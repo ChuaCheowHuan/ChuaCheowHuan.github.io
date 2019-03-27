@@ -1,0 +1,312 @@
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.5">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2019-03-27T15:23:20+08:00</updated><id>http://localhost:4000/feed.xml</id><entry><title type="html">Duel_ddqn_with_per</title><link href="http://localhost:4000/2019/03/15/Duel_DDQN_with_PER.html" rel="alternate" type="text/html" title="Duel_ddqn_with_per" /><published>2019-03-15T00:00:00+08:00</published><updated>2019-03-15T00:00:00+08:00</updated><id>http://localhost:4000/2019/03/15/Duel_DDQN_with_PER</id><content type="html" xml:base="http://localhost:4000/2019/03/15/Duel_DDQN_with_PER.html">&lt;p&gt;Duel DDQN with PER&lt;/p&gt;
+
+&lt;p&gt;A &lt;strong&gt;Dueling Double DQN with Priority Experience Replay (Duel DDQN with PER)&lt;/strong&gt; implementation in tensorflow.&lt;/p&gt;
+
+&lt;p&gt;Environment from openai gym: CartPole-v0&lt;/p&gt;
+
+&lt;hr /&gt;
+&lt;p&gt;&lt;br /&gt;
+&lt;strong&gt;Notations&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Model network = &lt;script type=&quot;math/tex&quot;&gt;Q_{\theta}&lt;/script&gt; &lt;br /&gt;
+Model parameter = &lt;script type=&quot;math/tex&quot;&gt;\theta&lt;/script&gt; &lt;br /&gt;
+Model network Q value = &lt;script type=&quot;math/tex&quot;&gt;Q_{\theta}&lt;/script&gt; (s, a) &lt;br /&gt;
+&lt;br /&gt;
+Target network = &lt;script type=&quot;math/tex&quot;&gt;Q_{\phi}&lt;/script&gt; &lt;br /&gt;
+Target parameter = &lt;script type=&quot;math/tex&quot;&gt;\phi&lt;/script&gt; &lt;br /&gt;
+Target network Q value = &lt;script type=&quot;math/tex&quot;&gt;Q_{\phi}&lt;/script&gt; (&lt;script type=&quot;math/tex&quot;&gt;s^{'}&lt;/script&gt;, &lt;script type=&quot;math/tex&quot;&gt;a^{'}&lt;/script&gt;) &lt;br /&gt;
+&lt;br /&gt;
+A small constant to ensure no sample has 0 probability to be selected = e&lt;/p&gt;
+
+&lt;p&gt;Hyper parameter  = &lt;script type=&quot;math/tex&quot;&gt;\alpha&lt;/script&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;Decides how to sample, range from 0 to 1, where 0 corresponds to fully uniformly random sample selection &amp;amp; 1 corresponding to selecting samples based on highest priority.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Hyper parameter  = &lt;script type=&quot;math/tex&quot;&gt;\beta&lt;/script&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;Starts close to 0, gradually annealed  to 1, slowly giving more importance to weights during training.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Minibatch size = k &lt;br /&gt;
+Replay memory size = N&lt;/p&gt;
+
+&lt;hr /&gt;
+&lt;p&gt;&lt;br /&gt;
+&lt;strong&gt;Equations&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;TD target = r (s, a) &lt;script type=&quot;math/tex&quot;&gt;+&lt;/script&gt; &lt;script type=&quot;math/tex&quot;&gt;\gamma&lt;/script&gt; &lt;script type=&quot;math/tex&quot;&gt;Q_{\phi}&lt;/script&gt; (&lt;script type=&quot;math/tex&quot;&gt;s^{'}&lt;/script&gt;, &lt;script type=&quot;math/tex&quot;&gt;argmax_{a^{'}}&lt;/script&gt; &lt;script type=&quot;math/tex&quot;&gt;Q_{\theta}&lt;/script&gt; (s&lt;script type=&quot;math/tex&quot;&gt;^{'}&lt;/script&gt;, a&lt;script type=&quot;math/tex&quot;&gt;^{'}&lt;/script&gt;)) &lt;br /&gt;
+&lt;br /&gt;
+TD  error = &lt;script type=&quot;math/tex&quot;&gt;{\delta}&lt;/script&gt; &lt;br /&gt;
+&lt;script type=&quot;math/tex&quot;&gt;\hspace{26pt}&lt;/script&gt;
+= (TD target) &lt;script type=&quot;math/tex&quot;&gt;-&lt;/script&gt; (Model network Q value) &lt;br /&gt;
+&lt;script type=&quot;math/tex&quot;&gt;\hspace{26pt}&lt;/script&gt;
+= [r (s, a) &lt;script type=&quot;math/tex&quot;&gt;+&lt;/script&gt; &lt;script type=&quot;math/tex&quot;&gt;\gamma&lt;/script&gt; &lt;script type=&quot;math/tex&quot;&gt;Q_{\phi}&lt;/script&gt; (&lt;script type=&quot;math/tex&quot;&gt;s^{'}&lt;/script&gt;, &lt;script type=&quot;math/tex&quot;&gt;argmax_{a^{'}}&lt;/script&gt; &lt;script type=&quot;math/tex&quot;&gt;Q_{\theta}&lt;/script&gt; (s&lt;script type=&quot;math/tex&quot;&gt;^{'}&lt;/script&gt;, a&lt;script type=&quot;math/tex&quot;&gt;^{'}&lt;/script&gt;))] &lt;script type=&quot;math/tex&quot;&gt;-&lt;/script&gt; &lt;script type=&quot;math/tex&quot;&gt;Q_{\theta}&lt;/script&gt; (s, a) &lt;br /&gt;
+&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;script type=&quot;math/tex&quot;&gt;priority_{i}&lt;/script&gt; = &lt;script type=&quot;math/tex&quot;&gt;p_{i}&lt;/script&gt; &lt;br /&gt;
+&lt;script type=&quot;math/tex&quot;&gt;\hspace{32pt}&lt;/script&gt;
+= &lt;script type=&quot;math/tex&quot;&gt;{|\delta_{i}|}&lt;/script&gt; &lt;script type=&quot;math/tex&quot;&gt;+&lt;/script&gt; e &lt;br /&gt;
+&lt;br /&gt;
+probability(i) = P(i) &lt;br /&gt;
+&lt;script type=&quot;math/tex&quot;&gt;\hspace{41pt}&lt;/script&gt;
+= &lt;script type=&quot;math/tex&quot;&gt;\frac{p_{i}^{\alpha}}  {\sum_{k}p_{k}^{\alpha}}&lt;/script&gt; &lt;br /&gt;
+&lt;br /&gt;
+weights = &lt;script type=&quot;math/tex&quot;&gt;w_{i}&lt;/script&gt; = (N &lt;script type=&quot;math/tex&quot;&gt;\cdot&lt;/script&gt; P(i)) &lt;script type=&quot;math/tex&quot;&gt;^{-\beta}&lt;/script&gt;&lt;/p&gt;
+
+&lt;hr /&gt;
+&lt;p&gt;&lt;br /&gt;
+&lt;strong&gt;Implementation details&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Sum tree:&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;Assume an example of a sum tree with 7 nodes (with 4 leaves which corresponds to the replay memory size):&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;blockquote&gt;
+  &lt;blockquote&gt;
+    &lt;p&gt;At initialization:&lt;/p&gt;
+    &lt;blockquote&gt;
+      &lt;p&gt;&lt;img src=&quot;https://drive.google.com/uc?export=view&amp;amp;id=1-quXFm1UnNnaThHxhaMoYl5RTAJnJUVI&quot; alt=&quot;alt text&quot; /&gt;&lt;/p&gt;
+    &lt;/blockquote&gt;
+  &lt;/blockquote&gt;
+&lt;/blockquote&gt;
+
+&lt;blockquote&gt;
+  &lt;blockquote&gt;
+    &lt;p&gt;When item 1 is added:&lt;/p&gt;
+    &lt;blockquote&gt;
+      &lt;p&gt;&lt;img src=&quot;https://drive.google.com/uc?export=view&amp;amp;id=1Jk-RO9Yqeq2DQKO1CKD9e_KQTxWgtMOu&quot; alt=&quot;alt text&quot; /&gt;&lt;/p&gt;
+    &lt;/blockquote&gt;
+  &lt;/blockquote&gt;
+&lt;/blockquote&gt;
+
+&lt;blockquote&gt;
+  &lt;blockquote&gt;
+    &lt;p&gt;When item 2 is added:&lt;/p&gt;
+    &lt;blockquote&gt;
+      &lt;p&gt;&lt;img src=&quot;https://drive.google.com/uc?export=view&amp;amp;id=1fTopGfDSeQj3uEKZPlo_2KSTWaBHrFfK&quot; alt=&quot;alt text&quot; /&gt;&lt;/p&gt;
+    &lt;/blockquote&gt;
+  &lt;/blockquote&gt;
+&lt;/blockquote&gt;
+
+&lt;blockquote&gt;
+  &lt;blockquote&gt;
+    &lt;p&gt;When item 3 is added:&lt;/p&gt;
+    &lt;blockquote&gt;
+      &lt;p&gt;&lt;img src=&quot;https://drive.google.com/uc?export=view&amp;amp;id=1d37aBtukIExVU7k84XjUPPphiFJlKXBZ&quot; alt=&quot;alt text&quot; /&gt;&lt;/p&gt;
+    &lt;/blockquote&gt;
+  &lt;/blockquote&gt;
+&lt;/blockquote&gt;
+
+&lt;blockquote&gt;
+  &lt;blockquote&gt;
+    &lt;p&gt;When item 4 is added:&lt;/p&gt;
+    &lt;blockquote&gt;
+      &lt;p&gt;&lt;img src=&quot;https://drive.google.com/uc?export=view&amp;amp;id=1V7B3vODsz2ELpW5--oQPh1vxmPMLYxOz&quot; alt=&quot;alt text&quot; /&gt;&lt;/p&gt;
+    &lt;/blockquote&gt;
+  &lt;/blockquote&gt;
+&lt;/blockquote&gt;
+
+&lt;blockquote&gt;
+  &lt;blockquote&gt;
+    &lt;p&gt;When item 5 is added:&lt;/p&gt;
+    &lt;blockquote&gt;
+      &lt;p&gt;&lt;img src=&quot;https://drive.google.com/uc?export=view&amp;amp;id=1KBPd61jU4nNug7b475gbKLe5sBJhC_l-&quot; alt=&quot;alt text&quot; /&gt;&lt;/p&gt;
+    &lt;/blockquote&gt;
+  &lt;/blockquote&gt;
+&lt;/blockquote&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;Figure below shows the corresponding code &amp;amp; array contents. The tree represents the entire sum tree while data represents the leaves.&lt;/p&gt;
+  &lt;blockquote&gt;
+    &lt;p&gt;&lt;img src=&quot;https://drive.google.com/uc?export=view&amp;amp;id=1kk60DiIQOEkR03wakk2Qwyj2xcK7ac3k&quot; alt=&quot;alt text&quot; /&gt;&lt;/p&gt;
+  &lt;/blockquote&gt;
+&lt;/blockquote&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;In the implementation, only one sumTree object is needed to store the collected experiences, this sumTree object resides in the Replay_memory class. The sumTree object has number of leaves = replay memory size = capacity
+The data array in sumTree object stores an object Exp, which is a sample of experience.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;br /&gt;
+The following code decides how to sample:&lt;/p&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;&lt;img src=&quot;https://drive.google.com/uc?export=view&amp;amp;id=1KlrlE3KANwmO56vtUdgAI6djfWcDfgWf&quot; alt=&quot;alt text&quot; /&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Refer to appendix B.2.1, under the section, “Proportional prioritization”, from the original (Schaul et al., 2016) &lt;a href=&quot;https://arxiv.org/pdf/1511.05952.pdf&quot;&gt;paper&lt;/a&gt; for sampling details.&lt;/p&gt;
+
+&lt;hr /&gt;
+&lt;p&gt;&lt;br /&gt;
+&lt;strong&gt;References&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://arxiv.org/pdf/1511.05952.pdf&quot;&gt;Prioritized experience replay (Schaul et al., 2016)&lt;/a&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">Duel DDQN with PER</summary></entry><entry><title type="html">Duel_ddqn</title><link href="http://localhost:4000/2019/03/10/Duel_DDQN.html" rel="alternate" type="text/html" title="Duel_ddqn" /><published>2019-03-10T00:00:00+08:00</published><updated>2019-03-10T00:00:00+08:00</updated><id>http://localhost:4000/2019/03/10/Duel_DDQN</id><content type="html" xml:base="http://localhost:4000/2019/03/10/Duel_DDQN.html">&lt;p&gt;Dueling DDQN&lt;/p&gt;
+
+&lt;p&gt;A &lt;strong&gt;Dueling Double DQN (Dueling DDQN)&lt;/strong&gt; implementation in tensorflow with random experience replay.&lt;/p&gt;
+
+&lt;p&gt;Environment from openai gym: CartPole-v0&lt;/p&gt;
+
+&lt;hr /&gt;
+&lt;p&gt;&lt;br /&gt;
+&lt;strong&gt;Notations&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Network = &lt;script type=&quot;math/tex&quot;&gt;Q_{\theta}&lt;/script&gt; &lt;br /&gt;
+Parameter = &lt;script type=&quot;math/tex&quot;&gt;\theta&lt;/script&gt; &lt;br /&gt;
+Network Q value = &lt;script type=&quot;math/tex&quot;&gt;Q_{\theta}&lt;/script&gt; (s, a) &lt;br /&gt;
+&lt;br /&gt;
+Value function = V(s) &lt;br /&gt;
+Advantage function = A(s, a) &lt;br /&gt;
+&lt;br /&gt;
+Parameter from the Advantage function layer = &lt;script type=&quot;math/tex&quot;&gt;\alpha&lt;/script&gt; &lt;br /&gt;
+Parameter from the Value function layer = &lt;script type=&quot;math/tex&quot;&gt;\beta&lt;/script&gt;&lt;/p&gt;
+
+&lt;hr /&gt;
+&lt;p&gt;&lt;br /&gt;
+&lt;strong&gt;Equations&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;(eqn 9) from the original paper &lt;a href=&quot;https://arxiv.org/pdf/1511.06581.pdf&quot;&gt;(Wang et al., 2015)&lt;/a&gt;: &lt;br /&gt;
+Q(s, a; &lt;script type=&quot;math/tex&quot;&gt;\theta&lt;/script&gt;, &lt;script type=&quot;math/tex&quot;&gt;\alpha&lt;/script&gt;, &lt;script type=&quot;math/tex&quot;&gt;\beta&lt;/script&gt;) =
+V(s; &lt;script type=&quot;math/tex&quot;&gt;\theta&lt;/script&gt;, &lt;script type=&quot;math/tex&quot;&gt;\beta&lt;/script&gt;)
+&lt;script type=&quot;math/tex&quot;&gt;+&lt;/script&gt; &lt;br /&gt;
+&lt;script type=&quot;math/tex&quot;&gt;\hspace{50pt}&lt;/script&gt;
+[ A(s, a; &lt;script type=&quot;math/tex&quot;&gt;\theta&lt;/script&gt;, &lt;script type=&quot;math/tex&quot;&gt;\alpha&lt;/script&gt;)
+&lt;script type=&quot;math/tex&quot;&gt;-&lt;/script&gt;
+&lt;script type=&quot;math/tex&quot;&gt;\frac{1}{|A|}&lt;/script&gt; &lt;script type=&quot;math/tex&quot;&gt;\sum_{a'}&lt;/script&gt; A(s, &lt;script type=&quot;math/tex&quot;&gt;a^{'}&lt;/script&gt;; &lt;script type=&quot;math/tex&quot;&gt;\theta&lt;/script&gt;, &lt;script type=&quot;math/tex&quot;&gt;\alpha&lt;/script&gt;) ]&lt;/p&gt;
+
+&lt;hr /&gt;
+&lt;p&gt;&lt;br /&gt;
+&lt;strong&gt;Implementation details&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;V represents the value function layer, A represents the Advantage function layer:&lt;/p&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;&lt;img src=&quot;https://drive.google.com/uc?export=view&amp;amp;id=1f901lKe-Fa_Y4ITX8NFNeMO7IX_O2fB9&quot; alt=&quot;alt text&quot; /&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;hr /&gt;
+&lt;p&gt;&lt;br /&gt;
+&lt;strong&gt;References&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://arxiv.org/pdf/1511.06581.pdf&quot;&gt;Dueling Network Architectures for Deep Reinforcement Learning
+(Wang et al., 2015)&lt;/a&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">Dueling DDQN</summary></entry><entry><title type="html">Ddqn</title><link href="http://localhost:4000/2019/03/07/DDQN.html" rel="alternate" type="text/html" title="Ddqn" /><published>2019-03-07T00:00:00+08:00</published><updated>2019-03-07T00:00:00+08:00</updated><id>http://localhost:4000/2019/03/07/DDQN</id><content type="html" xml:base="http://localhost:4000/2019/03/07/DDQN.html">&lt;p&gt;Double DQN (DDQN)&lt;/p&gt;
+
+&lt;p&gt;A &lt;strong&gt;Double DQN (DDQN)&lt;/strong&gt; implementation in tensorflow with random experience replay.&lt;/p&gt;
+
+&lt;p&gt;Environment from openai gym: CartPole-v0&lt;/p&gt;
+
+&lt;hr /&gt;
+&lt;p&gt;&lt;br /&gt;
+&lt;strong&gt;Notations&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Model network = &lt;script type=&quot;math/tex&quot;&gt;Q_{\theta}&lt;/script&gt; &lt;br /&gt;
+Model parameter = &lt;script type=&quot;math/tex&quot;&gt;\theta&lt;/script&gt; &lt;br /&gt;
+Model network Q value = &lt;script type=&quot;math/tex&quot;&gt;Q_{\theta}&lt;/script&gt; (s, a) &lt;br /&gt;
+&lt;br /&gt;
+Target network = &lt;script type=&quot;math/tex&quot;&gt;Q_{\phi}&lt;/script&gt; &lt;br /&gt;
+Target parameter = &lt;script type=&quot;math/tex&quot;&gt;\phi&lt;/script&gt; &lt;br /&gt;
+Target network Q value = &lt;script type=&quot;math/tex&quot;&gt;Q_{\phi}&lt;/script&gt; (&lt;script type=&quot;math/tex&quot;&gt;s^{'}&lt;/script&gt;, &lt;script type=&quot;math/tex&quot;&gt;a^{'}&lt;/script&gt;)&lt;/p&gt;
+
+&lt;hr /&gt;
+&lt;p&gt;&lt;br /&gt;
+&lt;strong&gt;Equations&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;TD target = r (s, a) &lt;script type=&quot;math/tex&quot;&gt;+&lt;/script&gt; &lt;script type=&quot;math/tex&quot;&gt;\gamma&lt;/script&gt; &lt;script type=&quot;math/tex&quot;&gt;Q_{\phi}&lt;/script&gt; (&lt;script type=&quot;math/tex&quot;&gt;s^{'}&lt;/script&gt;, &lt;script type=&quot;math/tex&quot;&gt;argmax_{a^{'}}&lt;/script&gt; &lt;script type=&quot;math/tex&quot;&gt;Q_{\theta}&lt;/script&gt; (s&lt;script type=&quot;math/tex&quot;&gt;^{'}&lt;/script&gt;, a&lt;script type=&quot;math/tex&quot;&gt;^{'}&lt;/script&gt;)) &lt;br /&gt;
+&lt;br /&gt;
+TD  error = (TD target) &lt;script type=&quot;math/tex&quot;&gt;-&lt;/script&gt; (Model network Q value) &lt;br /&gt;
+&lt;script type=&quot;math/tex&quot;&gt;\hspace{26pt}&lt;/script&gt;
+= [r (s, a) &lt;script type=&quot;math/tex&quot;&gt;+&lt;/script&gt; &lt;script type=&quot;math/tex&quot;&gt;\gamma&lt;/script&gt; &lt;script type=&quot;math/tex&quot;&gt;Q_{\phi}&lt;/script&gt; (&lt;script type=&quot;math/tex&quot;&gt;s^{'}&lt;/script&gt;, &lt;script type=&quot;math/tex&quot;&gt;argmax_{a^{'}}&lt;/script&gt; &lt;script type=&quot;math/tex&quot;&gt;Q_{\theta}&lt;/script&gt; (s&lt;script type=&quot;math/tex&quot;&gt;^{'}&lt;/script&gt;, a&lt;script type=&quot;math/tex&quot;&gt;^{'}&lt;/script&gt;))] &lt;script type=&quot;math/tex&quot;&gt;-&lt;/script&gt; &lt;script type=&quot;math/tex&quot;&gt;Q_{\theta}&lt;/script&gt; (s, a)&lt;/p&gt;
+
+&lt;hr /&gt;
+&lt;p&gt;&lt;br /&gt;
+&lt;strong&gt;Implementation details&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Create a placeholder to feed Q values from model network:&lt;/p&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;&lt;img src=&quot;https://drive.google.com/uc?export=view&amp;amp;id=1CcZVw82JRQRWYmTFFN9PvLKjd4b5BOAF&quot; alt=&quot;alt text&quot; /&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Select Q values from model network using &lt;script type=&quot;math/tex&quot;&gt;s^{'}&lt;/script&gt; as features &amp;amp; feed them to the training session:&lt;/p&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;&lt;img src=&quot;https://drive.google.com/uc?export=view&amp;amp;id=15uOc3uOz83V76X5s3PmgzzVWYJkkwR0Z&quot; alt=&quot;alt text&quot; /&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Select minibatch actions with largest Q values from model network, create indices &amp;amp; select corresponding minibatch actions from target network:&lt;/p&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;&lt;img src=&quot;https://drive.google.com/uc?export=view&amp;amp;id=1YelpKjS68nPBWtg8oeLiZV4mpzkmTPT_&quot; alt=&quot;alt text&quot; /&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;hr /&gt;
+&lt;p&gt;&lt;br /&gt;
+&lt;strong&gt;References&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://arxiv.org/pdf/1509.06461.pdf&quot;&gt;Deep Reinforcement Learning with Double Q-learning
+(Hasselt, Guez &amp;amp; Silver, 2016)&lt;/a&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">Double DQN (DDQN)</summary></entry><entry><title type="html">Dqn</title><link href="http://localhost:4000/2019/03/01/DQN.html" rel="alternate" type="text/html" title="Dqn" /><published>2019-03-01T00:00:00+08:00</published><updated>2019-03-01T00:00:00+08:00</updated><id>http://localhost:4000/2019/03/01/DQN</id><content type="html" xml:base="http://localhost:4000/2019/03/01/DQN.html">&lt;p&gt;DQN&lt;/p&gt;
+
+&lt;p&gt;A &lt;strong&gt;DQN&lt;/strong&gt; implementation in tensorflow with target network &amp;amp; random experience replay.&lt;/p&gt;
+
+&lt;p&gt;Environment from openai gym: CartPole-v0&lt;/p&gt;
+
+&lt;hr /&gt;
+&lt;p&gt;&lt;br /&gt;
+&lt;strong&gt;Notations&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Model network = &lt;script type=&quot;math/tex&quot;&gt;Q_{\theta}&lt;/script&gt; &lt;br /&gt;
+Model parameter = &lt;script type=&quot;math/tex&quot;&gt;\theta&lt;/script&gt; &lt;br /&gt;
+Model network Q value = &lt;script type=&quot;math/tex&quot;&gt;Q_{\theta}&lt;/script&gt; (s, a) &lt;br /&gt;
+&lt;br /&gt;
+Target network = &lt;script type=&quot;math/tex&quot;&gt;Q_{\phi}&lt;/script&gt; &lt;br /&gt;
+Target parameter = &lt;script type=&quot;math/tex&quot;&gt;\phi&lt;/script&gt; &lt;br /&gt;
+Target network Q value = &lt;script type=&quot;math/tex&quot;&gt;Q_{\phi}&lt;/script&gt; (&lt;script type=&quot;math/tex&quot;&gt;s^{'}&lt;/script&gt;, &lt;script type=&quot;math/tex&quot;&gt;a^{'}&lt;/script&gt;)&lt;/p&gt;
+
+&lt;hr /&gt;
+&lt;p&gt;&lt;br /&gt;
+&lt;strong&gt;Equations&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;TD target = r (s, a) &lt;script type=&quot;math/tex&quot;&gt;+&lt;/script&gt; &lt;script type=&quot;math/tex&quot;&gt;\gamma&lt;/script&gt; &lt;script type=&quot;math/tex&quot;&gt;max_{a}&lt;/script&gt; &lt;script type=&quot;math/tex&quot;&gt;Q_{\phi}&lt;/script&gt; (&lt;script type=&quot;math/tex&quot;&gt;s^{'}&lt;/script&gt;, &lt;script type=&quot;math/tex&quot;&gt;a^{'}&lt;/script&gt;) &lt;br /&gt;
+&lt;br /&gt;
+TD  error = (TD target) &lt;script type=&quot;math/tex&quot;&gt;-&lt;/script&gt; (Model network Q value) &lt;br /&gt;
+&lt;script type=&quot;math/tex&quot;&gt;\hspace{26pt}&lt;/script&gt;
+= [r (s, a) &lt;script type=&quot;math/tex&quot;&gt;+&lt;/script&gt; &lt;script type=&quot;math/tex&quot;&gt;\gamma&lt;/script&gt; &lt;script type=&quot;math/tex&quot;&gt;max_{a^{'}}&lt;/script&gt; &lt;script type=&quot;math/tex&quot;&gt;Q_{\phi}&lt;/script&gt; (&lt;script type=&quot;math/tex&quot;&gt;s^{'}&lt;/script&gt;, &lt;script type=&quot;math/tex&quot;&gt;a^{'}&lt;/script&gt;)] &lt;script type=&quot;math/tex&quot;&gt;-&lt;/script&gt; &lt;script type=&quot;math/tex&quot;&gt;Q_{\theta}&lt;/script&gt; (s, a)&lt;/p&gt;
+
+&lt;hr /&gt;
+&lt;p&gt;&lt;br /&gt;
+&lt;strong&gt;Implementation details&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Update target parameter &lt;script type=&quot;math/tex&quot;&gt;\phi&lt;/script&gt; with model parameter &lt;script type=&quot;math/tex&quot;&gt;\theta&lt;/script&gt; :&lt;/p&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;Copy &lt;script type=&quot;math/tex&quot;&gt;\theta&lt;/script&gt; to &lt;script type=&quot;math/tex&quot;&gt;\phi&lt;/script&gt; with &lt;em&gt;either&lt;/em&gt; soft or hard parameter update.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;Hard parameter update:&lt;/p&gt;
+  &lt;blockquote&gt;
+    &lt;p&gt;&lt;img src=&quot;https://drive.google.com/uc?export=view&amp;amp;id=18CK3rHYEfDxVtxe1gnVn2Z10Dosrmrww&quot; alt=&quot;alt text&quot; /&gt;
+&lt;img src=&quot;https://drive.google.com/uc?export=view&amp;amp;id=1lNBR6BxZZfk_uGkDSOumUm9qntiJ5QhH&quot; alt=&quot;alt text&quot; /&gt;&lt;/p&gt;
+  &lt;/blockquote&gt;
+&lt;/blockquote&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;Soft parameter update:&lt;/p&gt;
+  &lt;blockquote&gt;
+    &lt;p&gt;polyak &lt;script type=&quot;math/tex&quot;&gt;\cdot&lt;/script&gt;  &lt;script type=&quot;math/tex&quot;&gt;\theta&lt;/script&gt; + (1 &lt;script type=&quot;math/tex&quot;&gt;-&lt;/script&gt; polyak)  &lt;script type=&quot;math/tex&quot;&gt;\cdot&lt;/script&gt;  &lt;script type=&quot;math/tex&quot;&gt;\phi&lt;/script&gt;&lt;/p&gt;
+  &lt;/blockquote&gt;
+&lt;/blockquote&gt;
+
+&lt;blockquote&gt;
+  &lt;blockquote&gt;
+    &lt;p&gt;&lt;img src=&quot;https://drive.google.com/uc?export=view&amp;amp;id=1OfxkRAMve0liZ3BlkS4pCoJ6CPPEjwQG&quot; alt=&quot;alt text&quot; /&gt;&lt;/p&gt;
+  &lt;/blockquote&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Stop TD target from contributing to gradient computation:&lt;/p&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;&lt;img src=&quot;https://drive.google.com/uc?export=view&amp;amp;id=1sw1WtddZn4t48QJhz_LMTthIPhOc4jtl&quot; alt=&quot;alt text&quot; /&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;hr /&gt;
+&lt;p&gt;&lt;br /&gt;
+&lt;strong&gt;References&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://storage.googleapis.com/deepmind-media/dqn/DQNNaturePaper.pdf&quot;&gt;Human-level control through deep reinforcement learning
+(Mnih et al., 2015)&lt;/a&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">DQN</summary></entry></feed>

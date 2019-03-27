@@ -1,0 +1,126 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Dqn</title>
+    <link rel="stylesheet" href="/assets/css/styles.css">
+    <link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" />
+    <!-- Begin Jekyll SEO tag v2.6.0 -->
+<title>Dqn</title>
+<meta name="generator" content="Jekyll v3.8.5" />
+<meta property="og:title" content="Dqn" />
+<meta name="author" content="Huan" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="DQN" />
+<meta property="og:description" content="DQN" />
+<link rel="canonical" href="http://localhost:4000/2019/03/01/DQN.html" />
+<meta property="og:url" content="http://localhost:4000/2019/03/01/DQN.html" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2019-03-01T00:00:00+08:00" />
+<script type="application/ld+json">
+{"url":"http://localhost:4000/2019/03/01/DQN.html","headline":"Dqn","dateModified":"2019-03-01T00:00:00+08:00","datePublished":"2019-03-01T00:00:00+08:00","author":{"@type":"Person","name":"Huan"},"description":"DQN","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2019/03/01/DQN.html"},"@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+    <script type="text/javascript" async
+      src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML" async>
+    </script>
+
+  </head>
+  <body>
+    <nav>
+  
+    <a href="/" >Home</a>
+  
+    <a href="/about.html" >About</a>
+  
+    <a href="/blog.html" >Blog</a>
+  
+</nav>
+
+    <!--
+<h1>DQN</h1>
+-->
+<p>
+  01 Mar 2019
+  
+  
+    <!--
+      - <a href="/authors/ChuaCheowHuan.html">Chua Cheow Huan</a>
+      -->
+  
+</p>
+
+<p>DQN</p>
+
+<p>A <strong>DQN</strong> implementation in tensorflow with target network &amp; random experience replay.</p>
+
+<p>Environment from openai gym: CartPole-v0</p>
+
+<hr />
+<p><br />
+<strong>Notations</strong></p>
+
+<p>Model network = <script type="math/tex">Q_{\theta}</script> <br />
+Model parameter = <script type="math/tex">\theta</script> <br />
+Model network Q value = <script type="math/tex">Q_{\theta}</script> (s, a) <br />
+<br />
+Target network = <script type="math/tex">Q_{\phi}</script> <br />
+Target parameter = <script type="math/tex">\phi</script> <br />
+Target network Q value = <script type="math/tex">Q_{\phi}</script> (<script type="math/tex">s^{'}</script>, <script type="math/tex">a^{'}</script>)</p>
+
+<hr />
+<p><br />
+<strong>Equations</strong></p>
+
+<p>TD target = r (s, a) <script type="math/tex">+</script> <script type="math/tex">\gamma</script> <script type="math/tex">max_{a}</script> <script type="math/tex">Q_{\phi}</script> (<script type="math/tex">s^{'}</script>, <script type="math/tex">a^{'}</script>) <br />
+<br />
+TD  error = (TD target) <script type="math/tex">-</script> (Model network Q value) <br />
+<script type="math/tex">\hspace{26pt}</script>
+= [r (s, a) <script type="math/tex">+</script> <script type="math/tex">\gamma</script> <script type="math/tex">max_{a^{'}}</script> <script type="math/tex">Q_{\phi}</script> (<script type="math/tex">s^{'}</script>, <script type="math/tex">a^{'}</script>)] <script type="math/tex">-</script> <script type="math/tex">Q_{\theta}</script> (s, a)</p>
+
+<hr />
+<p><br />
+<strong>Implementation details</strong></p>
+
+<p>Update target parameter <script type="math/tex">\phi</script> with model parameter <script type="math/tex">\theta</script> :</p>
+<blockquote>
+  <p>Copy <script type="math/tex">\theta</script> to <script type="math/tex">\phi</script> with <em>either</em> soft or hard parameter update.</p>
+</blockquote>
+
+<blockquote>
+  <p>Hard parameter update:</p>
+  <blockquote>
+    <p><img src="https://drive.google.com/uc?export=view&amp;id=18CK3rHYEfDxVtxe1gnVn2Z10Dosrmrww" alt="alt text" />
+<img src="https://drive.google.com/uc?export=view&amp;id=1lNBR6BxZZfk_uGkDSOumUm9qntiJ5QhH" alt="alt text" /></p>
+  </blockquote>
+</blockquote>
+
+<blockquote>
+  <p>Soft parameter update:</p>
+  <blockquote>
+    <p>polyak <script type="math/tex">\cdot</script>  <script type="math/tex">\theta</script> + (1 <script type="math/tex">-</script> polyak)  <script type="math/tex">\cdot</script>  <script type="math/tex">\phi</script></p>
+  </blockquote>
+</blockquote>
+
+<blockquote>
+  <blockquote>
+    <p><img src="https://drive.google.com/uc?export=view&amp;id=1OfxkRAMve0liZ3BlkS4pCoJ6CPPEjwQG" alt="alt text" /></p>
+  </blockquote>
+</blockquote>
+
+<p>Stop TD target from contributing to gradient computation:</p>
+<blockquote>
+  <p><img src="https://drive.google.com/uc?export=view&amp;id=1sw1WtddZn4t48QJhz_LMTthIPhOc4jtl" alt="alt text" /></p>
+</blockquote>
+
+<hr />
+<p><br />
+<strong>References</strong></p>
+
+<p><a href="https://storage.googleapis.com/deepmind-media/dqn/DQNNaturePaper.pdf">Human-level control through deep reinforcement learning
+(Mnih et al., 2015)</a></p>
+
+
+  </body>
+</html>
