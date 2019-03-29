@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.5">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2019-03-27T20:29:21+08:00</updated><id>http://localhost:4000/feed.xml</id><entry><title type="html">Duel_ddqn_with_per</title><link href="http://localhost:4000/2019/03/15/Duel_DDQN_with_PER.html" rel="alternate" type="text/html" title="Duel_ddqn_with_per" /><published>2019-03-15T00:00:00+08:00</published><updated>2019-03-15T00:00:00+08:00</updated><id>http://localhost:4000/2019/03/15/Duel_DDQN_with_PER</id><content type="html" xml:base="http://localhost:4000/2019/03/15/Duel_DDQN_with_PER.html">&lt;p&gt;Duel DDQN with PER&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.5">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2019-03-29T17:50:01+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html"></title><subtitle></subtitle><author><name>Chua Cheow Huan</name></author><entry><title type="html">Duel_ddqn_with_per</title><link href="http://localhost:4000/Duel_DDQN_with_PER/" rel="alternate" type="text/html" title="Duel_ddqn_with_per" /><published>2019-03-15T00:00:00+08:00</published><updated>2019-03-15T00:00:00+08:00</updated><id>http://localhost:4000/Duel_DDQN_with_PER</id><content type="html" xml:base="http://localhost:4000/Duel_DDQN_with_PER/">&lt;p&gt;Duel DDQN with PER&lt;/p&gt;
 
 &lt;p&gt;A &lt;strong&gt;Dueling Double DQN with Priority Experience Replay (Duel DDQN with PER)&lt;/strong&gt; implementation in tensorflow.&lt;/p&gt;
 
@@ -142,7 +142,7 @@ The following code decides how to sample:&lt;/p&gt;
 &lt;p&gt;&lt;br /&gt;
 &lt;strong&gt;References&lt;/strong&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&quot;https://arxiv.org/pdf/1511.05952.pdf&quot;&gt;Prioritized experience replay (Schaul et al., 2016)&lt;/a&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">Duel DDQN with PER</summary></entry><entry><title type="html">Duel_ddqn</title><link href="http://localhost:4000/2019/03/10/Duel_DDQN.html" rel="alternate" type="text/html" title="Duel_ddqn" /><published>2019-03-10T00:00:00+08:00</published><updated>2019-03-10T00:00:00+08:00</updated><id>http://localhost:4000/2019/03/10/Duel_DDQN</id><content type="html" xml:base="http://localhost:4000/2019/03/10/Duel_DDQN.html">&lt;p&gt;Dueling DDQN&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://arxiv.org/pdf/1511.05952.pdf&quot;&gt;Prioritized experience replay (Schaul et al., 2016)&lt;/a&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">Duel DDQN with PER</summary></entry><entry><title type="html">Duel_ddqn</title><link href="http://localhost:4000/Duel_DDQN/" rel="alternate" type="text/html" title="Duel_ddqn" /><published>2019-03-10T00:00:00+08:00</published><updated>2019-03-10T00:00:00+08:00</updated><id>http://localhost:4000/Duel_DDQN</id><content type="html" xml:base="http://localhost:4000/Duel_DDQN/">&lt;p&gt;Dueling DDQN&lt;/p&gt;
 
 &lt;p&gt;A &lt;strong&gt;Dueling Double DQN (Dueling DDQN)&lt;/strong&gt; implementation in tensorflow with random experience replay.&lt;/p&gt;
 
@@ -189,7 +189,7 @@ V(s; &lt;script type=&quot;math/tex&quot;&gt;\theta&lt;/script&gt;, &lt;script t
 &lt;strong&gt;References&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;a href=&quot;https://arxiv.org/pdf/1511.06581.pdf&quot;&gt;Dueling Network Architectures for Deep Reinforcement Learning
-(Wang et al., 2015)&lt;/a&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">Dueling DDQN</summary></entry><entry><title type="html">Ddqn</title><link href="http://localhost:4000/2019/03/07/DDQN.html" rel="alternate" type="text/html" title="Ddqn" /><published>2019-03-07T00:00:00+08:00</published><updated>2019-03-07T00:00:00+08:00</updated><id>http://localhost:4000/2019/03/07/DDQN</id><content type="html" xml:base="http://localhost:4000/2019/03/07/DDQN.html">&lt;p&gt;Double DQN (DDQN)&lt;/p&gt;
+(Wang et al., 2015)&lt;/a&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">Dueling DDQN</summary></entry><entry><title type="html">Ddqn</title><link href="http://localhost:4000/DDQN/" rel="alternate" type="text/html" title="Ddqn" /><published>2019-03-07T00:00:00+08:00</published><updated>2019-03-07T00:00:00+08:00</updated><id>http://localhost:4000/DDQN</id><content type="html" xml:base="http://localhost:4000/DDQN/">&lt;p&gt;Double DQN (DDQN)&lt;/p&gt;
 
 &lt;p&gt;A &lt;strong&gt;Double DQN (DDQN)&lt;/strong&gt; implementation in tensorflow with random experience replay.&lt;/p&gt;
 
@@ -241,7 +241,7 @@ TD  error = (TD target) &lt;script type=&quot;math/tex&quot;&gt;-&lt;/script&gt;
 &lt;strong&gt;References&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;a href=&quot;https://arxiv.org/pdf/1509.06461.pdf&quot;&gt;Deep Reinforcement Learning with Double Q-learning
-(Hasselt, Guez &amp;amp; Silver, 2016)&lt;/a&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">Double DQN (DDQN)</summary></entry><entry><title type="html">Dqn</title><link href="http://localhost:4000/2019/03/01/DQN.html" rel="alternate" type="text/html" title="Dqn" /><published>2019-03-01T00:00:00+08:00</published><updated>2019-03-01T00:00:00+08:00</updated><id>http://localhost:4000/2019/03/01/DQN</id><content type="html" xml:base="http://localhost:4000/2019/03/01/DQN.html">&lt;p&gt;DQN&lt;/p&gt;
+(Hasselt, Guez &amp;amp; Silver, 2016)&lt;/a&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">Double DQN (DDQN)</summary></entry><entry><title type="html">Dqn</title><link href="http://localhost:4000/DQN/" rel="alternate" type="text/html" title="Dqn" /><published>2019-03-01T00:00:00+08:00</published><updated>2019-03-01T00:00:00+08:00</updated><id>http://localhost:4000/DQN</id><content type="html" xml:base="http://localhost:4000/DQN/">&lt;p&gt;DQN&lt;/p&gt;
 
 &lt;p&gt;A &lt;strong&gt;DQN&lt;/strong&gt; implementation in tensorflow with target network &amp;amp; random experience replay.&lt;/p&gt;
 

@@ -1,0 +1,599 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.15.2 by Michael Rose
+  Copyright 2013-2019 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+<html lang="en" class="no-js">
+
+
+
+<link rel="stylesheet" href="/assets/css/main.css">
+<script type="text/javascript" async
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML" async>
+</script>
+
+
+
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>Duel_ddqn_with_per -</title>
+<meta name="description" content="Duel DDQN with PER">
+
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="">
+<meta property="og:title" content="Duel_ddqn_with_per">
+<meta property="og:url" content="http://localhost:4000/Duel_DDQN_with_PER/">
+
+
+  <meta property="og:description" content="Duel DDQN with PER">
+
+
+
+  <meta property="og:image" content="http://localhost:4000/assets/images/bio-photo.jpg">
+
+
+
+
+
+  <meta property="article:published_time" content="2019-03-15T00:00:00+08:00">
+
+
+
+
+
+  
+
+  
+
+
+<link rel="canonical" href="http://localhost:4000/Duel_DDQN_with_PER/">
+
+
+
+
+
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "url": "http://localhost:4000",
+      "logo": "http://localhost:4000/assets/images/bio-photo.jpg"
+    }
+  </script>
+
+
+
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": "",
+      "url": "http://localhost:4000",
+      "sameAs": null
+    }
+  </script>
+
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+<link href="/feed.xml" type="application/atom+xml" rel="alternate" title=" Feed">
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+
+<!--[if IE ]>
+  <style>
+    /* old IE unsupported flexbox fixes */
+    .greedy-nav .site-title {
+      padding-right: 3em;
+    }
+    .greedy-nav button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+    }
+  </style>
+<![endif]-->
+
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body class="layout--posts">
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+          <a class="site-logo" href="/"><img src="/assets/images/bio-photo.jpg" alt=""></a>
+        
+        <a class="site-title" href="/"></a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a href="/" >Home</a>
+            </li><li class="masthead__menu-item">
+              <a href="/blog/index.html" >Blog</a>
+            </li><li class="masthead__menu-item">
+              <a href="/about/index.html" >About</a>
+            </li></ul>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+
+<div itemscope itemtype="https://schema.org/Person">
+
+  
+
+  <div class="author__content">
+    
+      <h3 class="author__name" itemprop="name"></h3>
+    
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs" rel="nofollow noopener noreferrer">
+      <i class="fas fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+  </div>
+
+
+  <div class="archive">
+    
+      <h1 id="page-title" class="page__title">Duel_ddqn_with_per</h1>
+    
+    <p>Duel DDQN with PER</p>
+
+<p>A <strong>Dueling Double DQN with Priority Experience Replay (Duel DDQN with PER)</strong> implementation in tensorflow.</p>
+
+<p>Environment from openai gym: CartPole-v0</p>
+
+<hr />
+<p><br />
+<strong>Notations</strong></p>
+
+<p>Model network = <script type="math/tex">Q_{\theta}</script> <br />
+Model parameter = <script type="math/tex">\theta</script> <br />
+Model network Q value = <script type="math/tex">Q_{\theta}</script> (s, a) <br />
+<br />
+Target network = <script type="math/tex">Q_{\phi}</script> <br />
+Target parameter = <script type="math/tex">\phi</script> <br />
+Target network Q value = <script type="math/tex">Q_{\phi}</script> (<script type="math/tex">s^{'}</script>, <script type="math/tex">a^{'}</script>) <br />
+<br />
+A small constant to ensure no sample has 0 probability to be selected = e</p>
+
+<p>Hyper parameter  = <script type="math/tex">\alpha</script></p>
+<blockquote>
+  <p>Decides how to sample, range from 0 to 1, where 0 corresponds to fully uniformly random sample selection &amp; 1 corresponding to selecting samples based on highest priority.</p>
+</blockquote>
+
+<p>Hyper parameter  = <script type="math/tex">\beta</script></p>
+<blockquote>
+  <p>Starts close to 0, gradually annealed  to 1, slowly giving more importance to weights during training.</p>
+</blockquote>
+
+<p>Minibatch size = k <br />
+Replay memory size = N</p>
+
+<hr />
+<p><br />
+<strong>Equations</strong></p>
+
+<p>TD target = r (s, a) <script type="math/tex">+</script> <script type="math/tex">\gamma</script> <script type="math/tex">Q_{\phi}</script> (<script type="math/tex">s^{'}</script>, <script type="math/tex">argmax_{a^{'}}</script> <script type="math/tex">Q_{\theta}</script> (s<script type="math/tex">^{'}</script>, a<script type="math/tex">^{'}</script>)) <br />
+<br />
+TD  error = <script type="math/tex">{\delta}</script> <br />
+<script type="math/tex">\hspace{26pt}</script>
+= (TD target) <script type="math/tex">-</script> (Model network Q value) <br />
+<script type="math/tex">\hspace{26pt}</script>
+= [r (s, a) <script type="math/tex">+</script> <script type="math/tex">\gamma</script> <script type="math/tex">Q_{\phi}</script> (<script type="math/tex">s^{'}</script>, <script type="math/tex">argmax_{a^{'}}</script> <script type="math/tex">Q_{\theta}</script> (s<script type="math/tex">^{'}</script>, a<script type="math/tex">^{'}</script>))] <script type="math/tex">-</script> <script type="math/tex">Q_{\theta}</script> (s, a) <br />
+<br /></p>
+
+<p><script type="math/tex">priority_{i}</script> = <script type="math/tex">p_{i}</script> <br />
+<script type="math/tex">\hspace{32pt}</script>
+= <script type="math/tex">{|\delta_{i}|}</script> <script type="math/tex">+</script> e <br />
+<br />
+probability(i) = P(i) <br />
+<script type="math/tex">\hspace{41pt}</script>
+= <script type="math/tex">\frac{p_{i}^{\alpha}}  {\sum_{k}p_{k}^{\alpha}}</script> <br />
+<br />
+weights = <script type="math/tex">w_{i}</script> = (N <script type="math/tex">\cdot</script> P(i)) <script type="math/tex">^{-\beta}</script></p>
+
+<hr />
+<p><br />
+<strong>Implementation details</strong></p>
+
+<p>Sum tree:</p>
+
+<blockquote>
+  <p>Assume an example of a sum tree with 7 nodes (with 4 leaves which corresponds to the replay memory size):</p>
+</blockquote>
+
+<blockquote>
+  <blockquote>
+    <p>At initialization:</p>
+    <blockquote>
+      <p><img src="https://drive.google.com/uc?export=view&amp;id=1-quXFm1UnNnaThHxhaMoYl5RTAJnJUVI" alt="alt text" /></p>
+    </blockquote>
+  </blockquote>
+</blockquote>
+
+<blockquote>
+  <blockquote>
+    <p>When item 1 is added:</p>
+    <blockquote>
+      <p><img src="https://drive.google.com/uc?export=view&amp;id=1Jk-RO9Yqeq2DQKO1CKD9e_KQTxWgtMOu" alt="alt text" /></p>
+    </blockquote>
+  </blockquote>
+</blockquote>
+
+<blockquote>
+  <blockquote>
+    <p>When item 2 is added:</p>
+    <blockquote>
+      <p><img src="https://drive.google.com/uc?export=view&amp;id=1fTopGfDSeQj3uEKZPlo_2KSTWaBHrFfK" alt="alt text" /></p>
+    </blockquote>
+  </blockquote>
+</blockquote>
+
+<blockquote>
+  <blockquote>
+    <p>When item 3 is added:</p>
+    <blockquote>
+      <p><img src="https://drive.google.com/uc?export=view&amp;id=1d37aBtukIExVU7k84XjUPPphiFJlKXBZ" alt="alt text" /></p>
+    </blockquote>
+  </blockquote>
+</blockquote>
+
+<blockquote>
+  <blockquote>
+    <p>When item 4 is added:</p>
+    <blockquote>
+      <p><img src="https://drive.google.com/uc?export=view&amp;id=1V7B3vODsz2ELpW5--oQPh1vxmPMLYxOz" alt="alt text" /></p>
+    </blockquote>
+  </blockquote>
+</blockquote>
+
+<blockquote>
+  <blockquote>
+    <p>When item 5 is added:</p>
+    <blockquote>
+      <p><img src="https://drive.google.com/uc?export=view&amp;id=1KBPd61jU4nNug7b475gbKLe5sBJhC_l-" alt="alt text" /></p>
+    </blockquote>
+  </blockquote>
+</blockquote>
+
+<blockquote>
+  <p>Figure below shows the corresponding code &amp; array contents. The tree represents the entire sum tree while data represents the leaves.</p>
+  <blockquote>
+    <p><img src="https://drive.google.com/uc?export=view&amp;id=1kk60DiIQOEkR03wakk2Qwyj2xcK7ac3k" alt="alt text" /></p>
+  </blockquote>
+</blockquote>
+
+<blockquote>
+  <p>In the implementation, only one sumTree object is needed to store the collected experiences, this sumTree object resides in the Replay_memory class. The sumTree object has number of leaves = replay memory size = capacity
+The data array in sumTree object stores an object Exp, which is a sample of experience.</p>
+</blockquote>
+
+<p><br />
+The following code decides how to sample:</p>
+<blockquote>
+  <p><img src="https://drive.google.com/uc?export=view&amp;id=1KlrlE3KANwmO56vtUdgAI6djfWcDfgWf" alt="alt text" /></p>
+</blockquote>
+
+<p>Refer to appendix B.2.1, under the section, “Proportional prioritization”, from the original (Schaul et al., 2016) <a href="https://arxiv.org/pdf/1511.05952.pdf">paper</a> for sampling details.</p>
+
+<hr />
+<p><br />
+<strong>References</strong></p>
+
+<p><a href="https://arxiv.org/pdf/1511.05952.pdf">Prioritized experience replay (Schaul et al., 2016)</a></p>
+
+
+<ul class="taxonomy__index">
+  
+  
+    <li>
+      <a href="#2019">
+        <strong>2019</strong> <span class="taxonomy__count">4</span>
+      </a>
+    </li>
+  
+</ul>
+
+
+
+  <section id="2019" class="taxonomy__section">
+    <h2 class="archive__subtitle">2019</h2>
+    <div class="entries-list">
+      
+        
+
+
+
+<div class="list__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="/Duel_DDQN_with_PER/" rel="permalink">Duel_ddqn_with_per
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
+
+
+
+
+  1 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">Duel DDQN with PER
+
+</p>
+  </article>
+</div>
+
+      
+        
+
+
+
+<div class="list__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="/Duel_DDQN/" rel="permalink">Duel_ddqn
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
+
+
+
+
+  less than 1 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">Dueling DDQN
+
+</p>
+  </article>
+</div>
+
+      
+        
+
+
+
+<div class="list__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="/DDQN/" rel="permalink">Ddqn
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
+
+
+
+
+  less than 1 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">Double DQN (DDQN)
+
+</p>
+  </article>
+</div>
+
+      
+        
+
+
+
+<div class="list__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="/DQN/" rel="permalink">Dqn
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
+
+
+
+
+  less than 1 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">DQN
+
+</p>
+  </article>
+</div>
+
+      
+    </div>
+    <a href="#page-title" class="back-to-top">Back to top &uarr;</a>
+  </section>
+
+
+  </div>
+</div>
+    </div>
+
+    
+
+    <div class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>Follow:</strong></li>
+    
+
+    
+      
+        
+      
+        
+      
+        
+          <li><a href="https://github.com/ChuaCheowHuan" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+        
+      
+        
+      
+        
+      
+    
+
+    <li><a href="/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2019 . Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+  <script defer src="https://use.fontawesome.com/releases/v5.7.1/js/all.js" integrity="sha384-eVEQC9zshBn0rFj4+TU78eNA19HMNigMviK/PU/FFjLXqa/GKPgX58rvt5Z8PLs7" crossorigin="anonymous"></script>
+
+
+
+
+
+
+
+  </body>
+</html>

@@ -1,5 +1,7 @@
-source 'https://rubygems.org'
+source "https://rubygems.org"
+gemspec
 
+gem 'jekyll-include-cache'
 gem 'jekyll'
 gem "minima"
 gem "jekyll-theme-hacker"

@@ -1,10 +1,13 @@
 ---
 layout: default
-title: About
+title:
+
 ---
-# About page
 
 This site documents my learning progress on topics that I'm curious about.
 
-I'm a curious individual that has no prior formal knowledge on a lot of stuff
-that I find interesting & that's including machine learning.
+
+
+<video autoplay muted loop id="bgVid">
+  <source src="/assets/movie/forest_fog.mp4" type="video/mp4">
+</video>

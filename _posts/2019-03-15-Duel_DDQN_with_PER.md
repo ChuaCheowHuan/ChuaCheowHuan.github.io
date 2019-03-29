@@ -1,5 +1,5 @@
 ---
-layout: post
+layout: posts
 author: Huan
 ---
 Duel DDQN with PER
