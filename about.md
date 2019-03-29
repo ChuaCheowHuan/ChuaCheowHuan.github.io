@@ -4,7 +4,7 @@ title:
 
 ---
 
-This site documents my learning progress on topics that I'm curious about.
+This site documents my codes on various topics that I'm curious about.
 
 
 
