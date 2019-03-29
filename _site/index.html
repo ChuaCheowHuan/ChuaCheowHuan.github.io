@@ -69,7 +69,7 @@
     {
       "@context": "https://schema.org",
       "@type": "Person",
-      "name": "",
+      "name": "Chua Cheow Huan",
       "url": "http://localhost:4000",
       "sameAs": null
     }
@@ -134,7 +134,7 @@
     <div class="masthead__menu">
       <nav id="site-nav" class="greedy-nav">
         
-          <a class="site-logo" href="/"><img src="/assets/images/bio-photo.jpg" alt=""></a>
+          <a class="site-logo" href="/"><img src="/assets/images/owl_painting.jpg" alt=""></a>
         
         <a class="site-title" href="/"></a>
         <ul class="visible-links"><li class="masthead__menu-item">
@@ -144,6 +144,13 @@
             </li><li class="masthead__menu-item">
               <a href="/about/index.html" >About</a>
             </li></ul>
+        
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">Toggle search</span>
+          <svg class="icon" width="16" height="16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 15.99 16">
+            <path d="M15.5,13.12L13.19,10.8a1.69,1.69,0,0,0-1.28-.55l-0.06-.06A6.5,6.5,0,0,0,5.77,0,6.5,6.5,0,0,0,2.46,11.59a6.47,6.47,0,0,0,7.74.26l0.05,0.05a1.65,1.65,0,0,0,.5,1.24l2.38,2.38A1.68,1.68,0,0,0,15.5,13.12ZM6.4,2A4.41,4.41,0,1,1,2,6.4,4.43,4.43,0,0,1,6.4,2Z" transform="translate(-.01)"></path>
+          </svg>
+        </button>
         
         <button class="greedy-nav__toggle hidden" type="button">
           <span class="visually-hidden">Toggle menu</span>
@@ -324,7 +331,7 @@
     
     <h2 class="archive__item-title" itemprop="headline">
       
-        <a href="/Duel_DDQN_with_PER/" rel="permalink">Duel_ddqn_with_per
+        <a href="/Duel_DDQN_with_PER/" rel="permalink">Dueling DDQN with PER
 </a>
       
     </h2>
@@ -337,7 +344,7 @@
   1 minute read
 </p>
     
-    <p class="archive__item-excerpt" itemprop="description">Duel DDQN with PER
+    <p class="archive__item-excerpt" itemprop="description">A Dueling Double DQN with Priority Experience Replay (Duel DDQN with PER) implementation in tensorflow.
 
 </p>
   </article>
@@ -353,7 +360,7 @@
     
     <h2 class="archive__item-title" itemprop="headline">
       
-        <a href="/Duel_DDQN/" rel="permalink">Duel_ddqn
+        <a href="/Duel_DDQN/" rel="permalink">Dueling DDQN
 </a>
       
     </h2>
@@ -366,7 +373,7 @@
   less than 1 minute read
 </p>
     
-    <p class="archive__item-excerpt" itemprop="description">Dueling DDQN
+    <p class="archive__item-excerpt" itemprop="description">A Dueling Double DQN (Dueling DDQN) implementation in tensorflow with random experience replay.
 
 </p>
   </article>
@@ -382,7 +389,7 @@
     
     <h2 class="archive__item-title" itemprop="headline">
       
-        <a href="/DDQN/" rel="permalink">Ddqn
+        <a href="/DDQN/" rel="permalink">DDQN
 </a>
       
     </h2>
@@ -395,7 +402,7 @@
   less than 1 minute read
 </p>
     
-    <p class="archive__item-excerpt" itemprop="description">Double DQN (DDQN)
+    <p class="archive__item-excerpt" itemprop="description">A Double DQN (DDQN) implementation in tensorflow with random experience replay.
 
 </p>
   </article>
@@ -411,7 +418,7 @@
     
     <h2 class="archive__item-title" itemprop="headline">
       
-        <a href="/DQN/" rel="permalink">Dqn
+        <a href="/DQN/" rel="permalink">DQN
 </a>
       
     </h2>
@@ -424,7 +431,7 @@
   less than 1 minute read
 </p>
     
-    <p class="archive__item-excerpt" itemprop="description">DQN
+    <p class="archive__item-excerpt" itemprop="description">A DQN implementation in tensorflow with target network &amp; random experience replay.
 
 </p>
   </article>
@@ -437,8 +444,15 @@
 
   </div>
 </div>
+
     </div>
 
+    
+      <div class="search-content">
+        <div class="search-content__inner-wrap"><input type="text" id="search" class="search-input" tabindex="-1" placeholder="Enter your search term..." />
+    <div id="results" class="results"></div></div>
+
+      </div>
     
 
     <div class="page__footer">
@@ -474,7 +488,7 @@
   </ul>
 </div>
 
-<div class="page__footer-copyright">&copy; 2019 . Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+<div class="page__footer-copyright">&copy; 2019 Chua Cheow Huan. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
 
       </footer>
     </div>
@@ -485,6 +499,10 @@
 
 
 
+
+<script src="/assets/js/lunr/lunr.min.js"></script>
+<script src="/assets/js/lunr/lunr-store.js"></script>
+<script src="/assets/js/lunr/lunr-en.js"></script>
 
 
 
