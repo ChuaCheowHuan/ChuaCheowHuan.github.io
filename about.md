@@ -4,7 +4,8 @@ title:
 
 ---
 
-This site documents my codes in my Github repositories.
+This site documents my [codes](https://github.com/ChuaCheowHuan/) in my Github
+repositories.
 
 
 
