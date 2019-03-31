@@ -4,7 +4,7 @@ title:
 
 ---
 
-This site documents my codes in my Github repositories, on various topics that I'm curious about.
+This site documents my codes in my Github repositories.
 
 
 
