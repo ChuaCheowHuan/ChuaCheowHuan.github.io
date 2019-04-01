@@ -20,7 +20,7 @@
     <meta charset="utf-8">
 
 <!-- begin _includes/seo.html --><title>Dueling DDQN with PER -</title>
-<meta name="description" content="A Dueling Double DQN with Priority Experience Replay (Duel DDQN with PER) implementation in tensorflow.">
+<meta name="description" content="A Dueling Double Deep Q Network with Priority Experience Replay (Duel DDQN with PER) implementation in tensorflow.">
 
 
 
@@ -31,7 +31,7 @@
 <meta property="og:url" content="http://localhost:4000/Duel_DDQN_with_PER/">
 
 
-  <meta property="og:description" content="A Dueling Double DQN with Priority Experience Replay (Duel DDQN with PER) implementation in tensorflow.">
+  <meta property="og:description" content="A Dueling Double Deep Q Network with Priority Experience Replay (Duel DDQN with PER) implementation in tensorflow.">
 
 
 
@@ -256,12 +256,11 @@
   
   </div>
 
-
   <div class="archive">
     
       <h1 id="page-title" class="page__title">Dueling DDQN with PER</h1>
     
-    <p>A <strong>Dueling Double DQN with Priority Experience Replay (Duel DDQN with PER)</strong> implementation in tensorflow.</p>
+    <p>A <strong>Dueling Double Deep Q Network with Priority Experience Replay (Duel DDQN with PER)</strong> implementation in tensorflow.</p>
 
 <p>Environment from OpenAI’s gym: CartPole-v0</p>
 
@@ -279,11 +278,13 @@ Target network = <script type="math/tex">Q_{\phi}</script> <br />
 Target parameter = <script type="math/tex">\phi</script> <br />
 Target network Q value = <script type="math/tex">Q_{\phi}</script> (<script type="math/tex">s^{'}</script>, <script type="math/tex">a^{'}</script>) <br />
 <br />
-A small constant to ensure no sample has 0 probability to be selected = e</p>
+A small constant to ensure that no sample has 0 probability to be selected = e</p>
 
 <p>Hyper parameter  = <script type="math/tex">\alpha</script></p>
 <blockquote>
-  <p>Decides how to sample, range from 0 to 1, where 0 corresponds to fully uniformly random sample selection &amp; 1 corresponding to selecting samples based on highest priority.</p>
+  <p>Decides how to sample, range from 0 to 1, where 0 corresponds to fully
+uniformly random sample selection &amp; 1 corresponding to selecting samples based
+on highest priority.</p>
 </blockquote>
 
 <p>Hyper parameter  = <script type="math/tex">\beta</script></p>
@@ -389,8 +390,8 @@ weights = <script type="math/tex">w_{i}</script> = (N <script type="math/tex">\c
 </blockquote>
 
 <blockquote>
-  <p>In the implementation, only one sumTree object is needed to store the collected experiences, this sumTree object resides in the Replay_memory class. The sumTree object has number of leaves = replay memory size = capacity
-The data array in sumTree object stores an object Exp, which is a sample of experience.</p>
+  <p>In the implementation, only one sumTree object is needed to store the collected experiences, this sumTree object resides in the Replay_memory class. The sumTree object has number of leaves = replay memory size = capacity.
+The data array in sumTree object stores an Exp object, which is a sample of experience.</p>
 </blockquote>
 
 <p><br />
@@ -449,7 +450,7 @@ The following code decides how to sample:</p>
   1 minute read
 </p>
     
-    <p class="archive__item-excerpt" itemprop="description">A Dueling Double DQN with Priority Experience Replay (Duel DDQN with PER) implementation in tensorflow.
+    <p class="archive__item-excerpt" itemprop="description">A Dueling Double Deep Q Network with Priority Experience Replay (Duel DDQN with PER) implementation in tensorflow.
 
 </p>
   </article>
@@ -478,7 +479,7 @@ The following code decides how to sample:</p>
   less than 1 minute read
 </p>
     
-    <p class="archive__item-excerpt" itemprop="description">A Dueling Double DQN (Dueling DDQN) implementation in tensorflow with random experience replay.
+    <p class="archive__item-excerpt" itemprop="description">A Dueling Double Deep Q Network (Dueling DDQN) implementation in tensorflow with random experience replay.
 
 </p>
   </article>
@@ -507,7 +508,7 @@ The following code decides how to sample:</p>
   less than 1 minute read
 </p>
     
-    <p class="archive__item-excerpt" itemprop="description">A Double DQN (DDQN) implementation in tensorflow with random experience replay.
+    <p class="archive__item-excerpt" itemprop="description">A Double Deep Q Network (DDQN) implementation in tensorflow with random experience replay.
 
 </p>
   </article>
@@ -536,7 +537,7 @@ The following code decides how to sample:</p>
   less than 1 minute read
 </p>
     
-    <p class="archive__item-excerpt" itemprop="description">A DQN implementation in tensorflow with target network &amp; random experience replay.
+    <p class="archive__item-excerpt" itemprop="description">A Deep Q Network implementation in tensorflow with target network &amp; random experience replay.
 
 </p>
   </article>

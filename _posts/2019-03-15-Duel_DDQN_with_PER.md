@@ -5,7 +5,7 @@ title: Dueling DDQN with PER
 
 ---
 
-A **Dueling Double DQN with Priority Experience Replay (Duel DDQN with PER)** implementation in tensorflow.
+A **Dueling Double Deep Q Network with Priority Experience Replay (Duel DDQN with PER)** implementation in tensorflow.
 
 Environment from OpenAI's gym: CartPole-v0
 
@@ -23,10 +23,12 @@ Target network = $$Q_{\phi}$$ \\
 Target parameter = $$\phi$$ \\
 Target network Q value = $$Q_{\phi}$$ ($$s^{'}$$, $$a^{'}$$) \\
 <br>
-A small constant to ensure no sample has 0 probability to be selected = e
+A small constant to ensure that no sample has 0 probability to be selected = e
 
 Hyper parameter  = $$\alpha$$
-> Decides how to sample, range from 0 to 1, where 0 corresponds to fully uniformly random sample selection & 1 corresponding to selecting samples based on highest priority.  
+> Decides how to sample, range from 0 to 1, where 0 corresponds to fully
+uniformly random sample selection & 1 corresponding to selecting samples based
+on highest priority.  
 
 Hyper parameter  = $$\beta$$
 >Starts close to 0, gradually annealed  to 1, slowly giving more importance to weights during training.
@@ -87,8 +89,8 @@ Sum tree:
 >Figure below shows the corresponding code & array contents. The tree represents the entire sum tree while data represents the leaves.
 >>![alt text](https://drive.google.com/uc?export=view&id=1kk60DiIQOEkR03wakk2Qwyj2xcK7ac3k)
 
->In the implementation, only one sumTree object is needed to store the collected experiences, this sumTree object resides in the Replay_memory class. The sumTree object has number of leaves = replay memory size = capacity
-The data array in sumTree object stores an object Exp, which is a sample of experience.
+>In the implementation, only one sumTree object is needed to store the collected experiences, this sumTree object resides in the Replay_memory class. The sumTree object has number of leaves = replay memory size = capacity.
+The data array in sumTree object stores an Exp object, which is a sample of experience.
 
 <br>
 The following code decides how to sample:
