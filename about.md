@@ -45,11 +45,12 @@ body {
 </video>
 
 <div class="content">
-  <h1></h1>
+  <h1>
+  </h1>
   <p>
   This site documents my codes in my Github <a href="https://github.com/ChuaCheowHuan">repositories</a>.
-  <br><br>
   My current area of interest is in artificial intelligence, specifically reinforcement learning.
+  <br><br>
   </p>
 </div>
 

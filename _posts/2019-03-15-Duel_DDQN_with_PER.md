@@ -7,7 +7,7 @@ title: Dueling DDQN with PER
 
 A **Dueling Double DQN with Priority Experience Replay (Duel DDQN with PER)** implementation in tensorflow.
 
-Environment from openai gym: CartPole-v0
+Environment from OpenAI's gym: CartPole-v0
 
 [Code](https://github.com/ChuaCheowHuan/reinforcement_learning/tree/master/DQN_variants/duel_DDQN_PER)
 
