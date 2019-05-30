@@ -109,13 +109,13 @@ analytics:
 author:
   name             : "Chua Cheow Huan"
   avatar           : # path of avatar image, e.g. "/assets/images/bio-photo.jpg"
-  bio              : "A curious individual."
+  bio              : "Self taught AI enthusiast."
   location         : "Singapore"
   email            :
   links:
     - label: "Email"
       icon: "fas fa-fw fa-envelope-square"
-      url: mailto:chuacheowhuan@gmail.com
+      # url: mailto:
       # url: mailto:your.name@email.com
     - label: "Website"
       icon: "fas fa-fw fa-link"

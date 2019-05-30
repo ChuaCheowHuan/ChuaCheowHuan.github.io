@@ -1,4 +1,180 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.5">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2019-04-01T16:46:46+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Chua Cheow Huan</title><subtitle></subtitle><author><name>Chua Cheow Huan</name></author><entry><title type="html">Dueling DDQN with PER</title><link href="http://localhost:4000/Duel_DDQN_with_PER/" rel="alternate" type="text/html" title="Dueling DDQN with PER" /><published>2019-03-15T00:00:00+08:00</published><updated>2019-03-15T00:00:00+08:00</updated><id>http://localhost:4000/Duel_DDQN_with_PER</id><content type="html" xml:base="http://localhost:4000/Duel_DDQN_with_PER/">&lt;p&gt;A &lt;strong&gt;Dueling Double Deep Q Network with Priority Experience Replay (Duel DDQN with PER)&lt;/strong&gt; implementation in tensorflow.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.5">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2019-05-30T17:34:34+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Chua Cheow Huan</title><subtitle></subtitle><author><name>Chua Cheow Huan</name></author><entry><title type="html">N-step target</title><link href="http://localhost:4000/n_step_target/" rel="alternate" type="text/html" title="N-step target" /><published>2019-05-30T00:00:00+08:00</published><updated>2019-05-30T00:00:00+08:00</updated><id>http://localhost:4000/n_step_target</id><content type="html" xml:base="http://localhost:4000/n_step_target/">&lt;p&gt;N-step target&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/ChuaCheowHuan/reinforcement_learning/tree/master/&quot;&gt;Code&lt;/a&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">N-step target</summary></entry><entry><title type="html">Python’s multiprocessing package</title><link href="http://localhost:4000/np_array_manipulation/" rel="alternate" type="text/html" title="Python's multiprocessing package" /><published>2019-05-30T00:00:00+08:00</published><updated>2019-05-30T00:00:00+08:00</updated><id>http://localhost:4000/np_array_manipulation</id><content type="html" xml:base="http://localhost:4000/np_array_manipulation/">&lt;p&gt;Python’s multiprocessing package for parallel data generation.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/ChuaCheowHuan/reinforcement_learning/tree/master/&quot;&gt;Code&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;In the context of reinforcement learning algorithms such as A3C or DPPO, data generation is done in parallel. This simple example program demonstrates how to use the Python’s multiprocessing package to achieve parallel data generation.&lt;/p&gt;
+
+&lt;p&gt;The main program has a chief that spawns multiple worker processes. Each worker spawns a single work process. The work process generates random integer data [1,3].&lt;/p&gt;
+
+&lt;p&gt;Each worker has it’s own local queue. When data is generated, it is stored in it’s local queue. When the local queue’s size is greater than 5, the data is retrieved &amp;amp; 0.1 is added to the data, this result is stored in the Chief’s global queue. When the Chief’s global queue’s size is greater than 3, the result is retrieved &amp;amp; printed on screen.&lt;/p&gt;
+
+&lt;p&gt;The Worker class:&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;class Worker(object):
+  def __init__(self, worker_id, g_queue):
+    self.g_queue = g_queue
+    self.worker_id = worker_id
+    self.queue = Queue() # local worker queue
+    self.work_process = Process(target=self.work, args=())
+    self.work_process.start()
+    info(worker_id, self.work_process, &quot;Worker&quot;)
+
+  def work(self):
+
+    info(self.worker_id, self.work_process, &quot;work&quot;)
+
+    while True:
+      data = np.random.randint(1,4)
+      self.queue.put(data)
+
+      # process data in queue
+      if self.queue.qsize() &amp;gt; 5:
+        data = self.queue.get()
+        result = data + 0.1
+        self.g_queue.put(result) # send result to global queue
+
+      time.sleep(1) # work every x sec interval
+
+    return self.w_id  
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;The Chief class:&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;class Chief(object):
+  def __init__(self, num_workers):
+    self.g_queue = Queue() # global queue    
+    self.num_workers = num_workers
+
+  def dispatch_workers(self):   
+    worker_processes = [Process(target=Worker(w_id, self.g_queue), args=()) for w_id in range(num_workers)]
+    return worker_processes
+
+  def result(self):
+    if self.g_queue.qsize() &amp;gt; 3:
+      result = self.g_queue.get()
+      print(&quot;result&quot;, result)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;The main program:&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;if __name__ == '__main__':  
+  print('main parent process id:', os.getppid())
+  print('main process id:', os.getpid())
+
+  num_workers = 2
+  chief = Chief(num_workers)
+  workers_processes = chief.dispatch_workers()
+
+  i = 0
+  while True:    
+    time.sleep(2) # chk g_queue every x sec interval to get result
+    chief.result()
+    print(&quot;i=&quot;, i)
+
+    if i&amp;gt;9:
+      break
+    i+=1    
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;A helper display function:&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;def info(worker_id, process, function_name):
+    print(&quot;worker_id=&quot;, worker_id,
+          'module name:', __name__,
+          'function name:', function_name,
+          'parent process:', os.getppid(),
+          'current process id:', os.getpid(),
+          'spawn process id:', process.pid)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name>Huan</name></author><summary type="html">Python’s multiprocessing package for parallel data generation.</summary></entry><entry><title type="html">Numpy array manipulation</title><link href="http://localhost:4000/py_mpp/" rel="alternate" type="text/html" title="Numpy array manipulation" /><published>2019-05-29T00:00:00+08:00</published><updated>2019-05-29T00:00:00+08:00</updated><id>http://localhost:4000/py_mpp</id><content type="html" xml:base="http://localhost:4000/py_mpp/">&lt;p&gt;Simple numpy array manipulation examples&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/ChuaCheowHuan/reinforcement_learning/tree/master/&quot;&gt;Code&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;This Jupyter notebook contains simple examples on how to manipulate numpy arrays. The code block below shows the codes &amp;amp; it’s corresponding display output.&lt;/p&gt;
+
+&lt;p&gt;Setting up a numpy array:&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;buffer=[0,1]
+print('buffer=', buffer)
+$buffer= [0, 1]
+
+new=2
+print('new=', new)
+$new= 2
+
+buffer = np.array(buffer + [new]) # append a new item &amp;amp; create a numpy array
+print('np.array(buffer + [new])=', buffer)
+$np.array(buffer + [new])= [0 1 2]
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Slicing examples:&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# numpy array slicing syntax
+# buffer[start:stop:step]
+
+print('buffer[1:]=', buffer[1:]) # starting from index 1
+$buffer[1:]= [1 2]
+
+print('buffer[-1:]=', buffer[-1:]) # getting item in last index
+$buffer[-1:]= [2]
+
+print('buffer[:1]=', buffer[:1]) # stop at index 1 (exclusive), keep only 1st item
+$buffer[:1]= [0]
+
+print('buffer[:-1]=', buffer[:-1]) # stop at last index (exclusive), discard item in last index
+$buffer[:-1]= [0 1]
+
+print('buffer[::-1]=', buffer[::-1]) # start from last index (reversal)
+$buffer[::-1]= [2 1 0]
+
+print('buffer[1::-1]=', buffer[1::-1]) # reverse starting from index 1
+$buffer[1::-1]= [1 0]
+
+# Starting from index 1 will return [1 2], reversing will return [2,1]
+print('buffer[1:][::-1]=', buffer[1:][::-1])
+$buffer[1:][::-1]= [2 1]
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;np.newaxis is an alias for None:&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# np.newaxis = None
+
+print('buffer[:, np.newaxis]=', buffer[:, np.newaxis])
+$buffer[:, np.newaxis]= [[0][1][2]]
+
+print('buffer[:, None]=', buffer[:, None])
+$buffer[:, None]= [[0][1][2]]
+
+print('buffer[np.newaxis, :]=', buffer[np.newaxis, :])
+$buffer[np.newaxis, :]= [[0 1 2]]
+
+print('buffer[None, :]=', buffer[None, :])
+$buffer[None, :]= [[0 1 2]]
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Stacking:&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;a = [1,2,3]
+b = [4,5,6]
+c = [7,8,9]
+
+r = np.hstack((a,b,c)) # horizontal stacking
+print(&quot;r=&quot;, r)
+$r= [1 2 3 4 5 6 7 8 9]
+
+QUEUE = queue.Queue()
+QUEUE.put(a)
+QUEUE.put(b)
+QUEUE.put(c)
+
+r = [QUEUE.get() for _ in range(QUEUE.qsize())]
+print(r)
+$[[1, 2, 3], [4, 5, 6], [7, 8, 9]]
+
+r = np.vstack(r) # vertical stacking
+print(r)
+$[[1 2 3]
+  [4 5 6]
+  [7 8 9]]
+
+print(r[:, ::-1]) # col reversal
+$[[3 2 1]
+  [6 5 4]
+  [9 8 7]]
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name>Huan</name></author><summary type="html">Simple numpy array manipulation examples</summary></entry><entry><title type="html">Dueling DDQN with PER</title><link href="http://localhost:4000/Duel_DDQN_with_PER/" rel="alternate" type="text/html" title="Dueling DDQN with PER" /><published>2019-03-15T00:00:00+08:00</published><updated>2019-03-15T00:00:00+08:00</updated><id>http://localhost:4000/Duel_DDQN_with_PER</id><content type="html" xml:base="http://localhost:4000/Duel_DDQN_with_PER/">&lt;p&gt;A &lt;strong&gt;Dueling Double Deep Q Network with Priority Experience Replay (Duel DDQN with PER)&lt;/strong&gt; implementation in tensorflow.&lt;/p&gt;
 
 &lt;p&gt;Environment from OpenAI’s gym: CartPole-v0&lt;/p&gt;
 

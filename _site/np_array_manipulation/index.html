@@ -19,25 +19,29 @@
   <head>
     <meta charset="utf-8">
 
-<!-- begin _includes/seo.html --><title></title>
-<meta name="description" content="">
+<!-- begin _includes/seo.html --><title>Python’s multiprocessing package -</title>
+<meta name="description" content="Python’s multiprocessing package for parallel data generation.">
 
 
 
-<meta property="og:type" content="website">
+<meta property="og:type" content="article">
 <meta property="og:locale" content="en_US">
 <meta property="og:site_name" content="">
-<meta property="og:title" content="">
-<meta property="og:url" content="http://localhost:4000/">
+<meta property="og:title" content="Python’s multiprocessing package">
+<meta property="og:url" content="http://localhost:4000/np_array_manipulation/">
+
+
+  <meta property="og:description" content="Python’s multiprocessing package for parallel data generation.">
+
+
+
+  <meta property="og:image" content="http://localhost:4000/assets/images/bio-photo.jpg">
 
 
 
 
-  <meta property="og:image" content="http://localhost:4000/assets/images/robot_board_light_crop.jpg">
 
-
-
-
+  <meta property="article:published_time" content="2019-05-30T00:00:00+08:00">
 
 
 
@@ -48,7 +52,7 @@
   
 
 
-<link rel="canonical" href="http://localhost:4000/">
+<link rel="canonical" href="http://localhost:4000/np_array_manipulation/">
 
 
 
@@ -121,7 +125,7 @@
 
   </head>
 
-  <body class="layout--home">
+  <body class="layout--posts">
 
     <!--[if lt IE 9]>
 <div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
@@ -163,28 +167,6 @@
 
     <div class="initial-content">
       
-  
-
-
-
-
-
-
-
-
-
-
-
-<div class="page__hero"
-  style=" "
->
-  
-    <img src="/assets/images/robot_board_light_crop.jpg" alt="" class="page__hero-image">
-  
-  
-</div>
-
-
 
 
 
@@ -200,12 +182,8 @@
 
   <div class="author__content">
     
-      <h3 class="author__name" itemprop="name">Chua Cheow Huan</h3>
+      <h3 class="author__name" itemprop="name"></h3>
     
-    
-      <p class="author__bio" itemprop="description">
-        Self taught AI enthusiast.
-      </p>
     
   </div>
 
@@ -213,25 +191,7 @@
     <button class="btn btn--inverse">Follow</button>
     <ul class="author__urls social-icons">
       
-        <li itemprop="homeLocation" itemscope itemtype="https://schema.org/Place">
-          <i class="fas fa-fw fa-map-marker-alt" aria-hidden="true"></i> <span itemprop="name">Singapore</span>
-        </li>
-      
 
-      
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
       
 
       
@@ -298,34 +258,112 @@
 
   <div class="archive">
     
-      <h1 id="page-title" class="page__title"></h1>
+      <h1 id="page-title" class="page__title">Python's multiprocessing package</h1>
     
-    <br>
-"Do not worry about your difficulties in Mathematics.
-<br>
- I can assure you mine are still greater."
- <br>
- - Albert Einstein
+    <p>Python’s multiprocessing package for parallel data generation.</p>
 
-<!doctype html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <title>Home</title>
-  </head>
-  <body>
-    <h1>
-    </h1>
-    <p>
-    </p>
-  </body>
-</html>
+<p><a href="https://github.com/ChuaCheowHuan/reinforcement_learning/tree/master/">Code</a></p>
+
+<p>In the context of reinforcement learning algorithms such as A3C or DPPO, data generation is done in parallel. This simple example program demonstrates how to use the Python’s multiprocessing package to achieve parallel data generation.</p>
+
+<p>The main program has a chief that spawns multiple worker processes. Each worker spawns a single work process. The work process generates random integer data [1,3].</p>
+
+<p>Each worker has it’s own local queue. When data is generated, it is stored in it’s local queue. When the local queue’s size is greater than 5, the data is retrieved &amp; 0.1 is added to the data, this result is stored in the Chief’s global queue. When the Chief’s global queue’s size is greater than 3, the result is retrieved &amp; printed on screen.</p>
+
+<p>The Worker class:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>class Worker(object):
+  def __init__(self, worker_id, g_queue):
+    self.g_queue = g_queue
+    self.worker_id = worker_id
+    self.queue = Queue() # local worker queue
+    self.work_process = Process(target=self.work, args=())
+    self.work_process.start()
+    info(worker_id, self.work_process, "Worker")
+
+  def work(self):
+
+    info(self.worker_id, self.work_process, "work")
+
+    while True:
+      data = np.random.randint(1,4)
+      self.queue.put(data)
+
+      # process data in queue
+      if self.queue.qsize() &gt; 5:
+        data = self.queue.get()
+        result = data + 0.1
+        self.g_queue.put(result) # send result to global queue
+
+      time.sleep(1) # work every x sec interval
+
+    return self.w_id  
+</code></pre></div></div>
+
+<p>The Chief class:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>class Chief(object):
+  def __init__(self, num_workers):
+    self.g_queue = Queue() # global queue    
+    self.num_workers = num_workers
+
+  def dispatch_workers(self):   
+    worker_processes = [Process(target=Worker(w_id, self.g_queue), args=()) for w_id in range(num_workers)]
+    return worker_processes
+
+  def result(self):
+    if self.g_queue.qsize() &gt; 3:
+      result = self.g_queue.get()
+      print("result", result)
+</code></pre></div></div>
+
+<p>The main program:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>if __name__ == '__main__':  
+  print('main parent process id:', os.getppid())
+  print('main process id:', os.getpid())
+
+  num_workers = 2
+  chief = Chief(num_workers)
+  workers_processes = chief.dispatch_workers()
+
+  i = 0
+  while True:    
+    time.sleep(2) # chk g_queue every x sec interval to get result
+    chief.result()
+    print("i=", i)
+
+    if i&gt;9:
+      break
+    i+=1    
+</code></pre></div></div>
+
+<p>A helper display function:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>def info(worker_id, process, function_name):
+    print("worker_id=", worker_id,
+          'module name:', __name__,
+          'function name:', function_name,
+          'parent process:', os.getppid(),
+          'current process id:', os.getpid(),
+          'spawn process id:', process.pid)
+</code></pre></div></div>
 
 
-<h3 class="archive__subtitle">Recent posts</h3>
-
-
+<ul class="taxonomy__index">
   
+  
+    <li>
+      <a href="#2019">
+        <strong>2019</strong> <span class="taxonomy__count">7</span>
+      </a>
+    </li>
+  
+</ul>
+
+
+
+  <section id="2019" class="taxonomy__section">
+    <h2 class="archive__subtitle">2019</h2>
+    <div class="entries-list">
+      
+        
 
 
 
@@ -353,8 +391,8 @@
   </article>
 </div>
 
-
-  
+      
+        
 
 
 
@@ -382,8 +420,8 @@
   </article>
 </div>
 
-
-  
+      
+        
 
 
 
@@ -411,8 +449,8 @@
   </article>
 </div>
 
-
-  
+      
+        
 
 
 
@@ -440,8 +478,8 @@
   </article>
 </div>
 
-
-  
+      
+        
 
 
 
@@ -469,8 +507,8 @@
   </article>
 </div>
 
-
-  
+      
+        
 
 
 
@@ -498,8 +536,8 @@
   </article>
 </div>
 
-
-  
+      
+        
 
 
 
@@ -527,9 +565,10 @@
   </article>
 </div>
 
-
-
-
+      
+    </div>
+    <a href="#page-title" class="back-to-top">Back to top &uarr;</a>
+  </section>
 
 
   </div>
@@ -595,6 +634,48 @@
 <script src="/assets/js/lunr/lunr-en.js"></script>
 
 
+
+
+    
+  <script>
+    var disqus_config = function () {
+      this.page.url = "http://localhost:4000/np_array_manipulation/";  // Replace PAGE_URL with your page's canonical URL variable
+      this.page.identifier = "/np_array_manipulation"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+    (function() { // DON'T EDIT BELOW THIS LINE
+      var d = document, s = d.createElement('script');
+      s.src = 'https://https-chuacheowhuan-github-io.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  </script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+
+
+<div id="disqus_thread"></div>
+<script>
+
+/**
+*  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+*  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+/*
+var disqus_config = function () {
+this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+};
+*/
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = 'https://https-chuacheowhuan-github-io.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+  
 
 
   </body>

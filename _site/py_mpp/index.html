@@ -19,25 +19,29 @@
   <head>
     <meta charset="utf-8">
 
-<!-- begin _includes/seo.html --><title></title>
-<meta name="description" content="">
+<!-- begin _includes/seo.html --><title>Numpy array manipulation -</title>
+<meta name="description" content="Simple numpy array manipulation examples">
 
 
 
-<meta property="og:type" content="website">
+<meta property="og:type" content="article">
 <meta property="og:locale" content="en_US">
 <meta property="og:site_name" content="">
-<meta property="og:title" content="">
-<meta property="og:url" content="http://localhost:4000/">
+<meta property="og:title" content="Numpy array manipulation">
+<meta property="og:url" content="http://localhost:4000/py_mpp/">
+
+
+  <meta property="og:description" content="Simple numpy array manipulation examples">
+
+
+
+  <meta property="og:image" content="http://localhost:4000/assets/images/bio-photo.jpg">
 
 
 
 
-  <meta property="og:image" content="http://localhost:4000/assets/images/robot_board_light_crop.jpg">
 
-
-
-
+  <meta property="article:published_time" content="2019-05-29T00:00:00+08:00">
 
 
 
@@ -48,7 +52,7 @@
   
 
 
-<link rel="canonical" href="http://localhost:4000/">
+<link rel="canonical" href="http://localhost:4000/py_mpp/">
 
 
 
@@ -121,7 +125,7 @@
 
   </head>
 
-  <body class="layout--home">
+  <body class="layout--posts">
 
     <!--[if lt IE 9]>
 <div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
@@ -163,28 +167,6 @@
 
     <div class="initial-content">
       
-  
-
-
-
-
-
-
-
-
-
-
-
-<div class="page__hero"
-  style=" "
->
-  
-    <img src="/assets/images/robot_board_light_crop.jpg" alt="" class="page__hero-image">
-  
-  
-</div>
-
-
 
 
 
@@ -200,12 +182,8 @@
 
   <div class="author__content">
     
-      <h3 class="author__name" itemprop="name">Chua Cheow Huan</h3>
+      <h3 class="author__name" itemprop="name"></h3>
     
-    
-      <p class="author__bio" itemprop="description">
-        Self taught AI enthusiast.
-      </p>
     
   </div>
 
@@ -213,25 +191,7 @@
     <button class="btn btn--inverse">Follow</button>
     <ul class="author__urls social-icons">
       
-        <li itemprop="homeLocation" itemscope itemtype="https://schema.org/Place">
-          <i class="fas fa-fw fa-map-marker-alt" aria-hidden="true"></i> <span itemprop="name">Singapore</span>
-        </li>
-      
 
-      
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
       
 
       
@@ -298,34 +258,120 @@
 
   <div class="archive">
     
-      <h1 id="page-title" class="page__title"></h1>
+      <h1 id="page-title" class="page__title">Numpy array manipulation</h1>
     
-    <br>
-"Do not worry about your difficulties in Mathematics.
-<br>
- I can assure you mine are still greater."
- <br>
- - Albert Einstein
+    <p>Simple numpy array manipulation examples</p>
 
-<!doctype html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <title>Home</title>
-  </head>
-  <body>
-    <h1>
-    </h1>
-    <p>
-    </p>
-  </body>
-</html>
+<p><a href="https://github.com/ChuaCheowHuan/reinforcement_learning/tree/master/">Code</a></p>
+
+<p>This Jupyter notebook contains simple examples on how to manipulate numpy arrays. The code block below shows the codes &amp; it’s corresponding display output.</p>
+
+<p>Setting up a numpy array:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>buffer=[0,1]
+print('buffer=', buffer)
+$buffer= [0, 1]
+
+new=2
+print('new=', new)
+$new= 2
+
+buffer = np.array(buffer + [new]) # append a new item &amp; create a numpy array
+print('np.array(buffer + [new])=', buffer)
+$np.array(buffer + [new])= [0 1 2]
+</code></pre></div></div>
+
+<p>Slicing examples:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># numpy array slicing syntax
+# buffer[start:stop:step]
+
+print('buffer[1:]=', buffer[1:]) # starting from index 1
+$buffer[1:]= [1 2]
+
+print('buffer[-1:]=', buffer[-1:]) # getting item in last index
+$buffer[-1:]= [2]
+
+print('buffer[:1]=', buffer[:1]) # stop at index 1 (exclusive), keep only 1st item
+$buffer[:1]= [0]
+
+print('buffer[:-1]=', buffer[:-1]) # stop at last index (exclusive), discard item in last index
+$buffer[:-1]= [0 1]
+
+print('buffer[::-1]=', buffer[::-1]) # start from last index (reversal)
+$buffer[::-1]= [2 1 0]
+
+print('buffer[1::-1]=', buffer[1::-1]) # reverse starting from index 1
+$buffer[1::-1]= [1 0]
+
+# Starting from index 1 will return [1 2], reversing will return [2,1]
+print('buffer[1:][::-1]=', buffer[1:][::-1])
+$buffer[1:][::-1]= [2 1]
+</code></pre></div></div>
+
+<p>np.newaxis is an alias for None:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># np.newaxis = None
+
+print('buffer[:, np.newaxis]=', buffer[:, np.newaxis])
+$buffer[:, np.newaxis]= [[0][1][2]]
+
+print('buffer[:, None]=', buffer[:, None])
+$buffer[:, None]= [[0][1][2]]
+
+print('buffer[np.newaxis, :]=', buffer[np.newaxis, :])
+$buffer[np.newaxis, :]= [[0 1 2]]
+
+print('buffer[None, :]=', buffer[None, :])
+$buffer[None, :]= [[0 1 2]]
+</code></pre></div></div>
+
+<p>Stacking:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>a = [1,2,3]
+b = [4,5,6]
+c = [7,8,9]
+
+r = np.hstack((a,b,c)) # horizontal stacking
+print("r=", r)
+$r= [1 2 3 4 5 6 7 8 9]
+
+QUEUE = queue.Queue()
+QUEUE.put(a)
+QUEUE.put(b)
+QUEUE.put(c)
+
+r = [QUEUE.get() for _ in range(QUEUE.qsize())]
+print(r)
+$[[1, 2, 3], [4, 5, 6], [7, 8, 9]]
+
+r = np.vstack(r) # vertical stacking
+print(r)
+$[[1 2 3]
+  [4 5 6]
+  [7 8 9]]
+
+print(r[:, ::-1]) # col reversal
+$[[3 2 1]
+  [6 5 4]
+  [9 8 7]]
+</code></pre></div></div>
 
 
-<h3 class="archive__subtitle">Recent posts</h3>
-
-
+<ul class="taxonomy__index">
   
+  
+    <li>
+      <a href="#2019">
+        <strong>2019</strong> <span class="taxonomy__count">7</span>
+      </a>
+    </li>
+  
+</ul>
+
+
+
+  <section id="2019" class="taxonomy__section">
+    <h2 class="archive__subtitle">2019</h2>
+    <div class="entries-list">
+      
+        
 
 
 
@@ -353,8 +399,8 @@
   </article>
 </div>
 
-
-  
+      
+        
 
 
 
@@ -382,8 +428,8 @@
   </article>
 </div>
 
-
-  
+      
+        
 
 
 
@@ -411,8 +457,8 @@
   </article>
 </div>
 
-
-  
+      
+        
 
 
 
@@ -440,8 +486,8 @@
   </article>
 </div>
 
-
-  
+      
+        
 
 
 
@@ -469,8 +515,8 @@
   </article>
 </div>
 
-
-  
+      
+        
 
 
 
@@ -498,8 +544,8 @@
   </article>
 </div>
 
-
-  
+      
+        
 
 
 
@@ -527,9 +573,10 @@
   </article>
 </div>
 
-
-
-
+      
+    </div>
+    <a href="#page-title" class="back-to-top">Back to top &uarr;</a>
+  </section>
 
 
   </div>
@@ -595,6 +642,48 @@
 <script src="/assets/js/lunr/lunr-en.js"></script>
 
 
+
+
+    
+  <script>
+    var disqus_config = function () {
+      this.page.url = "http://localhost:4000/py_mpp/";  // Replace PAGE_URL with your page's canonical URL variable
+      this.page.identifier = "/py_mpp"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+    (function() { // DON'T EDIT BELOW THIS LINE
+      var d = document, s = d.createElement('script');
+      s.src = 'https://https-chuacheowhuan-github-io.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  </script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+
+
+<div id="disqus_thread"></div>
+<script>
+
+/**
+*  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+*  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+/*
+var disqus_config = function () {
+this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+};
+*/
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = 'https://https-chuacheowhuan-github-io.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+  
 
 
   </body>
