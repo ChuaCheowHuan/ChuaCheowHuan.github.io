@@ -7,7 +7,7 @@ title: Numpy array manipulation
 
 Simple numpy array manipulation examples
 
-[Code](https://github.com/ChuaCheowHuan/reinforcement_learning/blob/master/misc_python_examples/np_array_manipulation.ipynb)
+[Full code](https://github.com/ChuaCheowHuan/reinforcement_learning/blob/master/misc_python_examples/np_array_manipulation.ipynb)
 
 This Jupyter notebook contains simple examples on how to manipulate numpy arrays. The code block below shows the codes & it's corresponding display output.
 
