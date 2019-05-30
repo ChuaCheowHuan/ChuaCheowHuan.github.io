@@ -264,11 +264,11 @@
 
 <p>Environment from OpenAI’s gym: CartPole-v0</p>
 
-<p><a href="https://github.com/ChuaCheowHuan/reinforcement_learning/tree/master/DQN_variants/DDQN">Code</a></p>
+<p><a href="https://github.com/ChuaCheowHuan/reinforcement_learning/tree/master/DQN_variants/DDQN">Full code</a></p>
 
 <hr />
 <p><br />
-<strong>Notations</strong></p>
+<strong>Notations:</strong></p>
 
 <p>Model network = <script type="math/tex">Q_{\theta}</script> <br />
 Model parameter = <script type="math/tex">\theta</script> <br />
@@ -280,7 +280,7 @@ Target network Q value = <script type="math/tex">Q_{\phi}</script> (<script type
 
 <hr />
 <p><br />
-<strong>Equations</strong></p>
+<strong>Equations:</strong></p>
 
 <p>TD target = r (s, a) <script type="math/tex">+</script> <script type="math/tex">\gamma</script> <script type="math/tex">Q_{\phi}</script> (<script type="math/tex">s^{'}</script>, <script type="math/tex">argmax_{a^{'}}</script> <script type="math/tex">Q_{\theta}</script> (s<script type="math/tex">^{'}</script>, a<script type="math/tex">^{'}</script>)) <br />
 <br />
@@ -290,26 +290,43 @@ TD  error = (TD target) <script type="math/tex">-</script> (Model network Q valu
 
 <hr />
 <p><br />
-<strong>Implementation details</strong></p>
+<strong>Implementation details:</strong></p>
 
 <p>Create a placeholder to feed Q values from model network:</p>
-<blockquote>
-  <p><img src="https://drive.google.com/uc?export=view&amp;id=1CcZVw82JRQRWYmTFFN9PvLKjd4b5BOAF" alt="alt text" /></p>
-</blockquote>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>self.model_s_next_Q_val = tf.placeholder(tf.float32, [None,self.num_actions], name='model_s_next_Q_val')
+</code></pre></div></div>
 
 <p>Select Q values from model network using <script type="math/tex">s^{'}</script> as features &amp; feed them to the training session:</p>
-<blockquote>
-  <p><img src="https://drive.google.com/uc?export=view&amp;id=15uOc3uOz83V76X5s3PmgzzVWYJkkwR0Z" alt="alt text" /></p>
-</blockquote>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># select actions from model network
+model_s_next_Q_val = self.sess.run(self.model_Q_val, feed_dict={self.s: s_next})
+
+# training
+_, loss = self.sess.run([self.optimizer, self.loss],
+                        feed_dict = {self.s: s,
+                                     self.a: a,
+                                     self.r: r,
+                                     self.s_next: s_next,
+                                     self.done: done,
+                                     self.model_s_next_Q_val: model_s_next_Q_val})
+</code></pre></div></div>
 
 <p>Select minibatch actions with largest Q values from model network, create indices &amp; select corresponding minibatch actions from target network:</p>
-<blockquote>
-  <p><img src="https://drive.google.com/uc?export=view&amp;id=1YelpKjS68nPBWtg8oeLiZV4mpzkmTPT_" alt="alt text" /></p>
-</blockquote>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>def td_target(self, s_next, r, done, model_s_next_Q_val, target_Q_val):
+    # select action with largest Q value from model network
+    model_max_a = tf.argmax(model_s_next_Q_val, axis=1, output_type=tf.dtypes.int32)
+
+    arr = tf.range(tf.shape(model_max_a)[0], dtype=tf.int32) # create row indices
+    indices = tf.stack([arr, model_max_a], axis=1) # create 2D indices        
+    max_target_Q_val = tf.gather_nd(target_Q_val, indices) # select minibatch actions from target network
+    max_target_Q_val = tf.reshape(max_target_Q_val, (self.minibatch_size,1))
+</code></pre></div></div>
 
 <hr />
 <p><br />
-<strong>References</strong></p>
+<strong>References:</strong></p>
 
 <p><a href="https://arxiv.org/pdf/1509.06461.pdf">Deep Reinforcement Learning with Double Q-learning
 (Hasselt, Guez &amp; Silver, 2016)</a></p>
@@ -322,7 +339,7 @@ TD  error = (TD target) <script type="math/tex">-</script> (Model network Q valu
   
     <li>
       <a href="#2019">
-        <strong>2019</strong> <span class="taxonomy__count">7</span>
+        <strong>2019</strong> <span class="taxonomy__count">6</span>
       </a>
     </li>
   
@@ -343,7 +360,7 @@ TD  error = (TD target) <script type="math/tex">-</script> (Model network Q valu
     
     <h2 class="archive__item-title" itemprop="headline">
       
-        <a href="/np_array_manipulation/" rel="permalink">Python’s multiprocessing package
+        <a href="/py_mpp/" rel="permalink">Python’s multiprocessing package
 </a>
       
     </h2>
@@ -372,36 +389,7 @@ TD  error = (TD target) <script type="math/tex">-</script> (Model network Q valu
     
     <h2 class="archive__item-title" itemprop="headline">
       
-        <a href="/n_step_target/" rel="permalink">N-step target
-</a>
-      
-    </h2>
-    
-      <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
-
-
-
-
-  less than 1 minute read
-</p>
-    
-    <p class="archive__item-excerpt" itemprop="description">N-step target
-
-</p>
-  </article>
-</div>
-
-      
-        
-
-
-
-<div class="list__item">
-  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
-    
-    <h2 class="archive__item-title" itemprop="headline">
-      
-        <a href="/py_mpp/" rel="permalink">Numpy array manipulation
+        <a href="/np_array_manipulation/" rel="permalink">Numpy array manipulation
 </a>
       
     </h2>
@@ -440,7 +428,7 @@ TD  error = (TD target) <script type="math/tex">-</script> (Model network Q valu
 
 
 
-  1 minute read
+  2 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">A Dueling Double Deep Q Network with Priority Experience Replay (Duel DDQN with PER) implementation in tensorflow.
@@ -469,7 +457,7 @@ TD  error = (TD target) <script type="math/tex">-</script> (Model network Q valu
 
 
 
-  less than 1 minute read
+  1 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">A Dueling Double Deep Q Network (Dueling DDQN) implementation in tensorflow with random experience replay.
@@ -498,7 +486,7 @@ TD  error = (TD target) <script type="math/tex">-</script> (Model network Q valu
 
 
 
-  less than 1 minute read
+  1 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">A Double Deep Q Network (DDQN) implementation in tensorflow with random experience replay.

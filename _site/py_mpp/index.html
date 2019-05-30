@@ -19,19 +19,19 @@
   <head>
     <meta charset="utf-8">
 
-<!-- begin _includes/seo.html --><title>Numpy array manipulation -</title>
-<meta name="description" content="Simple numpy array manipulation examples">
+<!-- begin _includes/seo.html --><title>Python’s multiprocessing package -</title>
+<meta name="description" content="Python’s multiprocessing package for parallel data generation.">
 
 
 
 <meta property="og:type" content="article">
 <meta property="og:locale" content="en_US">
 <meta property="og:site_name" content="">
-<meta property="og:title" content="Numpy array manipulation">
+<meta property="og:title" content="Python’s multiprocessing package">
 <meta property="og:url" content="http://localhost:4000/py_mpp/">
 
 
-  <meta property="og:description" content="Simple numpy array manipulation examples">
+  <meta property="og:description" content="Python’s multiprocessing package for parallel data generation.">
 
 
 
@@ -41,7 +41,7 @@
 
 
 
-  <meta property="article:published_time" content="2019-05-29T00:00:00+08:00">
+  <meta property="article:published_time" content="2019-05-30T00:00:00+08:00">
 
 
 
@@ -258,99 +258,91 @@
 
   <div class="archive">
     
-      <h1 id="page-title" class="page__title">Numpy array manipulation</h1>
+      <h1 id="page-title" class="page__title">Python's multiprocessing package</h1>
     
-    <p>Simple numpy array manipulation examples</p>
+    <p>Python’s multiprocessing package for parallel data generation.</p>
 
 <p><a href="https://github.com/ChuaCheowHuan/reinforcement_learning/tree/master/">Code</a></p>
 
-<p>This Jupyter notebook contains simple examples on how to manipulate numpy arrays. The code block below shows the codes &amp; it’s corresponding display output.</p>
+<p>In the context of reinforcement learning algorithms such as A3C or DPPO, data generation is done in parallel. This simple example program demonstrates how to use the Python’s multiprocessing package to achieve parallel data generation.</p>
 
-<p>Setting up a numpy array:</p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>buffer=[0,1]
-print('buffer=', buffer)
-$buffer= [0, 1]
+<p>The main program has a chief that spawns multiple worker processes. Each worker spawns a single work process. The work process generates random integer data [1,3].</p>
 
-new=2
-print('new=', new)
-$new= 2
+<p>Each worker has it’s own local queue. When data is generated, it is stored in it’s local queue. When the local queue’s size is greater than 5, the data is retrieved &amp; 0.1 is added to the data, this result is stored in the Chief’s global queue. When the Chief’s global queue’s size is greater than 3, the result is retrieved &amp; printed on screen.</p>
 
-buffer = np.array(buffer + [new]) # append a new item &amp; create a numpy array
-print('np.array(buffer + [new])=', buffer)
-$np.array(buffer + [new])= [0 1 2]
+<p>The Worker class:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>class Worker(object):
+  def __init__(self, worker_id, g_queue):
+    self.g_queue = g_queue
+    self.worker_id = worker_id
+    self.queue = Queue() # local worker queue
+    self.work_process = Process(target=self.work, args=())
+    self.work_process.start()
+    info(worker_id, self.work_process, "Worker")
+
+  def work(self):
+
+    info(self.worker_id, self.work_process, "work")
+
+    while True:
+      data = np.random.randint(1,4)
+      self.queue.put(data)
+
+      # process data in queue
+      if self.queue.qsize() &gt; 5:
+        data = self.queue.get()
+        result = data + 0.1
+        self.g_queue.put(result) # send result to global queue
+
+      time.sleep(1) # work every x sec interval
+
+    return self.w_id  
 </code></pre></div></div>
 
-<p>Slicing examples:</p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># numpy array slicing syntax
-# buffer[start:stop:step]
+<p>The Chief class:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>class Chief(object):
+  def __init__(self, num_workers):
+    self.g_queue = Queue() # global queue    
+    self.num_workers = num_workers
 
-print('buffer[1:]=', buffer[1:]) # starting from index 1
-$buffer[1:]= [1 2]
+  def dispatch_workers(self):   
+    worker_processes = [Process(target=Worker(w_id, self.g_queue), args=()) for w_id in range(num_workers)]
+    return worker_processes
 
-print('buffer[-1:]=', buffer[-1:]) # getting item in last index
-$buffer[-1:]= [2]
-
-print('buffer[:1]=', buffer[:1]) # stop at index 1 (exclusive), keep only 1st item
-$buffer[:1]= [0]
-
-print('buffer[:-1]=', buffer[:-1]) # stop at last index (exclusive), discard item in last index
-$buffer[:-1]= [0 1]
-
-print('buffer[::-1]=', buffer[::-1]) # start from last index (reversal)
-$buffer[::-1]= [2 1 0]
-
-print('buffer[1::-1]=', buffer[1::-1]) # reverse starting from index 1
-$buffer[1::-1]= [1 0]
-
-# Starting from index 1 will return [1 2], reversing will return [2,1]
-print('buffer[1:][::-1]=', buffer[1:][::-1])
-$buffer[1:][::-1]= [2 1]
+  def result(self):
+    if self.g_queue.qsize() &gt; 3:
+      result = self.g_queue.get()
+      print("result", result)
 </code></pre></div></div>
 
-<p>np.newaxis is an alias for None:</p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># np.newaxis = None
+<p>The main program:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>if __name__ == '__main__':  
+  print('main parent process id:', os.getppid())
+  print('main process id:', os.getpid())
 
-print('buffer[:, np.newaxis]=', buffer[:, np.newaxis])
-$buffer[:, np.newaxis]= [[0][1][2]]
+  num_workers = 2
+  chief = Chief(num_workers)
+  workers_processes = chief.dispatch_workers()
 
-print('buffer[:, None]=', buffer[:, None])
-$buffer[:, None]= [[0][1][2]]
+  i = 0
+  while True:    
+    time.sleep(2) # chk g_queue every x sec interval to get result
+    chief.result()
+    print("i=", i)
 
-print('buffer[np.newaxis, :]=', buffer[np.newaxis, :])
-$buffer[np.newaxis, :]= [[0 1 2]]
-
-print('buffer[None, :]=', buffer[None, :])
-$buffer[None, :]= [[0 1 2]]
+    if i&gt;9:
+      break
+    i+=1    
 </code></pre></div></div>
 
-<p>Stacking:</p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>a = [1,2,3]
-b = [4,5,6]
-c = [7,8,9]
-
-r = np.hstack((a,b,c)) # horizontal stacking
-print("r=", r)
-$r= [1 2 3 4 5 6 7 8 9]
-
-QUEUE = queue.Queue()
-QUEUE.put(a)
-QUEUE.put(b)
-QUEUE.put(c)
-
-r = [QUEUE.get() for _ in range(QUEUE.qsize())]
-print(r)
-$[[1, 2, 3], [4, 5, 6], [7, 8, 9]]
-
-r = np.vstack(r) # vertical stacking
-print(r)
-$[[1 2 3]
-  [4 5 6]
-  [7 8 9]]
-
-print(r[:, ::-1]) # col reversal
-$[[3 2 1]
-  [6 5 4]
-  [9 8 7]]
+<p>A helper display function:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>def info(worker_id, process, function_name):
+    print("worker_id=", worker_id,
+          'module name:', __name__,
+          'function name:', function_name,
+          'parent process:', os.getppid(),
+          'current process id:', os.getpid(),
+          'spawn process id:', process.pid)
 </code></pre></div></div>
 
 
@@ -359,7 +351,7 @@ $[[3 2 1]
   
     <li>
       <a href="#2019">
-        <strong>2019</strong> <span class="taxonomy__count">7</span>
+        <strong>2019</strong> <span class="taxonomy__count">6</span>
       </a>
     </li>
   
@@ -380,7 +372,7 @@ $[[3 2 1]
     
     <h2 class="archive__item-title" itemprop="headline">
       
-        <a href="/np_array_manipulation/" rel="permalink">Python’s multiprocessing package
+        <a href="/py_mpp/" rel="permalink">Python’s multiprocessing package
 </a>
       
     </h2>
@@ -409,36 +401,7 @@ $[[3 2 1]
     
     <h2 class="archive__item-title" itemprop="headline">
       
-        <a href="/n_step_target/" rel="permalink">N-step target
-</a>
-      
-    </h2>
-    
-      <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
-
-
-
-
-  less than 1 minute read
-</p>
-    
-    <p class="archive__item-excerpt" itemprop="description">N-step target
-
-</p>
-  </article>
-</div>
-
-      
-        
-
-
-
-<div class="list__item">
-  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
-    
-    <h2 class="archive__item-title" itemprop="headline">
-      
-        <a href="/py_mpp/" rel="permalink">Numpy array manipulation
+        <a href="/np_array_manipulation/" rel="permalink">Numpy array manipulation
 </a>
       
     </h2>
@@ -477,7 +440,7 @@ $[[3 2 1]
 
 
 
-  1 minute read
+  2 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">A Dueling Double Deep Q Network with Priority Experience Replay (Duel DDQN with PER) implementation in tensorflow.
@@ -535,7 +498,7 @@ $[[3 2 1]
 
 
 
-  less than 1 minute read
+  1 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">A Double Deep Q Network (DDQN) implementation in tensorflow with random experience replay.

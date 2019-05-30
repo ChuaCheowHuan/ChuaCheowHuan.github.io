@@ -264,11 +264,12 @@
 
 <p>Environment from OpenAI’s gym: CartPole-v0</p>
 
-<p><a href="https://github.com/ChuaCheowHuan/reinforcement_learning/tree/master/DQN_variants/DQN">Code</a></p>
+<p><a href="https://github.com/ChuaCheowHuan/reinforcement_learning/tree/master/DQN_variants/DQN">Full code</a></p>
 
 <hr />
-<p><br />
-<strong>Notations</strong></p>
+<p><br /></p>
+
+<p><strong>Notations:</strong></p>
 
 <p>Model network = <script type="math/tex">Q_{\theta}</script> <br />
 Model parameter = <script type="math/tex">\theta</script> <br />
@@ -279,8 +280,9 @@ Target parameter = <script type="math/tex">\phi</script> <br />
 Target network Q value = <script type="math/tex">Q_{\phi}</script> (<script type="math/tex">s^{'}</script>, <script type="math/tex">a^{'}</script>)</p>
 
 <hr />
-<p><br />
-<strong>Equations</strong></p>
+<p><br /></p>
+
+<p><strong>Equations:</strong></p>
 
 <p>TD target = r (s, a) <script type="math/tex">+</script> <script type="math/tex">\gamma</script> <script type="math/tex">max_{a}</script> <script type="math/tex">Q_{\phi}</script> (<script type="math/tex">s^{'}</script>, <script type="math/tex">a^{'}</script>) <br />
 <br />
@@ -289,48 +291,48 @@ TD  error = (TD target) <script type="math/tex">-</script> (Model network Q valu
 = [r (s, a) <script type="math/tex">+</script> <script type="math/tex">\gamma</script> <script type="math/tex">max_{a^{'}}</script> <script type="math/tex">Q_{\phi}</script> (<script type="math/tex">s^{'}</script>, <script type="math/tex">a^{'}</script>)] <script type="math/tex">-</script> <script type="math/tex">Q_{\theta}</script> (s, a)</p>
 
 <hr />
+<p><br /></p>
+
+<p><strong>Implementation details:</strong></p>
+
+<p>Update target parameter <script type="math/tex">\phi</script> with model parameter <script type="math/tex">\theta</script> :
+<br />
+Copy <script type="math/tex">\theta</script> to <script type="math/tex">\phi</script> with <em>either</em> soft or hard parameter update.
+<br /></p>
+
+<p>Hard parameter update:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>with tf.variable_scope('hard_replace'):
+  self.target_replace_hard = [t.assign(m) for t, m in zip(self.target_net_params, self.model_net_params)]   
+</code></pre></div></div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># hard params replacement
+if self.learn_step % self.tau_step == 0:
+    self.sess.run(self.target_replace_hard)  
+self.learn_step += 1
+</code></pre></div></div>
+<p><br /></p>
+
+<p>Soft parameter update:
+<br />
+polyak <script type="math/tex">\cdot</script>  <script type="math/tex">\theta</script> + (1 <script type="math/tex">-</script> polyak)  <script type="math/tex">\cdot</script>  <script type="math/tex">\phi</script></p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>with tf.variable_scope('soft_replace'):            
+  self.target_replace_soft = [t.assign(self.polyak * m + (1 - self.polyak) * t)
+                              for t, m in zip(self.target_net_params, self.model_net_params)]   
+</code></pre></div></div>
+
 <p><br />
-<strong>Implementation details</strong></p>
-
-<p>Update target parameter <script type="math/tex">\phi</script> with model parameter <script type="math/tex">\theta</script> :</p>
-<blockquote>
-  <p>Copy <script type="math/tex">\theta</script> to <script type="math/tex">\phi</script> with <em>either</em> soft or hard parameter update.</p>
-</blockquote>
-
-<blockquote>
-  <p>Hard parameter update:</p>
-  <blockquote>
-    <p><img src="https://drive.google.com/uc?export=view&amp;id=18CK3rHYEfDxVtxe1gnVn2Z10Dosrmrww" alt="alt text" />
-<img src="https://drive.google.com/uc?export=view&amp;id=1lNBR6BxZZfk_uGkDSOumUm9qntiJ5QhH" alt="alt text" /></p>
-  </blockquote>
-</blockquote>
-
-<blockquote>
-  <p>Soft parameter update:</p>
-  <blockquote>
-    <p>polyak <script type="math/tex">\cdot</script>  <script type="math/tex">\theta</script> + (1 <script type="math/tex">-</script> polyak)  <script type="math/tex">\cdot</script>  <script type="math/tex">\phi</script></p>
-  </blockquote>
-</blockquote>
-
-<blockquote>
-  <blockquote>
-    <p><img src="https://drive.google.com/uc?export=view&amp;id=1OfxkRAMve0liZ3BlkS4pCoJ6CPPEjwQG" alt="alt text" /></p>
-  </blockquote>
-</blockquote>
-
-<p>Stop TD target from contributing to gradient computation:</p>
-<blockquote>
-  <p><img src="https://drive.google.com/uc?export=view&amp;id=1sw1WtddZn4t48QJhz_LMTthIPhOc4jtl" alt="alt text" /></p>
-</blockquote>
-
+Stop TD target from contributing to gradient computation:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># exclude td_target in gradient computation
+td_target = tf.stop_gradient(td_target)
+</code></pre></div></div>
 <hr />
-<p><br />
-<strong>References</strong></p>
+<p><br /></p>
+
+<p><strong>References:</strong></p>
 
 <p><a href="https://storage.googleapis.com/deepmind-media/dqn/DQNNaturePaper.pdf">Human-level control through deep reinforcement learning
-(Mnih et al., 2015)</a></p>
-
-<p><br /></p>
+(Mnih et al., 2015)</a>
+<br /></p>
 
 
 <ul class="taxonomy__index">
@@ -338,7 +340,7 @@ TD  error = (TD target) <script type="math/tex">-</script> (Model network Q valu
   
     <li>
       <a href="#2019">
-        <strong>2019</strong> <span class="taxonomy__count">7</span>
+        <strong>2019</strong> <span class="taxonomy__count">6</span>
       </a>
     </li>
   
@@ -359,7 +361,7 @@ TD  error = (TD target) <script type="math/tex">-</script> (Model network Q valu
     
     <h2 class="archive__item-title" itemprop="headline">
       
-        <a href="/np_array_manipulation/" rel="permalink">Python’s multiprocessing package
+        <a href="/py_mpp/" rel="permalink">Python’s multiprocessing package
 </a>
       
     </h2>
@@ -388,36 +390,7 @@ TD  error = (TD target) <script type="math/tex">-</script> (Model network Q valu
     
     <h2 class="archive__item-title" itemprop="headline">
       
-        <a href="/n_step_target/" rel="permalink">N-step target
-</a>
-      
-    </h2>
-    
-      <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
-
-
-
-
-  less than 1 minute read
-</p>
-    
-    <p class="archive__item-excerpt" itemprop="description">N-step target
-
-</p>
-  </article>
-</div>
-
-      
-        
-
-
-
-<div class="list__item">
-  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
-    
-    <h2 class="archive__item-title" itemprop="headline">
-      
-        <a href="/py_mpp/" rel="permalink">Numpy array manipulation
+        <a href="/np_array_manipulation/" rel="permalink">Numpy array manipulation
 </a>
       
     </h2>
@@ -456,7 +429,7 @@ TD  error = (TD target) <script type="math/tex">-</script> (Model network Q valu
 
 
 
-  1 minute read
+  2 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">A Dueling Double Deep Q Network with Priority Experience Replay (Duel DDQN with PER) implementation in tensorflow.
@@ -485,7 +458,7 @@ TD  error = (TD target) <script type="math/tex">-</script> (Model network Q valu
 
 
 
-  less than 1 minute read
+  1 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">A Dueling Double Deep Q Network (Dueling DDQN) implementation in tensorflow with random experience replay.
@@ -514,7 +487,7 @@ TD  error = (TD target) <script type="math/tex">-</script> (Model network Q valu
 
 
 
-  less than 1 minute read
+  1 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">A Double Deep Q Network (DDQN) implementation in tensorflow with random experience replay.

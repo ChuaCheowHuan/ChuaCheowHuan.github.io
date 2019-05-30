@@ -9,11 +9,11 @@ A **Dueling Double Deep Q Network with Priority Experience Replay (Duel DDQN wit
 
 Environment from OpenAI's gym: CartPole-v0
 
-[Code](https://github.com/ChuaCheowHuan/reinforcement_learning/tree/master/DQN_variants/duel_DDQN_PER)
+[Full code](https://github.com/ChuaCheowHuan/reinforcement_learning/tree/master/DQN_variants/duel_DDQN_PER)
 
 ---
 <br>
-**Notations**
+**Notations:**
 
 Model network = $$Q_{\theta}$$ \\
 Model parameter = $$\theta$$ \\
@@ -38,7 +38,7 @@ Replay memory size = N
 
 ---
 <br>
-**Equations**
+**Equations:**
 
 TD target = r (s, a) $$+$$ $$\gamma$$ $$Q_{\phi}$$ ($$s^{'}$$, $$argmax_{a^{'}}$$ $$Q_{\theta}$$ (s$$^{'}$$, a$$^{'}$$)) \\
 <br>
@@ -62,7 +62,7 @@ weights = $$w_{i}$$ = (N $$\cdot$$ P(i)) $$^{-\beta}$$
 
 ---
 <br>
-**Implementation details**
+**Implementation details:**
 
 Sum tree:
 
@@ -94,13 +94,30 @@ The data array in sumTree object stores an Exp object, which is a sample of expe
 
 <br>
 The following code decides how to sample:
->![alt text](https://drive.google.com/uc?export=view&id=1KlrlE3KANwmO56vtUdgAI6djfWcDfgWf)
+```
+def sample(self, k): # k = minibatch size
+    batch = []
+
+    # total_p() gives the total sum of priorities of the leaves in the sumTree
+    # which is the value stored in the root node
+    segment = self.tree.total_p() / k
+
+    for i in range(k):
+        a = segment * i # start of segment
+        b = segment * (i + 1) # end of segment
+        s = np.random.uniform(a, b) # rand value between a, b
+
+        (idx, p, data) = self.tree.get(s)
+        batch.append( (idx, p, data) )            
+
+    return batch    
+```
 
 Refer to appendix B.2.1, under the section, "Proportional prioritization", from the original (Schaul et al., 2016) [paper](https://arxiv.org/pdf/1511.05952.pdf) for sampling details.
 
 ---
 <br>
-**References**
+**References:**
 
 [Prioritized experience replay (Schaul et al., 2016)](https://arxiv.org/pdf/1511.05952.pdf)
 

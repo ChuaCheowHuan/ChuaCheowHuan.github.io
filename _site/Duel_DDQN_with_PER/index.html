@@ -264,11 +264,11 @@
 
 <p>Environment from OpenAI’s gym: CartPole-v0</p>
 
-<p><a href="https://github.com/ChuaCheowHuan/reinforcement_learning/tree/master/DQN_variants/duel_DDQN_PER">Code</a></p>
+<p><a href="https://github.com/ChuaCheowHuan/reinforcement_learning/tree/master/DQN_variants/duel_DDQN_PER">Full code</a></p>
 
 <hr />
 <p><br />
-<strong>Notations</strong></p>
+<strong>Notations:</strong></p>
 
 <p>Model network = <script type="math/tex">Q_{\theta}</script> <br />
 Model parameter = <script type="math/tex">\theta</script> <br />
@@ -297,7 +297,7 @@ Replay memory size = N</p>
 
 <hr />
 <p><br />
-<strong>Equations</strong></p>
+<strong>Equations:</strong></p>
 
 <p>TD target = r (s, a) <script type="math/tex">+</script> <script type="math/tex">\gamma</script> <script type="math/tex">Q_{\phi}</script> (<script type="math/tex">s^{'}</script>, <script type="math/tex">argmax_{a^{'}}</script> <script type="math/tex">Q_{\theta}</script> (s<script type="math/tex">^{'}</script>, a<script type="math/tex">^{'}</script>)) <br />
 <br />
@@ -320,7 +320,7 @@ weights = <script type="math/tex">w_{i}</script> = (N <script type="math/tex">\c
 
 <hr />
 <p><br />
-<strong>Implementation details</strong></p>
+<strong>Implementation details:</strong></p>
 
 <p>Sum tree:</p>
 
@@ -396,15 +396,29 @@ The data array in sumTree object stores an Exp object, which is a sample of expe
 
 <p><br />
 The following code decides how to sample:</p>
-<blockquote>
-  <p><img src="https://drive.google.com/uc?export=view&amp;id=1KlrlE3KANwmO56vtUdgAI6djfWcDfgWf" alt="alt text" /></p>
-</blockquote>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>def sample(self, k): # k = minibatch size
+    batch = []
+
+    # total_p() gives the total sum of priorities of the leaves in the sumTree
+    # which is the value stored in the root node
+    segment = self.tree.total_p() / k
+
+    for i in range(k):
+        a = segment * i # start of segment
+        b = segment * (i + 1) # end of segment
+        s = np.random.uniform(a, b) # rand value between a, b
+
+        (idx, p, data) = self.tree.get(s)
+        batch.append( (idx, p, data) )            
+
+    return batch    
+</code></pre></div></div>
 
 <p>Refer to appendix B.2.1, under the section, “Proportional prioritization”, from the original (Schaul et al., 2016) <a href="https://arxiv.org/pdf/1511.05952.pdf">paper</a> for sampling details.</p>
 
 <hr />
 <p><br />
-<strong>References</strong></p>
+<strong>References:</strong></p>
 
 <p><a href="https://arxiv.org/pdf/1511.05952.pdf">Prioritized experience replay (Schaul et al., 2016)</a></p>
 
@@ -416,7 +430,7 @@ The following code decides how to sample:</p>
   
     <li>
       <a href="#2019">
-        <strong>2019</strong> <span class="taxonomy__count">7</span>
+        <strong>2019</strong> <span class="taxonomy__count">6</span>
       </a>
     </li>
   
@@ -437,7 +451,7 @@ The following code decides how to sample:</p>
     
     <h2 class="archive__item-title" itemprop="headline">
       
-        <a href="/np_array_manipulation/" rel="permalink">Python’s multiprocessing package
+        <a href="/py_mpp/" rel="permalink">Python’s multiprocessing package
 </a>
       
     </h2>
@@ -466,36 +480,7 @@ The following code decides how to sample:</p>
     
     <h2 class="archive__item-title" itemprop="headline">
       
-        <a href="/n_step_target/" rel="permalink">N-step target
-</a>
-      
-    </h2>
-    
-      <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
-
-
-
-
-  less than 1 minute read
-</p>
-    
-    <p class="archive__item-excerpt" itemprop="description">N-step target
-
-</p>
-  </article>
-</div>
-
-      
-        
-
-
-
-<div class="list__item">
-  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
-    
-    <h2 class="archive__item-title" itemprop="headline">
-      
-        <a href="/py_mpp/" rel="permalink">Numpy array manipulation
+        <a href="/np_array_manipulation/" rel="permalink">Numpy array manipulation
 </a>
       
     </h2>
@@ -534,7 +519,7 @@ The following code decides how to sample:</p>
 
 
 
-  1 minute read
+  2 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">A Dueling Double Deep Q Network with Priority Experience Replay (Duel DDQN with PER) implementation in tensorflow.
@@ -592,7 +577,7 @@ The following code decides how to sample:</p>
 
 
 
-  less than 1 minute read
+  1 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">A Double Deep Q Network (DDQN) implementation in tensorflow with random experience replay.

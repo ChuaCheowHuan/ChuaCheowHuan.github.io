@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.5">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2019-05-30T17:34:34+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Chua Cheow Huan</title><subtitle></subtitle><author><name>Chua Cheow Huan</name></author><entry><title type="html">N-step target</title><link href="http://localhost:4000/n_step_target/" rel="alternate" type="text/html" title="N-step target" /><published>2019-05-30T00:00:00+08:00</published><updated>2019-05-30T00:00:00+08:00</updated><id>http://localhost:4000/n_step_target</id><content type="html" xml:base="http://localhost:4000/n_step_target/">&lt;p&gt;N-step target&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://github.com/ChuaCheowHuan/reinforcement_learning/tree/master/&quot;&gt;Code&lt;/a&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">N-step target</summary></entry><entry><title type="html">Python’s multiprocessing package</title><link href="http://localhost:4000/np_array_manipulation/" rel="alternate" type="text/html" title="Python's multiprocessing package" /><published>2019-05-30T00:00:00+08:00</published><updated>2019-05-30T00:00:00+08:00</updated><id>http://localhost:4000/np_array_manipulation</id><content type="html" xml:base="http://localhost:4000/np_array_manipulation/">&lt;p&gt;Python’s multiprocessing package for parallel data generation.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.5">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2019-05-30T23:19:47+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Chua Cheow Huan</title><subtitle></subtitle><author><name>Chua Cheow Huan</name></author><entry><title type="html">Python’s multiprocessing package</title><link href="http://localhost:4000/py_mpp/" rel="alternate" type="text/html" title="Python's multiprocessing package" /><published>2019-05-30T00:00:00+08:00</published><updated>2019-05-30T00:00:00+08:00</updated><id>http://localhost:4000/py_mpp</id><content type="html" xml:base="http://localhost:4000/py_mpp/">&lt;p&gt;Python’s multiprocessing package for parallel data generation.&lt;/p&gt;
 
 &lt;p&gt;&lt;a href=&quot;https://github.com/ChuaCheowHuan/reinforcement_learning/tree/master/&quot;&gt;Code&lt;/a&gt;&lt;/p&gt;
 
@@ -83,7 +81,7 @@
           'parent process:', os.getppid(),
           'current process id:', os.getpid(),
           'spawn process id:', process.pid)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name>Huan</name></author><summary type="html">Python’s multiprocessing package for parallel data generation.</summary></entry><entry><title type="html">Numpy array manipulation</title><link href="http://localhost:4000/py_mpp/" rel="alternate" type="text/html" title="Numpy array manipulation" /><published>2019-05-29T00:00:00+08:00</published><updated>2019-05-29T00:00:00+08:00</updated><id>http://localhost:4000/py_mpp</id><content type="html" xml:base="http://localhost:4000/py_mpp/">&lt;p&gt;Simple numpy array manipulation examples&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name>Huan</name></author><summary type="html">Python’s multiprocessing package for parallel data generation.</summary></entry><entry><title type="html">Numpy array manipulation</title><link href="http://localhost:4000/np_array_manipulation/" rel="alternate" type="text/html" title="Numpy array manipulation" /><published>2019-05-29T00:00:00+08:00</published><updated>2019-05-29T00:00:00+08:00</updated><id>http://localhost:4000/np_array_manipulation</id><content type="html" xml:base="http://localhost:4000/np_array_manipulation/">&lt;p&gt;Simple numpy array manipulation examples&lt;/p&gt;
 
 &lt;p&gt;&lt;a href=&quot;https://github.com/ChuaCheowHuan/reinforcement_learning/tree/master/&quot;&gt;Code&lt;/a&gt;&lt;/p&gt;
 
@@ -178,11 +176,11 @@ $[[3 2 1]
 
 &lt;p&gt;Environment from OpenAI’s gym: CartPole-v0&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&quot;https://github.com/ChuaCheowHuan/reinforcement_learning/tree/master/DQN_variants/duel_DDQN_PER&quot;&gt;Code&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://github.com/ChuaCheowHuan/reinforcement_learning/tree/master/DQN_variants/duel_DDQN_PER&quot;&gt;Full code&lt;/a&gt;&lt;/p&gt;
 
 &lt;hr /&gt;
 &lt;p&gt;&lt;br /&gt;
-&lt;strong&gt;Notations&lt;/strong&gt;&lt;/p&gt;
+&lt;strong&gt;Notations:&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;Model network = &lt;script type=&quot;math/tex&quot;&gt;Q_{\theta}&lt;/script&gt; &lt;br /&gt;
 Model parameter = &lt;script type=&quot;math/tex&quot;&gt;\theta&lt;/script&gt; &lt;br /&gt;
@@ -211,7 +209,7 @@ Replay memory size = N&lt;/p&gt;
 
 &lt;hr /&gt;
 &lt;p&gt;&lt;br /&gt;
-&lt;strong&gt;Equations&lt;/strong&gt;&lt;/p&gt;
+&lt;strong&gt;Equations:&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;TD target = r (s, a) &lt;script type=&quot;math/tex&quot;&gt;+&lt;/script&gt; &lt;script type=&quot;math/tex&quot;&gt;\gamma&lt;/script&gt; &lt;script type=&quot;math/tex&quot;&gt;Q_{\phi}&lt;/script&gt; (&lt;script type=&quot;math/tex&quot;&gt;s^{'}&lt;/script&gt;, &lt;script type=&quot;math/tex&quot;&gt;argmax_{a^{'}}&lt;/script&gt; &lt;script type=&quot;math/tex&quot;&gt;Q_{\theta}&lt;/script&gt; (s&lt;script type=&quot;math/tex&quot;&gt;^{'}&lt;/script&gt;, a&lt;script type=&quot;math/tex&quot;&gt;^{'}&lt;/script&gt;)) &lt;br /&gt;
 &lt;br /&gt;
@@ -234,7 +232,7 @@ weights = &lt;script type=&quot;math/tex&quot;&gt;w_{i}&lt;/script&gt; = (N &lt;
 
 &lt;hr /&gt;
 &lt;p&gt;&lt;br /&gt;
-&lt;strong&gt;Implementation details&lt;/strong&gt;&lt;/p&gt;
+&lt;strong&gt;Implementation details:&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;Sum tree:&lt;/p&gt;
 
@@ -310,15 +308,29 @@ The data array in sumTree object stores an Exp object, which is a sample of expe
 
 &lt;p&gt;&lt;br /&gt;
 The following code decides how to sample:&lt;/p&gt;
-&lt;blockquote&gt;
-  &lt;p&gt;&lt;img src=&quot;https://drive.google.com/uc?export=view&amp;amp;id=1KlrlE3KANwmO56vtUdgAI6djfWcDfgWf&quot; alt=&quot;alt text&quot; /&gt;&lt;/p&gt;
-&lt;/blockquote&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;def sample(self, k): # k = minibatch size
+    batch = []
+
+    # total_p() gives the total sum of priorities of the leaves in the sumTree
+    # which is the value stored in the root node
+    segment = self.tree.total_p() / k
+
+    for i in range(k):
+        a = segment * i # start of segment
+        b = segment * (i + 1) # end of segment
+        s = np.random.uniform(a, b) # rand value between a, b
+
+        (idx, p, data) = self.tree.get(s)
+        batch.append( (idx, p, data) )            
+
+    return batch    
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;Refer to appendix B.2.1, under the section, “Proportional prioritization”, from the original (Schaul et al., 2016) &lt;a href=&quot;https://arxiv.org/pdf/1511.05952.pdf&quot;&gt;paper&lt;/a&gt; for sampling details.&lt;/p&gt;
 
 &lt;hr /&gt;
 &lt;p&gt;&lt;br /&gt;
-&lt;strong&gt;References&lt;/strong&gt;&lt;/p&gt;
+&lt;strong&gt;References:&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;a href=&quot;https://arxiv.org/pdf/1511.05952.pdf&quot;&gt;Prioritized experience replay (Schaul et al., 2016)&lt;/a&gt;&lt;/p&gt;
 
@@ -326,11 +338,11 @@ The following code decides how to sample:&lt;/p&gt;
 
 &lt;p&gt;Environment from OpenAI’s gym: CartPole-v0&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&quot;https://github.com/ChuaCheowHuan/reinforcement_learning/tree/master/DQN_variants/duel_DDQN&quot;&gt;Code&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://github.com/ChuaCheowHuan/reinforcement_learning/tree/master/DQN_variants/duel_DDQN&quot;&gt;Full code&lt;/a&gt;&lt;/p&gt;
 
 &lt;hr /&gt;
 &lt;p&gt;&lt;br /&gt;
-&lt;strong&gt;Notations&lt;/strong&gt;&lt;/p&gt;
+&lt;strong&gt;Notations:&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;Network = &lt;script type=&quot;math/tex&quot;&gt;Q_{\theta}&lt;/script&gt; &lt;br /&gt;
 Parameter = &lt;script type=&quot;math/tex&quot;&gt;\theta&lt;/script&gt; &lt;br /&gt;
@@ -344,7 +356,7 @@ Parameter from the Value function layer = &lt;script type=&quot;math/tex&quot;&g
 
 &lt;hr /&gt;
 &lt;p&gt;&lt;br /&gt;
-&lt;strong&gt;Equations&lt;/strong&gt;&lt;/p&gt;
+&lt;strong&gt;Equations:&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;(eqn 9) from the original paper &lt;a href=&quot;https://arxiv.org/pdf/1511.06581.pdf&quot;&gt;(Wang et al., 2015)&lt;/a&gt;: &lt;br /&gt;
 Q(s, a; &lt;script type=&quot;math/tex&quot;&gt;\theta&lt;/script&gt;, &lt;script type=&quot;math/tex&quot;&gt;\alpha&lt;/script&gt;, &lt;script type=&quot;math/tex&quot;&gt;\beta&lt;/script&gt;) =
@@ -357,16 +369,31 @@ V(s; &lt;script type=&quot;math/tex&quot;&gt;\theta&lt;/script&gt;, &lt;script t
 
 &lt;hr /&gt;
 &lt;p&gt;&lt;br /&gt;
-&lt;strong&gt;Implementation details&lt;/strong&gt;&lt;/p&gt;
+&lt;strong&gt;Implementation details:&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;V represents the value function layer, A represents the Advantage function layer:&lt;/p&gt;
-&lt;blockquote&gt;
-  &lt;p&gt;&lt;img src=&quot;https://drive.google.com/uc?export=view&amp;amp;id=1f901lKe-Fa_Y4ITX8NFNeMO7IX_O2fB9&quot; alt=&quot;alt text&quot; /&gt;&lt;/p&gt;
-&lt;/blockquote&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# contruct neural network
+def built_net(self, var_scope, w_init, b_init, features, num_hidden, num_output):              
+    with tf.variable_scope(var_scope):          
+      feature_layer = tf.contrib.layers.fully_connected(features, num_hidden,
+                                                        activation_fn = tf.nn.relu,
+                                                        weights_initializer = w_init,
+                                                        biases_initializer = b_init)
+      V = tf.contrib.layers.fully_connected(feature_layer, 1,
+                                            activation_fn = None,
+                                            weights_initializer = w_init,
+                                            biases_initializer = b_init)
+      A = tf.contrib.layers.fully_connected(feature_layer, num_output,
+                                            activation_fn = None,
+                                            weights_initializer = w_init,
+                                            biases_initializer = b_init)   
+      Q_val = V + (A - tf.reduce_mean(A, reduction_indices=1, keepdims=True)) # refer to eqn 9 from the original paper          
+    return Q_val   
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;hr /&gt;
 &lt;p&gt;&lt;br /&gt;
-&lt;strong&gt;References&lt;/strong&gt;&lt;/p&gt;
+&lt;strong&gt;References:&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;a href=&quot;https://arxiv.org/pdf/1511.06581.pdf&quot;&gt;Dueling Network Architectures for Deep Reinforcement Learning
 (Wang et al., 2015)&lt;/a&gt;&lt;/p&gt;
@@ -375,11 +402,11 @@ V(s; &lt;script type=&quot;math/tex&quot;&gt;\theta&lt;/script&gt;, &lt;script t
 
 &lt;p&gt;Environment from OpenAI’s gym: CartPole-v0&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&quot;https://github.com/ChuaCheowHuan/reinforcement_learning/tree/master/DQN_variants/DDQN&quot;&gt;Code&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://github.com/ChuaCheowHuan/reinforcement_learning/tree/master/DQN_variants/DDQN&quot;&gt;Full code&lt;/a&gt;&lt;/p&gt;
 
 &lt;hr /&gt;
 &lt;p&gt;&lt;br /&gt;
-&lt;strong&gt;Notations&lt;/strong&gt;&lt;/p&gt;
+&lt;strong&gt;Notations:&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;Model network = &lt;script type=&quot;math/tex&quot;&gt;Q_{\theta}&lt;/script&gt; &lt;br /&gt;
 Model parameter = &lt;script type=&quot;math/tex&quot;&gt;\theta&lt;/script&gt; &lt;br /&gt;
@@ -391,7 +418,7 @@ Target network Q value = &lt;script type=&quot;math/tex&quot;&gt;Q_{\phi}&lt;/sc
 
 &lt;hr /&gt;
 &lt;p&gt;&lt;br /&gt;
-&lt;strong&gt;Equations&lt;/strong&gt;&lt;/p&gt;
+&lt;strong&gt;Equations:&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;TD target = r (s, a) &lt;script type=&quot;math/tex&quot;&gt;+&lt;/script&gt; &lt;script type=&quot;math/tex&quot;&gt;\gamma&lt;/script&gt; &lt;script type=&quot;math/tex&quot;&gt;Q_{\phi}&lt;/script&gt; (&lt;script type=&quot;math/tex&quot;&gt;s^{'}&lt;/script&gt;, &lt;script type=&quot;math/tex&quot;&gt;argmax_{a^{'}}&lt;/script&gt; &lt;script type=&quot;math/tex&quot;&gt;Q_{\theta}&lt;/script&gt; (s&lt;script type=&quot;math/tex&quot;&gt;^{'}&lt;/script&gt;, a&lt;script type=&quot;math/tex&quot;&gt;^{'}&lt;/script&gt;)) &lt;br /&gt;
 &lt;br /&gt;
@@ -401,26 +428,43 @@ TD  error = (TD target) &lt;script type=&quot;math/tex&quot;&gt;-&lt;/script&gt;
 
 &lt;hr /&gt;
 &lt;p&gt;&lt;br /&gt;
-&lt;strong&gt;Implementation details&lt;/strong&gt;&lt;/p&gt;
+&lt;strong&gt;Implementation details:&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;Create a placeholder to feed Q values from model network:&lt;/p&gt;
-&lt;blockquote&gt;
-  &lt;p&gt;&lt;img src=&quot;https://drive.google.com/uc?export=view&amp;amp;id=1CcZVw82JRQRWYmTFFN9PvLKjd4b5BOAF&quot; alt=&quot;alt text&quot; /&gt;&lt;/p&gt;
-&lt;/blockquote&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;self.model_s_next_Q_val = tf.placeholder(tf.float32, [None,self.num_actions], name='model_s_next_Q_val')
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;Select Q values from model network using &lt;script type=&quot;math/tex&quot;&gt;s^{'}&lt;/script&gt; as features &amp;amp; feed them to the training session:&lt;/p&gt;
-&lt;blockquote&gt;
-  &lt;p&gt;&lt;img src=&quot;https://drive.google.com/uc?export=view&amp;amp;id=15uOc3uOz83V76X5s3PmgzzVWYJkkwR0Z&quot; alt=&quot;alt text&quot; /&gt;&lt;/p&gt;
-&lt;/blockquote&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# select actions from model network
+model_s_next_Q_val = self.sess.run(self.model_Q_val, feed_dict={self.s: s_next})
+
+# training
+_, loss = self.sess.run([self.optimizer, self.loss],
+                        feed_dict = {self.s: s,
+                                     self.a: a,
+                                     self.r: r,
+                                     self.s_next: s_next,
+                                     self.done: done,
+                                     self.model_s_next_Q_val: model_s_next_Q_val})
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;Select minibatch actions with largest Q values from model network, create indices &amp;amp; select corresponding minibatch actions from target network:&lt;/p&gt;
-&lt;blockquote&gt;
-  &lt;p&gt;&lt;img src=&quot;https://drive.google.com/uc?export=view&amp;amp;id=1YelpKjS68nPBWtg8oeLiZV4mpzkmTPT_&quot; alt=&quot;alt text&quot; /&gt;&lt;/p&gt;
-&lt;/blockquote&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;def td_target(self, s_next, r, done, model_s_next_Q_val, target_Q_val):
+    # select action with largest Q value from model network
+    model_max_a = tf.argmax(model_s_next_Q_val, axis=1, output_type=tf.dtypes.int32)
+
+    arr = tf.range(tf.shape(model_max_a)[0], dtype=tf.int32) # create row indices
+    indices = tf.stack([arr, model_max_a], axis=1) # create 2D indices        
+    max_target_Q_val = tf.gather_nd(target_Q_val, indices) # select minibatch actions from target network
+    max_target_Q_val = tf.reshape(max_target_Q_val, (self.minibatch_size,1))
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;hr /&gt;
 &lt;p&gt;&lt;br /&gt;
-&lt;strong&gt;References&lt;/strong&gt;&lt;/p&gt;
+&lt;strong&gt;References:&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;a href=&quot;https://arxiv.org/pdf/1509.06461.pdf&quot;&gt;Deep Reinforcement Learning with Double Q-learning
 (Hasselt, Guez &amp;amp; Silver, 2016)&lt;/a&gt;&lt;/p&gt;
@@ -429,11 +473,12 @@ TD  error = (TD target) &lt;script type=&quot;math/tex&quot;&gt;-&lt;/script&gt;
 
 &lt;p&gt;Environment from OpenAI’s gym: CartPole-v0&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&quot;https://github.com/ChuaCheowHuan/reinforcement_learning/tree/master/DQN_variants/DQN&quot;&gt;Code&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://github.com/ChuaCheowHuan/reinforcement_learning/tree/master/DQN_variants/DQN&quot;&gt;Full code&lt;/a&gt;&lt;/p&gt;
 
 &lt;hr /&gt;
-&lt;p&gt;&lt;br /&gt;
-&lt;strong&gt;Notations&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Notations:&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;Model network = &lt;script type=&quot;math/tex&quot;&gt;Q_{\theta}&lt;/script&gt; &lt;br /&gt;
 Model parameter = &lt;script type=&quot;math/tex&quot;&gt;\theta&lt;/script&gt; &lt;br /&gt;
@@ -444,8 +489,9 @@ Target parameter = &lt;script type=&quot;math/tex&quot;&gt;\phi&lt;/script&gt; &
 Target network Q value = &lt;script type=&quot;math/tex&quot;&gt;Q_{\phi}&lt;/script&gt; (&lt;script type=&quot;math/tex&quot;&gt;s^{'}&lt;/script&gt;, &lt;script type=&quot;math/tex&quot;&gt;a^{'}&lt;/script&gt;)&lt;/p&gt;
 
 &lt;hr /&gt;
-&lt;p&gt;&lt;br /&gt;
-&lt;strong&gt;Equations&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Equations:&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;TD target = r (s, a) &lt;script type=&quot;math/tex&quot;&gt;+&lt;/script&gt; &lt;script type=&quot;math/tex&quot;&gt;\gamma&lt;/script&gt; &lt;script type=&quot;math/tex&quot;&gt;max_{a}&lt;/script&gt; &lt;script type=&quot;math/tex&quot;&gt;Q_{\phi}&lt;/script&gt; (&lt;script type=&quot;math/tex&quot;&gt;s^{'}&lt;/script&gt;, &lt;script type=&quot;math/tex&quot;&gt;a^{'}&lt;/script&gt;) &lt;br /&gt;
 &lt;br /&gt;
@@ -454,45 +500,45 @@ TD  error = (TD target) &lt;script type=&quot;math/tex&quot;&gt;-&lt;/script&gt;
 = [r (s, a) &lt;script type=&quot;math/tex&quot;&gt;+&lt;/script&gt; &lt;script type=&quot;math/tex&quot;&gt;\gamma&lt;/script&gt; &lt;script type=&quot;math/tex&quot;&gt;max_{a^{'}}&lt;/script&gt; &lt;script type=&quot;math/tex&quot;&gt;Q_{\phi}&lt;/script&gt; (&lt;script type=&quot;math/tex&quot;&gt;s^{'}&lt;/script&gt;, &lt;script type=&quot;math/tex&quot;&gt;a^{'}&lt;/script&gt;)] &lt;script type=&quot;math/tex&quot;&gt;-&lt;/script&gt; &lt;script type=&quot;math/tex&quot;&gt;Q_{\theta}&lt;/script&gt; (s, a)&lt;/p&gt;
 
 &lt;hr /&gt;
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Implementation details:&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Update target parameter &lt;script type=&quot;math/tex&quot;&gt;\phi&lt;/script&gt; with model parameter &lt;script type=&quot;math/tex&quot;&gt;\theta&lt;/script&gt; :
+&lt;br /&gt;
+Copy &lt;script type=&quot;math/tex&quot;&gt;\theta&lt;/script&gt; to &lt;script type=&quot;math/tex&quot;&gt;\phi&lt;/script&gt; with &lt;em&gt;either&lt;/em&gt; soft or hard parameter update.
+&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;Hard parameter update:&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;with tf.variable_scope('hard_replace'):
+  self.target_replace_hard = [t.assign(m) for t, m in zip(self.target_net_params, self.model_net_params)]   
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# hard params replacement
+if self.learn_step % self.tau_step == 0:
+    self.sess.run(self.target_replace_hard)  
+self.learn_step += 1
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;Soft parameter update:
+&lt;br /&gt;
+polyak &lt;script type=&quot;math/tex&quot;&gt;\cdot&lt;/script&gt;  &lt;script type=&quot;math/tex&quot;&gt;\theta&lt;/script&gt; + (1 &lt;script type=&quot;math/tex&quot;&gt;-&lt;/script&gt; polyak)  &lt;script type=&quot;math/tex&quot;&gt;\cdot&lt;/script&gt;  &lt;script type=&quot;math/tex&quot;&gt;\phi&lt;/script&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;with tf.variable_scope('soft_replace'):            
+  self.target_replace_soft = [t.assign(self.polyak * m + (1 - self.polyak) * t)
+                              for t, m in zip(self.target_net_params, self.model_net_params)]   
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
 &lt;p&gt;&lt;br /&gt;
-&lt;strong&gt;Implementation details&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;Update target parameter &lt;script type=&quot;math/tex&quot;&gt;\phi&lt;/script&gt; with model parameter &lt;script type=&quot;math/tex&quot;&gt;\theta&lt;/script&gt; :&lt;/p&gt;
-&lt;blockquote&gt;
-  &lt;p&gt;Copy &lt;script type=&quot;math/tex&quot;&gt;\theta&lt;/script&gt; to &lt;script type=&quot;math/tex&quot;&gt;\phi&lt;/script&gt; with &lt;em&gt;either&lt;/em&gt; soft or hard parameter update.&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;Hard parameter update:&lt;/p&gt;
-  &lt;blockquote&gt;
-    &lt;p&gt;&lt;img src=&quot;https://drive.google.com/uc?export=view&amp;amp;id=18CK3rHYEfDxVtxe1gnVn2Z10Dosrmrww&quot; alt=&quot;alt text&quot; /&gt;
-&lt;img src=&quot;https://drive.google.com/uc?export=view&amp;amp;id=1lNBR6BxZZfk_uGkDSOumUm9qntiJ5QhH&quot; alt=&quot;alt text&quot; /&gt;&lt;/p&gt;
-  &lt;/blockquote&gt;
-&lt;/blockquote&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;Soft parameter update:&lt;/p&gt;
-  &lt;blockquote&gt;
-    &lt;p&gt;polyak &lt;script type=&quot;math/tex&quot;&gt;\cdot&lt;/script&gt;  &lt;script type=&quot;math/tex&quot;&gt;\theta&lt;/script&gt; + (1 &lt;script type=&quot;math/tex&quot;&gt;-&lt;/script&gt; polyak)  &lt;script type=&quot;math/tex&quot;&gt;\cdot&lt;/script&gt;  &lt;script type=&quot;math/tex&quot;&gt;\phi&lt;/script&gt;&lt;/p&gt;
-  &lt;/blockquote&gt;
-&lt;/blockquote&gt;
-
-&lt;blockquote&gt;
-  &lt;blockquote&gt;
-    &lt;p&gt;&lt;img src=&quot;https://drive.google.com/uc?export=view&amp;amp;id=1OfxkRAMve0liZ3BlkS4pCoJ6CPPEjwQG&quot; alt=&quot;alt text&quot; /&gt;&lt;/p&gt;
-  &lt;/blockquote&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;Stop TD target from contributing to gradient computation:&lt;/p&gt;
-&lt;blockquote&gt;
-  &lt;p&gt;&lt;img src=&quot;https://drive.google.com/uc?export=view&amp;amp;id=1sw1WtddZn4t48QJhz_LMTthIPhOc4jtl&quot; alt=&quot;alt text&quot; /&gt;&lt;/p&gt;
-&lt;/blockquote&gt;
-
+Stop TD target from contributing to gradient computation:&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# exclude td_target in gradient computation
+td_target = tf.stop_gradient(td_target)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 &lt;hr /&gt;
-&lt;p&gt;&lt;br /&gt;
-&lt;strong&gt;References&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;References:&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;a href=&quot;https://storage.googleapis.com/deepmind-media/dqn/DQNNaturePaper.pdf&quot;&gt;Human-level control through deep reinforcement learning
-(Mnih et al., 2015)&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">A Deep Q Network implementation in tensorflow with target network &amp;amp; random experience replay.</summary></entry></feed>
+(Mnih et al., 2015)&lt;/a&gt;
+&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">A Deep Q Network implementation in tensorflow with target network &amp;amp; random experience replay.</summary></entry></feed>
