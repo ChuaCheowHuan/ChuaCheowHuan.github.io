@@ -1,6 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.5">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2019-06-01T15:24:30+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Chua Cheow Huan</title><subtitle></subtitle><author><name>Chua Cheow Huan</name></author><entry><title type="html">N-step targets</title><link href="http://localhost:4000/n_step_targets/" rel="alternate" type="text/html" title="N-step targets" /><published>2019-05-31T00:00:00+08:00</published><updated>2019-05-31T00:00:00+08:00</updated><id>http://localhost:4000/n_step_targets</id><content type="html" xml:base="http://localhost:4000/n_step_targets/">&lt;p&gt;N-step Q-values estimation.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.5">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2019-06-01T16:41:26+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Chua Cheow Huan</title><subtitle></subtitle><author><name>Chua Cheow Huan</name></author><entry><title type="html">N-step targets</title><link href="http://localhost:4000/n_step_targets/" rel="alternate" type="text/html" title="N-step targets" /><published>2019-05-31T00:00:00+08:00</published><updated>2019-05-31T00:00:00+08:00</updated><id>http://localhost:4000/n_step_targets</id><content type="html" xml:base="http://localhost:4000/n_step_targets/">&lt;p&gt;N-step Q-values estimation.&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&quot;https://github.com/ChuaCheowHuan/reinforcement_learning/tree/master/&quot;&gt;Full code&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://github.com/ChuaCheowHuan/reinforcement_learning/blob/master/misc_python_examples/n_step_targets.ipynb&quot;&gt;Full code&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;The following two functions computes truncated Q-values estimates:&lt;/p&gt;
 
@@ -185,7 +185,19 @@ last term for those with INSUFFICIENT steps, break
  [51]
  [24]]
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;For the output above, note that when t+n = 5 which is greater than the last index 4, maximum terms are used where possible. ( Last term is given by (gamma**n) * v_s_ )&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">N-step Q-values estimation.</summary></entry><entry><title type="html">Python’s multiprocessing package</title><link href="http://localhost:4000/py_mpp/" rel="alternate" type="text/html" title="Python's multiprocessing package" /><published>2019-05-30T00:00:00+08:00</published><updated>2019-05-30T00:00:00+08:00</updated><id>http://localhost:4000/py_mpp</id><content type="html" xml:base="http://localhost:4000/py_mpp/">&lt;p&gt;Python’s multiprocessing package for parallel data generation.&lt;/p&gt;
+&lt;p&gt;For the output above, note that when t+n = 5 which is greater than the last index 4, maximum terms are used where possible. ( Last term for those with INSUFFICIENT steps is given by (gamma**n) * v_s_ = &lt;script type=&quot;math/tex&quot;&gt;\gamma^{5}&lt;/script&gt; V(&lt;script type=&quot;math/tex&quot;&gt;s_{5}&lt;/script&gt;)), where v_s_ = V(&lt;script type=&quot;math/tex&quot;&gt;s_{5}&lt;/script&gt;)&lt;/p&gt;
+
+&lt;p&gt;t=2, normal 2 steps estimation:&lt;/p&gt;
+
+&lt;p&gt;&lt;script type=&quot;math/tex&quot;&gt;Q^{\pi}(s_{t}, a_{t})&lt;/script&gt; = E(&lt;script type=&quot;math/tex&quot;&gt;r_{2}&lt;/script&gt; + &lt;script type=&quot;math/tex&quot;&gt;\gamma&lt;/script&gt; &lt;script type=&quot;math/tex&quot;&gt;r_{3}&lt;/script&gt; +  &lt;script type=&quot;math/tex&quot;&gt;\gamma^{4}&lt;/script&gt; V(&lt;script type=&quot;math/tex&quot;&gt;s_{4}&lt;/script&gt;))&lt;/p&gt;
+
+&lt;p&gt;t=3, 2 steps estimation with insufficient step, using v_s_ as last term:&lt;/p&gt;
+
+&lt;p&gt;&lt;script type=&quot;math/tex&quot;&gt;Q^{\pi}(s_{t}, a_{t})&lt;/script&gt; = E(&lt;script type=&quot;math/tex&quot;&gt;r_{3}&lt;/script&gt; + &lt;script type=&quot;math/tex&quot;&gt;\gamma&lt;/script&gt; &lt;script type=&quot;math/tex&quot;&gt;r_{4}&lt;/script&gt; +  &lt;script type=&quot;math/tex&quot;&gt;\gamma^{5}&lt;/script&gt; V(&lt;script type=&quot;math/tex&quot;&gt;s_{5}&lt;/script&gt;))&lt;/p&gt;
+
+&lt;p&gt;t=4, insufficient step for 2 steps estimation, resorting to 1 step estimation:&lt;/p&gt;
+
+&lt;p&gt;&lt;script type=&quot;math/tex&quot;&gt;Q^{\pi}(s_{t}, a_{t})&lt;/script&gt; = E(&lt;script type=&quot;math/tex&quot;&gt;r_{4}&lt;/script&gt; + &lt;script type=&quot;math/tex&quot;&gt;\gamma^{5}&lt;/script&gt; V(&lt;script type=&quot;math/tex&quot;&gt;s_{5}&lt;/script&gt;))&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">N-step Q-values estimation.</summary></entry><entry><title type="html">Python’s multiprocessing package</title><link href="http://localhost:4000/py_mpp/" rel="alternate" type="text/html" title="Python's multiprocessing package" /><published>2019-05-30T00:00:00+08:00</published><updated>2019-05-30T00:00:00+08:00</updated><id>http://localhost:4000/py_mpp</id><content type="html" xml:base="http://localhost:4000/py_mpp/">&lt;p&gt;Python’s multiprocessing package for parallel data generation.&lt;/p&gt;
 
 &lt;p&gt;&lt;a href=&quot;https://github.com/ChuaCheowHuan/reinforcement_learning/blob/master/misc_python_examples/py_mpp.ipynb&quot;&gt;Full code&lt;/a&gt;&lt;/p&gt;
 

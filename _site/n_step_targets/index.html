@@ -262,7 +262,7 @@
     
     <p>N-step Q-values estimation.</p>
 
-<p><a href="https://github.com/ChuaCheowHuan/reinforcement_learning/tree/master/">Full code</a></p>
+<p><a href="https://github.com/ChuaCheowHuan/reinforcement_learning/blob/master/misc_python_examples/n_step_targets.ipynb">Full code</a></p>
 
 <p>The following two functions computes truncated Q-values estimates:</p>
 
@@ -447,7 +447,19 @@ last term for those with INSUFFICIENT steps, break
  [51]
  [24]]
 </code></pre></div></div>
-<p>For the output above, note that when t+n = 5 which is greater than the last index 4, maximum terms are used where possible. ( Last term is given by (gamma**n) * v_s_ )</p>
+<p>For the output above, note that when t+n = 5 which is greater than the last index 4, maximum terms are used where possible. ( Last term for those with INSUFFICIENT steps is given by (gamma**n) * v_s_ = <script type="math/tex">\gamma^{5}</script> V(<script type="math/tex">s_{5}</script>)), where v_s_ = V(<script type="math/tex">s_{5}</script>)</p>
+
+<p>t=2, normal 2 steps estimation:</p>
+
+<p><script type="math/tex">Q^{\pi}(s_{t}, a_{t})</script> = E(<script type="math/tex">r_{2}</script> + <script type="math/tex">\gamma</script> <script type="math/tex">r_{3}</script> +  <script type="math/tex">\gamma^{4}</script> V(<script type="math/tex">s_{4}</script>))</p>
+
+<p>t=3, 2 steps estimation with insufficient step, using v_s_ as last term:</p>
+
+<p><script type="math/tex">Q^{\pi}(s_{t}, a_{t})</script> = E(<script type="math/tex">r_{3}</script> + <script type="math/tex">\gamma</script> <script type="math/tex">r_{4}</script> +  <script type="math/tex">\gamma^{5}</script> V(<script type="math/tex">s_{5}</script>))</p>
+
+<p>t=4, insufficient step for 2 steps estimation, resorting to 1 step estimation:</p>
+
+<p><script type="math/tex">Q^{\pi}(s_{t}, a_{t})</script> = E(<script type="math/tex">r_{4}</script> + <script type="math/tex">\gamma^{5}</script> V(<script type="math/tex">s_{5}</script>))</p>
 
 
 <ul class="taxonomy__index">
@@ -486,7 +498,7 @@ last term for those with INSUFFICIENT steps, break
 
 
 
-  31 minute read
+  68 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">N-step Q-values estimation.
@@ -515,7 +527,7 @@ last term for those with INSUFFICIENT steps, break
 
 
 
-  16 minute read
+  32 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">Python’s multiprocessing package for parallel data generation.
@@ -544,7 +556,7 @@ last term for those with INSUFFICIENT steps, break
 
 
 
-  14 minute read
+  29 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">Simple numpy array manipulation examples
@@ -573,7 +585,7 @@ last term for those with INSUFFICIENT steps, break
 
 
 
-  20 minute read
+  41 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">A Dueling Double Deep Q Network with Priority Experience Replay (Duel DDQN with PER) implementation in tensorflow.
@@ -602,7 +614,7 @@ last term for those with INSUFFICIENT steps, break
 
 
 
-  9 minute read
+  18 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">A Dueling Double Deep Q Network (Dueling DDQN) implementation in tensorflow with random experience replay.
@@ -631,7 +643,7 @@ last term for those with INSUFFICIENT steps, break
 
 
 
-  11 minute read
+  22 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">A Double Deep Q Network (DDQN) implementation in tensorflow with random experience replay.
@@ -660,7 +672,7 @@ last term for those with INSUFFICIENT steps, break
 
 
 
-  8 minute read
+  17 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">A Deep Q Network implementation in tensorflow with target network &amp; random experience replay.

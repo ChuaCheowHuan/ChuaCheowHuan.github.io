@@ -200,4 +200,16 @@ last term for those with INSUFFICIENT steps, break
  [51]
  [24]]
 ```
-For the output above, note that when t+n = 5 which is greater than the last index 4, maximum terms are used where possible. ( Last term is given by (gamma**n) * v_s_ )
+For the output above, note that when t+n = 5 which is greater than the last index 4, maximum terms are used where possible. ( Last term for those with INSUFFICIENT steps is given by (gamma**n) * v_s_ = $$\gamma^{5}$$ V($$s_{5}$$)), where v_s_ = V($$s_{5}$$)
+
+t=2, normal 2 steps estimation:
+
+$$Q^{\pi}(s_{t}, a_{t})$$ = E($$r_{2}$$ + $$\gamma$$ $$r_{3}$$ +  $$\gamma^{4}$$ V($$s_{4}$$))
+
+t=3, 2 steps estimation with insufficient step, using v_s_ as last term:
+
+$$Q^{\pi}(s_{t}, a_{t})$$ = E($$r_{3}$$ + $$\gamma$$ $$r_{4}$$ +  $$\gamma^{5}$$ V($$s_{5}$$))
+
+t=4, insufficient step for 2 steps estimation, resorting to 1 step estimation:
+
+$$Q^{\pi}(s_{t}, a_{t})$$ = E($$r_{4}$$ + $$\gamma^{5}$$ V($$s_{5}$$))
