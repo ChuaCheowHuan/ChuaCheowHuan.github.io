@@ -1,6 +1,193 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.5">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2019-05-30T23:19:47+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Chua Cheow Huan</title><subtitle></subtitle><author><name>Chua Cheow Huan</name></author><entry><title type="html">Python’s multiprocessing package</title><link href="http://localhost:4000/py_mpp/" rel="alternate" type="text/html" title="Python's multiprocessing package" /><published>2019-05-30T00:00:00+08:00</published><updated>2019-05-30T00:00:00+08:00</updated><id>http://localhost:4000/py_mpp</id><content type="html" xml:base="http://localhost:4000/py_mpp/">&lt;p&gt;Python’s multiprocessing package for parallel data generation.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.5">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2019-06-01T15:24:30+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Chua Cheow Huan</title><subtitle></subtitle><author><name>Chua Cheow Huan</name></author><entry><title type="html">N-step targets</title><link href="http://localhost:4000/n_step_targets/" rel="alternate" type="text/html" title="N-step targets" /><published>2019-05-31T00:00:00+08:00</published><updated>2019-05-31T00:00:00+08:00</updated><id>http://localhost:4000/n_step_targets</id><content type="html" xml:base="http://localhost:4000/n_step_targets/">&lt;p&gt;N-step Q-values estimation.&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&quot;https://github.com/ChuaCheowHuan/reinforcement_learning/tree/master/&quot;&gt;Code&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://github.com/ChuaCheowHuan/reinforcement_learning/tree/master/&quot;&gt;Full code&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;The following two functions computes truncated Q-values estimates:&lt;/p&gt;
+
+&lt;p&gt;1) n_step_targets_missing&lt;/p&gt;
+
+&lt;p&gt;treats missing terms as 0.&lt;/p&gt;
+
+&lt;p&gt;2) n_step_targets_max&lt;/p&gt;
+
+&lt;p&gt;use maximum terms possible.&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;1-step truncated estimate :&lt;/p&gt;
+
+&lt;p&gt;&lt;script type=&quot;math/tex&quot;&gt;Q^{\pi}(s_{t}, a_{t})&lt;/script&gt; = E(&lt;script type=&quot;math/tex&quot;&gt;r_{t}&lt;/script&gt; + &lt;script type=&quot;math/tex&quot;&gt;\gamma&lt;/script&gt; V(&lt;script type=&quot;math/tex&quot;&gt;s_{t+1}&lt;/script&gt;))&lt;/p&gt;
+
+&lt;p&gt;2-step truncated estimate :&lt;/p&gt;
+
+&lt;p&gt;&lt;script type=&quot;math/tex&quot;&gt;Q^{\pi}(s_{t}, a_{t})&lt;/script&gt; = E(&lt;script type=&quot;math/tex&quot;&gt;r_{t}&lt;/script&gt; + &lt;script type=&quot;math/tex&quot;&gt;\gamma&lt;/script&gt; &lt;script type=&quot;math/tex&quot;&gt;r_{t+1}&lt;/script&gt; +  &lt;script type=&quot;math/tex&quot;&gt;\gamma^{2}&lt;/script&gt; V(&lt;script type=&quot;math/tex&quot;&gt;s_{t+2}&lt;/script&gt;))&lt;/p&gt;
+
+&lt;p&gt;3-step truncated estimate :&lt;/p&gt;
+
+&lt;p&gt;&lt;script type=&quot;math/tex&quot;&gt;Q^{\pi}(s_{t}, a_{t})&lt;/script&gt; = E(&lt;script type=&quot;math/tex&quot;&gt;r_{t}&lt;/script&gt; + &lt;script type=&quot;math/tex&quot;&gt;\gamma&lt;/script&gt; &lt;script type=&quot;math/tex&quot;&gt;r_{t+1}&lt;/script&gt; + &lt;script type=&quot;math/tex&quot;&gt;\gamma^{2}&lt;/script&gt; &lt;script type=&quot;math/tex&quot;&gt;r_{t+2}&lt;/script&gt; + &lt;script type=&quot;math/tex&quot;&gt;\gamma^{3}&lt;/script&gt; V(&lt;script type=&quot;math/tex&quot;&gt;s_{t+3}&lt;/script&gt;))&lt;/p&gt;
+
+&lt;p&gt;N-step truncated estimate :&lt;/p&gt;
+
+&lt;p&gt;&lt;script type=&quot;math/tex&quot;&gt;Q^{\pi}(s_{t}, a_{t})&lt;/script&gt; = E(&lt;script type=&quot;math/tex&quot;&gt;r_{t}&lt;/script&gt; + &lt;script type=&quot;math/tex&quot;&gt;\gamma&lt;/script&gt; &lt;script type=&quot;math/tex&quot;&gt;r_{t+1}&lt;/script&gt; + &lt;script type=&quot;math/tex&quot;&gt;\gamma^{2}&lt;/script&gt; &lt;script type=&quot;math/tex&quot;&gt;r_{t+2}&lt;/script&gt; + … + &lt;script type=&quot;math/tex&quot;&gt;\gamma^{n}&lt;/script&gt; V(&lt;script type=&quot;math/tex&quot;&gt;s_{t+n}&lt;/script&gt;))&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;Assuming we have the following variables setup:&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;N=2 # N steps
+gamma=2
+t=5
+v_s_ = 10 # value of next state
+
+epr=np.arange(t).reshape(t,1)
+print(&quot;epr=&quot;, epr)
+
+baselines=np.arange(t).reshape(t,1)
+print(&quot;baselines=&quot;, baselines)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Display output of episodic rewards(epr) &amp;amp; baselines:&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;epr= [[0]
+ [1]
+ [2]
+ [3]
+ [4]]
+
+baselines= [[0]
+ [1]
+ [2]
+ [3]
+ [4]]
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This function computes the n-step targets, treats missing terms as zero:&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# if number of steps unavailable, missing terms treated as 0.
+def n_step_targets_missing(epr, baselines, gamma, N):
+  N = N+1
+  targets = np.zeros_like(epr)    
+  if N &amp;gt; epr.size:
+    N = epr.size
+  for t in range(epr.size):   
+    print(&quot;t=&quot;, t)
+    for n in range(N):
+      print(&quot;n=&quot;, n)
+      if t+n == epr.size:            
+        print('missing terms treated as 0, break') # last term for those with insufficient steps.
+        break # missing terms treated as 0
+      if n == N-1: # last term
+        targets[t] += (gamma**n) * baselines[t+n] # last term for those with sufficient steps
+        print('last term for those with sufficient steps, end inner n loop')
+      else:
+        targets[t] += (gamma**n) * epr[t+n] # non last terms
+  return targets
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Run the function n_step_targets_missing:&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;print('n_step_targets_missing:')
+T = n_step_targets_missing(epr, baselines, gamma, N)
+print(T)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Display the output:&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;n_step_targets_missing:
+t= 0
+n= 0
+n= 1
+n= 2
+last term for those with sufficient steps, end inner n loop
+t= 1
+n= 0
+n= 1
+n= 2
+last term for those with sufficient steps, end inner n loop
+t= 2
+n= 0
+n= 1
+n= 2
+last term for those with sufficient steps, end inner n loop
+t= 3
+n= 0
+n= 1
+n= 2
+missing terms treated as 0, break
+t= 4
+n= 0
+n= 1
+missing terms treated as 0, break
+[[10]
+ [17]
+ [24]
+ [11]
+ [ 4]]
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;For the output above, note that when t+n = 5 which is greater than the last index 4, missing terms are treated as 0.&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;This function computes the n-step targets, it will use maximum number of terms possible:&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# if number of steps unavailable, use max steps available.
+# uses v_s_ as input
+def n_step_targets_max(epr, baselines, v_s_, gamma, N):
+  N = N+1
+  targets = np.zeros_like(epr)    
+  if N &amp;gt; epr.size:
+    N = epr.size
+  for t in range(epr.size):  
+    print(&quot;t=&quot;, t)
+    for n in range(N):
+      print(&quot;n=&quot;, n)
+      if t+n == epr.size:            
+        targets[t] += (gamma**n) * v_s_ # last term for those with insufficient steps.
+        print('last term for those with INSUFFICIENT steps, break')
+        break
+      if n == N-1:
+        targets[t] += (gamma**n) * baselines[t+n] # last term for those with sufficient steps
+        print('last term for those with sufficient steps, end inner n loop')
+      else:
+        targets[t] += (gamma**n) * epr[t+n] # non last terms
+  return targets
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Run the function n_step_targets_max:&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;print('n_step_targets_max:')
+T = n_step_targets_max(epr, baselines, v_s_, gamma, N)
+print(T)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Display the output:&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;n_step_targets_max:
+t= 0
+n= 0
+n= 1
+n= 2
+last term for those with sufficient steps, end inner n loop
+t= 1
+n= 0
+n= 1
+n= 2
+last term for those with sufficient steps, end inner n loop
+t= 2
+n= 0
+n= 1
+n= 2
+last term for those with sufficient steps, end inner n loop
+t= 3
+n= 0
+n= 1
+n= 2
+last term for those with INSUFFICIENT steps, break
+t= 4
+n= 0
+n= 1
+last term for those with INSUFFICIENT steps, break
+[[10]
+ [17]
+ [24]
+ [51]
+ [24]]
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;For the output above, note that when t+n = 5 which is greater than the last index 4, maximum terms are used where possible. ( Last term is given by (gamma**n) * v_s_ )&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">N-step Q-values estimation.</summary></entry><entry><title type="html">Python’s multiprocessing package</title><link href="http://localhost:4000/py_mpp/" rel="alternate" type="text/html" title="Python's multiprocessing package" /><published>2019-05-30T00:00:00+08:00</published><updated>2019-05-30T00:00:00+08:00</updated><id>http://localhost:4000/py_mpp</id><content type="html" xml:base="http://localhost:4000/py_mpp/">&lt;p&gt;Python’s multiprocessing package for parallel data generation.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/ChuaCheowHuan/reinforcement_learning/blob/master/misc_python_examples/py_mpp.ipynb&quot;&gt;Full code&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;In the context of reinforcement learning algorithms such as A3C or DPPO, data generation is done in parallel. This simple example program demonstrates how to use the Python’s multiprocessing package to achieve parallel data generation.&lt;/p&gt;
 
@@ -83,7 +270,7 @@
           'spawn process id:', process.pid)
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name>Huan</name></author><summary type="html">Python’s multiprocessing package for parallel data generation.</summary></entry><entry><title type="html">Numpy array manipulation</title><link href="http://localhost:4000/np_array_manipulation/" rel="alternate" type="text/html" title="Numpy array manipulation" /><published>2019-05-29T00:00:00+08:00</published><updated>2019-05-29T00:00:00+08:00</updated><id>http://localhost:4000/np_array_manipulation</id><content type="html" xml:base="http://localhost:4000/np_array_manipulation/">&lt;p&gt;Simple numpy array manipulation examples&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&quot;https://github.com/ChuaCheowHuan/reinforcement_learning/tree/master/&quot;&gt;Code&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://github.com/ChuaCheowHuan/reinforcement_learning/blob/master/misc_python_examples/np_array_manipulation.ipynb&quot;&gt;Full code&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;This Jupyter notebook contains simple examples on how to manipulate numpy arrays. The code block below shows the codes &amp;amp; it’s corresponding display output.&lt;/p&gt;
 

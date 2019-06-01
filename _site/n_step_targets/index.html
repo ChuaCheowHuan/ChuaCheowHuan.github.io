@@ -19,19 +19,19 @@
   <head>
     <meta charset="utf-8">
 
-<!-- begin _includes/seo.html --><title>Python’s multiprocessing package -</title>
-<meta name="description" content="Python’s multiprocessing package for parallel data generation.">
+<!-- begin _includes/seo.html --><title>N-step targets -</title>
+<meta name="description" content="N-step Q-values estimation.">
 
 
 
 <meta property="og:type" content="article">
 <meta property="og:locale" content="en_US">
 <meta property="og:site_name" content="">
-<meta property="og:title" content="Python’s multiprocessing package">
-<meta property="og:url" content="http://localhost:4000/py_mpp/">
+<meta property="og:title" content="N-step targets">
+<meta property="og:url" content="http://localhost:4000/n_step_targets/">
 
 
-  <meta property="og:description" content="Python’s multiprocessing package for parallel data generation.">
+  <meta property="og:description" content="N-step Q-values estimation.">
 
 
 
@@ -41,7 +41,7 @@
 
 
 
-  <meta property="article:published_time" content="2019-05-30T00:00:00+08:00">
+  <meta property="article:published_time" content="2019-05-31T00:00:00+08:00">
 
 
 
@@ -52,7 +52,7 @@
   
 
 
-<link rel="canonical" href="http://localhost:4000/py_mpp/">
+<link rel="canonical" href="http://localhost:4000/n_step_targets/">
 
 
 
@@ -258,92 +258,196 @@
 
   <div class="archive">
     
-      <h1 id="page-title" class="page__title">Python's multiprocessing package</h1>
+      <h1 id="page-title" class="page__title">N-step targets</h1>
     
-    <p>Python’s multiprocessing package for parallel data generation.</p>
+    <p>N-step Q-values estimation.</p>
 
-<p><a href="https://github.com/ChuaCheowHuan/reinforcement_learning/blob/master/misc_python_examples/py_mpp.ipynb">Full code</a></p>
+<p><a href="https://github.com/ChuaCheowHuan/reinforcement_learning/tree/master/">Full code</a></p>
 
-<p>In the context of reinforcement learning algorithms such as A3C or DPPO, data generation is done in parallel. This simple example program demonstrates how to use the Python’s multiprocessing package to achieve parallel data generation.</p>
+<p>The following two functions computes truncated Q-values estimates:</p>
 
-<p>The main program has a chief that spawns multiple worker processes. Each worker spawns a single work process. The work process generates random integer data [1,3].</p>
+<p>1) n_step_targets_missing</p>
 
-<p>Each worker has it’s own local queue. When data is generated, it is stored in it’s local queue. When the local queue’s size is greater than 5, the data is retrieved &amp; 0.1 is added to the data, this result is stored in the Chief’s global queue. When the Chief’s global queue’s size is greater than 3, the result is retrieved &amp; printed on screen.</p>
+<p>treats missing terms as 0.</p>
 
-<p>The Worker class:</p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>class Worker(object):
-  def __init__(self, worker_id, g_queue):
-    self.g_queue = g_queue
-    self.worker_id = worker_id
-    self.queue = Queue() # local worker queue
-    self.work_process = Process(target=self.work, args=())
-    self.work_process.start()
-    info(worker_id, self.work_process, "Worker")
+<p>2) n_step_targets_max</p>
 
-  def work(self):
+<p>use maximum terms possible.</p>
 
-    info(self.worker_id, self.work_process, "work")
+<p><br /></p>
 
-    while True:
-      data = np.random.randint(1,4)
-      self.queue.put(data)
+<p>1-step truncated estimate :</p>
 
-      # process data in queue
-      if self.queue.qsize() &gt; 5:
-        data = self.queue.get()
-        result = data + 0.1
-        self.g_queue.put(result) # send result to global queue
+<p><script type="math/tex">Q^{\pi}(s_{t}, a_{t})</script> = E(<script type="math/tex">r_{t}</script> + <script type="math/tex">\gamma</script> V(<script type="math/tex">s_{t+1}</script>))</p>
 
-      time.sleep(1) # work every x sec interval
+<p>2-step truncated estimate :</p>
 
-    return self.w_id  
+<p><script type="math/tex">Q^{\pi}(s_{t}, a_{t})</script> = E(<script type="math/tex">r_{t}</script> + <script type="math/tex">\gamma</script> <script type="math/tex">r_{t+1}</script> +  <script type="math/tex">\gamma^{2}</script> V(<script type="math/tex">s_{t+2}</script>))</p>
+
+<p>3-step truncated estimate :</p>
+
+<p><script type="math/tex">Q^{\pi}(s_{t}, a_{t})</script> = E(<script type="math/tex">r_{t}</script> + <script type="math/tex">\gamma</script> <script type="math/tex">r_{t+1}</script> + <script type="math/tex">\gamma^{2}</script> <script type="math/tex">r_{t+2}</script> + <script type="math/tex">\gamma^{3}</script> V(<script type="math/tex">s_{t+3}</script>))</p>
+
+<p>N-step truncated estimate :</p>
+
+<p><script type="math/tex">Q^{\pi}(s_{t}, a_{t})</script> = E(<script type="math/tex">r_{t}</script> + <script type="math/tex">\gamma</script> <script type="math/tex">r_{t+1}</script> + <script type="math/tex">\gamma^{2}</script> <script type="math/tex">r_{t+2}</script> + … + <script type="math/tex">\gamma^{n}</script> V(<script type="math/tex">s_{t+n}</script>))</p>
+
+<p><br /></p>
+
+<p>Assuming we have the following variables setup:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>N=2 # N steps
+gamma=2
+t=5
+v_s_ = 10 # value of next state
+
+epr=np.arange(t).reshape(t,1)
+print("epr=", epr)
+
+baselines=np.arange(t).reshape(t,1)
+print("baselines=", baselines)
 </code></pre></div></div>
 
-<p>The Chief class:</p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>class Chief(object):
-  def __init__(self, num_workers):
-    self.g_queue = Queue() # global queue    
-    self.num_workers = num_workers
+<p>Display output of episodic rewards(epr) &amp; baselines:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>epr= [[0]
+ [1]
+ [2]
+ [3]
+ [4]]
 
-  def dispatch_workers(self):   
-    worker_processes = [Process(target=Worker(w_id, self.g_queue), args=()) for w_id in range(num_workers)]
-    return worker_processes
-
-  def result(self):
-    if self.g_queue.qsize() &gt; 3:
-      result = self.g_queue.get()
-      print("result", result)
+baselines= [[0]
+ [1]
+ [2]
+ [3]
+ [4]]
 </code></pre></div></div>
 
-<p>The main program:</p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>if __name__ == '__main__':  
-  print('main parent process id:', os.getppid())
-  print('main process id:', os.getpid())
-
-  num_workers = 2
-  chief = Chief(num_workers)
-  workers_processes = chief.dispatch_workers()
-
-  i = 0
-  while True:    
-    time.sleep(2) # chk g_queue every x sec interval to get result
-    chief.result()
-    print("i=", i)
-
-    if i&gt;9:
-      break
-    i+=1    
+<p>This function computes the n-step targets, treats missing terms as zero:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># if number of steps unavailable, missing terms treated as 0.
+def n_step_targets_missing(epr, baselines, gamma, N):
+  N = N+1
+  targets = np.zeros_like(epr)    
+  if N &gt; epr.size:
+    N = epr.size
+  for t in range(epr.size):   
+    print("t=", t)
+    for n in range(N):
+      print("n=", n)
+      if t+n == epr.size:            
+        print('missing terms treated as 0, break') # last term for those with insufficient steps.
+        break # missing terms treated as 0
+      if n == N-1: # last term
+        targets[t] += (gamma**n) * baselines[t+n] # last term for those with sufficient steps
+        print('last term for those with sufficient steps, end inner n loop')
+      else:
+        targets[t] += (gamma**n) * epr[t+n] # non last terms
+  return targets
 </code></pre></div></div>
 
-<p>A helper display function:</p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>def info(worker_id, process, function_name):
-    print("worker_id=", worker_id,
-          'module name:', __name__,
-          'function name:', function_name,
-          'parent process:', os.getppid(),
-          'current process id:', os.getpid(),
-          'spawn process id:', process.pid)
+<p>Run the function n_step_targets_missing:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>print('n_step_targets_missing:')
+T = n_step_targets_missing(epr, baselines, gamma, N)
+print(T)
 </code></pre></div></div>
+
+<p>Display the output:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>n_step_targets_missing:
+t= 0
+n= 0
+n= 1
+n= 2
+last term for those with sufficient steps, end inner n loop
+t= 1
+n= 0
+n= 1
+n= 2
+last term for those with sufficient steps, end inner n loop
+t= 2
+n= 0
+n= 1
+n= 2
+last term for those with sufficient steps, end inner n loop
+t= 3
+n= 0
+n= 1
+n= 2
+missing terms treated as 0, break
+t= 4
+n= 0
+n= 1
+missing terms treated as 0, break
+[[10]
+ [17]
+ [24]
+ [11]
+ [ 4]]
+</code></pre></div></div>
+<p>For the output above, note that when t+n = 5 which is greater than the last index 4, missing terms are treated as 0.</p>
+
+<p><br /></p>
+
+<p>This function computes the n-step targets, it will use maximum number of terms possible:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># if number of steps unavailable, use max steps available.
+# uses v_s_ as input
+def n_step_targets_max(epr, baselines, v_s_, gamma, N):
+  N = N+1
+  targets = np.zeros_like(epr)    
+  if N &gt; epr.size:
+    N = epr.size
+  for t in range(epr.size):  
+    print("t=", t)
+    for n in range(N):
+      print("n=", n)
+      if t+n == epr.size:            
+        targets[t] += (gamma**n) * v_s_ # last term for those with insufficient steps.
+        print('last term for those with INSUFFICIENT steps, break')
+        break
+      if n == N-1:
+        targets[t] += (gamma**n) * baselines[t+n] # last term for those with sufficient steps
+        print('last term for those with sufficient steps, end inner n loop')
+      else:
+        targets[t] += (gamma**n) * epr[t+n] # non last terms
+  return targets
+</code></pre></div></div>
+
+<p>Run the function n_step_targets_max:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>print('n_step_targets_max:')
+T = n_step_targets_max(epr, baselines, v_s_, gamma, N)
+print(T)
+</code></pre></div></div>
+
+<p>Display the output:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>n_step_targets_max:
+t= 0
+n= 0
+n= 1
+n= 2
+last term for those with sufficient steps, end inner n loop
+t= 1
+n= 0
+n= 1
+n= 2
+last term for those with sufficient steps, end inner n loop
+t= 2
+n= 0
+n= 1
+n= 2
+last term for those with sufficient steps, end inner n loop
+t= 3
+n= 0
+n= 1
+n= 2
+last term for those with INSUFFICIENT steps, break
+t= 4
+n= 0
+n= 1
+last term for those with INSUFFICIENT steps, break
+[[10]
+ [17]
+ [24]
+ [51]
+ [24]]
+</code></pre></div></div>
+<p>For the output above, note that when t+n = 5 which is greater than the last index 4, maximum terms are used where possible. ( Last term is given by (gamma**n) * v_s_ )</p>
 
 
 <ul class="taxonomy__index">
@@ -382,7 +486,7 @@
 
 
 
-  33 minute read
+  31 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">N-step Q-values estimation.
@@ -639,8 +743,8 @@
     
   <script>
     var disqus_config = function () {
-      this.page.url = "http://localhost:4000/py_mpp/";  // Replace PAGE_URL with your page's canonical URL variable
-      this.page.identifier = "/py_mpp"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+      this.page.url = "http://localhost:4000/n_step_targets/";  // Replace PAGE_URL with your page's canonical URL variable
+      this.page.identifier = "/n_step_targets"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
     };
     (function() { // DON'T EDIT BELOW THIS LINE
       var d = document, s = d.createElement('script');
