@@ -10,21 +10,25 @@ N-step returns are used as critic's targets.
 
 2 versions of N-step targets could be used:
 
-1) missing terms are treated as 0.
+Version 1) missing terms are treated as 0.
 
-2) use maximum terms possible.
+Version 2) use maximum terms possible.
 
 Check this [post](https://chuacheowhuan.github.io/n_step_targets/) for more information on N-step targets.
 
 Environment from OpenAI's gym:
 
-  Discrete: CartPole-v0
+Discrete: CartPole-v0
 
-  Continuous: Pendulum-v0
+Continuous: Pendulum-v0
 
 [Full code](https://): A3C (discrete) multi-threaded version with version 1 of N-step targets
 
 [Full code](https://): A3C (discrete) multi-threaded version with version 2 of N-step targets
+
+[Full code](https://): A3C (Continuous) multi-threaded version with version 1 of N-step targets
+
+[Full code](https://): A3C (Continuous) multi-threaded version with version 2 of N-step targets
 
 ACNet class:
 This class defines the models (Tensorflow graphs).
