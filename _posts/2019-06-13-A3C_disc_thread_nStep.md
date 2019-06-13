@@ -1,10 +1,10 @@
 ---
 layout: posts
 author: Huan
-title: A3C multi-threaded version with N step targets
+title: A3C multi-threaded discrete version with N step targets
 
 ---
-This post demonstrates how to implement the A3C (Asynchronous Advantage Actor Critic) algorithm with Tensorflow. This is a multi-threaded version.
+This post demonstrates how to implement the A3C (Asynchronous Advantage Actor Critic) algorithm with Tensorflow. This is a multi-threaded discrete version.
 
 N-step returns are used as critic's targets.
 
@@ -21,12 +21,6 @@ Environment from OpenAI's gym: CartPole-v0 (Discrete)
 [Full code](https://): A3C (discrete) multi-threaded version with version 1 of N-step targets
 
 [Full code](https://): A3C (discrete) multi-threaded version with version 2 of N-step targets
-
-Environment from OpenAI's gym: Pendulum-v0 (Continuous)
-
-[Full code](https://): A3C (Continuous) multi-threaded version with version 1 of N-step targets
-
-[Full code](https://): A3C (Continuous) multi-threaded version with version 2 of N-step targets
 
 The ACNet class defines the models (Tensorflow graphs) and contains both the actor and the critic networks.
 
@@ -107,3 +101,5 @@ The following code segment initialize storage for accumulated local gradients.
 self.AC.init_grad_storage_actor() # initialize storage for accumulated gradients.
 self.AC.init_grad_storage_critic()            
 ```
+
+Check this [post](https://chuacheowhuan.github.io/tf_accumulate_grad/) for more information on how to accumulate gradients in Tensorflow.
