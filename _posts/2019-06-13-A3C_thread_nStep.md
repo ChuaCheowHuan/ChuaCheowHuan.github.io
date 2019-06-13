@@ -1,14 +1,10 @@
 ---
 layout: posts
 author: Huan
-title: A3C (discrete) multi-threaded version with N step targets
+title: A3C multi-threaded version with N step targets
 
 ---
-This post demonstrates how to implement the A3C (Asynchronous Advantage Actor Critic) algorithm with Tensorflow.
-
-This is a multi-threaded version which learns in a discrete environment.
-
-Environment from OpenAI's gym: CartPole-v0
+This post demonstrates how to implement the A3C (Asynchronous Advantage Actor Critic) algorithm with Tensorflow. This is a multi-threaded version.
 
 N-step returns are used as critic's targets.
 
@@ -20,11 +16,18 @@ N-step returns are used as critic's targets.
 
 Check this [post](https://chuacheowhuan.github.io/n_step_targets/) for more information on N-step targets.
 
-A3C (discrete) multi-threaded version with version 1 of N-step targets: [Full code](https://)
+Environment from OpenAI's gym:
 
-A3C (discrete) multi-threaded version with version 2 of N-step targets: [Full code](https://)
+  Discrete: CartPole-v0
 
-ACNet class
+  Continuous: Pendulum-v0
+
+[Full code](https://): A3C (discrete) multi-threaded version with version 1 of N-step targets
+
+[Full code](https://): A3C (discrete) multi-threaded version with version 2 of N-step targets
+
+ACNet class:
+This class defines the models (Tensorflow graphs).
 
 ```
 class ACNet(object):
@@ -220,38 +223,7 @@ class Worker(object): # local only
             targets[t] += (gamma**n) * baselines[t+n]
           else:
             targets[t] += (gamma**n) * epr[t+n]
-      return targets  
-
-    def compute_n_step_targets_2(self, r, B, g, N):
-      if N >= len(r):
-        N = len(r)-1
-
-      T = np.zeros_like(r)             
-
-      # Non n-steps ops without baseline terms
-      t = r.size-1
-      T[t] = r[t] # last entry, do 0 step
-      for n in range(1,N): # n = 1..N-1, do 1 step to N-1 step
-        t = t-1
-        for i in range(n): # get 0..n-1 gamma raised r terms
-          T[t] += g**i * r[t+i]
-
-      # Non n-steps ops with baseline terms
-      t = r.size-1
-      for j in range(1,N): # 1..N-1
-        t = t-1
-        T[t] += g**j * B[N]
-
-      # n-steps ops without baseline
-      for t in range(r.size-N): # 0..r.size-N-1
-        for k in range(N):
-          T[t] += g**k * r[t+k]
-
-      # n-steps ops with baseline
-      for t in range(r.size-N): # 0..r.size-N-1
-        T[t] += g**N * B[t+N]
-
-      return T
+      return targets      
 ```
 
 Output with using compute_n_step_targets_missing():
