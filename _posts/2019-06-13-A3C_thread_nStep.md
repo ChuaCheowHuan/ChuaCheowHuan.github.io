@@ -36,6 +36,20 @@ A copy of ACNet is declared globally & the parameters are shared by the threaded
 
 ACNet class:
 
+The following code segment describes the loss function for the actor & critic networks for the discrete environment:
+
+```
+TD_err = tf.subtract(self.critic_target, self.V, name='TD_err')
+with tf.name_scope('actor_loss'):
+    log_prob = tf.reduce_sum(tf.log(self.action_prob + 1e-5) * tf.one_hot(self.a, num_actions, dtype=tf.float32), axis=1, keep_dims=True)
+    actor_component = log_prob * tf.stop_gradient(self.baselined_returns)
+    # entropy for exploration
+    entropy = -tf.reduce_sum(self.action_prob * tf.log(self.action_prob + 1e-5), axis=1, keep_dims=True)  # encourage exploration
+    self.actor_loss = tf.reduce_mean( -(ENTROPY_BETA * entropy + actor_component) )                                        
+with tf.name_scope('critic_loss'):
+    self.critic_loss = tf.reduce_mean(tf.square(TD_err))
+```
+
 The following function in the ACNet class creates the actor and critic's neural networks:
 
 ```
