@@ -8,6 +8,8 @@ This post demonstrates how to implement the A3C (Asynchronous Advantage Actor Cr
 
 This is a multi-threaded version which learns in a discrete environment.
 
+Environment from OpenAI's gym: CartPole-v0
+
 N-step returns are used as critic's targets.
 
 2 versions of N-step targets could be used:
@@ -18,9 +20,9 @@ N-step returns are used as critic's targets.
 
 Check this [post](https://chuacheowhuan.github.io/n_step_targets/) for more information on N-step targets.
 
-Environment from OpenAI's gym: CartPole-v0
+A3C (discrete) multi-threaded version with version 1 of N-step targets: [Full code](https://)
 
-[Full code](https://)
+A3C (discrete) multi-threaded version with version 2 of N-step targets: [Full code](https://)
 
 ACNet class
 
@@ -252,7 +254,7 @@ class Worker(object): # local only
       return T
 ```
 
-Output:
+Output with using compute_n_step_targets_missing():
 
 ```
 WARNING:tensorflow:From <ipython-input-2-cf49427a73a9>:45: dense (from tensorflow.python.layers.core) is deprecated and will be removed in a future version.
