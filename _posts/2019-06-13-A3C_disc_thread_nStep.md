@@ -5,7 +5,8 @@ title: A3C multi-threaded discrete version with N step targets
 ---
 pending update...
 
-This post demonstrates how to implement the A3C (Asynchronous Advantage Actor Critic) algorithm with Tensorflow. This is a multi-threaded discrete version.
+An A3C (Asynchronous Advantage Actor Critic) algorithm implementation with
+Tensorflow. This is a multi-threaded discrete version.
 
 Environment from OpenAI's gym: CartPole-v0 (Discrete)
 
@@ -56,11 +57,14 @@ Policy gradient estimator
 
 **Implementation details:**
 
-The ACNet class defines the models (Tensorflow graphs) and contains both the actor and the critic networks.
+The ACNet class defines the models (Tensorflow graphs) and contains both the
+actor and the critic networks.
 
-The Worker class contains the work function that does the main bulk of the computation.
+The Worker class contains the work function that does the main bulk of the
+computation.
 
-A copy of ACNet is declared globally & the parameters are shared by the threaded workers. Each worker also have it's own local copy of ACNet.
+A copy of ACNet is declared globally & it's parameters are shared by the
+threaded workers. Each worker also have it's own local copy of ACNet.
 
 Workers are instantiated & threaded in the main program.
 
