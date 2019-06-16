@@ -1,6 +1,69 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.5">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2019-06-17T00:00:21+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Chua Cheow Huan</title><subtitle></subtitle><author><name>Chua Cheow Huan</name></author><entry><title type="html">A3C multi-threaded continuous version with N step targets</title><link href="http://localhost:4000/A3C_cont_thread_nStep/" rel="alternate" type="text/html" title="A3C multi-threaded continuous version with N step targets" /><published>2019-06-14T00:00:00+08:00</published><updated>2019-06-14T00:00:00+08:00</updated><id>http://localhost:4000/A3C_cont_thread_nStep</id><content type="html" xml:base="http://localhost:4000/A3C_cont_thread_nStep/">&lt;p&gt;pending update…&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.5">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2019-06-17T02:02:55+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Chua Cheow Huan</title><subtitle></subtitle><author><name>Chua Cheow Huan</name></author><entry><title type="html">A3C multi-threaded continuous version with N step targets</title><link href="http://localhost:4000/A3C_cont_thread_nStep/" rel="alternate" type="text/html" title="A3C multi-threaded continuous version with N step targets" /><published>2019-06-14T00:00:00+08:00</published><updated>2019-06-14T00:00:00+08:00</updated><id>http://localhost:4000/A3C_cont_thread_nStep</id><content type="html" xml:base="http://localhost:4000/A3C_cont_thread_nStep/">&lt;p&gt;pending update…&lt;/p&gt;
 
-&lt;p&gt;This post demonstrates how to implement the A3C (Asynchronous Advantage Actor Critic) algorithm with Tensorflow. This is a multi-threaded continuous version.&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">pending update…</summary></entry><entry><title type="html">A3C multi-threaded discrete version with N step targets</title><link href="http://localhost:4000/A3C_disc_thread_nStep/" rel="alternate" type="text/html" title="A3C multi-threaded discrete version with N step targets" /><published>2019-06-13T00:00:00+08:00</published><updated>2019-06-13T00:00:00+08:00</updated><id>http://localhost:4000/A3C_disc_thread_nStep</id><content type="html" xml:base="http://localhost:4000/A3C_disc_thread_nStep/">&lt;p&gt;update pending&lt;/p&gt;
+&lt;p&gt;This post demonstrates how to implement the A3C (Asynchronous Advantage Actor Critic) algorithm with Tensorflow. This is a multi-threaded continuous version.&lt;/p&gt;
+
+&lt;p&gt;Environment from OpenAI’s gym: Pendulum-v0 (Discrete)&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://&quot;&gt;Full code&lt;/a&gt;: A3C (discrete) multi-threaded version with N-step targets(missing terms are treated as 0)&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://&quot;&gt;Full code&lt;/a&gt;: A3C (discrete) multi-threaded version with N-step
+targets(use maximum terms possible)&lt;/p&gt;
+
+&lt;p&gt;The majority of the code is very similar to the discrete version with the exceptions highlighted in the following sections:&lt;/p&gt;
+
+&lt;p&gt;Action selection:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;with tf.name_scope('select_action'):
+    #mean = mean * action_bound[1]                   
+    mean = mean * ( action_bound[1] - action_bound[0] ) / 2
+    sigma += 1e-4
+    normal_dist = tf.distributions.Normal(mean, sigma)                     
+    self.choose_a = tf.clip_by_value(tf.squeeze(normal_dist.sample(1), axis=[0, 1]), action_bound[0], action_bound[1])                  
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Loss function of the actor network:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;with tf.name_scope('actor_loss'):
+    log_prob = normal_dist.log_prob(self.a)
+    #actor_component = log_prob * tf.stop_gradient(TD_err)
+    actor_component = log_prob * tf.stop_gradient(self.baselined_returns)
+    entropy = -tf.reduce_mean(normal_dist.entropy()) # Compute the differential entropy of the multivariate normal.                   
+    self.actor_loss = -tf.reduce_mean( ENTROPY_BETA * entropy + actor_component)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;The following code segment creates a LSTM layer:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;def _lstm(self, Inputs, cell_size):
+        # [time_step, feature] =&amp;gt; [time_step, batch, feature]
+        s = tf.expand_dims(Inputs, axis=1, name='time_major')  
+        lstm_cell = tf.nn.rnn_cell.LSTMCell(cell_size)
+        self.init_state = lstm_cell.zero_state(batch_size=1, dtype=tf.float32)
+        outputs, self.final_state = tf.nn.dynamic_rnn(cell=lstm_cell, inputs=s, initial_state=self.init_state, time_major=True)
+        # joined state representation          
+        lstm_out = tf.reshape(outputs, [-1, cell_size], name='flatten_rnn_outputs')  
+        return lstm_out
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;The following function in the ACNet class creates the actor and critic’s neural networks(note that the critic’s network contains a LSTM layer):&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;def _create_net(self, scope):
+    w_init = tf.glorot_uniform_initializer()
+    #w_init = tf.random_normal_initializer(0., .1)
+    with tf.variable_scope('actor'):                        
+        hidden = tf.layers.dense(self.s, actor_hidden, tf.nn.relu6, kernel_initializer=w_init, name='hidden')            
+        #lstm_out = self._lstm(hidden, cell_size)
+        # tanh range = [-1,1]
+        mean = tf.layers.dense(hidden, num_actions, tf.nn.tanh, kernel_initializer=w_init, name='mean')
+        # softplus range = {0,inf}
+        sigma = tf.layers.dense(hidden, num_actions, tf.nn.softplus, kernel_initializer=w_init, name='sigma')
+    with tf.variable_scope('critic'):
+        hidden = tf.layers.dense(self.s, critic_hidden, tf.nn.relu6, kernel_initializer=w_init, name='hidden')
+        lstm_out = self._lstm(hidden, cell_size)
+        V = tf.layers.dense(lstm_out, 1, kernel_initializer=w_init, name='V')  
+    actor_params = tf.get_collection(tf.GraphKeys.TRAINABLE_VARIABLES, scope=scope + '/actor')
+    critic_params = tf.get_collection(tf.GraphKeys.TRAINABLE_VARIABLES, scope=scope + '/critic')
+    return mean, sigma, V, actor_params, critic_params
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name>Huan</name></author><summary type="html">pending update…</summary></entry><entry><title type="html">A3C multi-threaded discrete version with N step targets</title><link href="http://localhost:4000/A3C_disc_thread_nStep/" rel="alternate" type="text/html" title="A3C multi-threaded discrete version with N step targets" /><published>2019-06-13T00:00:00+08:00</published><updated>2019-06-13T00:00:00+08:00</updated><id>http://localhost:4000/A3C_disc_thread_nStep</id><content type="html" xml:base="http://localhost:4000/A3C_disc_thread_nStep/">&lt;p&gt;pending update…&lt;/p&gt;
 
 &lt;p&gt;This post demonstrates how to implement the A3C (Asynchronous Advantage Actor Critic) algorithm with Tensorflow. This is a multi-threaded discrete version.&lt;/p&gt;
 
@@ -59,24 +122,7 @@ targets(use maximum terms possible)&lt;/p&gt;
 
 &lt;p&gt;A copy of ACNet is declared globally &amp;amp; the parameters are shared by the threaded workers. Each worker also have it’s own local copy of ACNet.&lt;/p&gt;
 
-&lt;p&gt;Discounted rewards are used as critic’s targets:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;critic_target = self.discount_rewards(buffer_r, GAMMA, V_s)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;N-step targets are used in the computation of the Advantage function(baselined_returns):&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# Advantage function
-baselined_returns = n_step_targets - baseline
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;2 versions of N-step targets could be used:&lt;/p&gt;
-
-&lt;p&gt;Version 1) missing terms are treated as 0.&lt;/p&gt;
-
-&lt;p&gt;Version 2) use maximum terms possible.&lt;/p&gt;
-
-&lt;p&gt;Check this &lt;a href=&quot;https://chuacheowhuan.github.io/n_step_targets/&quot;&gt;post&lt;/a&gt; for more information on N-step targets.&lt;/p&gt;
+&lt;p&gt;Workers are instantiated &amp;amp; threaded in the main program.&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;ACNet class:&lt;/strong&gt;&lt;/p&gt;
 
@@ -115,6 +161,25 @@ with tf.name_scope('critic_loss'):
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;&lt;strong&gt;Worker class:&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Discounted rewards are used as critic’s targets:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;critic_target = self.discount_rewards(buffer_r, GAMMA, V_s)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;N-step targets are used in the computation of the Advantage function(baselined_returns):&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# Advantage function
+baselined_returns = n_step_targets - baseline
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;2 versions of N-step targets could be used:&lt;/p&gt;
+
+&lt;p&gt;Version 1) missing terms are treated as 0.&lt;/p&gt;
+
+&lt;p&gt;Version 2) use maximum terms possible.&lt;/p&gt;
+
+&lt;p&gt;Check this &lt;a href=&quot;https://chuacheowhuan.github.io/n_step_targets/&quot;&gt;post&lt;/a&gt; for more information on N-step targets.&lt;/p&gt;
 
 &lt;p&gt;The following code segment accumulates gradients &amp;amp; apply them to the local critic network:&lt;/p&gt;
 
@@ -174,7 +239,14 @@ for worker in workers:
     t.start()
     worker_threads.append(t)
 COORD.join(worker_threads)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name>Huan</name></author><summary type="html">update pending</summary></entry><entry><title type="html">Accumulate gradients with Tensorflow</title><link href="http://localhost:4000/tf_accumulate_grad/" rel="alternate" type="text/html" title="Accumulate gradients with Tensorflow" /><published>2019-06-11T00:00:00+08:00</published><updated>2019-06-11T00:00:00+08:00</updated><id>http://localhost:4000/tf_accumulate_grad</id><content type="html" xml:base="http://localhost:4000/tf_accumulate_grad/">&lt;p&gt;This post demonstrates how to accumulate gradients with Tensorflow.&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;References:&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://arxiv.org/pdf/1602.01783.pdf&quot;&gt;Asynchronous Methods for Deep Reinforcement Learning
+(Mnih, Badia, Mirza, Graves, Harley, Lillicrap, et al., 2016)&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">pending update…</summary></entry><entry><title type="html">Accumulate gradients with Tensorflow</title><link href="http://localhost:4000/tf_accumulate_grad/" rel="alternate" type="text/html" title="Accumulate gradients with Tensorflow" /><published>2019-06-11T00:00:00+08:00</published><updated>2019-06-11T00:00:00+08:00</updated><id>http://localhost:4000/tf_accumulate_grad</id><content type="html" xml:base="http://localhost:4000/tf_accumulate_grad/">&lt;p&gt;This post demonstrates how to accumulate gradients with Tensorflow.&lt;/p&gt;
 
 &lt;p&gt;&lt;a href=&quot;https://github.com/ChuaCheowHuan/misc_code_examples/blob/master/tf/tf_accumulate_grad.ipynb&quot;&gt;Full code&lt;/a&gt;&lt;/p&gt;
 

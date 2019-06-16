@@ -20,7 +20,7 @@
     <meta charset="utf-8">
 
 <!-- begin _includes/seo.html --><title>A3C multi-threaded discrete version with N step targets -</title>
-<meta name="description" content="update pending">
+<meta name="description" content="pending update…">
 
 
 
@@ -31,7 +31,7 @@
 <meta property="og:url" content="http://localhost:4000/A3C_disc_thread_nStep/">
 
 
-  <meta property="og:description" content="update pending">
+  <meta property="og:description" content="pending update…">
 
 
 
@@ -260,7 +260,7 @@
     
       <h1 id="page-title" class="page__title">A3C multi-threaded discrete version with N step targets</h1>
     
-    <p>update pending</p>
+    <p>pending update…</p>
 
 <p>This post demonstrates how to implement the A3C (Asynchronous Advantage Actor Critic) algorithm with Tensorflow. This is a multi-threaded discrete version.</p>
 
@@ -319,24 +319,7 @@ targets(use maximum terms possible)</p>
 
 <p>A copy of ACNet is declared globally &amp; the parameters are shared by the threaded workers. Each worker also have it’s own local copy of ACNet.</p>
 
-<p>Discounted rewards are used as critic’s targets:</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>critic_target = self.discount_rewards(buffer_r, GAMMA, V_s)
-</code></pre></div></div>
-
-<p>N-step targets are used in the computation of the Advantage function(baselined_returns):</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># Advantage function
-baselined_returns = n_step_targets - baseline
-</code></pre></div></div>
-
-<p>2 versions of N-step targets could be used:</p>
-
-<p>Version 1) missing terms are treated as 0.</p>
-
-<p>Version 2) use maximum terms possible.</p>
-
-<p>Check this <a href="https://chuacheowhuan.github.io/n_step_targets/">post</a> for more information on N-step targets.</p>
+<p>Workers are instantiated &amp; threaded in the main program.</p>
 
 <p><strong>ACNet class:</strong></p>
 
@@ -375,6 +358,25 @@ with tf.name_scope('critic_loss'):
 </code></pre></div></div>
 
 <p><strong>Worker class:</strong></p>
+
+<p>Discounted rewards are used as critic’s targets:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>critic_target = self.discount_rewards(buffer_r, GAMMA, V_s)
+</code></pre></div></div>
+
+<p>N-step targets are used in the computation of the Advantage function(baselined_returns):</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># Advantage function
+baselined_returns = n_step_targets - baseline
+</code></pre></div></div>
+
+<p>2 versions of N-step targets could be used:</p>
+
+<p>Version 1) missing terms are treated as 0.</p>
+
+<p>Version 2) use maximum terms possible.</p>
+
+<p>Check this <a href="https://chuacheowhuan.github.io/n_step_targets/">post</a> for more information on N-step targets.</p>
 
 <p>The following code segment accumulates gradients &amp; apply them to the local critic network:</p>
 
@@ -436,6 +438,13 @@ for worker in workers:
 COORD.join(worker_threads)
 </code></pre></div></div>
 
+<p><strong>References:</strong></p>
+
+<p><a href="https://arxiv.org/pdf/1602.01783.pdf">Asynchronous Methods for Deep Reinforcement Learning
+(Mnih, Badia, Mirza, Graves, Harley, Lillicrap, et al., 2016)</a></p>
+
+<p><br /></p>
+
 
 <ul class="taxonomy__index">
   
@@ -473,7 +482,7 @@ COORD.join(worker_threads)
 
 
 
-  2 minute read
+  31 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">pending update…
@@ -502,10 +511,10 @@ COORD.join(worker_threads)
 
 
 
-  59 minute read
+  61 minute read
 </p>
     
-    <p class="archive__item-excerpt" itemprop="description">update pending
+    <p class="archive__item-excerpt" itemprop="description">pending update…
 
 </p>
   </article>

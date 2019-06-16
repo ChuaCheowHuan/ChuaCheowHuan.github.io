@@ -62,26 +62,7 @@ The Worker class contains the work function that does the main bulk of the compu
 
 A copy of ACNet is declared globally & the parameters are shared by the threaded workers. Each worker also have it's own local copy of ACNet.
 
-Discounted rewards are used as critic's targets:
-
-```
-critic_target = self.discount_rewards(buffer_r, GAMMA, V_s)
-```
-
-N-step targets are used in the computation of the Advantage function(baselined_returns):
-
-```
-# Advantage function
-baselined_returns = n_step_targets - baseline
-```
-
-2 versions of N-step targets could be used:
-
-Version 1) missing terms are treated as 0.
-
-Version 2) use maximum terms possible.
-
-Check this [post](https://chuacheowhuan.github.io/n_step_targets/) for more information on N-step targets.
+Workers are instantiated & threaded in the main program.
 
 **ACNet class:**
 
@@ -123,6 +104,27 @@ def _create_net(self, scope):
 ```
 
 **Worker class:**
+
+Discounted rewards are used as critic's targets:
+
+```
+critic_target = self.discount_rewards(buffer_r, GAMMA, V_s)
+```
+
+N-step targets are used in the computation of the Advantage function(baselined_returns):
+
+```
+# Advantage function
+baselined_returns = n_step_targets - baseline
+```
+
+2 versions of N-step targets could be used:
+
+Version 1) missing terms are treated as 0.
+
+Version 2) use maximum terms possible.
+
+Check this [post](https://chuacheowhuan.github.io/n_step_targets/) for more information on N-step targets.
 
 The following code segment accumulates gradients & apply them to the local critic network:
 
