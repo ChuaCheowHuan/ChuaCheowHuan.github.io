@@ -190,3 +190,10 @@ for worker in workers:
     worker_threads.append(t)
 COORD.join(worker_threads)
 ```
+
+**References:**
+
+[Asynchronous Methods for Deep Reinforcement Learning
+(Mnih, Badia, Mirza, Graves, Harley, Lillicrap, et al., 2016)](https://arxiv.org/pdf/1602.01783.pdf)
+
+<br>
