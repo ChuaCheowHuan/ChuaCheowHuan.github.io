@@ -11,12 +11,13 @@ Tensorflow. This is a multi-threaded continuous version.
 
 Environment from OpenAI's gym: Pendulum-v0 (Discrete)
 
-[Full code](https://): A3C (discrete) multi-threaded version with N-step targets(missing terms are treated as 0)
+[Full code](https://): A3C (continuous) multi-threaded version with N-step targets(missing terms are treated as 0)
 
-[Full code](https://): A3C (discrete) multi-threaded version with N-step
+[Full code](https://): A3C (continuous) multi-threaded version with N-step
 targets(use maximum terms possible)
 
-The majority of the code is very similar to the discrete version with the exceptions highlighted in the following sections:
+The majority of the code is very similar to the [discrete](https://) version with the
+exceptions highlighted in the following sections:
 
 Action selection:
 
