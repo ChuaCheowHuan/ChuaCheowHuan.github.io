@@ -19,19 +19,19 @@
   <head>
     <meta charset="utf-8">
 
-<!-- begin _includes/seo.html --><title>N-step targets -</title>
-<meta name="description" content="N-step Q-values estimation.">
+<!-- begin _includes/seo.html --><title>A3C multi-threaded discrete version with N step targets -</title>
+<meta name="description" content="update pending">
 
 
 
 <meta property="og:type" content="article">
 <meta property="og:locale" content="en_US">
 <meta property="og:site_name" content="">
-<meta property="og:title" content="N-step targets">
-<meta property="og:url" content="http://localhost:4000/n_step_targets/">
+<meta property="og:title" content="A3C multi-threaded discrete version with N step targets">
+<meta property="og:url" content="http://localhost:4000/A3C_disc_thread_nStep/">
 
 
-  <meta property="og:description" content="N-step Q-values estimation.">
+  <meta property="og:description" content="update pending">
 
 
 
@@ -41,7 +41,7 @@
 
 
 
-  <meta property="article:published_time" content="2019-05-31T00:00:00+08:00">
+  <meta property="article:published_time" content="2019-06-13T00:00:00+08:00">
 
 
 
@@ -52,7 +52,7 @@
   
 
 
-<link rel="canonical" href="http://localhost:4000/n_step_targets/">
+<link rel="canonical" href="http://localhost:4000/A3C_disc_thread_nStep/">
 
 
 
@@ -258,208 +258,183 @@
 
   <div class="archive">
     
-      <h1 id="page-title" class="page__title">N-step targets</h1>
+      <h1 id="page-title" class="page__title">A3C multi-threaded discrete version with N step targets</h1>
     
-    <p>N-step Q-values estimation.</p>
+    <p>update pending</p>
 
-<p><a href="https://github.com/ChuaCheowHuan/reinforcement_learning/blob/master/policy_gradient_based/n_step_targets.ipynb">Full code</a></p>
+<p>This post demonstrates how to implement the A3C (Asynchronous Advantage Actor Critic) algorithm with Tensorflow. This is a multi-threaded discrete version.</p>
 
-<p>The following two functions computes truncated Q-values estimates:</p>
+<p>Environment from OpenAI’s gym: CartPole-v0 (Discrete)</p>
 
-<p>1) n_step_targets_missing</p>
+<p><a href="https://">Full code</a>: A3C (discrete) multi-threaded version with N-step targets(missing terms are treated as 0)</p>
 
-<p>treats missing terms as 0.</p>
+<p><a href="https://">Full code</a>: A3C (discrete) multi-threaded version with N-step
+targets(use maximum terms possible)</p>
 
-<p>2) n_step_targets_max</p>
+<hr />
 
-<p>use maximum terms possible.</p>
+<p><strong>Notations:</strong></p>
 
-<p><br /></p>
+<p>Actor network = <script type="math/tex">{\pi}_{\theta}</script></p>
 
-<p>1-step truncated estimate :</p>
+<p>Actor network parameter = <script type="math/tex">{\theta}</script></p>
 
-<p><script type="math/tex">Q^{\pi}(s_{t}, a_{t})</script> = E(<script type="math/tex">r_{t}</script> + <script type="math/tex">\gamma</script> V(<script type="math/tex">s_{t+1}</script>))</p>
+<p>Critic network = <script type="math/tex">V_{\phi}</script></p>
 
-<p>2-step truncated estimate :</p>
+<p>Critic network parameter = <script type="math/tex">\phi</script></p>
 
-<p><script type="math/tex">Q^{\pi}(s_{t}, a_{t})</script> = E(<script type="math/tex">r_{t}</script> + <script type="math/tex">\gamma</script> <script type="math/tex">r_{t+1}</script> +  <script type="math/tex">\gamma^{2}</script> V(<script type="math/tex">s_{t+2}</script>))</p>
+<p>Advantage function = A</p>
 
-<p>3-step truncated estimate :</p>
+<p>Number of trajectories = m</p>
 
-<p><script type="math/tex">Q^{\pi}(s_{t}, a_{t})</script> = E(<script type="math/tex">r_{t}</script> + <script type="math/tex">\gamma</script> <script type="math/tex">r_{t+1}</script> + <script type="math/tex">\gamma^{2}</script> <script type="math/tex">r_{t+2}</script> + <script type="math/tex">\gamma^{3}</script> V(<script type="math/tex">s_{t+3}</script>))</p>
+<hr />
 
-<p>N-step truncated estimate :</p>
+<p><strong>Equations:</strong></p>
+
+<p>Actor component: log<script type="math/tex">{\pi}_{\theta}</script> <script type="math/tex">(a_{t} {\mid} s_{t})</script></p>
+
+<p>Critic component = Advantage function = A = <script type="math/tex">Q(s_{t}, a_{t})</script> - <script type="math/tex">V_{\phi}(s_{t})</script></p>
+
+<p>Q values with N-step truncated estimate :</p>
 
 <p><script type="math/tex">Q^{\pi}(s_{t}, a_{t})</script> = E(<script type="math/tex">r_{t}</script> + <script type="math/tex">\gamma</script> <script type="math/tex">r_{t+1}</script> + <script type="math/tex">\gamma^{2}</script> <script type="math/tex">r_{t+2}</script> + … + <script type="math/tex">\gamma^{n}</script> V(<script type="math/tex">s_{t+n}</script>))</p>
 
-<p><br /></p>
+<p>Check this <a href="https://chuacheowhuan.github.io/n_step_targets/">post</a> for more information on N-step truncated estimate.</p>
 
-<p>Assuming we have the following variables setup:</p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>N=2 # N steps
-gamma=2
-t=5
-v_s_ = 10 # value of next state
+<p>Policy gradient estimator</p>
 
-epr=np.arange(t).reshape(t,1)
-print("epr=", epr)
+<p>= <script type="math/tex">\nabla_\theta J(\theta)</script></p>
 
-baselines=np.arange(t).reshape(t,1)
-print("baselines=", baselines)
+<p>= <script type="math/tex">{\dfrac{1}{m}}</script> <script type="math/tex">{\sum\limits_{i=1}^{m}}</script> <script type="math/tex">{\sum\limits_{t=0}^{T}}</script> <script type="math/tex">\nabla_\theta</script> log<script type="math/tex">{\pi}_{\theta}</script> <script type="math/tex">(a_{t} {\mid} s_{t})</script> <script type="math/tex">Q(s_{t}, a_{t})</script> - <script type="math/tex">V_{\phi}(s_{t})</script></p>
+
+<p>= <script type="math/tex">{\dfrac{1}{m}}</script> <script type="math/tex">{\sum\limits_{i=1}^{m}}</script> <script type="math/tex">{\sum\limits_{t=0}^{T}}</script> <script type="math/tex">\nabla_\theta</script> log<script type="math/tex">{\pi}_{\theta}</script> <script type="math/tex">(a_{t} {\mid} s_{t})</script> A</p>
+
+<hr />
+
+<p><strong>Implementation details:</strong></p>
+
+<p>The ACNet class defines the models (Tensorflow graphs) and contains both the actor and the critic networks.</p>
+
+<p>The Worker class contains the work function that does the main bulk of the computation.</p>
+
+<p>A copy of ACNet is declared globally &amp; the parameters are shared by the threaded workers. Each worker also have it’s own local copy of ACNet.</p>
+
+<p>Discounted rewards are used as critic’s targets:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>critic_target = self.discount_rewards(buffer_r, GAMMA, V_s)
 </code></pre></div></div>
 
-<p>Display output of episodic rewards(epr) &amp; baselines:</p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>epr= [[0]
- [1]
- [2]
- [3]
- [4]]
+<p>N-step targets are used in the computation of the Advantage function(baselined_returns):</p>
 
-baselines= [[0]
- [1]
- [2]
- [3]
- [4]]
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># Advantage function
+baselined_returns = n_step_targets - baseline
 </code></pre></div></div>
 
-<p>This function computes the n-step targets, treats missing terms as zero:</p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># if number of steps unavailable, missing terms treated as 0.
-def n_step_targets_missing(epr, baselines, gamma, N):
-  N = N+1
-  targets = np.zeros_like(epr)    
-  if N &gt; epr.size:
-    N = epr.size
-  for t in range(epr.size):   
-    print("t=", t)
-    for n in range(N):
-      print("n=", n)
-      if t+n == epr.size:            
-        print('missing terms treated as 0, break') # last term for those with insufficient steps.
-        break # missing terms treated as 0
-      if n == N-1: # last term
-        targets[t] += (gamma**n) * baselines[t+n] # last term for those with sufficient steps
-        print('last term for those with sufficient steps, end inner n loop')
-      else:
-        targets[t] += (gamma**n) * epr[t+n] # non last terms
-  return targets
+<p>2 versions of N-step targets could be used:</p>
+
+<p>Version 1) missing terms are treated as 0.</p>
+
+<p>Version 2) use maximum terms possible.</p>
+
+<p>Check this <a href="https://chuacheowhuan.github.io/n_step_targets/">post</a> for more information on N-step targets.</p>
+
+<p><strong>ACNet class:</strong></p>
+
+<p>Loss function for the actor network for the discrete environment:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>with tf.name_scope('actor_loss'):
+    log_prob = tf.reduce_sum(tf.log(self.action_prob + 1e-5) * tf.one_hot(self.a, num_actions, dtype=tf.float32), axis=1, keep_dims=True)
+    actor_component = log_prob * tf.stop_gradient(self.baselined_returns)
+    # entropy for exploration
+    entropy = -tf.reduce_sum(self.action_prob * tf.log(self.action_prob + 1e-5), axis=1, keep_dims=True)  # encourage exploration
+    self.actor_loss = tf.reduce_mean( -(ENTROPY_BETA * entropy + actor_component) )                                        
+</code></pre></div></div>
+<p>Loss function for the critic network for the discrete environment:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>TD_err = tf.subtract(self.critic_target, self.V, name='TD_err')
+      .
+      .
+      .
+with tf.name_scope('critic_loss'):
+    self.critic_loss = tf.reduce_mean(tf.square(TD_err))
 </code></pre></div></div>
 
-<p>Run the function n_step_targets_missing:</p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>print('n_step_targets_missing:')
-T = n_step_targets_missing(epr, baselines, gamma, N)
-print(T)
+<p>The following function in the ACNet class creates the actor and critic’s neural networks:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>def _create_net(self, scope):
+    w_init = tf.glorot_uniform_initializer()
+    with tf.variable_scope('actor'):
+        hidden = tf.layers.dense(self.s, actor_hidden, tf.nn.relu6, kernel_initializer=w_init, name='hidden')
+        action_prob = tf.layers.dense(hidden, num_actions, tf.nn.softmax, kernel_initializer=w_init, name='action_prob')        
+    with tf.variable_scope('critic'):
+        hidden = tf.layers.dense(self.s, critic_hidden, tf.nn.relu6, kernel_initializer=w_init, name='hidden')
+        V = tf.layers.dense(hidden, 1, kernel_initializer=w_init, name='V')         
+    actor_params = tf.get_collection(tf.GraphKeys.TRAINABLE_VARIABLES, scope=scope + '/actor')
+    critic_params = tf.get_collection(tf.GraphKeys.TRAINABLE_VARIABLES, scope=scope + '/critic')       
+    return action_prob, V, actor_params, critic_params
 </code></pre></div></div>
 
-<p>Display the output:</p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>n_step_targets_missing:
-t= 0
-n= 0
-n= 1
-n= 2
-last term for those with sufficient steps, end inner n loop
-t= 1
-n= 0
-n= 1
-n= 2
-last term for those with sufficient steps, end inner n loop
-t= 2
-n= 0
-n= 1
-n= 2
-last term for those with sufficient steps, end inner n loop
-t= 3
-n= 0
-n= 1
-n= 2
-missing terms treated as 0, break
-t= 4
-n= 0
-n= 1
-missing terms treated as 0, break
-[[10]
- [17]
- [24]
- [11]
- [ 4]]
-</code></pre></div></div>
-<p>For the output above, note that when t+n = 5 which is greater than the last index 4, missing terms are treated as 0.</p>
+<p><strong>Worker class:</strong></p>
 
-<p><br /></p>
+<p>The following code segment accumulates gradients &amp; apply them to the local critic network:</p>
 
-<p>This function computes the n-step targets, it will use maximum number of terms possible:</p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># if number of steps unavailable, use max steps available.
-# uses v_s_ as input
-def n_step_targets_max(epr, baselines, v_s_, gamma, N):
-  N = N+1
-  targets = np.zeros_like(epr)    
-  if N &gt; epr.size:
-    N = epr.size
-  for t in range(epr.size):  
-    print("t=", t)
-    for n in range(N):
-      print("n=", n)
-      if t+n == epr.size:            
-        targets[t] += (gamma**n) * v_s_ # last term for those with insufficient steps.
-        print('last term for those with INSUFFICIENT steps, break')
-        break
-      if n == N-1:
-        targets[t] += (gamma**n) * baselines[t+n] # last term for those with sufficient steps
-        print('last term for those with sufficient steps, end inner n loop')
-      else:
-        targets[t] += (gamma**n) * epr[t+n] # non last terms
-  return targets
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>self.AC.accumu_grad_critic(feed_dict) # accumulating gradients for local critic  
+self.AC.apply_accumu_grad_critic(feed_dict)
 </code></pre></div></div>
 
-<p>Run the function n_step_targets_max:</p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>print('n_step_targets_max:')
-T = n_step_targets_max(epr, baselines, v_s_, gamma, N)
-print(T)
+<p>The following code segment computes the advantage function(baselined_returns):</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>baseline = SESS.run(self.AC.V, {self.AC.s: buffer_s}) # Value function
+epr = np.vstack(buffer_r).astype(np.float32)
+n_step_targets = self.compute_n_step_targets_missing(epr, baseline, GAMMA, N_step) # Q values
+# Advantage function
+baselined_returns = n_step_targets - baseline
 </code></pre></div></div>
 
-<p>Display the output:</p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>n_step_targets_max:
-t= 0
-n= 0
-n= 1
-n= 2
-last term for those with sufficient steps, end inner n loop
-t= 1
-n= 0
-n= 1
-n= 2
-last term for those with sufficient steps, end inner n loop
-t= 2
-n= 0
-n= 1
-n= 2
-last term for those with sufficient steps, end inner n loop
-t= 3
-n= 0
-n= 1
-n= 2
-last term for those with INSUFFICIENT steps, break
-t= 4
-n= 0
-n= 1
-last term for those with INSUFFICIENT steps, break
-[[10]
- [17]
- [24]
- [51]
- [24]]
+<p>The following code segment accumulates gradients for the local actor network:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>self.AC.accumu_grad_actor(feed_dict) # accumulating gradients for local actor  
 </code></pre></div></div>
-<p>For the output above, note that when t+n = 5 which is greater than the last index 4, maximum terms are used where possible. ( Last term for those with INSUFFICIENT steps is given by (gamma**n) * v_s_ = <script type="math/tex">\gamma^{5}</script> V(<script type="math/tex">s_{5}</script>)), where v_s_ = V(<script type="math/tex">s_{5}</script>)</p>
 
-<p>t=2, normal 2 steps estimation:</p>
+<p>The following code segment push the parameters from the local networks to the global networks and then pulls the updated global parameters to the local networks:</p>
 
-<p><script type="math/tex">Q^{\pi}(s_{t}, a_{t})</script> = E(<script type="math/tex">r_{2}</script> + <script type="math/tex">\gamma</script> <script type="math/tex">r_{3}</script> +  <script type="math/tex">\gamma^{4}</script> V(<script type="math/tex">s_{4}</script>))</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># update
+self.AC.push_global_actor(feed_dict)                
+self.AC.push_global_critic(feed_dict)
+    .
+    .
+    .
+self.AC.pull_global()
+</code></pre></div></div>
 
-<p>t=3, 2 steps estimation with insufficient step, using v_s_ in the last term:</p>
+<p>The following code segment initialize storage for accumulated local gradients.</p>
 
-<p><script type="math/tex">Q^{\pi}(s_{t}, a_{t})</script> = E(<script type="math/tex">r_{3}</script> + <script type="math/tex">\gamma</script> <script type="math/tex">r_{4}</script> +  <script type="math/tex">\gamma^{5}</script> V(<script type="math/tex">s_{5}</script>))</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>self.AC.init_grad_storage_actor() # initialize storage for accumulated gradients.
+self.AC.init_grad_storage_critic()            
+</code></pre></div></div>
 
-<p>t=4, insufficient step for 2 steps estimation, resorting to 1 step estimation:</p>
+<p>Check this <a href="https://chuacheowhuan.github.io/tf_accumulate_grad/">post</a> for more information on how to accumulate gradients in Tensorflow.</p>
 
-<p><script type="math/tex">Q^{\pi}(s_{t}, a_{t})</script> = E(<script type="math/tex">r_{4}</script> + <script type="math/tex">\gamma^{5}</script> V(<script type="math/tex">s_{5}</script>))</p>
+<p><strong>Main program:</strong></p>
+
+<p>The following code segment creates the workers:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>workers = []
+for i in range(num_workers): # Create worker
+    i_name = 'W_%i' % i # worker name
+    workers.append(Worker(i_name, GLOBAL_AC))
+</code></pre></div></div>
+
+<p>The following code segment threads the workers:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>worker_threads = []
+for worker in workers:
+    job = lambda: worker.work()
+    t = threading.Thread(target=job)
+    t.start()
+    worker_threads.append(t)
+COORD.join(worker_threads)
+</code></pre></div></div>
 
 
 <ul class="taxonomy__index">
@@ -527,7 +502,7 @@ last term for those with INSUFFICIENT steps, break
 
 
 
-  65 minute read
+  59 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">update pending
@@ -556,7 +531,7 @@ last term for those with INSUFFICIENT steps, break
 
 
 
-  15 minute read
+  14 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">This post demonstrates how to accumulate gradients with Tensorflow.
@@ -585,7 +560,7 @@ last term for those with INSUFFICIENT steps, break
 
 
 
-  74 minute read
+  73 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">Distributed Tensorflow with Python multiprocessing package.
@@ -871,8 +846,8 @@ last term for those with INSUFFICIENT steps, break
     
   <script>
     var disqus_config = function () {
-      this.page.url = "http://localhost:4000/n_step_targets/";  // Replace PAGE_URL with your page's canonical URL variable
-      this.page.identifier = "/n_step_targets"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+      this.page.url = "http://localhost:4000/A3C_disc_thread_nStep/";  // Replace PAGE_URL with your page's canonical URL variable
+      this.page.identifier = "/A3C_disc_thread_nStep"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
     };
     (function() { // DON'T EDIT BELOW THIS LINE
       var d = document, s = d.createElement('script');
