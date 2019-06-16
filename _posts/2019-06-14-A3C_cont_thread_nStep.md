@@ -16,7 +16,7 @@ Environment from OpenAI's gym: Pendulum-v0 (Discrete)
 [Full code](https://): A3C (continuous) multi-threaded version with N-step
 targets(use maximum terms possible)
 
-The majority of the code is very similar to the [discrete](https://) version with the
+The majority of the code is very similar to the [discrete](https://chuacheowhuan.github.io/A3C_disc_thread_nStep/) version with the
 exceptions highlighted in the following sections:
 
 Action selection:
