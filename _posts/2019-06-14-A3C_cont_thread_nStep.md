@@ -4,7 +4,6 @@ author: Huan
 title: A3C multi-threaded continuous version with N step targets
 
 ---
-pending update...
 
 An A3C (Asynchronous Advantage Actor Critic) algorithm implementation with
 Tensorflow. This is a multi-threaded continuous version.

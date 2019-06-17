@@ -3,7 +3,6 @@ layout: posts
 author: Huan
 title: A3C multi-threaded discrete version with N step targets
 ---
-pending update...
 
 An A3C (Asynchronous Advantage Actor Critic) algorithm implementation with
 Tensorflow. This is a multi-threaded discrete version.
