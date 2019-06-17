@@ -262,7 +262,8 @@
     
     <p>pending update…</p>
 
-<p>This post demonstrates how to implement the A3C (Asynchronous Advantage Actor Critic) algorithm with Tensorflow. This is a multi-threaded discrete version.</p>
+<p>An A3C (Asynchronous Advantage Actor Critic) algorithm implementation with
+Tensorflow. This is a multi-threaded discrete version.</p>
 
 <p>Environment from OpenAI’s gym: CartPole-v0 (Discrete)</p>
 
@@ -313,11 +314,14 @@ targets(use maximum terms possible)</p>
 
 <p><strong>Implementation details:</strong></p>
 
-<p>The ACNet class defines the models (Tensorflow graphs) and contains both the actor and the critic networks.</p>
+<p>The ACNet class defines the models (Tensorflow graphs) and contains both the
+actor and the critic networks.</p>
 
-<p>The Worker class contains the work function that does the main bulk of the computation.</p>
+<p>The Worker class contains the work function that does the main bulk of the
+computation.</p>
 
-<p>A copy of ACNet is declared globally &amp; the parameters are shared by the threaded workers. Each worker also have it’s own local copy of ACNet.</p>
+<p>A copy of ACNet is declared globally &amp; it’s parameters are shared by the
+threaded workers. Each worker also have it’s own local copy of ACNet.</p>
 
 <p>Workers are instantiated &amp; threaded in the main program.</p>
 
@@ -482,7 +486,7 @@ COORD.join(worker_threads)
 
 
 
-  31 minute read
+  30 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">pending update…
