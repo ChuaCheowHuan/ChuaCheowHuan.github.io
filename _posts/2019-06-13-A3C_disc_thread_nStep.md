@@ -10,9 +10,9 @@ Tensorflow. This is a multi-threaded discrete version.
 
 Environment from OpenAI's gym: CartPole-v0 (Discrete)
 
-[Full code](https://): A3C (discrete) multi-threaded version with N-step targets(missing terms are treated as 0)
+[Full code](https://github.com/ChuaCheowHuan/reinforcement_learning/blob/master/policy_gradient_based/A3C/A3C_disc_miss.ipynb): A3C (discrete) multi-threaded version with N-step targets(missing terms are treated as 0)
 
-[Full code](https://): A3C (discrete) multi-threaded version with N-step
+[Full code](https://github.com/ChuaCheowHuan/reinforcement_learning/blob/master/policy_gradient_based/A3C/A3C_disc_max.ipynb): A3C (discrete) multi-threaded version with N-step
 targets(use maximum terms possible)
 
 ---

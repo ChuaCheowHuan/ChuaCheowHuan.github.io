@@ -11,9 +11,7 @@ Tensorflow. This is a multi-threaded continuous version.
 
 Environment from OpenAI's gym: Pendulum-v0 (Discrete)
 
-[Full code](https://): A3C (continuous) multi-threaded version with N-step targets(missing terms are treated as 0)
-
-[Full code](https://): A3C (continuous) multi-threaded version with N-step
+[Full code](https://github.com/ChuaCheowHuan/reinforcement_learning/blob/master/policy_gradient_based/A3C/A3C_cont_max.ipynb): A3C (continuous) multi-threaded version with N-step
 targets(use maximum terms possible)
 
 The majority of the code is very similar to the [discrete](https://chuacheowhuan.github.io/A3C_disc_thread_nStep/) version with the
