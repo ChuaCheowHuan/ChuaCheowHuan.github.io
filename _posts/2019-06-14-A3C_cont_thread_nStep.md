@@ -8,7 +8,7 @@ title: A3C multi-threaded continuous version with N step targets
 An A3C (Asynchronous Advantage Actor Critic) algorithm implementation with
 Tensorflow. This is a multi-threaded continuous version.
 
-Environment from OpenAI's gym: Pendulum-v0 (Discrete)
+Environment from OpenAI's gym: Pendulum-v0 (Continuous)
 
 [Full code](https://github.com/ChuaCheowHuan/reinforcement_learning/blob/master/policy_gradient_based/A3C/A3C_cont_max.ipynb): A3C (continuous) multi-threaded version with N-step
 targets(use maximum terms possible)
