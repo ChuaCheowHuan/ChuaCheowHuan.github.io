@@ -6,7 +6,7 @@ title: N-step targets
 ---
 N-step Q-values estimation.
 
-[Full code](https://github.com/ChuaCheowHuan/reinforcement_learning/blob/master/policy_gradient_based/n_step_targets.ipynb)
+[Full code](https://github.com/ChuaCheowHuan/reinforcement_learning/blob/master/n_step_targets.ipynb)
 
 The following two functions computes truncated Q-values estimates:
 

@@ -19,19 +19,19 @@
   <head>
     <meta charset="utf-8">
 
-<!-- begin _includes/seo.html --><title>Numpy array manipulation -</title>
-<meta name="description" content="Simple numpy array manipulation examples.">
+<!-- begin _includes/seo.html --><title>A3C distributed tensorflow -</title>
+<meta name="description" content="An A3C (Asynchronous Advantage Actor Critic) implementation withdistributed Tensorflow &amp; Python multiprocessing package. This is a discreteversion.">
 
 
 
 <meta property="og:type" content="article">
 <meta property="og:locale" content="en_US">
 <meta property="og:site_name" content="">
-<meta property="og:title" content="Numpy array manipulation">
-<meta property="og:url" content="https://chuacheowhuan.github.io/np_array_manipulation/">
+<meta property="og:title" content="A3C distributed tensorflow">
+<meta property="og:url" content="https://chuacheowhuan.github.io/A3C_dist_tf/">
 
 
-  <meta property="og:description" content="Simple numpy array manipulation examples.">
+  <meta property="og:description" content="An A3C (Asynchronous Advantage Actor Critic) implementation withdistributed Tensorflow &amp; Python multiprocessing package. This is a discreteversion.">
 
 
 
@@ -41,7 +41,7 @@
 
 
 
-  <meta property="article:published_time" content="2019-05-29T00:00:00+08:00">
+  <meta property="article:published_time" content="2019-06-25T00:00:00+08:00">
 
 
 
@@ -52,7 +52,7 @@
   
 
 
-<link rel="canonical" href="https://chuacheowhuan.github.io/np_array_manipulation/">
+<link rel="canonical" href="https://chuacheowhuan.github.io/A3C_dist_tf/">
 
 
 
@@ -258,99 +258,54 @@
 
   <div class="archive">
     
-      <h1 id="page-title" class="page__title">Numpy array manipulation</h1>
+      <h1 id="page-title" class="page__title">A3C distributed tensorflow</h1>
     
-    <p>Simple numpy array manipulation examples.</p>
+    <p>An A3C (Asynchronous Advantage Actor Critic) implementation with
+distributed Tensorflow &amp; Python multiprocessing package. This is a discrete
+version.</p>
 
-<p><a href="https://github.com/ChuaCheowHuan/misc_code_examples/blob/master/py/np_array_manipulation.ipynb">Full code</a></p>
+<p>Environment from OpenAI’s gym: Cartpole-v0 (discrete)</p>
 
-<p>This Jupyter notebook contains simple examples on how to manipulate numpy arrays. The code blocks below shows the codes &amp; it’s corresponding display output.</p>
+<p><a href="https://github.com/ChuaCheowHuan/reinforcement_learning/blob/master/A3C/A3C_disc_max_dist.ipynb">Full code</a>: A3C (discrete) distributed Tensorflow version with N-step targets(use maximum terms possible)</p>
 
-<p>Setting up a numpy array:</p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>buffer=[0,1]
-print('buffer=', buffer)
-$buffer= [0, 1]
+<p>The majority of the code is very similar to the <a href="https://chuacheowhuan.github.io/A3C_disc_thread_nStep/">discrete</a> version with the
+exceptions highlighted in the following sections:</p>
 
-new=2
-print('new=', new)
-$new= 2
+<p>Updating the global episode counter &amp; adding the episodic return to a
+tf.FIFOqueue at the end of the work() function.</p>
 
-buffer = np.array(buffer + [new]) # append a new item &amp; create a numpy array
-print('np.array(buffer + [new])=', buffer)
-$np.array(buffer + [new])= [0 1 2]
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>SESS.run(GLOBAL_EP.assign_add(1.0))
+qe = GLOBAL_RUNNING_R.enqueue(ep_r)
+SESS.run(qe)
 </code></pre></div></div>
 
-<p>Slicing examples:</p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># numpy array slicing syntax
-# buffer[start:stop:step]
+<p>The distributed Tensorflow part is very similar to a simple example discribed in
+this <a href="https://chuacheowhuan.github.io/dist_tf/">post</a>.</p>
 
-print('buffer[1:]=', buffer[1:]) # starting from index 1
-$buffer[1:]= [1 2]
+<p>Pin the global variables under the parameter server in both the parameter_server() &amp; worker(worker_n) function:</p>
 
-print('buffer[-1:]=', buffer[-1:]) # getting item in last index
-$buffer[-1:]= [2]
-
-print('buffer[:1]=', buffer[:1]) # stop at index 1 (exclusive), keep only 1st item
-$buffer[:1]= [0]
-
-print('buffer[:-1]=', buffer[:-1]) # stop at last index (exclusive), discard item in last index
-$buffer[:-1]= [0 1]
-
-print('buffer[::-1]=', buffer[::-1]) # start from last index (reversal)
-$buffer[::-1]= [2 1 0]
-
-print('buffer[1::-1]=', buffer[1::-1]) # reverse starting from index 1
-$buffer[1::-1]= [1 0]
-
-# Starting from index 1 will return [1 2], reversing will return [2,1]
-print('buffer[1:][::-1]=', buffer[1:][::-1])
-$buffer[1:][::-1]= [2 1]
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>with tf.device("/job:ps/task:0"):
+    GLOBAL_AC = ACNet(net_scope, sess, globalAC=None) # only need its params
+    GLOBAL_EP = tf.Variable(0.0, name='GLOBAL_EP') # num of global episodes   
+    # a queue of ep_r
+    GLOBAL_RUNNING_R = tf.FIFOQueue(max_global_episodes, tf.float32, shared_name="GLOBAL_RUNNING_R")        
 </code></pre></div></div>
 
-<p>np.newaxis is an alias for None:</p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># np.newaxis = None
+<p>In the parameter_server() function, check the size of the tf.FIFOqueue every 1 sec.
+If it’s full, dequeue the items in a list. the list will be used for display.</p>
 
-print('buffer[:, np.newaxis]=', buffer[:, np.newaxis])
-$buffer[:, np.newaxis]= [[0][1][2]]
-
-print('buffer[:, None]=', buffer[:, None])
-$buffer[:, None]= [[0][1][2]]
-
-print('buffer[np.newaxis, :]=', buffer[np.newaxis, :])
-$buffer[np.newaxis, :]= [[0 1 2]]
-
-print('buffer[None, :]=', buffer[None, :])
-$buffer[None, :]= [[0 1 2]]
-</code></pre></div></div>
-
-<p>Stacking:</p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>a = [1,2,3]
-b = [4,5,6]
-c = [7,8,9]
-
-r = np.hstack((a,b,c)) # horizontal stacking
-print("r=", r)
-$r= [1 2 3 4 5 6 7 8 9]
-
-QUEUE = queue.Queue()
-QUEUE.put(a)
-QUEUE.put(b)
-QUEUE.put(c)
-
-r = [QUEUE.get() for _ in range(QUEUE.qsize())]
-print(r)
-$[[1, 2, 3], [4, 5, 6], [7, 8, 9]]
-
-r = np.vstack(r) # vertical stacking
-print(r)
-$[[1 2 3]
-  [4 5 6]
-  [7 8 9]]
-
-print(r[:, ::-1]) # col reversal
-$[[3 2 1]
-  [6 5 4]
-  [9 8 7]]
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>while True:
+    time.sleep(1.0)
+    #print("ps 1 GLOBAL_EP: ", sess.run(GLOBAL_EP))
+    #print("ps 1 GLOBAL_RUNNING_R.size(): ", sess.run(GLOBAL_RUNNING_R.size()))  
+    if sess.run(GLOBAL_RUNNING_R.size()) &gt;= max_global_episodes: # GLOBAL_EP starts from 0, hence +1 to max_global_episodes          
+        time.sleep(5.0)
+        #print("ps 2 GLOBAL_RUNNING_R.size(): ", sess.run(GLOBAL_RUNNING_R.size()))  
+        GLOBAL_RUNNING_R_list = []
+        for j in range(sess.run(GLOBAL_RUNNING_R.size())):
+            ep_r = sess.run(GLOBAL_RUNNING_R.dequeue())
+            GLOBAL_RUNNING_R_list.append(ep_r) # for display
+        break
 </code></pre></div></div>
 
 
@@ -476,7 +431,7 @@ version.
 
 
 
-  29 minute read
+  28 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">An A3C (Asynchronous Advantage Actor Critic) implementation with
@@ -506,7 +461,7 @@ Tensorflow. This is a multi-threaded continuous version.
 
 
 
-  67 minute read
+  60 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">An A3C (Asynchronous Advantage Actor Critic) implementation with
@@ -536,7 +491,7 @@ Tensorflow. This is a multi-threaded discrete version.
 
 
 
-  15 minute read
+  14 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">This post demonstrates how to accumulate gradients with Tensorflow.
@@ -565,7 +520,7 @@ Tensorflow. This is a multi-threaded discrete version.
 
 
 
-  74 minute read
+  73 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">Distributed Tensorflow with Python multiprocessing package.
@@ -594,7 +549,7 @@ Tensorflow. This is a multi-threaded discrete version.
 
 
 
-  73 minute read
+  68 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">N-step Q-values estimation.
@@ -623,7 +578,7 @@ Tensorflow. This is a multi-threaded discrete version.
 
 
 
-  31 minute read
+  30 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">Python’s multiprocessing package for parallel data generation.
@@ -851,8 +806,8 @@ Tensorflow. This is a multi-threaded discrete version.
     
   <script>
     var disqus_config = function () {
-      this.page.url = "https://chuacheowhuan.github.io/np_array_manipulation/";  // Replace PAGE_URL with your page's canonical URL variable
-      this.page.identifier = "/np_array_manipulation"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+      this.page.url = "https://chuacheowhuan.github.io/A3C_dist_tf/";  // Replace PAGE_URL with your page's canonical URL variable
+      this.page.identifier = "/A3C_dist_tf"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
     };
     (function() { // DON'T EDIT BELOW THIS LINE
       var d = document, s = d.createElement('script');
