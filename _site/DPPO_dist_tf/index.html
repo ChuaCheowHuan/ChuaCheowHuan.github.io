@@ -283,17 +283,45 @@
 
 <p>Truncated version of generalized advantage estimation(GAE) =</p>
 
-<p>A_{t} =</p>
+<p><script type="math/tex">A_{t}</script>
+=
+<script type="math/tex">{\delta}_{t}
++
+({\gamma}
+{\lambda})
+{\delta}_{t}
++
+...
++
+({\gamma}
+{\lambda})
+^{T-t+1}
+{\delta}_{T-1}</script></p>
 
-<p>when lamda = 1,</p>
+<p>where
+<script type="math/tex">{\delta}_{t}</script> =
+<script type="math/tex">{r}_{t} +
+{\gamma}
+V(s_{t+1}) -
+V(s_{t})</script></p>
 
-<p>A_{t} =</p>
+<p>when <script type="math/tex">{\lambda}</script> = 1,</p>
+
+<p><script type="math/tex">A_{t}</script> =
+<script type="math/tex">-V(s_{t}) +
+r_{t} +
+{\gamma}r_{t+1} +
+... +
+{\gamma}^{T-t+1}
+r_{T-1} +
+{\gamma}^{T-t}
+V(s_{T})</script></p>
 
 <p>Probability ratio =</p>
 
 <p><script type="math/tex">R_{t}({\theta})</script> = <script type="math/tex">{\dfrac{ {\pi}_{\theta} (a_{t} {\mid} s_{t}) } { {\pi}_{\theta_{old}} (a_{t} {\mid} s_{t}) } }</script></p>
 
-<p>Objective function =</p>
+<p>Clipped Surrogate Objective function =</p>
 
 <p><script type="math/tex">L^{CLIP}
 ({\theta})</script>
@@ -318,6 +346,59 @@ min(
 <p><br /></p>
 
 <p><strong>Implementation details:</strong></p>
+
+<p>The following class is adapted from OpenAI’s baseline:
+This class is used for the normalization of rewards in this program before GAE computation.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>class RunningStats(object):
+    def __init__(self, epsilon=1e-4, shape=()):
+        self.mean = np.zeros(shape, 'float64')
+        self.var = np.ones(shape, 'float64')
+        self.std = np.ones(shape, 'float64')
+        self.count = epsilon
+
+    def update(self, x):
+        batch_mean = np.mean(x, axis=0)
+        batch_var = np.var(x, axis=0)
+        batch_count = x.shape[0]
+        self.update_from_moments(batch_mean, batch_var, batch_count)
+
+    def update_from_moments(self, batch_mean, batch_var, batch_count):
+        delta = batch_mean - self.mean
+        new_mean = self.mean + delta * batch_count / (self.count + batch_count)
+        m_a = self.var * self.count
+        m_b = batch_var * batch_count
+        M2 = m_a + m_b + np.square(delta) * self.count * batch_count / (self.count + batch_count)
+        new_var = M2 / (self.count + batch_count)
+
+        self.mean = new_mean
+        self.var = new_var
+        self.std = np.maximum(np.sqrt(self.var), 1e-6)
+        self.count = batch_count + self.count
+</code></pre></div></div>
+
+<p>This function in the PPO class is adapted from OpenAI’s Baseline, 
+returns TD lamda return &amp; advantage</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    def add_vtarg_and_adv(self, R, done, V, v_s_, gamma, lam):
+        # Compute target value using TD(lambda) estimator, and advantage with GAE(lambda)
+        # last element is only used for last vtarg, but we already zeroed it if last new = 1
+        done = np.append(done, 0)
+        V_plus = np.append(V, v_s_)
+        T = len(R)
+        adv = gaelam = np.empty(T, 'float32')
+        lastgaelam = 0
+        for t in reversed(range(T)):
+            nonterminal = 1-done[t+1]        
+            delta = R[t] + gamma * V_plus[t+1] * nonterminal - V_plus[t]
+            gaelam[t] = lastgaelam = delta + gamma * lam * nonterminal * lastgaelam   
+        #print("adv=", adv.shape)
+        #print("V=", V.shape)
+        #print("V_plus=", V_plus.shape)
+        tdlamret = np.vstack(adv) + V
+        #print("tdlamret=", tdlamret.shape)
+        return tdlamret, adv # tdlamret is critic_target or Qs      
+</code></pre></div></div>
 
 <p>The following code segment from the PPO class defines the Clipped Surrogate Objective function:</p>
 
@@ -441,7 +522,7 @@ min(
 
 
 
-  29 minute read
+  55 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">DPPO continuous (normalized running rewards with GAE) implementation with distributed Tensorflow and Python’s multiprocessing package. This is a continuous v...</p>

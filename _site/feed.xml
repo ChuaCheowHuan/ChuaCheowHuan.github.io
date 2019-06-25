@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.5">Jekyll</generator><link href="https://chuacheowhuan.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://chuacheowhuan.github.io/" rel="alternate" type="text/html" /><updated>2019-06-25T22:02:11+08:00</updated><id>https://chuacheowhuan.github.io/feed.xml</id><title type="html">Chua Cheow Huan</title><subtitle></subtitle><author><name>Chua Cheow Huan</name></author><entry><title type="html">DPPO distributed tensorflow</title><link href="https://chuacheowhuan.github.io/DPPO_dist_tf/" rel="alternate" type="text/html" title="DPPO distributed tensorflow" /><published>2019-06-25T00:00:00+08:00</published><updated>2019-06-25T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/DPPO_dist_tf</id><content type="html" xml:base="https://chuacheowhuan.github.io/DPPO_dist_tf/">&lt;p&gt;DPPO continuous (normalized running rewards with GAE) implementation with distributed Tensorflow and Python’s multiprocessing package. This is a continuous version.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.5">Jekyll</generator><link href="https://chuacheowhuan.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://chuacheowhuan.github.io/" rel="alternate" type="text/html" /><updated>2019-06-25T23:25:41+08:00</updated><id>https://chuacheowhuan.github.io/feed.xml</id><title type="html">Chua Cheow Huan</title><subtitle></subtitle><author><name>Chua Cheow Huan</name></author><entry><title type="html">DPPO distributed tensorflow</title><link href="https://chuacheowhuan.github.io/DPPO_dist_tf/" rel="alternate" type="text/html" title="DPPO distributed tensorflow" /><published>2019-06-25T00:00:00+08:00</published><updated>2019-06-25T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/DPPO_dist_tf</id><content type="html" xml:base="https://chuacheowhuan.github.io/DPPO_dist_tf/">&lt;p&gt;DPPO continuous (normalized running rewards with GAE) implementation with distributed Tensorflow and Python’s multiprocessing package. This is a continuous version.&lt;/p&gt;
 
 &lt;p&gt;Environment from OpenAI’s gym: Pendulum-v0 (Continuous)&lt;/p&gt;
 
@@ -21,17 +21,45 @@
 
 &lt;p&gt;Truncated version of generalized advantage estimation(GAE) =&lt;/p&gt;
 
-&lt;p&gt;A_{t} =&lt;/p&gt;
+&lt;p&gt;&lt;script type=&quot;math/tex&quot;&gt;A_{t}&lt;/script&gt;
+=
+&lt;script type=&quot;math/tex&quot;&gt;{\delta}_{t}
++
+({\gamma}
+{\lambda})
+{\delta}_{t}
++
+...
++
+({\gamma}
+{\lambda})
+^{T-t+1}
+{\delta}_{T-1}&lt;/script&gt;&lt;/p&gt;
 
-&lt;p&gt;when lamda = 1,&lt;/p&gt;
+&lt;p&gt;where
+&lt;script type=&quot;math/tex&quot;&gt;{\delta}_{t}&lt;/script&gt; =
+&lt;script type=&quot;math/tex&quot;&gt;{r}_{t} +
+{\gamma}
+V(s_{t+1}) -
+V(s_{t})&lt;/script&gt;&lt;/p&gt;
 
-&lt;p&gt;A_{t} =&lt;/p&gt;
+&lt;p&gt;when &lt;script type=&quot;math/tex&quot;&gt;{\lambda}&lt;/script&gt; = 1,&lt;/p&gt;
+
+&lt;p&gt;&lt;script type=&quot;math/tex&quot;&gt;A_{t}&lt;/script&gt; =
+&lt;script type=&quot;math/tex&quot;&gt;-V(s_{t}) +
+r_{t} +
+{\gamma}r_{t+1} +
+... +
+{\gamma}^{T-t+1}
+r_{T-1} +
+{\gamma}^{T-t}
+V(s_{T})&lt;/script&gt;&lt;/p&gt;
 
 &lt;p&gt;Probability ratio =&lt;/p&gt;
 
 &lt;p&gt;&lt;script type=&quot;math/tex&quot;&gt;R_{t}({\theta})&lt;/script&gt; = &lt;script type=&quot;math/tex&quot;&gt;{\dfrac{ {\pi}_{\theta} (a_{t} {\mid} s_{t}) } { {\pi}_{\theta_{old}} (a_{t} {\mid} s_{t}) } }&lt;/script&gt;&lt;/p&gt;
 
-&lt;p&gt;Objective function =&lt;/p&gt;
+&lt;p&gt;Clipped Surrogate Objective function =&lt;/p&gt;
 
 &lt;p&gt;&lt;script type=&quot;math/tex&quot;&gt;L^{CLIP}
 ({\theta})&lt;/script&gt;
@@ -56,6 +84,59 @@ min(
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;Implementation details:&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;The following class is adapted from OpenAI’s baseline:
+This class is used for the normalization of rewards in this program before GAE computation.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;class RunningStats(object):
+    def __init__(self, epsilon=1e-4, shape=()):
+        self.mean = np.zeros(shape, 'float64')
+        self.var = np.ones(shape, 'float64')
+        self.std = np.ones(shape, 'float64')
+        self.count = epsilon
+
+    def update(self, x):
+        batch_mean = np.mean(x, axis=0)
+        batch_var = np.var(x, axis=0)
+        batch_count = x.shape[0]
+        self.update_from_moments(batch_mean, batch_var, batch_count)
+
+    def update_from_moments(self, batch_mean, batch_var, batch_count):
+        delta = batch_mean - self.mean
+        new_mean = self.mean + delta * batch_count / (self.count + batch_count)
+        m_a = self.var * self.count
+        m_b = batch_var * batch_count
+        M2 = m_a + m_b + np.square(delta) * self.count * batch_count / (self.count + batch_count)
+        new_var = M2 / (self.count + batch_count)
+
+        self.mean = new_mean
+        self.var = new_var
+        self.std = np.maximum(np.sqrt(self.var), 1e-6)
+        self.count = batch_count + self.count
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This function in the PPO class is adapted from OpenAI’s Baseline, 
+returns TD lamda return &amp;amp; advantage&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    def add_vtarg_and_adv(self, R, done, V, v_s_, gamma, lam):
+        # Compute target value using TD(lambda) estimator, and advantage with GAE(lambda)
+        # last element is only used for last vtarg, but we already zeroed it if last new = 1
+        done = np.append(done, 0)
+        V_plus = np.append(V, v_s_)
+        T = len(R)
+        adv = gaelam = np.empty(T, 'float32')
+        lastgaelam = 0
+        for t in reversed(range(T)):
+            nonterminal = 1-done[t+1]        
+            delta = R[t] + gamma * V_plus[t+1] * nonterminal - V_plus[t]
+            gaelam[t] = lastgaelam = delta + gamma * lam * nonterminal * lastgaelam   
+        #print(&quot;adv=&quot;, adv.shape)
+        #print(&quot;V=&quot;, V.shape)
+        #print(&quot;V_plus=&quot;, V_plus.shape)
+        tdlamret = np.vstack(adv) + V
+        #print(&quot;tdlamret=&quot;, tdlamret.shape)
+        return tdlamret, adv # tdlamret is critic_target or Qs      
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;The following code segment from the PPO class defines the Clipped Surrogate Objective function:&lt;/p&gt;
 
