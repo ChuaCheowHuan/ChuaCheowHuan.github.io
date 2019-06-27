@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.5">Jekyll</generator><link href="https://chuacheowhuan.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://chuacheowhuan.github.io/" rel="alternate" type="text/html" /><updated>2019-06-25T23:25:41+08:00</updated><id>https://chuacheowhuan.github.io/feed.xml</id><title type="html">Chua Cheow Huan</title><subtitle></subtitle><author><name>Chua Cheow Huan</name></author><entry><title type="html">DPPO distributed tensorflow</title><link href="https://chuacheowhuan.github.io/DPPO_dist_tf/" rel="alternate" type="text/html" title="DPPO distributed tensorflow" /><published>2019-06-25T00:00:00+08:00</published><updated>2019-06-25T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/DPPO_dist_tf</id><content type="html" xml:base="https://chuacheowhuan.github.io/DPPO_dist_tf/">&lt;p&gt;DPPO continuous (normalized running rewards with GAE) implementation with distributed Tensorflow and Python’s multiprocessing package. This is a continuous version.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.5">Jekyll</generator><link href="https://chuacheowhuan.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://chuacheowhuan.github.io/" rel="alternate" type="text/html" /><updated>2019-06-27T23:55:43+08:00</updated><id>https://chuacheowhuan.github.io/feed.xml</id><title type="html">Chua Cheow Huan</title><subtitle></subtitle><author><name>Chua Cheow Huan</name></author><entry><title type="html">DPPO distributed tensorflow</title><link href="https://chuacheowhuan.github.io/DPPO_dist_tf/" rel="alternate" type="text/html" title="DPPO distributed tensorflow" /><published>2019-06-25T00:00:00+08:00</published><updated>2019-06-25T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/DPPO_dist_tf</id><content type="html" xml:base="https://chuacheowhuan.github.io/DPPO_dist_tf/">&lt;p&gt;DPPO continuous (normalized running rewards with GAE) implementation with distributed Tensorflow and Python’s multiprocessing package. This is a continuous version.&lt;/p&gt;
 
 &lt;p&gt;Environment from OpenAI’s gym: Pendulum-v0 (Continuous)&lt;/p&gt;
 
@@ -212,7 +212,7 @@ qe = GLOBAL_RUNNING_R.enqueue(ep_r)
 SESS.run(qe)
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;p&gt;The distributed Tensorflow part is very similar to a simple example discribed in
+&lt;p&gt;The distributed Tensorflow part is very similar to a simple example described in
 this &lt;a href=&quot;https://chuacheowhuan.github.io/dist_tf/&quot;&gt;post&lt;/a&gt;.&lt;/p&gt;
 
 &lt;p&gt;Pin the global variables under the parameter server in both the parameter_server() &amp;amp; worker(worker_n) function:&lt;/p&gt;
