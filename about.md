@@ -49,7 +49,7 @@ body {
   </h1>
   <p>
   This site documents my codes in my Github <a href="https://github.com/ChuaCheowHuan">repositories</a>.
-  I'm interested in artificial intelligence, specifically reinforcement learning & I'm learning RL by reproducing RL algorithms.
+  I'm interested in artificial intelligence, specifically reinforcement learning.
   <br><br>
   </p>
 </div>
