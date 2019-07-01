@@ -4,7 +4,7 @@ author: Huan
 title: DPPO distributed tensorflow
 ---
 
-DPPO continuous (normalized running rewards with GAE) implementation with distributed Tensorflow and Python's multiprocessing package. This is a continuous version.
+Distributed Proximal Policy Optimization (Distributed PPO or DPPO) continuous version  implementation with distributed Tensorflow and Python's multiprocessing package. This implementation uses normalized running rewards with GAE.
 
 Environment from OpenAI's gym: Pendulum-v0 (Continuous)
 
@@ -134,7 +134,7 @@ class RunningStats(object):
         self.count = batch_count + self.count
 ```
 
-This function in the PPO class is adapted from OpenAI's Baseline, 
+This function in the PPO class is adapted from OpenAI's Baseline,
 returns TD lamda return & advantage
 
 ```
