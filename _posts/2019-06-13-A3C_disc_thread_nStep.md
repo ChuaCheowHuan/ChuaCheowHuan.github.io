@@ -5,18 +5,17 @@ title: A3C multi-threaded discrete version with N step targets
 ---
 
 An A3C (Asynchronous Advantage Actor Critic) implementation with
-Tensorflow. This is a multi-threaded discrete version.
+Tensorflow. This is a multi-threaded discrete version. The code is tested with
+Gym's discrete action space environment, CartPole-v0 on Colab.
 
-Environment from OpenAI's gym: CartPole-v0 (Discrete)
-
-[Full code](https://github.com/ChuaCheowHuan/reinforcement_learning/blob/master/A3C/A3C_disc_miss.ipynb): A3C (discrete) multi-threaded version with N-step targets(missing terms are treated as 0)
+[Full code](https://github.com/ChuaCheowHuan/reinforcement_learning/blob/master/A3C/A3C_disc_miss.ipynb): A3C (discrete) multi-threaded version with N-step targets (missing terms are treated as 0)
 
 [Full code](https://github.com/ChuaCheowHuan/reinforcement_learning/blob/master/A3C/A3C_disc_max.ipynb): A3C (discrete) multi-threaded version with N-step
-targets(use maximum terms possible)
+targets (use maximum terms possible)
 
 ---
 
-**Notations:**
+## Notations:
 
 Actor network = $${\pi}_{\theta}$$
 
@@ -32,7 +31,7 @@ Number of trajectories = m
 
 ---
 
-**Equations:**
+## Equations:
 
 Actor component: log$${\pi}_{\theta}$$ $$(a_{t} {\mid} s_{t})$$
 
@@ -54,20 +53,16 @@ Policy gradient estimator
 
 ---
 
-**Implementation details:**
+## Key implementation details:
 
-The ACNet class defines the models (Tensorflow graphs) and contains both the
-actor and the critic networks.
+The ```ACNet``` class defines the models (Tensorflow graphs) and contains both
+the actor and the critic networks. The ```Worker``` class contains the work
+function that does the main bulk of the computation. A copy of ```ACNet``` is
+declared globally & it's parameters are shared by the threaded workers. Each
+worker also have it's own local copy of ```ACNet```. Workers are instantiated &
+threaded in the main program.
 
-The Worker class contains the work function that does the main bulk of the
-computation.
-
-A copy of ACNet is declared globally & it's parameters are shared by the
-threaded workers. Each worker also have it's own local copy of ACNet.
-
-Workers are instantiated & threaded in the main program.
-
-**ACNet class:**
+### ACNet class:
 
 Loss function for the actor network for the discrete environment:
 
@@ -90,7 +85,8 @@ with tf.name_scope('critic_loss'):
     self.critic_loss = tf.reduce_mean(tf.square(TD_err))
 ```
 
-The following function in the ACNet class creates the actor and critic's neural networks:
+The following function in the ACNet class creates the actor and critic's neural
+networks:
 
 ```
 def _create_net(self, scope):
@@ -106,7 +102,7 @@ def _create_net(self, scope):
     return action_prob, V, actor_params, critic_params
 ```
 
-**Worker class:**
+### Worker class:
 
 Discounted rewards are used as critic's targets:
 
@@ -114,7 +110,8 @@ Discounted rewards are used as critic's targets:
 critic_target = self.discount_rewards(buffer_r, GAMMA, V_s)
 ```
 
-N-step targets are used in the computation of the Advantage function(baselined_returns):
+N-step returns are used in the computation of the Advantage function
+(baselined_returns):
 
 ```
 # Advantage function
@@ -123,13 +120,15 @@ baselined_returns = n_step_targets - baseline
 
 2 versions of N-step targets could be used:
 
-Version 1) missing terms are treated as 0.
+- missing terms are treated as 0.
 
-Version 2) use maximum terms possible.
+- use maximum terms possible.
 
-Check this [post](https://chuacheowhuan.github.io/n_step_targets/) for more information on N-step targets.
+Check this [post](https://chuacheowhuan.github.io/n_step_targets/) for more
+information on N-step targets.
 
-The following code segment accumulates gradients & apply them to the local critic network:
+The following code segment accumulates gradients & apply them to the local
+critic network:
 
 ```
 self.AC.accumu_grad_critic(feed_dict) # accumulating gradients for local critic  
@@ -152,7 +151,9 @@ The following code segment accumulates gradients for the local actor network:
 self.AC.accumu_grad_actor(feed_dict) # accumulating gradients for local actor  
 ```
 
-The following code segment push the parameters from the local networks to the global networks and then pulls the updated global parameters to the local networks:
+The following code segment push the parameters from the local networks to the
+global networks and then pulls the updated global parameters to the local
+networks:
 
 ```
 # update
@@ -171,9 +172,10 @@ self.AC.init_grad_storage_actor() # initialize storage for accumulated gradients
 self.AC.init_grad_storage_critic()            
 ```
 
-Check this [post](https://chuacheowhuan.github.io/tf_accumulate_grad/) for more information on how to accumulate gradients in Tensorflow.
+Check this [post](https://chuacheowhuan.github.io/tf_accumulate_grad/) for more
+information on how to accumulate gradients in Tensorflow.
 
-**Main program:**
+## Main program:
 
 The following code segment creates the workers:
 
@@ -196,9 +198,11 @@ for worker in workers:
 COORD.join(worker_threads)
 ```
 
-**References:**
+## References:
 
 [Asynchronous Methods for Deep Reinforcement Learning
 (Mnih, Badia, Mirza, Graves, Harley, Lillicrap, et al., 2016)](https://arxiv.org/pdf/1602.01783.pdf)
+
+---
 
 <br>

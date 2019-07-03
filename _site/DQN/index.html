@@ -20,7 +20,7 @@
     <meta charset="utf-8">
 
 <!-- begin _includes/seo.html --><title>DQN -</title>
-<meta name="description" content="A Deep Q Network implementation in tensorflow with target network &amp; random experience replay.">
+<meta name="description" content="A Deep Q Network implementation in tensorflow with target network &amp; randomexperience replay. The code is tested with Gym’s discrete action spaceenvironment, CartPole-v0 on Colab.">
 
 
 
@@ -31,7 +31,7 @@
 <meta property="og:url" content="https://chuacheowhuan.github.io/DQN/">
 
 
-  <meta property="og:description" content="A Deep Q Network implementation in tensorflow with target network &amp; random experience replay.">
+  <meta property="og:description" content="A Deep Q Network implementation in tensorflow with target network &amp; randomexperience replay. The code is tested with Gym’s discrete action spaceenvironment, CartPole-v0 on Colab.">
 
 
 
@@ -260,79 +260,76 @@
     
       <h1 id="page-title" class="page__title">DQN</h1>
     
-    <p>A <strong>Deep Q Network</strong> implementation in tensorflow with target network &amp; random experience replay.</p>
-
-<p>Environment from OpenAI’s gym: CartPole-v0</p>
+    <p>A <strong>Deep Q Network</strong> implementation in tensorflow with target network &amp; random
+experience replay. The code is tested with Gym’s discrete action space
+environment, CartPole-v0 on Colab.</p>
 
 <p><a href="https://github.com/ChuaCheowHuan/reinforcement_learning/tree/master/DQN_variants/DQN">Full code</a></p>
 
 <hr />
-<p><br /></p>
 
-<p><strong>Notations:</strong></p>
+<h2 id="notations">Notations:</h2>
 
 <p>Model network = <script type="math/tex">Q_{\theta}</script> <br />
 Model parameter = <script type="math/tex">\theta</script> <br />
-Model network Q value = <script type="math/tex">Q_{\theta}</script> (s, a) <br />
-<br />
-Target network = <script type="math/tex">Q_{\phi}</script> <br />
+Model network Q value = <script type="math/tex">Q_{\theta}</script> (s, a) \</p>
+
+<p>Target network = <script type="math/tex">Q_{\phi}</script> <br />
 Target parameter = <script type="math/tex">\phi</script> <br />
 Target network Q value = <script type="math/tex">Q_{\phi}</script> (<script type="math/tex">s^{'}</script>, <script type="math/tex">a^{'}</script>)</p>
 
 <hr />
-<p><br /></p>
 
-<p><strong>Equations:</strong></p>
+<h2 id="equations">Equations:</h2>
 
-<p>TD target = r (s, a) <script type="math/tex">+</script> <script type="math/tex">\gamma</script> <script type="math/tex">max_{a}</script> <script type="math/tex">Q_{\phi}</script> (<script type="math/tex">s^{'}</script>, <script type="math/tex">a^{'}</script>) <br />
-<br />
-TD  error = (TD target) <script type="math/tex">-</script> (Model network Q value) <br />
+<p>TD target = r (s, a) <script type="math/tex">+</script> <script type="math/tex">\gamma</script> <script type="math/tex">max_{a}</script> <script type="math/tex">Q_{\phi}</script> (<script type="math/tex">s^{'}</script>, <script type="math/tex">a^{'}</script>) \</p>
+
+<p>TD  error = (TD target) <script type="math/tex">-</script> (Model network Q value) <br />
 <script type="math/tex">\hspace{26pt}</script>
 = [r (s, a) <script type="math/tex">+</script> <script type="math/tex">\gamma</script> <script type="math/tex">max_{a^{'}}</script> <script type="math/tex">Q_{\phi}</script> (<script type="math/tex">s^{'}</script>, <script type="math/tex">a^{'}</script>)] <script type="math/tex">-</script> <script type="math/tex">Q_{\theta}</script> (s, a)</p>
 
 <hr />
-<p><br /></p>
 
-<p><strong>Implementation details:</strong></p>
+<h2 id="key-implementation-details">Key implementation details:</h2>
 
-<p>Update target parameter <script type="math/tex">\phi</script> with model parameter <script type="math/tex">\theta</script> :
-<br />
-Copy <script type="math/tex">\theta</script> to <script type="math/tex">\phi</script> with <em>either</em> soft or hard parameter update.
-<br /></p>
+<p>Update target parameter <script type="math/tex">\phi</script> with model parameter <script type="math/tex">\theta</script>.
+Copy <script type="math/tex">\theta</script> to <script type="math/tex">\phi</script> with <em>either</em> soft or hard parameter update.</p>
 
 <p>Hard parameter update:</p>
+
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>with tf.variable_scope('hard_replace'):
   self.target_replace_hard = [t.assign(m) for t, m in zip(self.target_net_params, self.model_net_params)]   
 </code></pre></div></div>
+
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># hard params replacement
 if self.learn_step % self.tau_step == 0:
     self.sess.run(self.target_replace_hard)  
 self.learn_step += 1
 </code></pre></div></div>
-<p><br /></p>
 
-<p>Soft parameter update:
-<br />
-polyak <script type="math/tex">\cdot</script>  <script type="math/tex">\theta</script> + (1 <script type="math/tex">-</script> polyak)  <script type="math/tex">\cdot</script>  <script type="math/tex">\phi</script></p>
+<p>Soft parameter update: polyak <script type="math/tex">\cdot</script>  <script type="math/tex">\theta</script> + (1 <script type="math/tex">-</script> polyak)  <script type="math/tex">\cdot</script>  <script type="math/tex">\phi</script></p>
 
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>with tf.variable_scope('soft_replace'):            
   self.target_replace_soft = [t.assign(self.polyak * m + (1 - self.polyak) * t)
                               for t, m in zip(self.target_net_params, self.model_net_params)]   
 </code></pre></div></div>
 
-<p><br />
-Stop TD target from contributing to gradient computation:</p>
+<p>Stop TD target from contributing to gradient computation:</p>
+
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># exclude td_target in gradient computation
 td_target = tf.stop_gradient(td_target)
 </code></pre></div></div>
-<hr />
-<p><br /></p>
 
-<p><strong>References:</strong></p>
+<hr />
+
+<h2 id="references">References:</h2>
 
 <p><a href="https://storage.googleapis.com/deepmind-media/dqn/DQNNaturePaper.pdf">Human-level control through deep reinforcement learning
-(Mnih et al., 2015)</a>
-<br /></p>
+(Mnih et al., 2015)</a></p>
+
+<hr />
+
+<p><br /></p>
 
 
 <ul class="taxonomy__index">
@@ -371,10 +368,12 @@ td_target = tf.stop_gradient(td_target)
 
 
 
-  80 minute read
+  83 minute read
 </p>
     
-    <p class="archive__item-excerpt" itemprop="description">Random Distillation Network (RDN) with Proximal Policy Optimization (PPO) implentation in Tensorflow. This is a continuous version which solves the mountain ...</p>
+    <p class="archive__item-excerpt" itemprop="description">Random Distillation Network (RDN) with Proximal Policy Optimization (PPO)
+implentation in Tensorflow. This is a continuous version which solves the
+mountain ...</p>
   </article>
 </div>
 
@@ -398,10 +397,11 @@ td_target = tf.stop_gradient(td_target)
 
 
 
-  66 minute read
+  67 minute read
 </p>
     
-    <p class="archive__item-excerpt" itemprop="description">Distributed Proximal Policy Optimization (Distributed PPO or DPPO) continuous version  implementation with distributed Tensorflow and Python’s multiprocessin...</p>
+    <p class="archive__item-excerpt" itemprop="description">Distributed Proximal Policy Optimization (Distributed PPO or DPPO) continuous
+version implementation with distributed Tensorflow and Python’s multiprocessing...</p>
   </article>
 </div>
 
@@ -425,14 +425,12 @@ td_target = tf.stop_gradient(td_target)
 
 
 
-  22 minute read
+  24 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">An A3C (Asynchronous Advantage Actor Critic) implementation with
 distributed Tensorflow &amp; Python multiprocessing package. This is a discrete
-version.
-
-</p>
+version. The...</p>
   </article>
 </div>
 
@@ -456,13 +454,12 @@ version.
 
 
 
-  29 minute read
+  30 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">An A3C (Asynchronous Advantage Actor Critic) implementation with
-Tensorflow. This is a multi-threaded continuous version.
-
-</p>
+Tensorflow. This is a multi-threaded continuous version. The code is tested with
+Gym’s conti...</p>
   </article>
 </div>
 
@@ -486,13 +483,12 @@ Tensorflow. This is a multi-threaded continuous version.
 
 
 
-  67 minute read
+  68 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">An A3C (Asynchronous Advantage Actor Critic) implementation with
-Tensorflow. This is a multi-threaded discrete version.
-
-</p>
+Tensorflow. This is a multi-threaded discrete version. The code is tested with
+Gym’s discret...</p>
   </article>
 </div>
 
@@ -545,12 +541,12 @@ Tensorflow. This is a multi-threaded discrete version.
 
 
 
-  74 minute read
+  75 minute read
 </p>
     
-    <p class="archive__item-excerpt" itemprop="description">Distributed Tensorflow with Python multiprocessing package.
-
-</p>
+    <p class="archive__item-excerpt" itemprop="description">Distributed Tensorflow with Python multiprocessing package. This post
+demonstrates how to use distributed Tensorflow with Python’s
+multiprocessing package. A...</p>
   </article>
 </div>
 
@@ -574,7 +570,7 @@ Tensorflow. This is a multi-threaded discrete version.
 
 
 
-  73 minute read
+  75 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">N-step Q-values estimation.
@@ -664,9 +660,8 @@ Tensorflow. This is a multi-threaded discrete version.
   48 minute read
 </p>
     
-    <p class="archive__item-excerpt" itemprop="description">A Dueling Double Deep Q Network with Priority Experience Replay (Duel DDQN with PER) implementation in tensorflow.
-
-</p>
+    <p class="archive__item-excerpt" itemprop="description">A Dueling Double Deep Q Network with Priority Experience Replay (Duel DDQN with PER)
+implementation in tensorflow. The code is tested with Gym’s discrete act...</p>
   </article>
 </div>
 
@@ -690,12 +685,12 @@ Tensorflow. This is a multi-threaded discrete version.
 
 
 
-  20 minute read
+  21 minute read
 </p>
     
-    <p class="archive__item-excerpt" itemprop="description">A Dueling Double Deep Q Network (Dueling DDQN) implementation in tensorflow with random experience replay.
-
-</p>
+    <p class="archive__item-excerpt" itemprop="description">A Dueling Double Deep Q Network (Dueling DDQN) implementation in tensorflow
+with random experience replay. The code is tested with Gym’s discrete action
+spac...</p>
   </article>
 </div>
 
@@ -723,8 +718,7 @@ Tensorflow. This is a multi-threaded discrete version.
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">A Double Deep Q Network (DDQN) implementation in tensorflow with random experience replay.
-
-</p>
+The code is tested with Gym’s discrete action space environment, C...</p>
   </article>
 </div>
 
@@ -748,12 +742,12 @@ Tensorflow. This is a multi-threaded discrete version.
 
 
 
-  17 minute read
+  18 minute read
 </p>
     
-    <p class="archive__item-excerpt" itemprop="description">A Deep Q Network implementation in tensorflow with target network &amp; random experience replay.
-
-</p>
+    <p class="archive__item-excerpt" itemprop="description">A Deep Q Network implementation in tensorflow with target network &amp; random
+experience replay. The code is tested with Gym’s discrete action space
+environ...</p>
   </article>
 </div>
 

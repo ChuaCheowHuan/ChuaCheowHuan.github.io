@@ -4,28 +4,37 @@ author: Huan
 title: DPPO distributed tensorflow
 ---
 
-Distributed Proximal Policy Optimization (Distributed PPO or DPPO) continuous version  implementation with distributed Tensorflow and Python's multiprocessing package. This implementation uses normalized running rewards with GAE.
-
-Environment from OpenAI's gym: Pendulum-v0 (Continuous)
+Distributed Proximal Policy Optimization (Distributed PPO or DPPO) continuous
+version implementation with distributed Tensorflow and Python's multiprocessing
+package. This implementation uses normalized running rewards with GAE. The code
+is tested with Gym's continuous action space environment, Pendulum-v0 on Colab.
 
 [Full code](https://github.com/ChuaCheowHuan/reinforcement_learning/blob/master/DPPO/DPPO_cont_GAE_dist_GPU.ipynb):
 
-**Notations:**
+---
 
-current policy = $${\pi}_{\theta} (a_{t} {\mid} s_{t})$$
+## Notations:
 
-old policy = $${\pi}_{\theta_{old}} (a_{t} {\mid} s_{t})$$
+current policy =
+$${\pi}_{\theta}
+(a_{t}
+  {\mid} s_{t})$$
 
-epsilon = $${\epsilon}$$
+old policy =
+$${\pi}_{\theta_{old}}
+(a_{t}
+  {\mid} s_{t})$$
+
+epsilon =
+$${\epsilon}$$
 
 Advantage function = A
 
 ---
-<br>
 
-**Equations:**
+## Equations:
 
-Truncated version of generalized advantage estimation(GAE) =
+Truncated version of generalized advantage estimation (GAE) =
 
 $$
 A_{t}
@@ -99,12 +108,12 @@ min(
 $$
 
 ---
-<br>
 
-**Implementation details:**
+## Key implementation details:
 
 The following class is adapted from OpenAI's baseline:
-This class is used for the normalization of rewards in this program before GAE computation.
+This class is used for the normalization of rewards in this program before GAE
+computation.
 
 ```
 class RunningStats(object):
@@ -134,7 +143,7 @@ class RunningStats(object):
         self.count = batch_count + self.count
 ```
 
-This function in the PPO class is adapted from OpenAI's Baseline,
+This function in the ```PPO``` class is adapted from OpenAI's Baseline,
 returns TD lamda return & advantage
 
 ```
@@ -158,7 +167,8 @@ returns TD lamda return & advantage
         return tdlamret, adv # tdlamret is critic_target or Qs      
 ```
 
-The following code segment from the PPO class defines the Clipped Surrogate Objective function:
+The following code segment from the ```PPO``` class defines the Clipped Surrogate
+Objective function:
 
 ```
 with tf.variable_scope('surrogate'):
@@ -167,22 +177,25 @@ with tf.variable_scope('surrogate'):
                     self.aloss = -tf.reduce_mean(tf.minimum(surr, tf.clip_by_value(ratio, 1.-epsilon, 1.+epsilon)*self.adv))
 ```
 
-The following code segment from the work() function in the worker class normalized the running rewards for each worker:
+The following code segment from the ```work()``` function in the worker class
+normalized the running rewards for each worker:
 
 ```
 self.running_stats_r.update(np.array(buffer_r))
                     buffer_r = np.clip( (np.array(buffer_r) - self.running_stats_r.mean) / self.running_stats_r.std, -stats_CLIP, stats_CLIP )
 ```
 
-The following code segment from the work() function in the worker class computes the TD lamda return & advantage:
+The following code segment from the ```work()``` function in the worker class computes
+ the TD lamda return & advantage:
 
 ```
 tdlamret, adv = self.ppo.add_vtarg_and_adv(np.vstack(buffer_r), np.vstack(buffer_done), np.vstack(buffer_V), v_s_, GAMMA, lamda)
 
 ```
 
-The following update function in the PPO class does the training & the updating of global & local parameters
-(Note the at the beginning of training, probability ratio = 1):
+The following update function in the ```PPO``` class does the training & the
+updating of global & local parameters (Note the at the beginning of training,
+  probability ratio = 1):
 
 ```
 def update(self, s, a, r, adv):    
@@ -202,19 +215,25 @@ def update(self, s, a, r, adv):
                       {self.state: s, self.discounted_r: r})   
 ```
 
-The distributed Tensorflow & multiprocessing code sections are very similar to the ones describe in the following posts:
+---
 
-[Distributed Tensorflow](https://chuacheowhuan.github.io/dist_tf/)
+The distributed Tensorflow & multiprocessing code sections are very similar to
+the ones describe in the following posts:
 
 [A3C distributed tensorflow](https://chuacheowhuan.github.io/A3C_dist_tf/)
 
----
-<br>
+[Distributed Tensorflow](https://chuacheowhuan.github.io/dist_tf/)
 
-**References:**
+---
+
+## References:
 
 [Proximal Policy Optimization Algorithms](https://arxiv.org/pdf/1707.06347.pdf)
 (Schulman, Wolski, Dhariwal, Radford, Klimov, 2017)
 
 [Emergence of Locomotion Behaviours in Rich Environments](https://arxiv.org/pdf/1707.02286.pdf)
 (Nicolas Heess, Dhruva TB, Srinivasan Sriram, Jay Lemmon, Josh Merel, Greg Wayne, et al., 2017)
+
+---
+
+<br>

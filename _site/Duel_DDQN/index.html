@@ -20,7 +20,7 @@
     <meta charset="utf-8">
 
 <!-- begin _includes/seo.html --><title>Dueling DDQN -</title>
-<meta name="description" content="A Dueling Double Deep Q Network (Dueling DDQN) implementation in tensorflow with random experience replay.">
+<meta name="description" content="A Dueling Double Deep Q Network (Dueling DDQN) implementation in tensorflowwith random experience replay. The code is tested with Gym’s discrete actionspace environment, CartPole-v0 on Colab.">
 
 
 
@@ -31,7 +31,7 @@
 <meta property="og:url" content="https://chuacheowhuan.github.io/Duel_DDQN/">
 
 
-  <meta property="og:description" content="A Dueling Double Deep Q Network (Dueling DDQN) implementation in tensorflow with random experience replay.">
+  <meta property="og:description" content="A Dueling Double Deep Q Network (Dueling DDQN) implementation in tensorflowwith random experience replay. The code is tested with Gym’s discrete actionspace environment, CartPole-v0 on Colab.">
 
 
 
@@ -260,42 +260,50 @@
     
       <h1 id="page-title" class="page__title">Dueling DDQN</h1>
     
-    <p>A <strong>Dueling Double Deep Q Network (Dueling DDQN)</strong> implementation in tensorflow with random experience replay.</p>
-
-<p>Environment from OpenAI’s gym: CartPole-v0</p>
+    <p>A <strong>Dueling Double Deep Q Network (Dueling DDQN)</strong> implementation in tensorflow
+with random experience replay. The code is tested with Gym’s discrete action
+space environment, CartPole-v0 on Colab.</p>
 
 <p><a href="https://github.com/ChuaCheowHuan/reinforcement_learning/tree/master/DQN_variants/duel_DDQN">Full code</a></p>
 
 <hr />
-<p><br />
-<strong>Notations:</strong></p>
 
-<p>Network = <script type="math/tex">Q_{\theta}</script> <br />
-Parameter = <script type="math/tex">\theta</script> <br />
-Network Q value = <script type="math/tex">Q_{\theta}</script> (s, a) <br />
-<br />
-Value function = V(s) <br />
-Advantage function = A(s, a) <br />
-<br />
-Parameter from the Advantage function layer = <script type="math/tex">\alpha</script> <br />
-Parameter from the Value function layer = <script type="math/tex">\beta</script></p>
+<h2 id="notations">Notations:</h2>
+
+<p>Network = <script type="math/tex">Q_{\theta}</script></p>
+
+<p>Parameter = <script type="math/tex">\theta</script></p>
+
+<p>Network Q value =
+<script type="math/tex">Q_{\theta}</script>
+(s, a)</p>
+
+<p>Value function = V(s)</p>
+
+<p>Advantage function = A(s, a)</p>
+
+<p>Parameter from the Advantage function layer = <script type="math/tex">\alpha</script></p>
+
+<p>Parameter from the Value function layer = <script type="math/tex">\beta</script></p>
 
 <hr />
-<p><br />
-<strong>Equations:</strong></p>
 
-<p>(eqn 9) from the original paper <a href="https://arxiv.org/pdf/1511.06581.pdf">(Wang et al., 2015)</a>: <br />
-Q(s, a; <script type="math/tex">\theta</script>, <script type="math/tex">\alpha</script>, <script type="math/tex">\beta</script>) =
+<h2 id="equations">Equations:</h2>
+
+<p>(eqn 9) from the original paper <a href="https://arxiv.org/pdf/1511.06581.pdf">(Wang et al., 2015)</a>:</p>
+
+<p>Q(s, a; <script type="math/tex">\theta</script>, <script type="math/tex">\alpha</script>, <script type="math/tex">\beta</script>) =
 V(s; <script type="math/tex">\theta</script>, <script type="math/tex">\beta</script>)
-<script type="math/tex">+</script> <br />
-<script type="math/tex">\hspace{50pt}</script>
+<script type="math/tex">+</script>
 [ A(s, a; <script type="math/tex">\theta</script>, <script type="math/tex">\alpha</script>)
 <script type="math/tex">-</script>
-<script type="math/tex">\frac{1}{|A|}</script> <script type="math/tex">\sum_{a'}</script> A(s, <script type="math/tex">a^{'}</script>; <script type="math/tex">\theta</script>, <script type="math/tex">\alpha</script>) ]</p>
+<script type="math/tex">\frac{1}{|A|}</script> <script type="math/tex">\sum_{a'}</script>
+A(s, <script type="math/tex">a^{'}</script>;
+<script type="math/tex">\theta</script>, <script type="math/tex">\alpha</script>) ]</p>
 
 <hr />
-<p><br />
-<strong>Implementation details:</strong></p>
+
+<h2 id="key-implementation-details">Key implementation details:</h2>
 
 <p>V represents the value function layer, A represents the Advantage function layer:</p>
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># contruct neural network
@@ -318,11 +326,13 @@ def built_net(self, var_scope, w_init, b_init, features, num_hidden, num_output)
 </code></pre></div></div>
 
 <hr />
-<p><br />
-<strong>References:</strong></p>
+
+<h2 id="references">References:</h2>
 
 <p><a href="https://arxiv.org/pdf/1511.06581.pdf">Dueling Network Architectures for Deep Reinforcement Learning
 (Wang et al., 2015)</a></p>
+
+<hr />
 
 <p><br /></p>
 
@@ -363,10 +373,12 @@ def built_net(self, var_scope, w_init, b_init, features, num_hidden, num_output)
 
 
 
-  80 minute read
+  83 minute read
 </p>
     
-    <p class="archive__item-excerpt" itemprop="description">Random Distillation Network (RDN) with Proximal Policy Optimization (PPO) implentation in Tensorflow. This is a continuous version which solves the mountain ...</p>
+    <p class="archive__item-excerpt" itemprop="description">Random Distillation Network (RDN) with Proximal Policy Optimization (PPO)
+implentation in Tensorflow. This is a continuous version which solves the
+mountain ...</p>
   </article>
 </div>
 
@@ -390,10 +402,11 @@ def built_net(self, var_scope, w_init, b_init, features, num_hidden, num_output)
 
 
 
-  66 minute read
+  67 minute read
 </p>
     
-    <p class="archive__item-excerpt" itemprop="description">Distributed Proximal Policy Optimization (Distributed PPO or DPPO) continuous version  implementation with distributed Tensorflow and Python’s multiprocessin...</p>
+    <p class="archive__item-excerpt" itemprop="description">Distributed Proximal Policy Optimization (Distributed PPO or DPPO) continuous
+version implementation with distributed Tensorflow and Python’s multiprocessing...</p>
   </article>
 </div>
 
@@ -417,14 +430,12 @@ def built_net(self, var_scope, w_init, b_init, features, num_hidden, num_output)
 
 
 
-  22 minute read
+  24 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">An A3C (Asynchronous Advantage Actor Critic) implementation with
 distributed Tensorflow &amp; Python multiprocessing package. This is a discrete
-version.
-
-</p>
+version. The...</p>
   </article>
 </div>
 
@@ -448,13 +459,12 @@ version.
 
 
 
-  29 minute read
+  30 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">An A3C (Asynchronous Advantage Actor Critic) implementation with
-Tensorflow. This is a multi-threaded continuous version.
-
-</p>
+Tensorflow. This is a multi-threaded continuous version. The code is tested with
+Gym’s conti...</p>
   </article>
 </div>
 
@@ -478,13 +488,12 @@ Tensorflow. This is a multi-threaded continuous version.
 
 
 
-  67 minute read
+  68 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">An A3C (Asynchronous Advantage Actor Critic) implementation with
-Tensorflow. This is a multi-threaded discrete version.
-
-</p>
+Tensorflow. This is a multi-threaded discrete version. The code is tested with
+Gym’s discret...</p>
   </article>
 </div>
 
@@ -537,12 +546,12 @@ Tensorflow. This is a multi-threaded discrete version.
 
 
 
-  74 minute read
+  75 minute read
 </p>
     
-    <p class="archive__item-excerpt" itemprop="description">Distributed Tensorflow with Python multiprocessing package.
-
-</p>
+    <p class="archive__item-excerpt" itemprop="description">Distributed Tensorflow with Python multiprocessing package. This post
+demonstrates how to use distributed Tensorflow with Python’s
+multiprocessing package. A...</p>
   </article>
 </div>
 
@@ -566,7 +575,7 @@ Tensorflow. This is a multi-threaded discrete version.
 
 
 
-  73 minute read
+  75 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">N-step Q-values estimation.
@@ -656,9 +665,8 @@ Tensorflow. This is a multi-threaded discrete version.
   48 minute read
 </p>
     
-    <p class="archive__item-excerpt" itemprop="description">A Dueling Double Deep Q Network with Priority Experience Replay (Duel DDQN with PER) implementation in tensorflow.
-
-</p>
+    <p class="archive__item-excerpt" itemprop="description">A Dueling Double Deep Q Network with Priority Experience Replay (Duel DDQN with PER)
+implementation in tensorflow. The code is tested with Gym’s discrete act...</p>
   </article>
 </div>
 
@@ -682,12 +690,12 @@ Tensorflow. This is a multi-threaded discrete version.
 
 
 
-  18 minute read
+  19 minute read
 </p>
     
-    <p class="archive__item-excerpt" itemprop="description">A Dueling Double Deep Q Network (Dueling DDQN) implementation in tensorflow with random experience replay.
-
-</p>
+    <p class="archive__item-excerpt" itemprop="description">A Dueling Double Deep Q Network (Dueling DDQN) implementation in tensorflow
+with random experience replay. The code is tested with Gym’s discrete action
+spac...</p>
   </article>
 </div>
 
@@ -711,12 +719,11 @@ Tensorflow. This is a multi-threaded discrete version.
 
 
 
-  22 minute read
+  23 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">A Double Deep Q Network (DDQN) implementation in tensorflow with random experience replay.
-
-</p>
+The code is tested with Gym’s discrete action space environment, C...</p>
   </article>
 </div>
 
@@ -740,12 +747,12 @@ Tensorflow. This is a multi-threaded discrete version.
 
 
 
-  17 minute read
+  18 minute read
 </p>
     
-    <p class="archive__item-excerpt" itemprop="description">A Deep Q Network implementation in tensorflow with target network &amp; random experience replay.
-
-</p>
+    <p class="archive__item-excerpt" itemprop="description">A Deep Q Network implementation in tensorflow with target network &amp; random
+experience replay. The code is tested with Gym’s discrete action space
+environ...</p>
   </article>
 </div>
 

@@ -20,7 +20,7 @@
     <meta charset="utf-8">
 
 <!-- begin _includes/seo.html --><title>A3C multi-threaded continuous version with N step targets -</title>
-<meta name="description" content="An A3C (Asynchronous Advantage Actor Critic) implementation withTensorflow. This is a multi-threaded continuous version.">
+<meta name="description" content="An A3C (Asynchronous Advantage Actor Critic) implementation withTensorflow. This is a multi-threaded continuous version. The code is tested withGym’s continuous action space environment, Pendulum-v0 on Colab.">
 
 
 
@@ -31,7 +31,7 @@
 <meta property="og:url" content="https://chuacheowhuan.github.io/A3C_cont_thread_nStep/">
 
 
-  <meta property="og:description" content="An A3C (Asynchronous Advantage Actor Critic) implementation withTensorflow. This is a multi-threaded continuous version.">
+  <meta property="og:description" content="An A3C (Asynchronous Advantage Actor Critic) implementation withTensorflow. This is a multi-threaded continuous version. The code is tested withGym’s continuous action space environment, Pendulum-v0 on Colab.">
 
 
 
@@ -261,15 +261,17 @@
       <h1 id="page-title" class="page__title">A3C multi-threaded continuous version with N step targets</h1>
     
     <p>An A3C (Asynchronous Advantage Actor Critic) implementation with
-Tensorflow. This is a multi-threaded continuous version.</p>
-
-<p>Environment from OpenAI’s gym: Pendulum-v0 (Continuous)</p>
-
-<p><a href="https://github.com/ChuaCheowHuan/reinforcement_learning/blob/master/A3C/A3C_cont_max.ipynb">Full code</a>: A3C (continuous) multi-threaded version with N-step
-targets(use maximum terms possible)</p>
+Tensorflow. This is a multi-threaded continuous version. The code is tested with
+Gym’s continuous action space environment, Pendulum-v0 on Colab.</p>
 
 <p>The majority of the code is very similar to the <a href="https://chuacheowhuan.github.io/A3C_disc_thread_nStep/">discrete</a> version with the
 exceptions highlighted in the following sections:</p>
+
+<p><a href="https://github.com/ChuaCheowHuan/reinforcement_learning/blob/master/A3C/A3C_cont_max.ipynb">Full code</a>: A3C (continuous) multi-threaded version with N-step targets (use maximum terms possible)</p>
+
+<hr />
+
+<h2 id="key-implementation-details">Key implementation details:</h2>
 
 <p>Action selection:</p>
 
@@ -304,7 +306,8 @@ exceptions highlighted in the following sections:</p>
         return lstm_out
 </code></pre></div></div>
 
-<p>The following function in the ACNet class creates the actor and critic’s neural networks(note that the critic’s network contains a LSTM layer):</p>
+<p>The following function in the ACNet class creates the actor and critic’s neural
+networks(note that the critic’s network contains a LSTM layer):</p>
 
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>def _create_net(self, scope):
     w_init = tf.glorot_uniform_initializer()
@@ -324,6 +327,10 @@ exceptions highlighted in the following sections:</p>
     critic_params = tf.get_collection(tf.GraphKeys.TRAINABLE_VARIABLES, scope=scope + '/critic')
     return mean, sigma, V, actor_params, critic_params
 </code></pre></div></div>
+
+<hr />
+
+<p><br /></p>
 
 
 <ul class="taxonomy__index">
@@ -362,10 +369,12 @@ exceptions highlighted in the following sections:</p>
 
 
 
-  80 minute read
+  83 minute read
 </p>
     
-    <p class="archive__item-excerpt" itemprop="description">Random Distillation Network (RDN) with Proximal Policy Optimization (PPO) implentation in Tensorflow. This is a continuous version which solves the mountain ...</p>
+    <p class="archive__item-excerpt" itemprop="description">Random Distillation Network (RDN) with Proximal Policy Optimization (PPO)
+implentation in Tensorflow. This is a continuous version which solves the
+mountain ...</p>
   </article>
 </div>
 
@@ -389,10 +398,11 @@ exceptions highlighted in the following sections:</p>
 
 
 
-  66 minute read
+  67 minute read
 </p>
     
-    <p class="archive__item-excerpt" itemprop="description">Distributed Proximal Policy Optimization (Distributed PPO or DPPO) continuous version  implementation with distributed Tensorflow and Python’s multiprocessin...</p>
+    <p class="archive__item-excerpt" itemprop="description">Distributed Proximal Policy Optimization (Distributed PPO or DPPO) continuous
+version implementation with distributed Tensorflow and Python’s multiprocessing...</p>
   </article>
 </div>
 
@@ -416,14 +426,12 @@ exceptions highlighted in the following sections:</p>
 
 
 
-  22 minute read
+  24 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">An A3C (Asynchronous Advantage Actor Critic) implementation with
 distributed Tensorflow &amp; Python multiprocessing package. This is a discrete
-version.
-
-</p>
+version. The...</p>
   </article>
 </div>
 
@@ -447,13 +455,12 @@ version.
 
 
 
-  28 minute read
+  29 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">An A3C (Asynchronous Advantage Actor Critic) implementation with
-Tensorflow. This is a multi-threaded continuous version.
-
-</p>
+Tensorflow. This is a multi-threaded continuous version. The code is tested with
+Gym’s conti...</p>
   </article>
 </div>
 
@@ -477,13 +484,12 @@ Tensorflow. This is a multi-threaded continuous version.
 
 
 
-  60 minute read
+  61 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">An A3C (Asynchronous Advantage Actor Critic) implementation with
-Tensorflow. This is a multi-threaded discrete version.
-
-</p>
+Tensorflow. This is a multi-threaded discrete version. The code is tested with
+Gym’s discret...</p>
   </article>
 </div>
 
@@ -539,9 +545,9 @@ Tensorflow. This is a multi-threaded discrete version.
   73 minute read
 </p>
     
-    <p class="archive__item-excerpt" itemprop="description">Distributed Tensorflow with Python multiprocessing package.
-
-</p>
+    <p class="archive__item-excerpt" itemprop="description">Distributed Tensorflow with Python multiprocessing package. This post
+demonstrates how to use distributed Tensorflow with Python’s
+multiprocessing package. A...</p>
   </article>
 </div>
 
@@ -565,7 +571,7 @@ Tensorflow. This is a multi-threaded discrete version.
 
 
 
-  68 minute read
+  69 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">N-step Q-values estimation.
@@ -652,12 +658,11 @@ Tensorflow. This is a multi-threaded discrete version.
 
 
 
-  41 minute read
+  42 minute read
 </p>
     
-    <p class="archive__item-excerpt" itemprop="description">A Dueling Double Deep Q Network with Priority Experience Replay (Duel DDQN with PER) implementation in tensorflow.
-
-</p>
+    <p class="archive__item-excerpt" itemprop="description">A Dueling Double Deep Q Network with Priority Experience Replay (Duel DDQN with PER)
+implementation in tensorflow. The code is tested with Gym’s discrete act...</p>
   </article>
 </div>
 
@@ -681,12 +686,12 @@ Tensorflow. This is a multi-threaded discrete version.
 
 
 
-  18 minute read
+  19 minute read
 </p>
     
-    <p class="archive__item-excerpt" itemprop="description">A Dueling Double Deep Q Network (Dueling DDQN) implementation in tensorflow with random experience replay.
-
-</p>
+    <p class="archive__item-excerpt" itemprop="description">A Dueling Double Deep Q Network (Dueling DDQN) implementation in tensorflow
+with random experience replay. The code is tested with Gym’s discrete action
+spac...</p>
   </article>
 </div>
 
@@ -710,12 +715,11 @@ Tensorflow. This is a multi-threaded discrete version.
 
 
 
-  22 minute read
+  23 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">A Double Deep Q Network (DDQN) implementation in tensorflow with random experience replay.
-
-</p>
+The code is tested with Gym’s discrete action space environment, C...</p>
   </article>
 </div>
 
@@ -739,12 +743,12 @@ Tensorflow. This is a multi-threaded discrete version.
 
 
 
-  17 minute read
+  18 minute read
 </p>
     
-    <p class="archive__item-excerpt" itemprop="description">A Deep Q Network implementation in tensorflow with target network &amp; random experience replay.
-
-</p>
+    <p class="archive__item-excerpt" itemprop="description">A Deep Q Network implementation in tensorflow with target network &amp; random
+experience replay. The code is tested with Gym’s discrete action space
+environ...</p>
   </article>
 </div>
 

@@ -20,7 +20,7 @@
     <meta charset="utf-8">
 
 <!-- begin _includes/seo.html --><title>Dueling DDQN with PER -</title>
-<meta name="description" content="A Dueling Double Deep Q Network with Priority Experience Replay (Duel DDQN with PER) implementation in tensorflow.">
+<meta name="description" content="A Dueling Double Deep Q Network with Priority Experience Replay (Duel DDQN with PER)implementation in tensorflow. The code is tested with Gym’s discrete action space environment,CartPole-v0 on Colab.">
 
 
 
@@ -31,7 +31,7 @@
 <meta property="og:url" content="https://chuacheowhuan.github.io/Duel_DDQN_with_PER/">
 
 
-  <meta property="og:description" content="A Dueling Double Deep Q Network with Priority Experience Replay (Duel DDQN with PER) implementation in tensorflow.">
+  <meta property="og:description" content="A Dueling Double Deep Q Network with Priority Experience Replay (Duel DDQN with PER)implementation in tensorflow. The code is tested with Gym’s discrete action space environment,CartPole-v0 on Colab.">
 
 
 
@@ -260,142 +260,146 @@
     
       <h1 id="page-title" class="page__title">Dueling DDQN with PER</h1>
     
-    <p>A <strong>Dueling Double Deep Q Network with Priority Experience Replay (Duel DDQN with PER)</strong> implementation in tensorflow.</p>
-
-<p>Environment from OpenAI’s gym: CartPole-v0</p>
+    <p>A <strong>Dueling Double Deep Q Network with Priority Experience Replay (Duel DDQN with PER)</strong>
+implementation in tensorflow. The code is tested with Gym’s discrete action space environment,
+CartPole-v0 on Colab.</p>
 
 <p><a href="https://github.com/ChuaCheowHuan/reinforcement_learning/tree/master/DQN_variants/duel_DDQN_PER">Full code</a></p>
 
 <hr />
-<p><br />
-<strong>Notations:</strong></p>
 
-<p>Model network = <script type="math/tex">Q_{\theta}</script> <br />
-Model parameter = <script type="math/tex">\theta</script> <br />
-Model network Q value = <script type="math/tex">Q_{\theta}</script> (s, a) <br />
-<br />
-Target network = <script type="math/tex">Q_{\phi}</script> <br />
-Target parameter = <script type="math/tex">\phi</script> <br />
-Target network Q value = <script type="math/tex">Q_{\phi}</script> (<script type="math/tex">s^{'}</script>, <script type="math/tex">a^{'}</script>) <br />
-<br />
-A small constant to ensure that no sample has 0 probability to be selected = e</p>
+<h2 id="notations">Notations:</h2>
+
+<p>Model network = <script type="math/tex">Q_{\theta}</script></p>
+
+<p>Model parameter = <script type="math/tex">\theta</script></p>
+
+<p>Model network Q value = <script type="math/tex">Q_{\theta}</script> (s, a)</p>
+
+<p>Target network = <script type="math/tex">Q_{\phi}</script></p>
+
+<p>Target parameter = <script type="math/tex">\phi</script></p>
+
+<p>Target network Q value = <script type="math/tex">Q_{\phi}</script> (<script type="math/tex">s^{'}</script>, <script type="math/tex">a^{'}</script>)</p>
+
+<p>A small constant to ensure that no sample has 0 probability to be selected = e</p>
 
 <p>Hyper parameter  = <script type="math/tex">\alpha</script></p>
-<blockquote>
-  <p>Decides how to sample, range from 0 to 1, where 0 corresponds to fully
+
+<ul>
+  <li>Decides how to sample, range from 0 to 1, where 0 corresponds to fully
 uniformly random sample selection &amp; 1 corresponding to selecting samples based
-on highest priority.</p>
-</blockquote>
+on highest priority.</li>
+</ul>
 
 <p>Hyper parameter  = <script type="math/tex">\beta</script></p>
-<blockquote>
-  <p>Starts close to 0, gradually annealed  to 1, slowly giving more importance to weights during training.</p>
-</blockquote>
 
-<p>Minibatch size = k <br />
-Replay memory size = N</p>
+<ul>
+  <li>Starts close to 0, gradually annealed  to 1, slowly giving more importance to weights during training.</li>
+</ul>
 
-<hr />
-<p><br />
-<strong>Equations:</strong></p>
+<p>Minibatch size = k</p>
 
-<p>TD target = r (s, a) <script type="math/tex">+</script> <script type="math/tex">\gamma</script> <script type="math/tex">Q_{\phi}</script> (<script type="math/tex">s^{'}</script>, <script type="math/tex">argmax_{a^{'}}</script> <script type="math/tex">Q_{\theta}</script> (s<script type="math/tex">^{'}</script>, a<script type="math/tex">^{'}</script>)) <br />
-<br />
-TD  error = <script type="math/tex">{\delta}</script> <br />
-<script type="math/tex">\hspace{26pt}</script>
-= (TD target) <script type="math/tex">-</script> (Model network Q value) <br />
-<script type="math/tex">\hspace{26pt}</script>
-= [r (s, a) <script type="math/tex">+</script> <script type="math/tex">\gamma</script> <script type="math/tex">Q_{\phi}</script> (<script type="math/tex">s^{'}</script>, <script type="math/tex">argmax_{a^{'}}</script> <script type="math/tex">Q_{\theta}</script> (s<script type="math/tex">^{'}</script>, a<script type="math/tex">^{'}</script>))] <script type="math/tex">-</script> <script type="math/tex">Q_{\theta}</script> (s, a) <br />
-<br /></p>
-
-<p><script type="math/tex">priority_{i}</script> = <script type="math/tex">p_{i}</script> <br />
-<script type="math/tex">\hspace{32pt}</script>
-= <script type="math/tex">{|\delta_{i}|}</script> <script type="math/tex">+</script> e <br />
-<br />
-probability(i) = P(i) <br />
-<script type="math/tex">\hspace{41pt}</script>
-= <script type="math/tex">\frac{p_{i}^{\alpha}}  {\sum_{k}p_{k}^{\alpha}}</script> <br />
-<br />
-weights = <script type="math/tex">w_{i}</script> = (N <script type="math/tex">\cdot</script> P(i)) <script type="math/tex">^{-\beta}</script></p>
+<p>Replay memory size = N</p>
 
 <hr />
-<p><br />
-<strong>Implementation details:</strong></p>
 
-<p>Sum tree:</p>
+<h2 id="equations">Equations:</h2>
 
-<blockquote>
-  <p>Assume an example of a sum tree with 7 nodes (with 4 leaves which corresponds to the replay memory size):</p>
-</blockquote>
+<p>TD target =
+r (s, a)
+<script type="math/tex">+</script>
+<script type="math/tex">\gamma</script>
+<script type="math/tex">Q_{\phi}</script>
+(<script type="math/tex">s^{'}</script>,
+<script type="math/tex">argmax_{a^{'}}</script>
+<script type="math/tex">Q_{\theta}</script>
+(s<script type="math/tex">^{'}</script>, a<script type="math/tex">^{'}</script>))</p>
 
-<blockquote>
-  <blockquote>
-    <p>At initialization:</p>
-    <blockquote>
-      <p><img src="https://drive.google.com/uc?export=view&amp;id=1-quXFm1UnNnaThHxhaMoYl5RTAJnJUVI" alt="alt text" /></p>
-    </blockquote>
-  </blockquote>
-</blockquote>
+<p>TD error =
+<script type="math/tex">{\delta}</script>
+=
+(TD target)
+<script type="math/tex">-</script>
+(Model network Q value)
+=
+[r (s, a)
+<script type="math/tex">+</script>
+<script type="math/tex">\gamma</script>
+<script type="math/tex">Q_{\phi}</script>
+(<script type="math/tex">s^{'}</script>,
+<script type="math/tex">argmax_{a^{'}}</script>
+<script type="math/tex">Q_{\theta}</script>
+(s<script type="math/tex">^{'}</script>,
+a<script type="math/tex">^{'}</script>))]
+<script type="math/tex">-</script>
+<script type="math/tex">Q_{\theta}</script>
+(s, a)</p>
 
-<blockquote>
-  <blockquote>
-    <p>When item 1 is added:</p>
-    <blockquote>
-      <p><img src="https://drive.google.com/uc?export=view&amp;id=1Jk-RO9Yqeq2DQKO1CKD9e_KQTxWgtMOu" alt="alt text" /></p>
-    </blockquote>
-  </blockquote>
-</blockquote>
+<p><script type="math/tex">priority_{i}</script> =
+<script type="math/tex">p_{i}</script>
+=
+<script type="math/tex">{|\delta_{i}|}</script> <script type="math/tex">+</script> e</p>
 
-<blockquote>
-  <blockquote>
-    <p>When item 2 is added:</p>
-    <blockquote>
-      <p><img src="https://drive.google.com/uc?export=view&amp;id=1fTopGfDSeQj3uEKZPlo_2KSTWaBHrFfK" alt="alt text" /></p>
-    </blockquote>
-  </blockquote>
-</blockquote>
+<p>probability(i) =
+P(i)
+=
+<script type="math/tex">\frac{p_{i}^{\alpha}}  
+{\sum_{k}p_{k}^{\alpha}}</script></p>
 
-<blockquote>
-  <blockquote>
-    <p>When item 3 is added:</p>
-    <blockquote>
-      <p><img src="https://drive.google.com/uc?export=view&amp;id=1d37aBtukIExVU7k84XjUPPphiFJlKXBZ" alt="alt text" /></p>
-    </blockquote>
-  </blockquote>
-</blockquote>
+<p>weights =
+<script type="math/tex">w_{i}</script>
+=
+(N <script type="math/tex">\cdot</script> P(i))
+<script type="math/tex">^{-\beta}</script></p>
 
-<blockquote>
-  <blockquote>
-    <p>When item 4 is added:</p>
-    <blockquote>
-      <p><img src="https://drive.google.com/uc?export=view&amp;id=1V7B3vODsz2ELpW5--oQPh1vxmPMLYxOz" alt="alt text" /></p>
-    </blockquote>
-  </blockquote>
-</blockquote>
+<hr />
 
-<blockquote>
-  <blockquote>
-    <p>When item 5 is added:</p>
-    <blockquote>
-      <p><img src="https://drive.google.com/uc?export=view&amp;id=1KBPd61jU4nNug7b475gbKLe5sBJhC_l-" alt="alt text" /></p>
-    </blockquote>
-  </blockquote>
-</blockquote>
+<h2 id="key-implementation-details">Key implementation details:</h2>
 
-<blockquote>
-  <p>Figure below shows the corresponding code &amp; array contents. The tree represents the entire sum tree while data represents the leaves.</p>
-  <blockquote>
-    <p><img src="https://drive.google.com/uc?export=view&amp;id=1kk60DiIQOEkR03wakk2Qwyj2xcK7ac3k" alt="alt text" /></p>
-  </blockquote>
-</blockquote>
+<p><strong>Sum tree:</strong></p>
 
-<blockquote>
-  <p>In the implementation, only one sumTree object is needed to store the collected experiences, this sumTree object resides in the Replay_memory class. The sumTree object has number of leaves = replay memory size = capacity.
+<p>Assume an example of a sum tree with 7 nodes (with 4 leaves which corresponds to the replay memory size):</p>
+
+<p>At initialization:</p>
+<ul>
+  <li><img src="https://drive.google.com/uc?export=view&amp;id=1-quXFm1UnNnaThHxhaMoYl5RTAJnJUVI" alt="alt text" /></li>
+</ul>
+
+<p>When item 1 is added:</p>
+<ul>
+  <li><img src="https://drive.google.com/uc?export=view&amp;id=1Jk-RO9Yqeq2DQKO1CKD9e_KQTxWgtMOu" alt="alt text" /></li>
+</ul>
+
+<p>When item 2 is added:</p>
+<ul>
+  <li><img src="https://drive.google.com/uc?export=view&amp;id=1fTopGfDSeQj3uEKZPlo_2KSTWaBHrFfK" alt="alt text" /></li>
+</ul>
+
+<p>When item 3 is added:</p>
+<ul>
+  <li><img src="https://drive.google.com/uc?export=view&amp;id=1d37aBtukIExVU7k84XjUPPphiFJlKXBZ" alt="alt text" /></li>
+</ul>
+
+<p>When item 4 is added:</p>
+<ul>
+  <li><img src="https://drive.google.com/uc?export=view&amp;id=1V7B3vODsz2ELpW5--oQPh1vxmPMLYxOz" alt="alt text" /></li>
+</ul>
+
+<p>When item 5 is added:</p>
+<ul>
+  <li><img src="https://drive.google.com/uc?export=view&amp;id=1KBPd61jU4nNug7b475gbKLe5sBJhC_l-" alt="alt text" /></li>
+</ul>
+
+<p>Figure below shows the corresponding code &amp; array contents. The tree represents the entire sum tree while data represents the leaves.</p>
+
+<p><img src="https://drive.google.com/uc?export=view&amp;id=1kk60DiIQOEkR03wakk2Qwyj2xcK7ac3k" alt="alt text" /></p>
+
+<p>In the implementation, only one sumTree object is needed to store the collected experiences, this sumTree object resides in the Replay_memory class. The sumTree object has number of leaves = replay memory size = capacity.
 The data array in sumTree object stores an Exp object, which is a sample of experience.</p>
-</blockquote>
 
-<p><br />
-The following code decides how to sample:</p>
+<p>The following code decides how to sample:</p>
+
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>def sample(self, k): # k = minibatch size
     batch = []
 
@@ -417,10 +421,12 @@ The following code decides how to sample:</p>
 <p>Refer to appendix B.2.1, under the section, “Proportional prioritization”, from the original (Schaul et al., 2016) <a href="https://arxiv.org/pdf/1511.05952.pdf">paper</a> for sampling details.</p>
 
 <hr />
-<p><br />
-<strong>References:</strong></p>
+
+<h2 id="references">References:</h2>
 
 <p><a href="https://arxiv.org/pdf/1511.05952.pdf">Prioritized experience replay (Schaul et al., 2016)</a></p>
+
+<hr />
 
 <p><br /></p>
 
@@ -461,10 +467,12 @@ The following code decides how to sample:</p>
 
 
 
-  80 minute read
+  83 minute read
 </p>
     
-    <p class="archive__item-excerpt" itemprop="description">Random Distillation Network (RDN) with Proximal Policy Optimization (PPO) implentation in Tensorflow. This is a continuous version which solves the mountain ...</p>
+    <p class="archive__item-excerpt" itemprop="description">Random Distillation Network (RDN) with Proximal Policy Optimization (PPO)
+implentation in Tensorflow. This is a continuous version which solves the
+mountain ...</p>
   </article>
 </div>
 
@@ -488,10 +496,11 @@ The following code decides how to sample:</p>
 
 
 
-  66 minute read
+  67 minute read
 </p>
     
-    <p class="archive__item-excerpt" itemprop="description">Distributed Proximal Policy Optimization (Distributed PPO or DPPO) continuous version  implementation with distributed Tensorflow and Python’s multiprocessin...</p>
+    <p class="archive__item-excerpt" itemprop="description">Distributed Proximal Policy Optimization (Distributed PPO or DPPO) continuous
+version implementation with distributed Tensorflow and Python’s multiprocessing...</p>
   </article>
 </div>
 
@@ -515,14 +524,12 @@ The following code decides how to sample:</p>
 
 
 
-  22 minute read
+  24 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">An A3C (Asynchronous Advantage Actor Critic) implementation with
 distributed Tensorflow &amp; Python multiprocessing package. This is a discrete
-version.
-
-</p>
+version. The...</p>
   </article>
 </div>
 
@@ -546,13 +553,12 @@ version.
 
 
 
-  29 minute read
+  30 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">An A3C (Asynchronous Advantage Actor Critic) implementation with
-Tensorflow. This is a multi-threaded continuous version.
-
-</p>
+Tensorflow. This is a multi-threaded continuous version. The code is tested with
+Gym’s conti...</p>
   </article>
 </div>
 
@@ -576,13 +582,12 @@ Tensorflow. This is a multi-threaded continuous version.
 
 
 
-  67 minute read
+  68 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">An A3C (Asynchronous Advantage Actor Critic) implementation with
-Tensorflow. This is a multi-threaded discrete version.
-
-</p>
+Tensorflow. This is a multi-threaded discrete version. The code is tested with
+Gym’s discret...</p>
   </article>
 </div>
 
@@ -635,12 +640,12 @@ Tensorflow. This is a multi-threaded discrete version.
 
 
 
-  74 minute read
+  75 minute read
 </p>
     
-    <p class="archive__item-excerpt" itemprop="description">Distributed Tensorflow with Python multiprocessing package.
-
-</p>
+    <p class="archive__item-excerpt" itemprop="description">Distributed Tensorflow with Python multiprocessing package. This post
+demonstrates how to use distributed Tensorflow with Python’s
+multiprocessing package. A...</p>
   </article>
 </div>
 
@@ -664,7 +669,7 @@ Tensorflow. This is a multi-threaded discrete version.
 
 
 
-  73 minute read
+  75 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">N-step Q-values estimation.
@@ -751,12 +756,11 @@ Tensorflow. This is a multi-threaded discrete version.
 
 
 
-  41 minute read
+  42 minute read
 </p>
     
-    <p class="archive__item-excerpt" itemprop="description">A Dueling Double Deep Q Network with Priority Experience Replay (Duel DDQN with PER) implementation in tensorflow.
-
-</p>
+    <p class="archive__item-excerpt" itemprop="description">A Dueling Double Deep Q Network with Priority Experience Replay (Duel DDQN with PER)
+implementation in tensorflow. The code is tested with Gym’s discrete act...</p>
   </article>
 </div>
 
@@ -780,12 +784,12 @@ Tensorflow. This is a multi-threaded discrete version.
 
 
 
-  18 minute read
+  19 minute read
 </p>
     
-    <p class="archive__item-excerpt" itemprop="description">A Dueling Double Deep Q Network (Dueling DDQN) implementation in tensorflow with random experience replay.
-
-</p>
+    <p class="archive__item-excerpt" itemprop="description">A Dueling Double Deep Q Network (Dueling DDQN) implementation in tensorflow
+with random experience replay. The code is tested with Gym’s discrete action
+spac...</p>
   </article>
 </div>
 
@@ -809,12 +813,11 @@ Tensorflow. This is a multi-threaded discrete version.
 
 
 
-  22 minute read
+  23 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">A Double Deep Q Network (DDQN) implementation in tensorflow with random experience replay.
-
-</p>
+The code is tested with Gym’s discrete action space environment, C...</p>
   </article>
 </div>
 
@@ -838,12 +841,12 @@ Tensorflow. This is a multi-threaded discrete version.
 
 
 
-  17 minute read
+  18 minute read
 </p>
     
-    <p class="archive__item-excerpt" itemprop="description">A Deep Q Network implementation in tensorflow with target network &amp; random experience replay.
-
-</p>
+    <p class="archive__item-excerpt" itemprop="description">A Deep Q Network implementation in tensorflow with target network &amp; random
+experience replay. The code is tested with Gym’s discrete action space
+environ...</p>
   </article>
 </div>
 

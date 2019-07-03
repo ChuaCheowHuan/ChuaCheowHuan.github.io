@@ -20,7 +20,7 @@
     <meta charset="utf-8">
 
 <!-- begin _includes/seo.html --><title>RDN (Random Distillation Network) with Proximal Policy Optimization (PPO) Tensorflow -</title>
-<meta name="description" content="Random Distillation Network (RDN) with Proximal Policy Optimization (PPO) implentation in Tensorflow. This is a continuous version which solves the mountain car continuous problem (MountainCarContinuous-v0). The RDN helps learning with curiosity driven exploration.">
+<meta name="description" content="Random Distillation Network (RDN) with Proximal Policy Optimization (PPO)implentation in Tensorflow. This is a continuous version which solves themountain car continuous problem (MountainCarContinuous-v0).The RDN helps learning with curiosity driven exploration.">
 
 
 
@@ -31,7 +31,7 @@
 <meta property="og:url" content="https://chuacheowhuan.github.io/RDN/">
 
 
-  <meta property="og:description" content="Random Distillation Network (RDN) with Proximal Policy Optimization (PPO) implentation in Tensorflow. This is a continuous version which solves the mountain car continuous problem (MountainCarContinuous-v0). The RDN helps learning with curiosity driven exploration.">
+  <meta property="og:description" content="Random Distillation Network (RDN) with Proximal Policy Optimization (PPO)implentation in Tensorflow. This is a continuous version which solves themountain car continuous problem (MountainCarContinuous-v0).The RDN helps learning with curiosity driven exploration.">
 
 
 
@@ -260,22 +260,43 @@
     
       <h1 id="page-title" class="page__title">RDN (Random Distillation Network) with Proximal Policy Optimization (PPO) Tensorflow</h1>
     
-    <p>Random Distillation Network (RDN) with Proximal Policy Optimization (PPO) implentation in Tensorflow. This is a continuous version which solves the mountain car continuous problem (MountainCarContinuous-v0). The RDN helps learning with curiosity driven exploration.</p>
+    <p>Random Distillation Network (RDN) with Proximal Policy Optimization (PPO)
+implentation in Tensorflow. This is a continuous version which solves the
+mountain car continuous problem (MountainCarContinuous-v0).
+The RDN helps learning with curiosity driven exploration.</p>
 
-<p>The agent starts to converge correctly at around 30 episodes &amp; reached the flag 291 times out of 300 episodes (97% hit rate).
-It takes 385.09387278556824 seconds to complete 300 episodes on Google’s Colab.</p>
+<p>The agent starts to converge correctly at around 30 episodes &amp; reached the flag
+291 times out of 300 episodes (97% hit rate). It takes 385.09387278556824
+seconds to complete 300 episodes on Google’s Colab.</p>
 
-<p>Checkout the <a href="https://chuacheowhuan.github.io/RDN/#charts">resulting charts</a> from program output.</p>
+<p>Edit: A new version which corrects a numerical error(causes nan action) takes
+780.2065596580505 seconds for 300 episodes. Both versions have similar results.
+The URL for the new version is updated.</p>
 
-<p>Full code: <a href="https://github.com/ChuaCheowHuan/reinforcement_learning/blob/master/RDN/RND_PPO_cont_ftr_nsn_mtCar.py">Python file</a>, <a href="https://github.com/ChuaCheowHuan/reinforcement_learning/blob/master/RDN/RND_PPO_cont_ftr_nsn_mtCar.ipynb">Jupyter notebook</a> (The Jupyter notebook, which also contain the resulting charts at the end, can be run directly on Google’s Colab.)</p>
+<p>Checkout the <a href="https://chuacheowhuan.github.io/RDN/#charts">resulting
+charts</a> from the program output.</p>
+
+<p>Full code:</p>
+
+<ul>
+  <li>
+    <p><a href="https://github.com/ChuaCheowHuan/reinforcement_learning/blob/master/RDN_PPO/RDN_PPO_cont_ftr_nsn_mtcar_php.py">Python file</a>,</p>
+  </li>
+  <li>
+    <p><a href="https://github.com/ChuaCheowHuan/reinforcement_learning/blob/master/RDN_PPO/RDN_PPO_cont_ftr_nsn_mtCar_php.ipynb">Jupyter notebook</a>
+(The Jupyter notebook, which also contain the resulting charts at the end, can be run directly on Google’s Colab.)</p>
+  </li>
+</ul>
 
 <hr />
 
-<p><strong>Notations &amp; equations</strong></p>
+<h2 id="notations--equations">Notations &amp; equations</h2>
 
-<p>fixed feature from target network = <script type="math/tex">{ f (s_{t+1}) }</script></p>
+<p>fixed feature from target network =
+<script type="math/tex">{ f (s_{t+1}) }</script></p>
 
-<p>predicted feature from predictor network = <script type="math/tex">{ f ^\prime  (s_{t+1}) }</script></p>
+<p>predicted feature from predictor network =
+<script type="math/tex">{ f ^\prime  (s_{t+1}) }</script></p>
 
 <p>intrinsic reward =
 <script type="math/tex">r_{i}</script> =
@@ -285,11 +306,12 @@ It takes 385.09387278556824 seconds to complete 300 episodes on Google’s Colab
 ||
 <script type="math/tex">{}{^2}</script></p>
 
-<p>For notations &amp; equations regarding PPO, refer to this <a href="https://chuacheowhuan.github.io/DPPO_dist_tf/">post</a>.</p>
+<p>For notations &amp; equations regarding PPO, refer to this
+<a href="https://chuacheowhuan.github.io/DPPO_dist_tf/">post</a>.</p>
 
 <hr />
 
-<p><strong>Implementation details:</strong></p>
+<h2 id="key-implementation-details">Key implementation details:</h2>
 
 <p><strong>Preprocessing, state featurization:</strong></p>
 
@@ -338,9 +360,9 @@ def featurize_batch_state(batch_states):
 
 <p><strong>Preprocessing, next state normalization for RDN:</strong></p>
 
-<p>Variance is computed for the next states <code class="highlighter-rouge">buffer_s_</code> using the <code class="highlighter-rouge">RunningStats</code> class.</p>
-
-<p>During every training batch, the next states are normalize and clipped.</p>
+<p>Variance is computed for the next states <code class="highlighter-rouge">buffer_s_</code> using
+the <code class="highlighter-rouge">RunningStats</code> class. During every training batch, the next states are
+normalize and clipped.</p>
 
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>def state_next_normalize(sample_size, running_stats_s_):
 
@@ -360,7 +382,7 @@ def featurize_batch_state(batch_states):
 
 <hr />
 
-<p><strong>Tensorboard graphs:</strong></p>
+<h2 id="tensorboard-graphs">Tensorboard graphs:</h2>
 
 <p><strong>Big picture:</strong></p>
 
@@ -385,20 +407,23 @@ def featurize_batch_state(batch_states):
 <p><strong>PPO’s actor:</strong></p>
 
 <p>At every iteration, an action is sampled from policy network <code class="highlighter-rouge">pi</code>.
-Entropy is NOT used in the computation of the loss in this program.
 <img src="/assets/images/RDN_PPO_tf_graph_img/PPO_a.png" alt="image" /></p>
 
 <hr />
 
 <p><strong>PPO’s critic:</strong></p>
 
-<p>The critic contains two value function networks. One for extrinsic rewards &amp; one for intrinsic rewards. Two sets of TD lambda returns &amp; advantages are also computed.</p>
+<p>The critic contains two value function networks. One for extrinsic rewards &amp; one
+ for intrinsic rewards. Two sets of TD lambda returns &amp; advantages are also
+ computed.</p>
 
 <p>For extrinsic rewards: <code class="highlighter-rouge">tdlamret adv</code></p>
 
 <p>For intrinsic rewards: <code class="highlighter-rouge">tdlamret_i adv_i</code></p>
 
-<p>The TD lambda returns are used as the PPO’s critics targets in their respective networks while the advantages are summed &amp; used as the advantage in the actor’s loss computation.</p>
+<p>The TD lambda returns are used as the PPO’s critics targets in their respective
+networks while the advantages are summed &amp; used as the advantage in the actor’s
+loss computation.</p>
 
 <p><img src="/assets/images/RDN_PPO_tf_graph_img/PPO_c.png" alt="image" /></p>
 
@@ -415,7 +440,8 @@ Entropy is NOT used in the computation of the loss in this program.
 <p><strong>RDN target network:</strong></p>
 
 <p>The target network is a fixed network, meaning that it’s never trained.
-It’s weights are randomized once during initialization. The target network is used to encode next states <code class="highlighter-rouge">state_</code>. It’s output are encoded next states.</p>
+It’s weights are randomized once during initialization. The target network is
+used to encode next states <code class="highlighter-rouge">state_</code>. It’s output are encoded next states.</p>
 
 <p><img src="/assets/images/RDN_PPO_tf_graph_img/RDN_t.png" alt="image" /></p>
 
@@ -423,19 +449,22 @@ It’s weights are randomized once during initialization. The target network is 
 
 <p><strong>RDN predictor network:</strong></p>
 
-<p>The <code class="highlighter-rouge">predictor_loss</code> is the intrinsic reward. It is the difference between the predictor network’s output with the target network’s output. The predictor network is trying to guess the target network’s encoded output.</p>
+<p>The <code class="highlighter-rouge">predictor_loss</code> is the intrinsic reward. It is the difference between
+the predictor network’s output with the target network’s output. The predictor
+network is trying to guess the target network’s encoded output.</p>
 
 <p><img src="/assets/images/RDN_PPO_tf_graph_img/RDN_p.png" alt="image" /></p>
 
 <hr />
 
-<p><strong>Key to note:</strong></p>
+<h2 id="key-to-note">Key to note:</h2>
 
 <p>All networks used in this program are linear.</p>
 
 <p>The actor module is basically similar to this DPPO <a href="https://github.com/ChuaCheowHuan/reinforcement_learning/blob/master/DPPO/DPPO_cont_GAE_dist_GPU.ipynb">code</a> documented in this <a href="https://chuacheowhuan.github.io/DPPO_dist_tf/">post</a>.</p>
 
-<p>The difference is in the critic module. This implementation has two value functions in the critic module rather than one.</p>
+<p>The difference is in the critic module. This implementation has two value
+functions in the critic module rather than one.</p>
 
 <p>The <code class="highlighter-rouge">predictor_loss</code> is the intrinsic reward.</p>
 
@@ -443,16 +472,16 @@ It’s weights are randomized once during initialization. The target network is 
 
 <hr />
 
-<p><strong>Problems to be resolved:</strong></p>
+<h2 id="problems-encountered">Problems encountered:</h2>
 
-<p>The actor’s network occasionally returns nan for action. This happens randomly. Random
-initialization of the network &amp; a smaller learning rate seems to help but does not resolve the issue completely.</p>
+<p>The actor’s network occasionally returns ‘'’nan’’’ for action. This happens randomly, most likely caused by exploding gradients.
+Not initializing or randomly initializing actor’s weights results in nan when outputting action.</p>
 
 <hr />
 
 <p><a name="charts"></a></p>
 
-<p><strong>Program output:</strong></p>
+<h2 id="program-output">Program output:</h2>
 
 <p>hit_counter 291 0.97</p>
 
@@ -472,12 +501,14 @@ initialization of the network &amp; a smaller learning rate seems to help but do
 
 <hr />
 
-<p><strong>References:</strong></p>
+<h2 id="references">References:</h2>
 
 <p><a href="https://arxiv.org/pdf/1810.12894.pdf">Exploration by Random Network Distillation</a>
 (Yuri Burda, Harrison Edwards, Amos Storkey, Oleg Klimov, 2018)</p>
 
 <hr />
+
+<p><br /></p>
 
 
 <ul class="taxonomy__index">
@@ -516,10 +547,12 @@ initialization of the network &amp; a smaller learning rate seems to help but do
 
 
 
-  75 minute read
+  77 minute read
 </p>
     
-    <p class="archive__item-excerpt" itemprop="description">Random Distillation Network (RDN) with Proximal Policy Optimization (PPO) implentation in Tensorflow. This is a continuous version which solves the mountain ...</p>
+    <p class="archive__item-excerpt" itemprop="description">Random Distillation Network (RDN) with Proximal Policy Optimization (PPO)
+implentation in Tensorflow. This is a continuous version which solves the
+mountain ...</p>
   </article>
 </div>
 
@@ -543,10 +576,11 @@ initialization of the network &amp; a smaller learning rate seems to help but do
 
 
 
-  56 minute read
+  57 minute read
 </p>
     
-    <p class="archive__item-excerpt" itemprop="description">Distributed Proximal Policy Optimization (Distributed PPO or DPPO) continuous version  implementation with distributed Tensorflow and Python’s multiprocessin...</p>
+    <p class="archive__item-excerpt" itemprop="description">Distributed Proximal Policy Optimization (Distributed PPO or DPPO) continuous
+version implementation with distributed Tensorflow and Python’s multiprocessing...</p>
   </article>
 </div>
 
@@ -570,14 +604,12 @@ initialization of the network &amp; a smaller learning rate seems to help but do
 
 
 
-  22 minute read
+  23 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">An A3C (Asynchronous Advantage Actor Critic) implementation with
 distributed Tensorflow &amp; Python multiprocessing package. This is a discrete
-version.
-
-</p>
+version. The...</p>
   </article>
 </div>
 
@@ -601,13 +633,12 @@ version.
 
 
 
-  28 minute read
+  29 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">An A3C (Asynchronous Advantage Actor Critic) implementation with
-Tensorflow. This is a multi-threaded continuous version.
-
-</p>
+Tensorflow. This is a multi-threaded continuous version. The code is tested with
+Gym’s conti...</p>
   </article>
 </div>
 
@@ -631,13 +662,12 @@ Tensorflow. This is a multi-threaded continuous version.
 
 
 
-  60 minute read
+  61 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">An A3C (Asynchronous Advantage Actor Critic) implementation with
-Tensorflow. This is a multi-threaded discrete version.
-
-</p>
+Tensorflow. This is a multi-threaded discrete version. The code is tested with
+Gym’s discret...</p>
   </article>
 </div>
 
@@ -693,9 +723,9 @@ Tensorflow. This is a multi-threaded discrete version.
   73 minute read
 </p>
     
-    <p class="archive__item-excerpt" itemprop="description">Distributed Tensorflow with Python multiprocessing package.
-
-</p>
+    <p class="archive__item-excerpt" itemprop="description">Distributed Tensorflow with Python multiprocessing package. This post
+demonstrates how to use distributed Tensorflow with Python’s
+multiprocessing package. A...</p>
   </article>
 </div>
 
@@ -719,7 +749,7 @@ Tensorflow. This is a multi-threaded discrete version.
 
 
 
-  68 minute read
+  69 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">N-step Q-values estimation.
@@ -806,12 +836,11 @@ Tensorflow. This is a multi-threaded discrete version.
 
 
 
-  41 minute read
+  42 minute read
 </p>
     
-    <p class="archive__item-excerpt" itemprop="description">A Dueling Double Deep Q Network with Priority Experience Replay (Duel DDQN with PER) implementation in tensorflow.
-
-</p>
+    <p class="archive__item-excerpt" itemprop="description">A Dueling Double Deep Q Network with Priority Experience Replay (Duel DDQN with PER)
+implementation in tensorflow. The code is tested with Gym’s discrete act...</p>
   </article>
 </div>
 
@@ -835,12 +864,12 @@ Tensorflow. This is a multi-threaded discrete version.
 
 
 
-  18 minute read
+  19 minute read
 </p>
     
-    <p class="archive__item-excerpt" itemprop="description">A Dueling Double Deep Q Network (Dueling DDQN) implementation in tensorflow with random experience replay.
-
-</p>
+    <p class="archive__item-excerpt" itemprop="description">A Dueling Double Deep Q Network (Dueling DDQN) implementation in tensorflow
+with random experience replay. The code is tested with Gym’s discrete action
+spac...</p>
   </article>
 </div>
 
@@ -864,12 +893,11 @@ Tensorflow. This is a multi-threaded discrete version.
 
 
 
-  22 minute read
+  23 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">A Double Deep Q Network (DDQN) implementation in tensorflow with random experience replay.
-
-</p>
+The code is tested with Gym’s discrete action space environment, C...</p>
   </article>
 </div>
 
@@ -893,12 +921,12 @@ Tensorflow. This is a multi-threaded discrete version.
 
 
 
-  17 minute read
+  18 minute read
 </p>
     
-    <p class="archive__item-excerpt" itemprop="description">A Deep Q Network implementation in tensorflow with target network &amp; random experience replay.
-
-</p>
+    <p class="archive__item-excerpt" itemprop="description">A Deep Q Network implementation in tensorflow with target network &amp; random
+experience replay. The code is tested with Gym’s discrete action space
+environ...</p>
   </article>
 </div>
 

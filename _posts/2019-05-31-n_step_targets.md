@@ -2,43 +2,61 @@
 layout: posts
 author: Huan
 title: N-step targets
-
 ---
-N-step Q-values estimation.
+
+## N-step Q-values estimation.
 
 [Full code](https://github.com/ChuaCheowHuan/reinforcement_learning/blob/master/n_step_targets.ipynb)
 
 The following two functions computes truncated Q-values estimates:
 
-1) n_step_targets_missing
+A) n_step_targets_missing
 
-treats missing terms as 0.
+- treats missing terms as 0.
 
-2) n_step_targets_max
+B) n_step_targets_max
 
-use maximum terms possible.
+- use maximum terms possible.
 
-<br>
+---
 
-1-step truncated estimate :
+## Equations:
 
-$$Q^{\pi}(s_{t}, a_{t})$$ = E($$r_{t}$$ + $$\gamma$$ V($$s_{t+1}$$))
+1-step truncated estimate:
 
-2-step truncated estimate :
+$$Q^{\pi}(s_{t}, a_{t})$$ =
+E($$r_{t}$$ +
+  $$\gamma$$ V($$s_{t+1}$$))
 
-$$Q^{\pi}(s_{t}, a_{t})$$ = E($$r_{t}$$ + $$\gamma$$ $$r_{t+1}$$ +  $$\gamma^{2}$$ V($$s_{t+2}$$))
+2-step truncated estimate:
 
-3-step truncated estimate :
+$$Q^{\pi}(s_{t}, a_{t})$$ =
+E($$r_{t}$$ +
+  $$\gamma$$ $$r_{t+1}$$ +
+  $$\gamma^{2}$$ V($$s_{t+2}$$))
 
-$$Q^{\pi}(s_{t}, a_{t})$$ = E($$r_{t}$$ + $$\gamma$$ $$r_{t+1}$$ + $$\gamma^{2}$$ $$r_{t+2}$$ + $$\gamma^{3}$$ V($$s_{t+3}$$))
+3-step truncated estimate:
 
-N-step truncated estimate :
+$$Q^{\pi}(s_{t}, a_{t})$$ =
+E($$r_{t}$$ +
+  $$\gamma$$ $$r_{t+1}$$ +
+  $$\gamma^{2}$$ $$r_{t+2}$$ +
+  $$\gamma^{3}$$ V($$s_{t+3}$$))
 
-$$Q^{\pi}(s_{t}, a_{t})$$ = E($$r_{t}$$ + $$\gamma$$ $$r_{t+1}$$ + $$\gamma^{2}$$ $$r_{t+2}$$ + ... + $$\gamma^{n}$$ V($$s_{t+n}$$))
+N-step truncated estimate:
 
-<br>
+$$Q^{\pi}(s_{t}, a_{t})$$ =
+E($$r_{t}$$ +
+  $$\gamma$$ $$r_{t+1}$$ +
+  $$\gamma^{2}$$ $$r_{t+2}$$ + ... +
+  $$\gamma^{n}$$ V($$s_{t+n}$$))
+
+---
+
+## Example:
 
 Assuming we have the following variables setup:
+
 ```
 N=2 # N steps
 gamma=2
@@ -53,6 +71,7 @@ print("baselines=", baselines)
 ```
 
 Display output of episodic rewards(epr) & baselines:
+
 ```
 epr= [[0]
  [1]
@@ -67,7 +86,10 @@ baselines= [[0]
  [4]]
 ```
 
-This function computes the n-step targets, treats missing terms as zero:
+---
+
+### A) This function computes the n-step targets, treats missing terms as zero:
+
 ```
 # if number of steps unavailable, missing terms treated as 0.
 def n_step_targets_missing(epr, baselines, gamma, N):
@@ -91,6 +113,7 @@ def n_step_targets_missing(epr, baselines, gamma, N):
 ```
 
 Run the function n_step_targets_missing:
+
 ```
 print('n_step_targets_missing:')
 T = n_step_targets_missing(epr, baselines, gamma, N)
@@ -98,6 +121,7 @@ print(T)
 ```
 
 Display the output:
+
 ```
 n_step_targets_missing:
 t= 0
@@ -130,11 +154,13 @@ missing terms treated as 0, break
  [11]
  [ 4]]
 ```
+
 For the output above, note that when t+n = 5 which is greater than the last index 4, missing terms are treated as 0.
 
-<br>
+---
 
-This function computes the n-step targets, it will use maximum number of terms possible:
+### B) This function computes the n-step targets, it will use maximum number of terms possible:
+
 ```
 # if number of steps unavailable, use max steps available.
 # uses v_s_ as input
@@ -160,6 +186,7 @@ def n_step_targets_max(epr, baselines, v_s_, gamma, N):
 ```
 
 Run the function n_step_targets_max:
+
 ```
 print('n_step_targets_max:')
 T = n_step_targets_max(epr, baselines, v_s_, gamma, N)
@@ -167,6 +194,7 @@ print(T)
 ```
 
 Display the output:
+
 ```
 n_step_targets_max:
 t= 0
@@ -199,16 +227,32 @@ last term for those with INSUFFICIENT steps, break
  [51]
  [24]]
 ```
-For the output above, note that when t+n = 5 which is greater than the last index 4, maximum terms are used where possible. ( Last term for those with INSUFFICIENT steps is given by (gamma**n) * v_s_ = $$\gamma^{5}$$ V($$s_{5}$$)), where v_s_ = V($$s_{5}$$)
 
-t=2, normal 2 steps estimation:
+For the output above, note that when t+n = 5 which is greater than the last index 4,
+maximum terms are used where possible.
+( Last term for those with INSUFFICIENT steps is given by
+  (gamma**n) * v_s_ = $$\gamma^{5}$$ V($$s_{5}$$)), where v_s_ = V($$s_{5}$$)
 
-$$Q^{\pi}(s_{t}, a_{t})$$ = E($$r_{2}$$ + $$\gamma$$ $$r_{3}$$ +  $$\gamma^{4}$$ V($$s_{4}$$))
+When t = 2, normal 2 steps estimation:
 
-t=3, 2 steps estimation with insufficient step, using v_s_ in the last term:
+$$Q^{\pi}(s_{t}, a_{t})$$ =
+E($$r_{2}$$ +
+  $$\gamma$$ $$r_{3}$$ +
+  $$\gamma^{4}$$ V($$s_{4}$$))
 
-$$Q^{\pi}(s_{t}, a_{t})$$ = E($$r_{3}$$ + $$\gamma$$ $$r_{4}$$ +  $$\gamma^{5}$$ V($$s_{5}$$))
+When t = 3, 2 steps estimation with insufficient step, using v_s_ in the last term:
 
-t=4, insufficient step for 2 steps estimation, resorting to 1 step estimation:
+$$Q^{\pi}(s_{t}, a_{t})$$ =
+E($$r_{3}$$ +
+  $$\gamma$$ $$r_{4}$$ +
+  $$\gamma^{5}$$ V($$s_{5}$$))
 
-$$Q^{\pi}(s_{t}, a_{t})$$ = E($$r_{4}$$ + $$\gamma^{5}$$ V($$s_{5}$$))
+When t = 4, insufficient step for 2 steps estimation, resorting to 1 step estimation:
+
+$$Q^{\pi}(s_{t}, a_{t})$$ =
+E($$r_{4}$$ +
+   $$\gamma^{5}$$ V($$s_{5}$$))
+
+---
+
+<br>

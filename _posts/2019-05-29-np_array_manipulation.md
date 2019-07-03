@@ -2,16 +2,18 @@
 layout: posts
 author: Huan
 title: Numpy array manipulation
-
 ---
 
-Simple numpy array manipulation examples.
+## Simple numpy array manipulation examples. 
+
+This Jupyter notebook contains simple
+examples on how to manipulate numpy arrays. The code blocks below shows the
+codes & it's corresponding display output.
 
 [Full code](https://github.com/ChuaCheowHuan/misc_code_examples/blob/master/py/np_array_manipulation.ipynb)
 
-This Jupyter notebook contains simple examples on how to manipulate numpy arrays. The code blocks below shows the codes & it's corresponding display output.
-
 Setting up a numpy array:
+
 ```
 buffer=[0,1]
 print('buffer=', buffer)
@@ -27,6 +29,7 @@ $np.array(buffer + [new])= [0 1 2]
 ```
 
 Slicing examples:
+
 ```
 # numpy array slicing syntax
 # buffer[start:stop:step]
@@ -55,6 +58,7 @@ $buffer[1:][::-1]= [2 1]
 ```
 
 np.newaxis is an alias for None:
+
 ```
 # np.newaxis = None
 
@@ -72,6 +76,7 @@ $buffer[None, :]= [[0 1 2]]
 ```
 
 Stacking:
+
 ```
 a = [1,2,3]
 b = [4,5,6]
@@ -101,3 +106,7 @@ $[[3 2 1]
   [6 5 4]
   [9 8 7]]
 ```
+
+---
+
+<br>

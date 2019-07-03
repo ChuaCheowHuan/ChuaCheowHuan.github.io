@@ -260,41 +260,63 @@
     
       <h1 id="page-title" class="page__title">N-step targets</h1>
     
-    <p>N-step Q-values estimation.</p>
+    <h2 id="n-step-q-values-estimation">N-step Q-values estimation.</h2>
 
 <p><a href="https://github.com/ChuaCheowHuan/reinforcement_learning/blob/master/n_step_targets.ipynb">Full code</a></p>
 
 <p>The following two functions computes truncated Q-values estimates:</p>
 
-<p>1) n_step_targets_missing</p>
+<p>A) n_step_targets_missing</p>
 
-<p>treats missing terms as 0.</p>
+<ul>
+  <li>treats missing terms as 0.</li>
+</ul>
 
-<p>2) n_step_targets_max</p>
+<p>B) n_step_targets_max</p>
 
-<p>use maximum terms possible.</p>
+<ul>
+  <li>use maximum terms possible.</li>
+</ul>
 
-<p><br /></p>
+<hr />
 
-<p>1-step truncated estimate :</p>
+<h2 id="equations">Equations:</h2>
 
-<p><script type="math/tex">Q^{\pi}(s_{t}, a_{t})</script> = E(<script type="math/tex">r_{t}</script> + <script type="math/tex">\gamma</script> V(<script type="math/tex">s_{t+1}</script>))</p>
+<p>1-step truncated estimate:</p>
 
-<p>2-step truncated estimate :</p>
+<p><script type="math/tex">Q^{\pi}(s_{t}, a_{t})</script> =
+E(<script type="math/tex">r_{t}</script> +
+  <script type="math/tex">\gamma</script> V(<script type="math/tex">s_{t+1}</script>))</p>
 
-<p><script type="math/tex">Q^{\pi}(s_{t}, a_{t})</script> = E(<script type="math/tex">r_{t}</script> + <script type="math/tex">\gamma</script> <script type="math/tex">r_{t+1}</script> +  <script type="math/tex">\gamma^{2}</script> V(<script type="math/tex">s_{t+2}</script>))</p>
+<p>2-step truncated estimate:</p>
 
-<p>3-step truncated estimate :</p>
+<p><script type="math/tex">Q^{\pi}(s_{t}, a_{t})</script> =
+E(<script type="math/tex">r_{t}</script> +
+  <script type="math/tex">\gamma</script> <script type="math/tex">r_{t+1}</script> +
+  <script type="math/tex">\gamma^{2}</script> V(<script type="math/tex">s_{t+2}</script>))</p>
 
-<p><script type="math/tex">Q^{\pi}(s_{t}, a_{t})</script> = E(<script type="math/tex">r_{t}</script> + <script type="math/tex">\gamma</script> <script type="math/tex">r_{t+1}</script> + <script type="math/tex">\gamma^{2}</script> <script type="math/tex">r_{t+2}</script> + <script type="math/tex">\gamma^{3}</script> V(<script type="math/tex">s_{t+3}</script>))</p>
+<p>3-step truncated estimate:</p>
 
-<p>N-step truncated estimate :</p>
+<p><script type="math/tex">Q^{\pi}(s_{t}, a_{t})</script> =
+E(<script type="math/tex">r_{t}</script> +
+  <script type="math/tex">\gamma</script> <script type="math/tex">r_{t+1}</script> +
+  <script type="math/tex">\gamma^{2}</script> <script type="math/tex">r_{t+2}</script> +
+  <script type="math/tex">\gamma^{3}</script> V(<script type="math/tex">s_{t+3}</script>))</p>
 
-<p><script type="math/tex">Q^{\pi}(s_{t}, a_{t})</script> = E(<script type="math/tex">r_{t}</script> + <script type="math/tex">\gamma</script> <script type="math/tex">r_{t+1}</script> + <script type="math/tex">\gamma^{2}</script> <script type="math/tex">r_{t+2}</script> + … + <script type="math/tex">\gamma^{n}</script> V(<script type="math/tex">s_{t+n}</script>))</p>
+<p>N-step truncated estimate:</p>
 
-<p><br /></p>
+<p><script type="math/tex">Q^{\pi}(s_{t}, a_{t})</script> =
+E(<script type="math/tex">r_{t}</script> +
+  <script type="math/tex">\gamma</script> <script type="math/tex">r_{t+1}</script> +
+  <script type="math/tex">\gamma^{2}</script> <script type="math/tex">r_{t+2}</script> + … +
+  <script type="math/tex">\gamma^{n}</script> V(<script type="math/tex">s_{t+n}</script>))</p>
+
+<hr />
+
+<h2 id="example">Example:</h2>
 
 <p>Assuming we have the following variables setup:</p>
+
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>N=2 # N steps
 gamma=2
 t=5
@@ -308,6 +330,7 @@ print("baselines=", baselines)
 </code></pre></div></div>
 
 <p>Display output of episodic rewards(epr) &amp; baselines:</p>
+
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>epr= [[0]
  [1]
  [2]
@@ -321,7 +344,10 @@ baselines= [[0]
  [4]]
 </code></pre></div></div>
 
-<p>This function computes the n-step targets, treats missing terms as zero:</p>
+<hr />
+
+<h3 id="a-this-function-computes-the-n-step-targets-treats-missing-terms-as-zero">A) This function computes the n-step targets, treats missing terms as zero:</h3>
+
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># if number of steps unavailable, missing terms treated as 0.
 def n_step_targets_missing(epr, baselines, gamma, N):
   N = N+1
@@ -344,12 +370,14 @@ def n_step_targets_missing(epr, baselines, gamma, N):
 </code></pre></div></div>
 
 <p>Run the function n_step_targets_missing:</p>
+
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>print('n_step_targets_missing:')
 T = n_step_targets_missing(epr, baselines, gamma, N)
 print(T)
 </code></pre></div></div>
 
 <p>Display the output:</p>
+
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>n_step_targets_missing:
 t= 0
 n= 0
@@ -381,11 +409,13 @@ missing terms treated as 0, break
  [11]
  [ 4]]
 </code></pre></div></div>
+
 <p>For the output above, note that when t+n = 5 which is greater than the last index 4, missing terms are treated as 0.</p>
 
-<p><br /></p>
+<hr />
 
-<p>This function computes the n-step targets, it will use maximum number of terms possible:</p>
+<h3 id="b-this-function-computes-the-n-step-targets-it-will-use-maximum-number-of-terms-possible">B) This function computes the n-step targets, it will use maximum number of terms possible:</h3>
+
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># if number of steps unavailable, use max steps available.
 # uses v_s_ as input
 def n_step_targets_max(epr, baselines, v_s_, gamma, N):
@@ -410,12 +440,14 @@ def n_step_targets_max(epr, baselines, v_s_, gamma, N):
 </code></pre></div></div>
 
 <p>Run the function n_step_targets_max:</p>
+
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>print('n_step_targets_max:')
 T = n_step_targets_max(epr, baselines, v_s_, gamma, N)
 print(T)
 </code></pre></div></div>
 
 <p>Display the output:</p>
+
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>n_step_targets_max:
 t= 0
 n= 0
@@ -447,19 +479,35 @@ last term for those with INSUFFICIENT steps, break
  [51]
  [24]]
 </code></pre></div></div>
-<p>For the output above, note that when t+n = 5 which is greater than the last index 4, maximum terms are used where possible. ( Last term for those with INSUFFICIENT steps is given by (gamma**n) * v_s_ = <script type="math/tex">\gamma^{5}</script> V(<script type="math/tex">s_{5}</script>)), where v_s_ = V(<script type="math/tex">s_{5}</script>)</p>
 
-<p>t=2, normal 2 steps estimation:</p>
+<p>For the output above, note that when t+n = 5 which is greater than the last index 4,
+maximum terms are used where possible.
+( Last term for those with INSUFFICIENT steps is given by
+  (gamma**n) * v_s_ = <script type="math/tex">\gamma^{5}</script> V(<script type="math/tex">s_{5}</script>)), where v_s_ = V(<script type="math/tex">s_{5}</script>)</p>
 
-<p><script type="math/tex">Q^{\pi}(s_{t}, a_{t})</script> = E(<script type="math/tex">r_{2}</script> + <script type="math/tex">\gamma</script> <script type="math/tex">r_{3}</script> +  <script type="math/tex">\gamma^{4}</script> V(<script type="math/tex">s_{4}</script>))</p>
+<p>When t = 2, normal 2 steps estimation:</p>
 
-<p>t=3, 2 steps estimation with insufficient step, using v_s_ in the last term:</p>
+<p><script type="math/tex">Q^{\pi}(s_{t}, a_{t})</script> =
+E(<script type="math/tex">r_{2}</script> +
+  <script type="math/tex">\gamma</script> <script type="math/tex">r_{3}</script> +
+  <script type="math/tex">\gamma^{4}</script> V(<script type="math/tex">s_{4}</script>))</p>
 
-<p><script type="math/tex">Q^{\pi}(s_{t}, a_{t})</script> = E(<script type="math/tex">r_{3}</script> + <script type="math/tex">\gamma</script> <script type="math/tex">r_{4}</script> +  <script type="math/tex">\gamma^{5}</script> V(<script type="math/tex">s_{5}</script>))</p>
+<p>When t = 3, 2 steps estimation with insufficient step, using v_s_ in the last term:</p>
 
-<p>t=4, insufficient step for 2 steps estimation, resorting to 1 step estimation:</p>
+<p><script type="math/tex">Q^{\pi}(s_{t}, a_{t})</script> =
+E(<script type="math/tex">r_{3}</script> +
+  <script type="math/tex">\gamma</script> <script type="math/tex">r_{4}</script> +
+  <script type="math/tex">\gamma^{5}</script> V(<script type="math/tex">s_{5}</script>))</p>
 
-<p><script type="math/tex">Q^{\pi}(s_{t}, a_{t})</script> = E(<script type="math/tex">r_{4}</script> + <script type="math/tex">\gamma^{5}</script> V(<script type="math/tex">s_{5}</script>))</p>
+<p>When t = 4, insufficient step for 2 steps estimation, resorting to 1 step estimation:</p>
+
+<p><script type="math/tex">Q^{\pi}(s_{t}, a_{t})</script> =
+E(<script type="math/tex">r_{4}</script> +
+   <script type="math/tex">\gamma^{5}</script> V(<script type="math/tex">s_{5}</script>))</p>
+
+<hr />
+
+<p><br /></p>
 
 
 <ul class="taxonomy__index">
@@ -498,10 +546,12 @@ last term for those with INSUFFICIENT steps, break
 
 
 
-  80 minute read
+  83 minute read
 </p>
     
-    <p class="archive__item-excerpt" itemprop="description">Random Distillation Network (RDN) with Proximal Policy Optimization (PPO) implentation in Tensorflow. This is a continuous version which solves the mountain ...</p>
+    <p class="archive__item-excerpt" itemprop="description">Random Distillation Network (RDN) with Proximal Policy Optimization (PPO)
+implentation in Tensorflow. This is a continuous version which solves the
+mountain ...</p>
   </article>
 </div>
 
@@ -525,10 +575,11 @@ last term for those with INSUFFICIENT steps, break
 
 
 
-  66 minute read
+  67 minute read
 </p>
     
-    <p class="archive__item-excerpt" itemprop="description">Distributed Proximal Policy Optimization (Distributed PPO or DPPO) continuous version  implementation with distributed Tensorflow and Python’s multiprocessin...</p>
+    <p class="archive__item-excerpt" itemprop="description">Distributed Proximal Policy Optimization (Distributed PPO or DPPO) continuous
+version implementation with distributed Tensorflow and Python’s multiprocessing...</p>
   </article>
 </div>
 
@@ -552,14 +603,12 @@ last term for those with INSUFFICIENT steps, break
 
 
 
-  22 minute read
+  24 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">An A3C (Asynchronous Advantage Actor Critic) implementation with
 distributed Tensorflow &amp; Python multiprocessing package. This is a discrete
-version.
-
-</p>
+version. The...</p>
   </article>
 </div>
 
@@ -583,13 +632,12 @@ version.
 
 
 
-  29 minute read
+  30 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">An A3C (Asynchronous Advantage Actor Critic) implementation with
-Tensorflow. This is a multi-threaded continuous version.
-
-</p>
+Tensorflow. This is a multi-threaded continuous version. The code is tested with
+Gym’s conti...</p>
   </article>
 </div>
 
@@ -613,13 +661,12 @@ Tensorflow. This is a multi-threaded continuous version.
 
 
 
-  67 minute read
+  68 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">An A3C (Asynchronous Advantage Actor Critic) implementation with
-Tensorflow. This is a multi-threaded discrete version.
-
-</p>
+Tensorflow. This is a multi-threaded discrete version. The code is tested with
+Gym’s discret...</p>
   </article>
 </div>
 
@@ -672,12 +719,12 @@ Tensorflow. This is a multi-threaded discrete version.
 
 
 
-  74 minute read
+  75 minute read
 </p>
     
-    <p class="archive__item-excerpt" itemprop="description">Distributed Tensorflow with Python multiprocessing package.
-
-</p>
+    <p class="archive__item-excerpt" itemprop="description">Distributed Tensorflow with Python multiprocessing package. This post
+demonstrates how to use distributed Tensorflow with Python’s
+multiprocessing package. A...</p>
   </article>
 </div>
 
@@ -701,7 +748,7 @@ Tensorflow. This is a multi-threaded discrete version.
 
 
 
-  68 minute read
+  69 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">N-step Q-values estimation.
@@ -788,12 +835,11 @@ Tensorflow. This is a multi-threaded discrete version.
 
 
 
-  41 minute read
+  42 minute read
 </p>
     
-    <p class="archive__item-excerpt" itemprop="description">A Dueling Double Deep Q Network with Priority Experience Replay (Duel DDQN with PER) implementation in tensorflow.
-
-</p>
+    <p class="archive__item-excerpt" itemprop="description">A Dueling Double Deep Q Network with Priority Experience Replay (Duel DDQN with PER)
+implementation in tensorflow. The code is tested with Gym’s discrete act...</p>
   </article>
 </div>
 
@@ -817,12 +863,12 @@ Tensorflow. This is a multi-threaded discrete version.
 
 
 
-  18 minute read
+  19 minute read
 </p>
     
-    <p class="archive__item-excerpt" itemprop="description">A Dueling Double Deep Q Network (Dueling DDQN) implementation in tensorflow with random experience replay.
-
-</p>
+    <p class="archive__item-excerpt" itemprop="description">A Dueling Double Deep Q Network (Dueling DDQN) implementation in tensorflow
+with random experience replay. The code is tested with Gym’s discrete action
+spac...</p>
   </article>
 </div>
 
@@ -846,12 +892,11 @@ Tensorflow. This is a multi-threaded discrete version.
 
 
 
-  22 minute read
+  23 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">A Double Deep Q Network (DDQN) implementation in tensorflow with random experience replay.
-
-</p>
+The code is tested with Gym’s discrete action space environment, C...</p>
   </article>
 </div>
 
@@ -875,12 +920,12 @@ Tensorflow. This is a multi-threaded discrete version.
 
 
 
-  17 minute read
+  18 minute read
 </p>
     
-    <p class="archive__item-excerpt" itemprop="description">A Deep Q Network implementation in tensorflow with target network &amp; random experience replay.
-
-</p>
+    <p class="archive__item-excerpt" itemprop="description">A Deep Q Network implementation in tensorflow with target network &amp; random
+experience replay. The code is tested with Gym’s discrete action space
+environ...</p>
   </article>
 </div>
 

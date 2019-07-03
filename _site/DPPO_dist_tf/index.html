@@ -20,7 +20,7 @@
     <meta charset="utf-8">
 
 <!-- begin _includes/seo.html --><title>DPPO distributed tensorflow -</title>
-<meta name="description" content="Distributed Proximal Policy Optimization (Distributed PPO or DPPO) continuous version  implementation with distributed Tensorflow and Python’s multiprocessing package. This implementation uses normalized running rewards with GAE.">
+<meta name="description" content="Distributed Proximal Policy Optimization (Distributed PPO or DPPO) continuousversion implementation with distributed Tensorflow and Python’s multiprocessingpackage. This implementation uses normalized running rewards with GAE. The codeis tested with Gym’s continuous action space environment, Pendulum-v0 on Colab.">
 
 
 
@@ -31,7 +31,7 @@
 <meta property="og:url" content="https://chuacheowhuan.github.io/DPPO_dist_tf/">
 
 
-  <meta property="og:description" content="Distributed Proximal Policy Optimization (Distributed PPO or DPPO) continuous version  implementation with distributed Tensorflow and Python’s multiprocessing package. This implementation uses normalized running rewards with GAE.">
+  <meta property="og:description" content="Distributed Proximal Policy Optimization (Distributed PPO or DPPO) continuousversion implementation with distributed Tensorflow and Python’s multiprocessingpackage. This implementation uses normalized running rewards with GAE. The codeis tested with Gym’s continuous action space environment, Pendulum-v0 on Colab.">
 
 
 
@@ -260,28 +260,37 @@
     
       <h1 id="page-title" class="page__title">DPPO distributed tensorflow</h1>
     
-    <p>Distributed Proximal Policy Optimization (Distributed PPO or DPPO) continuous version  implementation with distributed Tensorflow and Python’s multiprocessing package. This implementation uses normalized running rewards with GAE.</p>
-
-<p>Environment from OpenAI’s gym: Pendulum-v0 (Continuous)</p>
+    <p>Distributed Proximal Policy Optimization (Distributed PPO or DPPO) continuous
+version implementation with distributed Tensorflow and Python’s multiprocessing
+package. This implementation uses normalized running rewards with GAE. The code
+is tested with Gym’s continuous action space environment, Pendulum-v0 on Colab.</p>
 
 <p><a href="https://github.com/ChuaCheowHuan/reinforcement_learning/blob/master/DPPO/DPPO_cont_GAE_dist_GPU.ipynb">Full code</a>:</p>
 
-<p><strong>Notations:</strong></p>
+<hr />
 
-<p>current policy = <script type="math/tex">{\pi}_{\theta} (a_{t} {\mid} s_{t})</script></p>
+<h2 id="notations">Notations:</h2>
 
-<p>old policy = <script type="math/tex">{\pi}_{\theta_{old}} (a_{t} {\mid} s_{t})</script></p>
+<p>current policy =
+<script type="math/tex">{\pi}_{\theta}
+(a_{t}
+  {\mid} s_{t})</script></p>
 
-<p>epsilon = <script type="math/tex">{\epsilon}</script></p>
+<p>old policy =
+<script type="math/tex">{\pi}_{\theta_{old}}
+(a_{t}
+  {\mid} s_{t})</script></p>
+
+<p>epsilon =
+<script type="math/tex">{\epsilon}</script></p>
 
 <p>Advantage function = A</p>
 
 <hr />
-<p><br /></p>
 
-<p><strong>Equations:</strong></p>
+<h2 id="equations">Equations:</h2>
 
-<p>Truncated version of generalized advantage estimation(GAE) =</p>
+<p>Truncated version of generalized advantage estimation (GAE) =</p>
 
 <p><script type="math/tex">A_{t}</script>
 =
@@ -343,12 +352,12 @@ min(
 \rbrack</script></p>
 
 <hr />
-<p><br /></p>
 
-<p><strong>Implementation details:</strong></p>
+<h2 id="key-implementation-details">Key implementation details:</h2>
 
 <p>The following class is adapted from OpenAI’s baseline:
-This class is used for the normalization of rewards in this program before GAE computation.</p>
+This class is used for the normalization of rewards in this program before GAE
+computation.</p>
 
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>class RunningStats(object):
     def __init__(self, epsilon=1e-4, shape=()):
@@ -377,7 +386,7 @@ This class is used for the normalization of rewards in this program before GAE c
         self.count = batch_count + self.count
 </code></pre></div></div>
 
-<p>This function in the PPO class is adapted from OpenAI’s Baseline,
+<p>This function in the <code class="highlighter-rouge">PPO</code> class is adapted from OpenAI’s Baseline,
 returns TD lamda return &amp; advantage</p>
 
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    def add_vtarg_and_adv(self, R, done, V, v_s_, gamma, lam):
@@ -400,7 +409,8 @@ returns TD lamda return &amp; advantage</p>
         return tdlamret, adv # tdlamret is critic_target or Qs      
 </code></pre></div></div>
 
-<p>The following code segment from the PPO class defines the Clipped Surrogate Objective function:</p>
+<p>The following code segment from the <code class="highlighter-rouge">PPO</code> class defines the Clipped Surrogate
+Objective function:</p>
 
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>with tf.variable_scope('surrogate'):
                     ratio = self.pi.prob(self.act) / self.oldpi.prob(self.act)
@@ -408,20 +418,23 @@ returns TD lamda return &amp; advantage</p>
                     self.aloss = -tf.reduce_mean(tf.minimum(surr, tf.clip_by_value(ratio, 1.-epsilon, 1.+epsilon)*self.adv))
 </code></pre></div></div>
 
-<p>The following code segment from the work() function in the worker class normalized the running rewards for each worker:</p>
+<p>The following code segment from the <code class="highlighter-rouge">work()</code> function in the worker class
+normalized the running rewards for each worker:</p>
 
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>self.running_stats_r.update(np.array(buffer_r))
                     buffer_r = np.clip( (np.array(buffer_r) - self.running_stats_r.mean) / self.running_stats_r.std, -stats_CLIP, stats_CLIP )
 </code></pre></div></div>
 
-<p>The following code segment from the work() function in the worker class computes the TD lamda return &amp; advantage:</p>
+<p>The following code segment from the <code class="highlighter-rouge">work()</code> function in the worker class computes
+ the TD lamda return &amp; advantage:</p>
 
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>tdlamret, adv = self.ppo.add_vtarg_and_adv(np.vstack(buffer_r), np.vstack(buffer_done), np.vstack(buffer_V), v_s_, GAMMA, lamda)
 
 </code></pre></div></div>
 
-<p>The following update function in the PPO class does the training &amp; the updating of global &amp; local parameters
-(Note the at the beginning of training, probability ratio = 1):</p>
+<p>The following update function in the <code class="highlighter-rouge">PPO</code> class does the training &amp; the
+updating of global &amp; local parameters (Note the at the beginning of training,
+  probability ratio = 1):</p>
 
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>def update(self, s, a, r, adv):    
     self.sess.run(self.update_oldpi_op)
@@ -440,22 +453,28 @@ returns TD lamda return &amp; advantage</p>
                       {self.state: s, self.discounted_r: r})   
 </code></pre></div></div>
 
-<p>The distributed Tensorflow &amp; multiprocessing code sections are very similar to the ones describe in the following posts:</p>
+<hr />
 
-<p><a href="https://chuacheowhuan.github.io/dist_tf/">Distributed Tensorflow</a></p>
+<p>The distributed Tensorflow &amp; multiprocessing code sections are very similar to
+the ones describe in the following posts:</p>
 
 <p><a href="https://chuacheowhuan.github.io/A3C_dist_tf/">A3C distributed tensorflow</a></p>
 
-<hr />
-<p><br /></p>
+<p><a href="https://chuacheowhuan.github.io/dist_tf/">Distributed Tensorflow</a></p>
 
-<p><strong>References:</strong></p>
+<hr />
+
+<h2 id="references">References:</h2>
 
 <p><a href="https://arxiv.org/pdf/1707.06347.pdf">Proximal Policy Optimization Algorithms</a>
 (Schulman, Wolski, Dhariwal, Radford, Klimov, 2017)</p>
 
 <p><a href="https://arxiv.org/pdf/1707.02286.pdf">Emergence of Locomotion Behaviours in Rich Environments</a>
 (Nicolas Heess, Dhruva TB, Srinivasan Sriram, Jay Lemmon, Josh Merel, Greg Wayne, et al., 2017)</p>
+
+<hr />
+
+<p><br /></p>
 
 
 <ul class="taxonomy__index">
@@ -494,10 +513,12 @@ returns TD lamda return &amp; advantage</p>
 
 
 
-  80 minute read
+  83 minute read
 </p>
     
-    <p class="archive__item-excerpt" itemprop="description">Random Distillation Network (RDN) with Proximal Policy Optimization (PPO) implentation in Tensorflow. This is a continuous version which solves the mountain ...</p>
+    <p class="archive__item-excerpt" itemprop="description">Random Distillation Network (RDN) with Proximal Policy Optimization (PPO)
+implentation in Tensorflow. This is a continuous version which solves the
+mountain ...</p>
   </article>
 </div>
 
@@ -521,10 +542,11 @@ returns TD lamda return &amp; advantage</p>
 
 
 
-  56 minute read
+  57 minute read
 </p>
     
-    <p class="archive__item-excerpt" itemprop="description">Distributed Proximal Policy Optimization (Distributed PPO or DPPO) continuous version  implementation with distributed Tensorflow and Python’s multiprocessin...</p>
+    <p class="archive__item-excerpt" itemprop="description">Distributed Proximal Policy Optimization (Distributed PPO or DPPO) continuous
+version implementation with distributed Tensorflow and Python’s multiprocessing...</p>
   </article>
 </div>
 
@@ -548,14 +570,12 @@ returns TD lamda return &amp; advantage</p>
 
 
 
-  22 minute read
+  23 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">An A3C (Asynchronous Advantage Actor Critic) implementation with
 distributed Tensorflow &amp; Python multiprocessing package. This is a discrete
-version.
-
-</p>
+version. The...</p>
   </article>
 </div>
 
@@ -579,13 +599,12 @@ version.
 
 
 
-  28 minute read
+  29 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">An A3C (Asynchronous Advantage Actor Critic) implementation with
-Tensorflow. This is a multi-threaded continuous version.
-
-</p>
+Tensorflow. This is a multi-threaded continuous version. The code is tested with
+Gym’s conti...</p>
   </article>
 </div>
 
@@ -609,13 +628,12 @@ Tensorflow. This is a multi-threaded continuous version.
 
 
 
-  60 minute read
+  61 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">An A3C (Asynchronous Advantage Actor Critic) implementation with
-Tensorflow. This is a multi-threaded discrete version.
-
-</p>
+Tensorflow. This is a multi-threaded discrete version. The code is tested with
+Gym’s discret...</p>
   </article>
 </div>
 
@@ -671,9 +689,9 @@ Tensorflow. This is a multi-threaded discrete version.
   73 minute read
 </p>
     
-    <p class="archive__item-excerpt" itemprop="description">Distributed Tensorflow with Python multiprocessing package.
-
-</p>
+    <p class="archive__item-excerpt" itemprop="description">Distributed Tensorflow with Python multiprocessing package. This post
+demonstrates how to use distributed Tensorflow with Python’s
+multiprocessing package. A...</p>
   </article>
 </div>
 
@@ -697,7 +715,7 @@ Tensorflow. This is a multi-threaded discrete version.
 
 
 
-  68 minute read
+  69 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">N-step Q-values estimation.
@@ -784,12 +802,11 @@ Tensorflow. This is a multi-threaded discrete version.
 
 
 
-  41 minute read
+  42 minute read
 </p>
     
-    <p class="archive__item-excerpt" itemprop="description">A Dueling Double Deep Q Network with Priority Experience Replay (Duel DDQN with PER) implementation in tensorflow.
-
-</p>
+    <p class="archive__item-excerpt" itemprop="description">A Dueling Double Deep Q Network with Priority Experience Replay (Duel DDQN with PER)
+implementation in tensorflow. The code is tested with Gym’s discrete act...</p>
   </article>
 </div>
 
@@ -813,12 +830,12 @@ Tensorflow. This is a multi-threaded discrete version.
 
 
 
-  18 minute read
+  19 minute read
 </p>
     
-    <p class="archive__item-excerpt" itemprop="description">A Dueling Double Deep Q Network (Dueling DDQN) implementation in tensorflow with random experience replay.
-
-</p>
+    <p class="archive__item-excerpt" itemprop="description">A Dueling Double Deep Q Network (Dueling DDQN) implementation in tensorflow
+with random experience replay. The code is tested with Gym’s discrete action
+spac...</p>
   </article>
 </div>
 
@@ -842,12 +859,11 @@ Tensorflow. This is a multi-threaded discrete version.
 
 
 
-  22 minute read
+  23 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">A Double Deep Q Network (DDQN) implementation in tensorflow with random experience replay.
-
-</p>
+The code is tested with Gym’s discrete action space environment, C...</p>
   </article>
 </div>
 
@@ -871,12 +887,12 @@ Tensorflow. This is a multi-threaded discrete version.
 
 
 
-  17 minute read
+  18 minute read
 </p>
     
-    <p class="archive__item-excerpt" itemprop="description">A Deep Q Network implementation in tensorflow with target network &amp; random experience replay.
-
-</p>
+    <p class="archive__item-excerpt" itemprop="description">A Deep Q Network implementation in tensorflow with target network &amp; random
+experience replay. The code is tested with Gym’s discrete action space
+environ...</p>
   </article>
 </div>
 

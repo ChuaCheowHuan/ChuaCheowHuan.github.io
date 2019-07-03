@@ -32,3 +32,7 @@ def accumu_grad(self, OPT, loss, scope):
 
     return zero_op, accumu_op, apply_op, accumu                
 ```
+
+---
+
+<br>

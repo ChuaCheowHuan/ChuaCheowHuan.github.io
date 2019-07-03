@@ -20,7 +20,7 @@
     <meta charset="utf-8">
 
 <!-- begin _includes/seo.html --><title>A3C multi-threaded discrete version with N step targets -</title>
-<meta name="description" content="An A3C (Asynchronous Advantage Actor Critic) implementation withTensorflow. This is a multi-threaded discrete version.">
+<meta name="description" content="An A3C (Asynchronous Advantage Actor Critic) implementation withTensorflow. This is a multi-threaded discrete version. The code is tested withGym’s discrete action space environment, CartPole-v0 on Colab.">
 
 
 
@@ -31,7 +31,7 @@
 <meta property="og:url" content="https://chuacheowhuan.github.io/A3C_disc_thread_nStep/">
 
 
-  <meta property="og:description" content="An A3C (Asynchronous Advantage Actor Critic) implementation withTensorflow. This is a multi-threaded discrete version.">
+  <meta property="og:description" content="An A3C (Asynchronous Advantage Actor Critic) implementation withTensorflow. This is a multi-threaded discrete version. The code is tested withGym’s discrete action space environment, CartPole-v0 on Colab.">
 
 
 
@@ -261,18 +261,17 @@
       <h1 id="page-title" class="page__title">A3C multi-threaded discrete version with N step targets</h1>
     
     <p>An A3C (Asynchronous Advantage Actor Critic) implementation with
-Tensorflow. This is a multi-threaded discrete version.</p>
+Tensorflow. This is a multi-threaded discrete version. The code is tested with
+Gym’s discrete action space environment, CartPole-v0 on Colab.</p>
 
-<p>Environment from OpenAI’s gym: CartPole-v0 (Discrete)</p>
-
-<p><a href="https://github.com/ChuaCheowHuan/reinforcement_learning/blob/master/A3C/A3C_disc_miss.ipynb">Full code</a>: A3C (discrete) multi-threaded version with N-step targets(missing terms are treated as 0)</p>
+<p><a href="https://github.com/ChuaCheowHuan/reinforcement_learning/blob/master/A3C/A3C_disc_miss.ipynb">Full code</a>: A3C (discrete) multi-threaded version with N-step targets (missing terms are treated as 0)</p>
 
 <p><a href="https://github.com/ChuaCheowHuan/reinforcement_learning/blob/master/A3C/A3C_disc_max.ipynb">Full code</a>: A3C (discrete) multi-threaded version with N-step
-targets(use maximum terms possible)</p>
+targets (use maximum terms possible)</p>
 
 <hr />
 
-<p><strong>Notations:</strong></p>
+<h2 id="notations">Notations:</h2>
 
 <p>Actor network = <script type="math/tex">{\pi}_{\theta}</script></p>
 
@@ -288,7 +287,7 @@ targets(use maximum terms possible)</p>
 
 <hr />
 
-<p><strong>Equations:</strong></p>
+<h2 id="equations">Equations:</h2>
 
 <p>Actor component: log<script type="math/tex">{\pi}_{\theta}</script> <script type="math/tex">(a_{t} {\mid} s_{t})</script></p>
 
@@ -310,20 +309,16 @@ targets(use maximum terms possible)</p>
 
 <hr />
 
-<p><strong>Implementation details:</strong></p>
+<h2 id="key-implementation-details">Key implementation details:</h2>
 
-<p>The ACNet class defines the models (Tensorflow graphs) and contains both the
-actor and the critic networks.</p>
+<p>The <code class="highlighter-rouge">ACNet</code> class defines the models (Tensorflow graphs) and contains both
+the actor and the critic networks. The <code class="highlighter-rouge">Worker</code> class contains the work
+function that does the main bulk of the computation. A copy of <code class="highlighter-rouge">ACNet</code> is
+declared globally &amp; it’s parameters are shared by the threaded workers. Each
+worker also have it’s own local copy of <code class="highlighter-rouge">ACNet</code>. Workers are instantiated &amp;
+threaded in the main program.</p>
 
-<p>The Worker class contains the work function that does the main bulk of the
-computation.</p>
-
-<p>A copy of ACNet is declared globally &amp; it’s parameters are shared by the
-threaded workers. Each worker also have it’s own local copy of ACNet.</p>
-
-<p>Workers are instantiated &amp; threaded in the main program.</p>
-
-<p><strong>ACNet class:</strong></p>
+<h3 id="acnet-class">ACNet class:</h3>
 
 <p>Loss function for the actor network for the discrete environment:</p>
 
@@ -344,7 +339,8 @@ with tf.name_scope('critic_loss'):
     self.critic_loss = tf.reduce_mean(tf.square(TD_err))
 </code></pre></div></div>
 
-<p>The following function in the ACNet class creates the actor and critic’s neural networks:</p>
+<p>The following function in the ACNet class creates the actor and critic’s neural
+networks:</p>
 
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>def _create_net(self, scope):
     w_init = tf.glorot_uniform_initializer()
@@ -359,14 +355,15 @@ with tf.name_scope('critic_loss'):
     return action_prob, V, actor_params, critic_params
 </code></pre></div></div>
 
-<p><strong>Worker class:</strong></p>
+<h3 id="worker-class">Worker class:</h3>
 
 <p>Discounted rewards are used as critic’s targets:</p>
 
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>critic_target = self.discount_rewards(buffer_r, GAMMA, V_s)
 </code></pre></div></div>
 
-<p>N-step targets are used in the computation of the Advantage function(baselined_returns):</p>
+<p>N-step returns are used in the computation of the Advantage function
+(baselined_returns):</p>
 
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># Advantage function
 baselined_returns = n_step_targets - baseline
@@ -374,13 +371,20 @@ baselined_returns = n_step_targets - baseline
 
 <p>2 versions of N-step targets could be used:</p>
 
-<p>Version 1) missing terms are treated as 0.</p>
+<ul>
+  <li>
+    <p>missing terms are treated as 0.</p>
+  </li>
+  <li>
+    <p>use maximum terms possible.</p>
+  </li>
+</ul>
 
-<p>Version 2) use maximum terms possible.</p>
+<p>Check this <a href="https://chuacheowhuan.github.io/n_step_targets/">post</a> for more
+information on N-step targets.</p>
 
-<p>Check this <a href="https://chuacheowhuan.github.io/n_step_targets/">post</a> for more information on N-step targets.</p>
-
-<p>The following code segment accumulates gradients &amp; apply them to the local critic network:</p>
+<p>The following code segment accumulates gradients &amp; apply them to the local
+critic network:</p>
 
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>self.AC.accumu_grad_critic(feed_dict) # accumulating gradients for local critic  
 self.AC.apply_accumu_grad_critic(feed_dict)
@@ -400,7 +404,9 @@ baselined_returns = n_step_targets - baseline
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>self.AC.accumu_grad_actor(feed_dict) # accumulating gradients for local actor  
 </code></pre></div></div>
 
-<p>The following code segment push the parameters from the local networks to the global networks and then pulls the updated global parameters to the local networks:</p>
+<p>The following code segment push the parameters from the local networks to the
+global networks and then pulls the updated global parameters to the local
+networks:</p>
 
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># update
 self.AC.push_global_actor(feed_dict)                
@@ -417,9 +423,10 @@ self.AC.pull_global()
 self.AC.init_grad_storage_critic()            
 </code></pre></div></div>
 
-<p>Check this <a href="https://chuacheowhuan.github.io/tf_accumulate_grad/">post</a> for more information on how to accumulate gradients in Tensorflow.</p>
+<p>Check this <a href="https://chuacheowhuan.github.io/tf_accumulate_grad/">post</a> for more
+information on how to accumulate gradients in Tensorflow.</p>
 
-<p><strong>Main program:</strong></p>
+<h2 id="main-program">Main program:</h2>
 
 <p>The following code segment creates the workers:</p>
 
@@ -440,10 +447,12 @@ for worker in workers:
 COORD.join(worker_threads)
 </code></pre></div></div>
 
-<p><strong>References:</strong></p>
+<h2 id="references">References:</h2>
 
 <p><a href="https://arxiv.org/pdf/1602.01783.pdf">Asynchronous Methods for Deep Reinforcement Learning
 (Mnih, Badia, Mirza, Graves, Harley, Lillicrap, et al., 2016)</a></p>
+
+<hr />
 
 <p><br /></p>
 
@@ -484,10 +493,12 @@ COORD.join(worker_threads)
 
 
 
-  80 minute read
+  83 minute read
 </p>
     
-    <p class="archive__item-excerpt" itemprop="description">Random Distillation Network (RDN) with Proximal Policy Optimization (PPO) implentation in Tensorflow. This is a continuous version which solves the mountain ...</p>
+    <p class="archive__item-excerpt" itemprop="description">Random Distillation Network (RDN) with Proximal Policy Optimization (PPO)
+implentation in Tensorflow. This is a continuous version which solves the
+mountain ...</p>
   </article>
 </div>
 
@@ -511,10 +522,11 @@ COORD.join(worker_threads)
 
 
 
-  66 minute read
+  67 minute read
 </p>
     
-    <p class="archive__item-excerpt" itemprop="description">Distributed Proximal Policy Optimization (Distributed PPO or DPPO) continuous version  implementation with distributed Tensorflow and Python’s multiprocessin...</p>
+    <p class="archive__item-excerpt" itemprop="description">Distributed Proximal Policy Optimization (Distributed PPO or DPPO) continuous
+version implementation with distributed Tensorflow and Python’s multiprocessing...</p>
   </article>
 </div>
 
@@ -538,14 +550,12 @@ COORD.join(worker_threads)
 
 
 
-  22 minute read
+  24 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">An A3C (Asynchronous Advantage Actor Critic) implementation with
 distributed Tensorflow &amp; Python multiprocessing package. This is a discrete
-version.
-
-</p>
+version. The...</p>
   </article>
 </div>
 
@@ -569,13 +579,12 @@ version.
 
 
 
-  29 minute read
+  30 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">An A3C (Asynchronous Advantage Actor Critic) implementation with
-Tensorflow. This is a multi-threaded continuous version.
-
-</p>
+Tensorflow. This is a multi-threaded continuous version. The code is tested with
+Gym’s conti...</p>
   </article>
 </div>
 
@@ -599,13 +608,12 @@ Tensorflow. This is a multi-threaded continuous version.
 
 
 
-  60 minute read
+  61 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">An A3C (Asynchronous Advantage Actor Critic) implementation with
-Tensorflow. This is a multi-threaded discrete version.
-
-</p>
+Tensorflow. This is a multi-threaded discrete version. The code is tested with
+Gym’s discret...</p>
   </article>
 </div>
 
@@ -661,9 +669,9 @@ Tensorflow. This is a multi-threaded discrete version.
   73 minute read
 </p>
     
-    <p class="archive__item-excerpt" itemprop="description">Distributed Tensorflow with Python multiprocessing package.
-
-</p>
+    <p class="archive__item-excerpt" itemprop="description">Distributed Tensorflow with Python multiprocessing package. This post
+demonstrates how to use distributed Tensorflow with Python’s
+multiprocessing package. A...</p>
   </article>
 </div>
 
@@ -687,7 +695,7 @@ Tensorflow. This is a multi-threaded discrete version.
 
 
 
-  68 minute read
+  69 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">N-step Q-values estimation.
@@ -774,12 +782,11 @@ Tensorflow. This is a multi-threaded discrete version.
 
 
 
-  41 minute read
+  42 minute read
 </p>
     
-    <p class="archive__item-excerpt" itemprop="description">A Dueling Double Deep Q Network with Priority Experience Replay (Duel DDQN with PER) implementation in tensorflow.
-
-</p>
+    <p class="archive__item-excerpt" itemprop="description">A Dueling Double Deep Q Network with Priority Experience Replay (Duel DDQN with PER)
+implementation in tensorflow. The code is tested with Gym’s discrete act...</p>
   </article>
 </div>
 
@@ -803,12 +810,12 @@ Tensorflow. This is a multi-threaded discrete version.
 
 
 
-  18 minute read
+  19 minute read
 </p>
     
-    <p class="archive__item-excerpt" itemprop="description">A Dueling Double Deep Q Network (Dueling DDQN) implementation in tensorflow with random experience replay.
-
-</p>
+    <p class="archive__item-excerpt" itemprop="description">A Dueling Double Deep Q Network (Dueling DDQN) implementation in tensorflow
+with random experience replay. The code is tested with Gym’s discrete action
+spac...</p>
   </article>
 </div>
 
@@ -832,12 +839,11 @@ Tensorflow. This is a multi-threaded discrete version.
 
 
 
-  22 minute read
+  23 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">A Double Deep Q Network (DDQN) implementation in tensorflow with random experience replay.
-
-</p>
+The code is tested with Gym’s discrete action space environment, C...</p>
   </article>
 </div>
 
@@ -861,12 +867,12 @@ Tensorflow. This is a multi-threaded discrete version.
 
 
 
-  17 minute read
+  18 minute read
 </p>
     
-    <p class="archive__item-excerpt" itemprop="description">A Deep Q Network implementation in tensorflow with target network &amp; random experience replay.
-
-</p>
+    <p class="archive__item-excerpt" itemprop="description">A Deep Q Network implementation in tensorflow with target network &amp; random
+experience replay. The code is tested with Gym’s discrete action space
+environ...</p>
   </article>
 </div>
 
