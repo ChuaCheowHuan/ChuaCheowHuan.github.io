@@ -19,19 +19,19 @@
   <head>
     <meta charset="utf-8">
 
-<!-- begin _includes/seo.html --><title>Dueling DDQN with PER -</title>
-<meta name="description" content="A Dueling Double Deep Q Network with Priority Experience Replay (Duel DDQN with PER)implementation in tensorflow. The code is tested with Gym’s discrete action space environment,CartPole-v0 on Colab.">
+<!-- begin _includes/seo.html --><title>.bash_profile for Mac -</title>
+<meta name="description" content="Edit .bash_profile for Mac.">
 
 
 
 <meta property="og:type" content="article">
 <meta property="og:locale" content="en_US">
 <meta property="og:site_name" content="">
-<meta property="og:title" content="Dueling DDQN with PER">
-<meta property="og:url" content="https://chuacheowhuan.github.io/Duel_DDQN_with_PER/">
+<meta property="og:title" content=".bash_profile for Mac">
+<meta property="og:url" content="https://chuacheowhuan.github.io/bash_script/">
 
 
-  <meta property="og:description" content="A Dueling Double Deep Q Network with Priority Experience Replay (Duel DDQN with PER)implementation in tensorflow. The code is tested with Gym’s discrete action space environment,CartPole-v0 on Colab.">
+  <meta property="og:description" content="Edit .bash_profile for Mac.">
 
 
 
@@ -41,7 +41,7 @@
 
 
 
-  <meta property="article:published_time" content="2019-03-15T00:00:00+08:00">
+  <meta property="article:published_time" content="2019-07-03T00:00:00+08:00">
 
 
 
@@ -52,7 +52,7 @@
   
 
 
-<link rel="canonical" href="https://chuacheowhuan.github.io/Duel_DDQN_with_PER/">
+<link rel="canonical" href="https://chuacheowhuan.github.io/bash_script/">
 
 
 
@@ -260,173 +260,55 @@
 
   <div class="archive">
     
-      <h1 id="page-title" class="page__title">Dueling DDQN with PER</h1>
+      <h1 id="page-title" class="page__title">.bash_profile for Mac</h1>
     
-    <p>A <strong>Dueling Double Deep Q Network with Priority Experience Replay (Duel DDQN with PER)</strong>
-implementation in tensorflow. The code is tested with Gym’s discrete action space environment,
-CartPole-v0 on Colab.</p>
+    <p>Edit .bash_profile for Mac.</p>
 
-<p><a href="https://github.com/ChuaCheowHuan/reinforcement_learning/tree/master/DQN_variants/duel_DDQN_PER">Full code</a></p>
-
-<hr />
-
-<h2 id="notations">Notations:</h2>
-
-<p>Model network = <script type="math/tex">Q_{\theta}</script></p>
-
-<p>Model parameter = <script type="math/tex">\theta</script></p>
-
-<p>Model network Q value = <script type="math/tex">Q_{\theta}</script> (s, a)</p>
-
-<p>Target network = <script type="math/tex">Q_{\phi}</script></p>
-
-<p>Target parameter = <script type="math/tex">\phi</script></p>
-
-<p>Target network Q value = <script type="math/tex">Q_{\phi}</script> (<script type="math/tex">s^{'}</script>, <script type="math/tex">a^{'}</script>)</p>
-
-<p>A small constant to ensure that no sample has 0 probability to be selected = e</p>
-
-<p>Hyper parameter  = <script type="math/tex">\alpha</script></p>
-
-<ul>
-  <li>Decides how to sample, range from 0 to 1, where 0 corresponds to fully
-uniformly random sample selection &amp; 1 corresponding to selecting samples based
-on highest priority.</li>
-</ul>
-
-<p>Hyper parameter  = <script type="math/tex">\beta</script></p>
-
-<ul>
-  <li>Starts close to 0, gradually annealed  to 1, slowly giving more importance to weights during training.</li>
-</ul>
-
-<p>Minibatch size = k</p>
-
-<p>Replay memory size = N</p>
+<ol>
+  <li>Start Terminal</li>
+  <li>Enter “cd ~/” to go to home folder</li>
+  <li>Edit .bash_profile with “open -e .bash_profile” to open in TextEdit.</li>
+  <li>Enter “. .bash_profile” to reload .bash_profile.</li>
+</ol>
 
 <hr />
 
-<h2 id="equations">Equations:</h2>
+<h2 id="examples">Examples</h2>
 
-<p>TD target =
-r (s, a)
-<script type="math/tex">+</script>
-<script type="math/tex">\gamma</script>
-<script type="math/tex">Q_{\phi}</script>
-(<script type="math/tex">s^{'}</script>,
-<script type="math/tex">argmax_{a^{'}}</script>
-<script type="math/tex">Q_{\theta}</script>
-(s<script type="math/tex">^{'}</script>, a<script type="math/tex">^{'}</script>))</p>
+<p>To bundle common git operations, add the following to .bash_profile file:</p>
 
-<p>TD error =
-<script type="math/tex">{\delta}</script>
-=
-(TD target)
-<script type="math/tex">-</script>
-(Model network Q value)
-=
-[r (s, a)
-<script type="math/tex">+</script>
-<script type="math/tex">\gamma</script>
-<script type="math/tex">Q_{\phi}</script>
-(<script type="math/tex">s^{'}</script>,
-<script type="math/tex">argmax_{a^{'}}</script>
-<script type="math/tex">Q_{\theta}</script>
-(s<script type="math/tex">^{'}</script>,
-a<script type="math/tex">^{'}</script>))]
-<script type="math/tex">-</script>
-<script type="math/tex">Q_{\theta}</script>
-(s, a)</p>
-
-<p><script type="math/tex">priority_{i}</script> =
-<script type="math/tex">p_{i}</script>
-=
-<script type="math/tex">{|\delta_{i}|}</script> <script type="math/tex">+</script> e</p>
-
-<p>probability(i) =
-P(i)
-=
-<script type="math/tex">\frac{p_{i}^{\alpha}}  
-{\sum_{k}p_{k}^{\alpha}}</script></p>
-
-<p>weights =
-<script type="math/tex">w_{i}</script>
-=
-(N <script type="math/tex">\cdot</script> P(i))
-<script type="math/tex">^{-\beta}</script></p>
-
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>function lazy_git() {
+    git checkout test_ver
+    git add .
+    git commit -a -m "$1"
+    git checkout master
+    git merge test_ver
+    git push
+    git checkout test_ver
+}
+</code></pre></div></div>
 <hr />
 
-<h2 id="key-implementation-details">Key implementation details:</h2>
+<p>To bundle common jekyll operations, add the following to .bash_profile file:</p>
 
-<p><strong>Sum tree:</strong></p>
+<p>The command <code class="highlighter-rouge">serve</code> runs localhost.</p>
 
-<p>Assume an example of a sum tree with 7 nodes (with 4 leaves which corresponds to the replay memory size):</p>
-
-<p>At initialization:</p>
-<ul>
-  <li><img src="https://drive.google.com/uc?export=view&amp;id=1-quXFm1UnNnaThHxhaMoYl5RTAJnJUVI" alt="alt text" /></li>
-</ul>
-
-<p>When item 1 is added:</p>
-<ul>
-  <li><img src="https://drive.google.com/uc?export=view&amp;id=1Jk-RO9Yqeq2DQKO1CKD9e_KQTxWgtMOu" alt="alt text" /></li>
-</ul>
-
-<p>When item 2 is added:</p>
-<ul>
-  <li><img src="https://drive.google.com/uc?export=view&amp;id=1fTopGfDSeQj3uEKZPlo_2KSTWaBHrFfK" alt="alt text" /></li>
-</ul>
-
-<p>When item 3 is added:</p>
-<ul>
-  <li><img src="https://drive.google.com/uc?export=view&amp;id=1d37aBtukIExVU7k84XjUPPphiFJlKXBZ" alt="alt text" /></li>
-</ul>
-
-<p>When item 4 is added:</p>
-<ul>
-  <li><img src="https://drive.google.com/uc?export=view&amp;id=1V7B3vODsz2ELpW5--oQPh1vxmPMLYxOz" alt="alt text" /></li>
-</ul>
-
-<p>When item 5 is added:</p>
-<ul>
-  <li><img src="https://drive.google.com/uc?export=view&amp;id=1KBPd61jU4nNug7b475gbKLe5sBJhC_l-" alt="alt text" /></li>
-</ul>
-
-<p>Figure below shows the corresponding code &amp; array contents. The tree represents the entire sum tree while data represents the leaves.</p>
-
-<p><img src="https://drive.google.com/uc?export=view&amp;id=1kk60DiIQOEkR03wakk2Qwyj2xcK7ac3k" alt="alt text" /></p>
-
-<p>In the implementation, only one sumTree object is needed to store the collected experiences, this sumTree object resides in the Replay_memory class. The sumTree object has number of leaves = replay memory size = capacity.
-The data array in sumTree object stores an Exp object, which is a sample of experience.</p>
-
-<p>The following code decides how to sample:</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>def sample(self, k): # k = minibatch size
-    batch = []
-
-    # total_p() gives the total sum of priorities of the leaves in the sumTree
-    # which is the value stored in the root node
-    segment = self.tree.total_p() / k
-
-    for i in range(k):
-        a = segment * i # start of segment
-        b = segment * (i + 1) # end of segment
-        s = np.random.uniform(a, b) # rand value between a, b
-
-        (idx, p, data) = self.tree.get(s)
-        batch.append( (idx, p, data) )            
-
-    return batch    
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>function lazy_jekyll_serve() {
+    cd /Users/hadron0/gitHubRepo/ChuaCheowHuan.github.io
+    pwd
+    bundle exec jekyll serve
+}
 </code></pre></div></div>
 
-<p>Refer to appendix B.2.1, under the section, “Proportional prioritization”, from the original (Schaul et al., 2016) <a href="https://arxiv.org/pdf/1511.05952.pdf">paper</a> for sampling details.</p>
+<p>The command <code class="highlighter-rouge">build</code> build the site. This command is neccessary for
+generating sitemap.xml &amp; robot.txt.</p>
 
-<hr />
-
-<h2 id="references">References:</h2>
-
-<p><a href="https://arxiv.org/pdf/1511.05952.pdf">Prioritized experience replay (Schaul et al., 2016)</a></p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>function lazy_jekyll_build() {
+    cd /Users/hadron0/gitHubRepo/ChuaCheowHuan.github.io
+    pwd
+    bundle exec jekyll build
+}
+</code></pre></div></div>
 
 <hr />
 
@@ -469,7 +351,7 @@ The data array in sumTree object stores an Exp object, which is a sample of expe
 
 
 
-  13 minute read
+  12 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">Edit .bash_profile for Mac.
@@ -498,7 +380,7 @@ The data array in sumTree object stores an Exp object, which is a sample of expe
 
 
 
-  83 minute read
+  77 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">Random Distillation Network (RDN) with Proximal Policy Optimization (PPO)
@@ -527,7 +409,7 @@ mountain ...</p>
 
 
 
-  67 minute read
+  57 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">Distributed Proximal Policy Optimization (Distributed PPO or DPPO) continuous
@@ -555,7 +437,7 @@ version implementation with distributed Tensorflow and Python’s multiprocessin
 
 
 
-  23 minute read
+  22 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">A3C (Asynchronous Advantage Actor Critic) implementation with distributed
@@ -584,7 +466,7 @@ version with N-...</p>
 
 
 
-  30 minute read
+  28 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">An A3C (Asynchronous Advantage Actor Critic) implementation with
@@ -613,7 +495,7 @@ Gym’s conti...</p>
 
 
 
-  67 minute read
+  60 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">An A3C (Asynchronous Advantage Actor Critic) implementation with
@@ -642,7 +524,7 @@ Gym’s discret...</p>
 
 
 
-  15 minute read
+  14 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">This post demonstrates how to accumulate gradients with Tensorflow.
@@ -671,7 +553,7 @@ Gym’s discret...</p>
 
 
 
-  75 minute read
+  73 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">Distributed Tensorflow with Python multiprocessing package. This post
@@ -700,7 +582,7 @@ multiprocessing package. A...</p>
 
 
 
-  75 minute read
+  69 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">N-step Q-values estimation.
@@ -729,7 +611,7 @@ multiprocessing package. A...</p>
 
 
 
-  31 minute read
+  30 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">Python’s multiprocessing package for parallel data generation.
@@ -758,7 +640,7 @@ multiprocessing package. A...</p>
 
 
 
-  30 minute read
+  29 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">Simple numpy array manipulation examples.
@@ -955,8 +837,8 @@ environ...</p>
     
   <script>
     var disqus_config = function () {
-      this.page.url = "https://chuacheowhuan.github.io/Duel_DDQN_with_PER/";  // Replace PAGE_URL with your page's canonical URL variable
-      this.page.identifier = "/Duel_DDQN_with_PER"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+      this.page.url = "https://chuacheowhuan.github.io/bash_script/";  // Replace PAGE_URL with your page's canonical URL variable
+      this.page.identifier = "/bash_script"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
     };
     (function() { // DON'T EDIT BELOW THIS LINE
       var d = document, s = d.createElement('script');

@@ -272,23 +272,43 @@ environment, CartPole-v0 on Colab.</p>
 
 <h2 id="notations">Notations:</h2>
 
-<p>Model network = <script type="math/tex">Q_{\theta}</script> <br />
-Model parameter = <script type="math/tex">\theta</script> <br />
-Model network Q value = <script type="math/tex">Q_{\theta}</script> (s, a) \</p>
+<p>Model network = <script type="math/tex">Q_{\theta}</script></p>
 
-<p>Target network = <script type="math/tex">Q_{\phi}</script> <br />
-Target parameter = <script type="math/tex">\phi</script> <br />
-Target network Q value = <script type="math/tex">Q_{\phi}</script> (<script type="math/tex">s^{'}</script>, <script type="math/tex">a^{'}</script>)</p>
+<p>Model parameter = <script type="math/tex">\theta</script></p>
+
+<p>Model network Q value = <script type="math/tex">Q_{\theta}</script> (s, a)</p>
+
+<p>Target network = <script type="math/tex">Q_{\phi}</script></p>
+
+<p>Target parameter = <script type="math/tex">\phi</script></p>
+
+<p>Target network Q value = <script type="math/tex">Q_{\phi}</script> (<script type="math/tex">s^{'}</script>, <script type="math/tex">a^{'}</script>)</p>
 
 <hr />
 
 <h2 id="equations">Equations:</h2>
 
-<p>TD target = r (s, a) <script type="math/tex">+</script> <script type="math/tex">\gamma</script> <script type="math/tex">max_{a}</script> <script type="math/tex">Q_{\phi}</script> (<script type="math/tex">s^{'}</script>, <script type="math/tex">a^{'}</script>) \</p>
+<p>TD target = r (s, a)
+<script type="math/tex">+</script>
+<script type="math/tex">\gamma</script>
+<script type="math/tex">max_{a}</script>
+<script type="math/tex">Q_{\phi}</script>
+(<script type="math/tex">s^{'}</script>,
+<script type="math/tex">a^{'}</script>)</p>
 
-<p>TD  error = (TD target) <script type="math/tex">-</script> (Model network Q value) <br />
-<script type="math/tex">\hspace{26pt}</script>
-= [r (s, a) <script type="math/tex">+</script> <script type="math/tex">\gamma</script> <script type="math/tex">max_{a^{'}}</script> <script type="math/tex">Q_{\phi}</script> (<script type="math/tex">s^{'}</script>, <script type="math/tex">a^{'}</script>)] <script type="math/tex">-</script> <script type="math/tex">Q_{\theta}</script> (s, a)</p>
+<p>TD error =
+(TD target)
+<script type="math/tex">-</script>
+(Model network Q value)
+= [r (s, a)
+<script type="math/tex">+</script>
+<script type="math/tex">\gamma</script>
+<script type="math/tex">max_{a^{'}}</script>
+<script type="math/tex">Q_{\phi}</script>
+(<script type="math/tex">s^{'}</script>,
+<script type="math/tex">a^{'}</script>)]
+<script type="math/tex">-</script>
+<script type="math/tex">Q_{\theta}</script> (s, a)</p>
 
 <hr />
 
@@ -339,7 +359,7 @@ td_target = tf.stop_gradient(td_target)
   
     <li>
       <a href="#2019">
-        <strong>2019</strong> <span class="taxonomy__count">14</span>
+        <strong>2019</strong> <span class="taxonomy__count">15</span>
       </a>
     </li>
   
@@ -350,6 +370,35 @@ td_target = tf.stop_gradient(td_target)
   <section id="2019" class="taxonomy__section">
     <h2 class="archive__subtitle">2019</h2>
     <div class="entries-list">
+      
+        
+
+
+
+<div class="list__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="/bash_script/" rel="permalink">.bash_profile for Mac
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
+
+
+
+
+  13 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">Edit .bash_profile for Mac.
+
+</p>
+  </article>
+</div>
+
       
         
 
@@ -427,12 +476,12 @@ version implementation with distributed Tensorflow and Python’s multiprocessin
 
 
 
-  24 minute read
+  23 minute read
 </p>
     
-    <p class="archive__item-excerpt" itemprop="description">An A3C (Asynchronous Advantage Actor Critic) implementation with
-distributed Tensorflow &amp; Python multiprocessing package. This is a discrete
-version. The...</p>
+    <p class="archive__item-excerpt" itemprop="description">A3C (Asynchronous Advantage Actor Critic) implementation with distributed
+Tensorflow &amp; Python multiprocessing package. This is a discrete
+version with N-...</p>
   </article>
 </div>
 
@@ -485,7 +534,7 @@ Gym’s conti...</p>
 
 
 
-  68 minute read
+  67 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">An A3C (Asynchronous Advantage Actor Critic) implementation with
