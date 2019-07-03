@@ -47,8 +47,7 @@ body {
 <div class="content">
   <h1>
   </h1>
-  <p>
-  This site documents my codes in my Github <a href="https://github.com/ChuaCheowHuan">repositories</a>.
+  <p>  
   I'm interested in artificial intelligence, specifically reinforcement learning.
   <br><br>
   </p>
