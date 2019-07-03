@@ -19,19 +19,19 @@
   <head>
     <meta charset="utf-8">
 
-<!-- begin _includes/seo.html --><title>RDN (Random Distillation Network) with Proximal Policy Optimization (PPO) Tensorflow -</title>
-<meta name="description" content="Random Distillation Network (RDN) with Proximal Policy Optimization (PPO)implentation in Tensorflow. This is a continuous version which solves themountain car continuous problem (MountainCarContinuous-v0).The RDN helps learning with curiosity driven exploration.">
+<!-- begin _includes/seo.html --><title>RND (Random Network Distillation) with Proximal Policy Optimization (PPO) Tensorflow -</title>
+<meta name="description" content="Random Network Distillation (RND) with Proximal Policy Optimization (PPO)implentation in Tensorflow. This is a continuous version which solves themountain car continuous problem (MountainCarContinuous-v0).The RND helps learning with curiosity driven exploration.">
 
 
 
 <meta property="og:type" content="article">
 <meta property="og:locale" content="en_US">
 <meta property="og:site_name" content="">
-<meta property="og:title" content="RDN (Random Distillation Network) with Proximal Policy Optimization (PPO) Tensorflow">
-<meta property="og:url" content="https://chuacheowhuan.github.io/RDN/">
+<meta property="og:title" content="RND (Random Network Distillation) with Proximal Policy Optimization (PPO) Tensorflow">
+<meta property="og:url" content="https://chuacheowhuan.github.io/RND/">
 
 
-  <meta property="og:description" content="Random Distillation Network (RDN) with Proximal Policy Optimization (PPO)implentation in Tensorflow. This is a continuous version which solves themountain car continuous problem (MountainCarContinuous-v0).The RDN helps learning with curiosity driven exploration.">
+  <meta property="og:description" content="Random Network Distillation (RND) with Proximal Policy Optimization (PPO)implentation in Tensorflow. This is a continuous version which solves themountain car continuous problem (MountainCarContinuous-v0).The RND helps learning with curiosity driven exploration.">
 
 
 
@@ -52,7 +52,7 @@
   
 
 
-<link rel="canonical" href="https://chuacheowhuan.github.io/RDN/">
+<link rel="canonical" href="https://chuacheowhuan.github.io/RND/">
 
 
 
@@ -260,12 +260,12 @@
 
   <div class="archive">
     
-      <h1 id="page-title" class="page__title">RDN (Random Distillation Network) with Proximal Policy Optimization (PPO) Tensorflow</h1>
+      <h1 id="page-title" class="page__title">RND (Random Network Distillation) with Proximal Policy Optimization (PPO) Tensorflow</h1>
     
-    <p>Random Distillation Network (RDN) with Proximal Policy Optimization (PPO)
+    <p>Random Network Distillation (RND) with Proximal Policy Optimization (PPO)
 implentation in Tensorflow. This is a continuous version which solves the
 mountain car continuous problem (MountainCarContinuous-v0).
-The RDN helps learning with curiosity driven exploration.</p>
+The RND helps learning with curiosity driven exploration.</p>
 
 <p>The agent starts to converge correctly at around 30 episodes &amp; reached the flag
 291 times out of 300 episodes (97% hit rate). It takes 385.09387278556824
@@ -275,17 +275,17 @@ seconds to complete 300 episodes on Google’s Colab.</p>
 780.2065596580505 seconds for 300 episodes. Both versions have similar results.
 The URL for the new version is updated.</p>
 
-<p>Checkout the <a href="https://chuacheowhuan.github.io/RDN/#charts">resulting
+<p>Checkout the <a href="https://chuacheowhuan.github.io/RND/#charts">resulting
 charts</a> from the program output.</p>
 
 <p>Full code:</p>
 
 <ul>
   <li>
-    <p><a href="https://github.com/ChuaCheowHuan/reinforcement_learning/blob/master/RDN_PPO/RDN_PPO_cont_ftr_nsn_mtcar_php.py">Python file</a>,</p>
+    <p><a href="https://github.com/ChuaCheowHuan/reinforcement_learning/blob/master/RND_PPO/RND_PPO_cont_ftr_nsn_mtcar_php.py">Python file</a>,</p>
   </li>
   <li>
-    <p><a href="https://github.com/ChuaCheowHuan/reinforcement_learning/blob/master/RDN_PPO/RDN_PPO_cont_ftr_nsn_mtCar_php.ipynb">Jupyter notebook</a>
+    <p><a href="https://github.com/ChuaCheowHuan/reinforcement_learning/blob/master/RND_PPO/RND_PPO_cont_ftr_nsn_mtCar_php.ipynb">Jupyter notebook</a>
 (The Jupyter notebook, which also contain the resulting charts at the end, can be run directly on Google’s Colab.)</p>
   </li>
 </ul>
@@ -346,7 +346,7 @@ https://github.com/dennybritz/reinforcement-learning/blob/master/PolicyGradient/
         scaler.transform(states)) # Perform standardization by centering and scaling
 
 # state featurization of state(s) only,
-# not used on s_ for RDN's target &amp; predictor networks
+# not used on s_ for RND's target &amp; predictor networks
 def featurize_state(state):
     scaled = scaler.transform([state]) # Perform standardization by centering and scaling
     featurized = featurizer.transform(scaled) # Transform X separately by each transformer, concatenate results.
@@ -360,7 +360,7 @@ def featurize_batch_state(batch_states):
     return fs_list
 </code></pre></div></div>
 
-<p><strong>Preprocessing, next state normalization for RDN:</strong></p>
+<p><strong>Preprocessing, next state normalization for RND:</strong></p>
 
 <p>Variance is computed for the next states <code class="highlighter-rouge">buffer_s_</code> using
 the <code class="highlighter-rouge">RunningStats</code> class. During every training batch, the next states are
@@ -388,13 +388,13 @@ normalize and clipped.</p>
 
 <p><strong>Big picture:</strong></p>
 
-<p>There are two main modules, the PPO and the RDN.</p>
+<p>There are two main modules, the PPO and the RND.</p>
 
 <p>Current state, <code class="highlighter-rouge">state</code> is passed into PPO.</p>
 
-<p>Next state, <code class="highlighter-rouge">state_</code> is passed into RDN.</p>
+<p>Next state, <code class="highlighter-rouge">state_</code> is passed into RND.</p>
 
-<p><img src="/assets/images/RDN_PPO_tf_graph_img/main.png" alt="image" /></p>
+<p><img src="/assets/images/RND_PPO_tf_graph_img/main.png" alt="image" /></p>
 
 <hr />
 
@@ -402,14 +402,14 @@ normalize and clipped.</p>
 
 <p>PPO module contains the actor network &amp; the critic network.</p>
 
-<p><img src="/assets/images/RDN_PPO_tf_graph_img/PPO.png" alt="image" /></p>
+<p><img src="/assets/images/RND_PPO_tf_graph_img/PPO.png" alt="image" /></p>
 
 <hr />
 
 <p><strong>PPO’s actor:</strong></p>
 
 <p>At every iteration, an action is sampled from policy network <code class="highlighter-rouge">pi</code>.
-<img src="/assets/images/RDN_PPO_tf_graph_img/PPO_a.png" alt="image" /></p>
+<img src="/assets/images/RND_PPO_tf_graph_img/PPO_a.png" alt="image" /></p>
 
 <hr />
 
@@ -427,35 +427,35 @@ normalize and clipped.</p>
 networks while the advantages are summed &amp; used as the advantage in the actor’s
 loss computation.</p>
 
-<p><img src="/assets/images/RDN_PPO_tf_graph_img/PPO_c.png" alt="image" /></p>
+<p><img src="/assets/images/RND_PPO_tf_graph_img/PPO_c.png" alt="image" /></p>
 
 <hr />
 
-<p><strong>RDN module:</strong></p>
+<p><strong>RND module:</strong></p>
 
-<p>RDN module contains the target network &amp; the predictor network.</p>
+<p>RND module contains the target network &amp; the predictor network.</p>
 
-<p><img src="/assets/images/RDN_PPO_tf_graph_img/RDN.png" alt="image" /></p>
+<p><img src="/assets/images/RND_PPO_tf_graph_img/RND.png" alt="image" /></p>
 
 <hr />
 
-<p><strong>RDN target network:</strong></p>
+<p><strong>RND target network:</strong></p>
 
 <p>The target network is a fixed network, meaning that it’s never trained.
 It’s weights are randomized once during initialization. The target network is
 used to encode next states <code class="highlighter-rouge">state_</code>. It’s output are encoded next states.</p>
 
-<p><img src="/assets/images/RDN_PPO_tf_graph_img/RDN_t.png" alt="image" /></p>
+<p><img src="/assets/images/RND_PPO_tf_graph_img/RND_t.png" alt="image" /></p>
 
 <hr />
 
-<p><strong>RDN predictor network:</strong></p>
+<p><strong>RND predictor network:</strong></p>
 
 <p>The <code class="highlighter-rouge">predictor_loss</code> is the intrinsic reward. It is the difference between
 the predictor network’s output with the target network’s output. The predictor
 network is trying to guess the target network’s encoded output.</p>
 
-<p><img src="/assets/images/RDN_PPO_tf_graph_img/RDN_p.png" alt="image" /></p>
+<p><img src="/assets/images/RND_PPO_tf_graph_img/RND_p.png" alt="image" /></p>
 
 <hr />
 
@@ -470,7 +470,7 @@ functions in the critic module rather than one.</p>
 
 <p>The <code class="highlighter-rouge">predictor_loss</code> is the intrinsic reward.</p>
 
-<p><img src="/assets/images/RDN_PPO_tf_graph_img/key.png" alt="image" /></p>
+<p><img src="/assets/images/RND_PPO_tf_graph_img/key.png" alt="image" /></p>
 
 <hr />
 
@@ -489,15 +489,15 @@ Not initializing or randomly initializing actor’s weights results in nan when 
 
 <p>Number of steps per episode:</p>
 
-<p><img src="/assets/images/RDN_PPO_tf_graph_img/output/steps.png" alt="image" /></p>
+<p><img src="/assets/images/RND_PPO_tf_graph_img/output/steps.png" alt="image" /></p>
 
 <p>Reward per episode:</p>
 
-<p><img src="/assets/images/RDN_PPO_tf_graph_img/output/reward.png" alt="image" /></p>
+<p><img src="/assets/images/RND_PPO_tf_graph_img/output/reward.png" alt="image" /></p>
 
 <p>Moving average reward per episode:</p>
 
-<p><img src="/assets/images/RDN_PPO_tf_graph_img/output/mv_avg.png" alt="image" /></p>
+<p><img src="/assets/images/RND_PPO_tf_graph_img/output/mv_avg.png" alt="image" /></p>
 
 <p>— 385.09387278556824 seconds —</p>
 
@@ -597,7 +597,7 @@ Not initializing or randomly initializing actor’s weights results in nan when 
     
     <h2 class="archive__item-title" itemprop="headline">
       
-        <a href="/RDN/" rel="permalink">RDN (Random Distillation Network) with Proximal Policy Optimization (PPO) Tensorflow
+        <a href="/RND/" rel="permalink">RND (Random Network Distillation) with Proximal Policy Optimization (PPO) Tensorflow
 </a>
       
     </h2>
@@ -610,7 +610,7 @@ Not initializing or randomly initializing actor’s weights results in nan when 
   77 minute read
 </p>
     
-    <p class="archive__item-excerpt" itemprop="description">Random Distillation Network (RDN) with Proximal Policy Optimization (PPO)
+    <p class="archive__item-excerpt" itemprop="description">Random Network Distillation (RND) with Proximal Policy Optimization (PPO)
 implentation in Tensorflow. This is a continuous version which solves the
 mountain ...</p>
   </article>
@@ -1064,8 +1064,8 @@ environ...</p>
     
   <script>
     var disqus_config = function () {
-      this.page.url = "https://chuacheowhuan.github.io/RDN/";  // Replace PAGE_URL with your page's canonical URL variable
-      this.page.identifier = "/RDN"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+      this.page.url = "https://chuacheowhuan.github.io/RND/";  // Replace PAGE_URL with your page's canonical URL variable
+      this.page.identifier = "/RND"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
     };
     (function() { // DON'T EDIT BELOW THIS LINE
       var d = document, s = d.createElement('script');
