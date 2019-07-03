@@ -1,6 +1,6 @@
-# My Github pages repository
+# What's in this repository?
 
-This repository contains codes for my Github pages on my repositories.
+This repository contains codes for my Github pages.
 
 ## Blog
 
