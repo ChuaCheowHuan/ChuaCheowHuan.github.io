@@ -1,5 +1,7 @@
-Reproducing reinforcement learning algorithms.
+# Reinforcement learning
 
-The writeup for my repos are available at the following Github page:
+This repository contains codes for my Github pages on reinforcement learning.
 
-[https://ChuaCheowHuan.github.io/](https://ChuaCheowHuan.github.io/)
+## Blog
+
+Check out my [blog](https://ChuaCheowHuan.github.io/) for more information on my repositories.
