@@ -1,4 +1,31 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.5">Jekyll</generator><link href="https://chuacheowhuan.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://chuacheowhuan.github.io/" rel="alternate" type="text/html" /><updated>2019-07-03T21:23:01+08:00</updated><id>https://chuacheowhuan.github.io/feed.xml</id><title type="html">Chua Cheow Huan</title><subtitle></subtitle><author><name>Chua Cheow Huan</name></author><entry><title type="html">.bash_profile for Mac</title><link href="https://chuacheowhuan.github.io/bash_script/" rel="alternate" type="text/html" title=".bash_profile for Mac" /><published>2019-07-03T00:00:00+08:00</published><updated>2019-07-03T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/bash_script</id><content type="html" xml:base="https://chuacheowhuan.github.io/bash_script/">&lt;p&gt;Edit .bash_profile for Mac.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.5">Jekyll</generator><link href="https://chuacheowhuan.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://chuacheowhuan.github.io/" rel="alternate" type="text/html" /><updated>2019-07-04T01:08:54+08:00</updated><id>https://chuacheowhuan.github.io/feed.xml</id><title type="html">Chua Cheow Huan</title><subtitle></subtitle><author><name>Chua Cheow Huan</name></author><entry><title type="html">Tensorflow graphs in Tensorboard</title><link href="https://chuacheowhuan.github.io/tf_graph/" rel="alternate" type="text/html" title="Tensorflow graphs in Tensorboard" /><published>2019-07-04T00:00:00+08:00</published><updated>2019-07-04T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/tf_graph</id><content type="html" xml:base="https://chuacheowhuan.github.io/tf_graph/">&lt;p&gt;You need to use &lt;a href=&quot;https://www.tensorflow.org/tensorboard/r2/get_started&quot;&gt;Tensorboard&lt;/a&gt; which comes will Tensorflow installed.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;tf.reset_default_graph()
+sess = tf.Session()
+
+# Your Tensorflow graph goes here.
+# ...
+
+sess.run(tf.global_variables_initializer())
+
+# Declare tf.summary.FileWriter where log is your output directory for Tensorboard &amp;amp; add the graph to the writer.
+writer = tf.summary.FileWriter('log', sess.graph)
+
+# Run your training loop
+# sess.run(...)
+
+writer.close()
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Run this command in terminal to open tensorboard:&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;tensorboard --logdir log
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;Navigate to &lt;code class=&quot;highlighter-rouge&quot;&gt;http://127.0.0.1:6006&lt;/code&gt; in your browser to access Tensorflow.
+Your graph is in the graph tab.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">You need to use Tensorboard which comes will Tensorflow installed.</summary></entry><entry><title type="html">.bash_profile for Mac</title><link href="https://chuacheowhuan.github.io/bash_script/" rel="alternate" type="text/html" title=".bash_profile for Mac" /><published>2019-07-03T00:00:00+08:00</published><updated>2019-07-03T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/bash_script</id><content type="html" xml:base="https://chuacheowhuan.github.io/bash_script/">&lt;p&gt;Edit .bash_profile for Mac.&lt;/p&gt;
 
 &lt;ol&gt;
   &lt;li&gt;Start Terminal&lt;/li&gt;
@@ -48,255 +75,7 @@ generating sitemap.xml &amp;amp; robot.txt.&lt;/p&gt;
 
 &lt;hr /&gt;
 
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">Edit .bash_profile for Mac.</summary></entry><entry><title type="html">RDN (Random Distillation Network) with Proximal Policy Optimization (PPO) Tensorflow</title><link href="https://chuacheowhuan.github.io/RDN/" rel="alternate" type="text/html" title="RDN (Random Distillation Network) with Proximal Policy Optimization (PPO) Tensorflow" /><published>2019-06-25T00:00:00+08:00</published><updated>2019-06-25T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/RDN</id><content type="html" xml:base="https://chuacheowhuan.github.io/RDN/">&lt;p&gt;Random Distillation Network (RDN) with Proximal Policy Optimization (PPO)
-implentation in Tensorflow. This is a continuous version which solves the
-mountain car continuous problem (MountainCarContinuous-v0).
-The RDN helps learning with curiosity driven exploration.&lt;/p&gt;
-
-&lt;p&gt;The agent starts to converge correctly at around 30 episodes &amp;amp; reached the flag
-291 times out of 300 episodes (97% hit rate). It takes 385.09387278556824
-seconds to complete 300 episodes on Google’s Colab.&lt;/p&gt;
-
-&lt;p&gt;Edit: A new version which corrects a numerical error(causes nan action) takes
-780.2065596580505 seconds for 300 episodes. Both versions have similar results.
-The URL for the new version is updated.&lt;/p&gt;
-
-&lt;p&gt;Checkout the &lt;a href=&quot;https://chuacheowhuan.github.io/RDN/#charts&quot;&gt;resulting
-charts&lt;/a&gt; from the program output.&lt;/p&gt;
-
-&lt;p&gt;Full code:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;
-    &lt;p&gt;&lt;a href=&quot;https://github.com/ChuaCheowHuan/reinforcement_learning/blob/master/RDN_PPO/RDN_PPO_cont_ftr_nsn_mtcar_php.py&quot;&gt;Python file&lt;/a&gt;,&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;&lt;a href=&quot;https://github.com/ChuaCheowHuan/reinforcement_learning/blob/master/RDN_PPO/RDN_PPO_cont_ftr_nsn_mtCar_php.ipynb&quot;&gt;Jupyter notebook&lt;/a&gt;
-(The Jupyter notebook, which also contain the resulting charts at the end, can be run directly on Google’s Colab.)&lt;/p&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;notations--equations&quot;&gt;Notations &amp;amp; equations&lt;/h2&gt;
-
-&lt;p&gt;fixed feature from target network =
-&lt;script type=&quot;math/tex&quot;&gt;{ f (s_{t+1}) }&lt;/script&gt;&lt;/p&gt;
-
-&lt;p&gt;predicted feature from predictor network =
-&lt;script type=&quot;math/tex&quot;&gt;{ f ^\prime  (s_{t+1}) }&lt;/script&gt;&lt;/p&gt;
-
-&lt;p&gt;intrinsic reward =
-&lt;script type=&quot;math/tex&quot;&gt;r_{i}&lt;/script&gt; =
-||
-&lt;script type=&quot;math/tex&quot;&gt;{ f ^\prime  (s_{t+1}) }&lt;/script&gt; -
-&lt;script type=&quot;math/tex&quot;&gt;{ f (s_{t+1}) }&lt;/script&gt;
-||
-&lt;script type=&quot;math/tex&quot;&gt;{}{^2}&lt;/script&gt;&lt;/p&gt;
-
-&lt;p&gt;For notations &amp;amp; equations regarding PPO, refer to this
-&lt;a href=&quot;https://chuacheowhuan.github.io/DPPO_dist_tf/&quot;&gt;post&lt;/a&gt;.&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;key-implementation-details&quot;&gt;Key implementation details:&lt;/h2&gt;
-
-&lt;p&gt;&lt;strong&gt;Preprocessing, state featurization:&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;Prior to training, the states are featurized with the RBF kernel.&lt;/p&gt;
-
-&lt;p&gt;(states are also featurized during every training batch.)&lt;/p&gt;
-
-&lt;p&gt;Refer to scikit-learn.org documentation: &lt;a href=&quot;https://scikit-learn.org/stable/modules/kernel_approximation.html#rbf-kernel-approx&quot;&gt;5.7.2. Radial Basis Function Kernel&lt;/a&gt; for more information on RBF kernel.&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;if state_ftr == True:
-&quot;&quot;&quot;
-The following code for state featurization is adapted &amp;amp; modified from dennybritz's repository located at:
-https://github.com/dennybritz/reinforcement-learning/blob/master/PolicyGradient/Continuous%20MountainCar%20Actor%20Critic%20Solution.ipynb
-&quot;&quot;&quot;
-    # Feature Preprocessing: Normalize to zero mean and unit variance
-    # We use a few samples from the observation space to do this
-    states = np.array([env.observation_space.sample() for x in range(sample_size)]) # pre-trained, states preprocessing
-    scaler = sklearn.preprocessing.StandardScaler()
-    scaler.fit(states) # Compute the mean and std to be used for later scaling.
-
-    # convert states to a featurizes representation.
-    # We use RBF kernels with different variances to cover different parts of the space
-    featurizer = sklearn.pipeline.FeatureUnion([ # Concatenates results of multiple transformer objects.
-            (&quot;rbf1&quot;, RBFSampler(gamma=5.0, n_components=n_comp)),
-            (&quot;rbf2&quot;, RBFSampler(gamma=2.0, n_components=n_comp)),
-            (&quot;rbf3&quot;, RBFSampler(gamma=1.0, n_components=n_comp)),
-            (&quot;rbf4&quot;, RBFSampler(gamma=0.5, n_components=n_comp))
-            ])
-    featurizer.fit(
-        scaler.transform(states)) # Perform standardization by centering and scaling
-
-# state featurization of state(s) only,
-# not used on s_ for RDN's target &amp;amp; predictor networks
-def featurize_state(state):
-    scaled = scaler.transform([state]) # Perform standardization by centering and scaling
-    featurized = featurizer.transform(scaled) # Transform X separately by each transformer, concatenate results.
-    return featurized[0]
-
-def featurize_batch_state(batch_states):
-    fs_list = []
-    for s in batch_states:
-        fs = featurize_state(s)
-        fs_list.append(fs)
-    return fs_list
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;&lt;strong&gt;Preprocessing, next state normalization for RDN:&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;Variance is computed for the next states &lt;code class=&quot;highlighter-rouge&quot;&gt;buffer_s_&lt;/code&gt; using
-the &lt;code class=&quot;highlighter-rouge&quot;&gt;RunningStats&lt;/code&gt; class. During every training batch, the next states are
-normalize and clipped.&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;def state_next_normalize(sample_size, running_stats_s_):
-
-  buffer_s_ = []
-  s = env.reset()
-  for i in range(sample_size):
-    a = env.action_space.sample()
-    s_, r, done, _ = env.step(a)
-    buffer_s_.append(s_)
-
-  running_stats_s_.update(np.array(buffer_s_))
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;if state_next_normal == True:
-  state_next_normalize(sample_size, running_stats_s_)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;tensorboard-graphs&quot;&gt;Tensorboard graphs:&lt;/h2&gt;
-
-&lt;p&gt;&lt;strong&gt;Big picture:&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;There are two main modules, the PPO and the RDN.&lt;/p&gt;
-
-&lt;p&gt;Current state, &lt;code class=&quot;highlighter-rouge&quot;&gt;state&lt;/code&gt; is passed into PPO.&lt;/p&gt;
-
-&lt;p&gt;Next state, &lt;code class=&quot;highlighter-rouge&quot;&gt;state_&lt;/code&gt; is passed into RDN.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/images/RDN_PPO_tf_graph_img/main.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;&lt;strong&gt;PPO module:&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;PPO module contains the actor network &amp;amp; the critic network.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/images/RDN_PPO_tf_graph_img/PPO.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;&lt;strong&gt;PPO’s actor:&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;At every iteration, an action is sampled from policy network &lt;code class=&quot;highlighter-rouge&quot;&gt;pi&lt;/code&gt;.
-&lt;img src=&quot;/assets/images/RDN_PPO_tf_graph_img/PPO_a.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;&lt;strong&gt;PPO’s critic:&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;The critic contains two value function networks. One for extrinsic rewards &amp;amp; one
- for intrinsic rewards. Two sets of TD lambda returns &amp;amp; advantages are also
- computed.&lt;/p&gt;
-
-&lt;p&gt;For extrinsic rewards: &lt;code class=&quot;highlighter-rouge&quot;&gt;tdlamret adv&lt;/code&gt;&lt;/p&gt;
-
-&lt;p&gt;For intrinsic rewards: &lt;code class=&quot;highlighter-rouge&quot;&gt;tdlamret_i adv_i&lt;/code&gt;&lt;/p&gt;
-
-&lt;p&gt;The TD lambda returns are used as the PPO’s critics targets in their respective
-networks while the advantages are summed &amp;amp; used as the advantage in the actor’s
-loss computation.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/images/RDN_PPO_tf_graph_img/PPO_c.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;&lt;strong&gt;RDN module:&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;RDN module contains the target network &amp;amp; the predictor network.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/images/RDN_PPO_tf_graph_img/RDN.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;&lt;strong&gt;RDN target network:&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;The target network is a fixed network, meaning that it’s never trained.
-It’s weights are randomized once during initialization. The target network is
-used to encode next states &lt;code class=&quot;highlighter-rouge&quot;&gt;state_&lt;/code&gt;. It’s output are encoded next states.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/images/RDN_PPO_tf_graph_img/RDN_t.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;&lt;strong&gt;RDN predictor network:&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;The &lt;code class=&quot;highlighter-rouge&quot;&gt;predictor_loss&lt;/code&gt; is the intrinsic reward. It is the difference between
-the predictor network’s output with the target network’s output. The predictor
-network is trying to guess the target network’s encoded output.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/images/RDN_PPO_tf_graph_img/RDN_p.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;key-to-note&quot;&gt;Key to note:&lt;/h2&gt;
-
-&lt;p&gt;All networks used in this program are linear.&lt;/p&gt;
-
-&lt;p&gt;The actor module is basically similar to this DPPO &lt;a href=&quot;https://github.com/ChuaCheowHuan/reinforcement_learning/blob/master/DPPO/DPPO_cont_GAE_dist_GPU.ipynb&quot;&gt;code&lt;/a&gt; documented in this &lt;a href=&quot;https://chuacheowhuan.github.io/DPPO_dist_tf/&quot;&gt;post&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;The difference is in the critic module. This implementation has two value
-functions in the critic module rather than one.&lt;/p&gt;
-
-&lt;p&gt;The &lt;code class=&quot;highlighter-rouge&quot;&gt;predictor_loss&lt;/code&gt; is the intrinsic reward.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/images/RDN_PPO_tf_graph_img/key.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;problems-encountered&quot;&gt;Problems encountered:&lt;/h2&gt;
-
-&lt;p&gt;The actor’s network occasionally returns ‘'’nan’’’ for action. This happens randomly, most likely caused by exploding gradients.
-Not initializing or randomly initializing actor’s weights results in nan when outputting action.&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;&lt;a name=&quot;charts&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-
-&lt;h2 id=&quot;program-output&quot;&gt;Program output:&lt;/h2&gt;
-
-&lt;p&gt;hit_counter 291 0.97&lt;/p&gt;
-
-&lt;p&gt;Number of steps per episode:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/images/RDN_PPO_tf_graph_img/output/steps.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Reward per episode:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/images/RDN_PPO_tf_graph_img/output/reward.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Moving average reward per episode:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/images/RDN_PPO_tf_graph_img/output/mv_avg.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;— 385.09387278556824 seconds —&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;references&quot;&gt;References:&lt;/h2&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://arxiv.org/pdf/1810.12894.pdf&quot;&gt;Exploration by Random Network Distillation&lt;/a&gt;
-(Yuri Burda, Harrison Edwards, Amos Storkey, Oleg Klimov, 2018)&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">Random Distillation Network (RDN) with Proximal Policy Optimization (PPO) implentation in Tensorflow. This is a continuous version which solves the mountain car continuous problem (MountainCarContinuous-v0). The RDN helps learning with curiosity driven exploration.</summary></entry><entry><title type="html">DPPO distributed tensorflow</title><link href="https://chuacheowhuan.github.io/DPPO_dist_tf/" rel="alternate" type="text/html" title="DPPO distributed tensorflow" /><published>2019-06-25T00:00:00+08:00</published><updated>2019-06-25T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/DPPO_dist_tf</id><content type="html" xml:base="https://chuacheowhuan.github.io/DPPO_dist_tf/">&lt;p&gt;Distributed Proximal Policy Optimization (Distributed PPO or DPPO) continuous
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">Edit .bash_profile for Mac.</summary></entry><entry><title type="html">DPPO distributed tensorflow</title><link href="https://chuacheowhuan.github.io/DPPO_dist_tf/" rel="alternate" type="text/html" title="DPPO distributed tensorflow" /><published>2019-06-25T00:00:00+08:00</published><updated>2019-06-25T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/DPPO_dist_tf</id><content type="html" xml:base="https://chuacheowhuan.github.io/DPPO_dist_tf/">&lt;p&gt;Distributed Proximal Policy Optimization (Distributed PPO or DPPO) continuous
 version implementation with distributed Tensorflow and Python’s multiprocessing
 package. This implementation uses normalized running rewards with GAE. The code
 is tested with Gym’s continuous action space environment, Pendulum-v0 on Colab.&lt;/p&gt;
@@ -562,7 +341,255 @@ If it’s full, dequeue the items in a list. the list will be used for display.&
 
 &lt;hr /&gt;
 
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">A3C (Asynchronous Advantage Actor Critic) implementation with distributed Tensorflow &amp;amp; Python multiprocessing package. This is a discrete version with N-step targets (use maximum terms possible). The code is tested with Gym’s discrete action space environment, CartPole-v0 on Colab.</summary></entry><entry><title type="html">A3C multi-threaded continuous version with N step targets</title><link href="https://chuacheowhuan.github.io/A3C_cont_thread_nStep/" rel="alternate" type="text/html" title="A3C multi-threaded continuous version with N step targets" /><published>2019-06-14T00:00:00+08:00</published><updated>2019-06-14T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/A3C_cont_thread_nStep</id><content type="html" xml:base="https://chuacheowhuan.github.io/A3C_cont_thread_nStep/">&lt;p&gt;An A3C (Asynchronous Advantage Actor Critic) implementation with
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">A3C (Asynchronous Advantage Actor Critic) implementation with distributed Tensorflow &amp;amp; Python multiprocessing package. This is a discrete version with N-step targets (use maximum terms possible). The code is tested with Gym’s discrete action space environment, CartPole-v0 on Colab.</summary></entry><entry><title type="html">RDN (Random Distillation Network) with Proximal Policy Optimization (PPO) Tensorflow</title><link href="https://chuacheowhuan.github.io/RDN/" rel="alternate" type="text/html" title="RDN (Random Distillation Network) with Proximal Policy Optimization (PPO) Tensorflow" /><published>2019-06-25T00:00:00+08:00</published><updated>2019-06-25T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/RDN</id><content type="html" xml:base="https://chuacheowhuan.github.io/RDN/">&lt;p&gt;Random Distillation Network (RDN) with Proximal Policy Optimization (PPO)
+implentation in Tensorflow. This is a continuous version which solves the
+mountain car continuous problem (MountainCarContinuous-v0).
+The RDN helps learning with curiosity driven exploration.&lt;/p&gt;
+
+&lt;p&gt;The agent starts to converge correctly at around 30 episodes &amp;amp; reached the flag
+291 times out of 300 episodes (97% hit rate). It takes 385.09387278556824
+seconds to complete 300 episodes on Google’s Colab.&lt;/p&gt;
+
+&lt;p&gt;Edit: A new version which corrects a numerical error(causes nan action) takes
+780.2065596580505 seconds for 300 episodes. Both versions have similar results.
+The URL for the new version is updated.&lt;/p&gt;
+
+&lt;p&gt;Checkout the &lt;a href=&quot;https://chuacheowhuan.github.io/RDN/#charts&quot;&gt;resulting
+charts&lt;/a&gt; from the program output.&lt;/p&gt;
+
+&lt;p&gt;Full code:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;https://github.com/ChuaCheowHuan/reinforcement_learning/blob/master/RDN_PPO/RDN_PPO_cont_ftr_nsn_mtcar_php.py&quot;&gt;Python file&lt;/a&gt;,&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;https://github.com/ChuaCheowHuan/reinforcement_learning/blob/master/RDN_PPO/RDN_PPO_cont_ftr_nsn_mtCar_php.ipynb&quot;&gt;Jupyter notebook&lt;/a&gt;
+(The Jupyter notebook, which also contain the resulting charts at the end, can be run directly on Google’s Colab.)&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;notations--equations&quot;&gt;Notations &amp;amp; equations&lt;/h2&gt;
+
+&lt;p&gt;fixed feature from target network =
+&lt;script type=&quot;math/tex&quot;&gt;{ f (s_{t+1}) }&lt;/script&gt;&lt;/p&gt;
+
+&lt;p&gt;predicted feature from predictor network =
+&lt;script type=&quot;math/tex&quot;&gt;{ f ^\prime  (s_{t+1}) }&lt;/script&gt;&lt;/p&gt;
+
+&lt;p&gt;intrinsic reward =
+&lt;script type=&quot;math/tex&quot;&gt;r_{i}&lt;/script&gt; =
+||
+&lt;script type=&quot;math/tex&quot;&gt;{ f ^\prime  (s_{t+1}) }&lt;/script&gt; -
+&lt;script type=&quot;math/tex&quot;&gt;{ f (s_{t+1}) }&lt;/script&gt;
+||
+&lt;script type=&quot;math/tex&quot;&gt;{}{^2}&lt;/script&gt;&lt;/p&gt;
+
+&lt;p&gt;For notations &amp;amp; equations regarding PPO, refer to this
+&lt;a href=&quot;https://chuacheowhuan.github.io/DPPO_dist_tf/&quot;&gt;post&lt;/a&gt;.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;key-implementation-details&quot;&gt;Key implementation details:&lt;/h2&gt;
+
+&lt;p&gt;&lt;strong&gt;Preprocessing, state featurization:&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Prior to training, the states are featurized with the RBF kernel.&lt;/p&gt;
+
+&lt;p&gt;(states are also featurized during every training batch.)&lt;/p&gt;
+
+&lt;p&gt;Refer to scikit-learn.org documentation: &lt;a href=&quot;https://scikit-learn.org/stable/modules/kernel_approximation.html#rbf-kernel-approx&quot;&gt;5.7.2. Radial Basis Function Kernel&lt;/a&gt; for more information on RBF kernel.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;if state_ftr == True:
+&quot;&quot;&quot;
+The following code for state featurization is adapted &amp;amp; modified from dennybritz's repository located at:
+https://github.com/dennybritz/reinforcement-learning/blob/master/PolicyGradient/Continuous%20MountainCar%20Actor%20Critic%20Solution.ipynb
+&quot;&quot;&quot;
+    # Feature Preprocessing: Normalize to zero mean and unit variance
+    # We use a few samples from the observation space to do this
+    states = np.array([env.observation_space.sample() for x in range(sample_size)]) # pre-trained, states preprocessing
+    scaler = sklearn.preprocessing.StandardScaler()
+    scaler.fit(states) # Compute the mean and std to be used for later scaling.
+
+    # convert states to a featurizes representation.
+    # We use RBF kernels with different variances to cover different parts of the space
+    featurizer = sklearn.pipeline.FeatureUnion([ # Concatenates results of multiple transformer objects.
+            (&quot;rbf1&quot;, RBFSampler(gamma=5.0, n_components=n_comp)),
+            (&quot;rbf2&quot;, RBFSampler(gamma=2.0, n_components=n_comp)),
+            (&quot;rbf3&quot;, RBFSampler(gamma=1.0, n_components=n_comp)),
+            (&quot;rbf4&quot;, RBFSampler(gamma=0.5, n_components=n_comp))
+            ])
+    featurizer.fit(
+        scaler.transform(states)) # Perform standardization by centering and scaling
+
+# state featurization of state(s) only,
+# not used on s_ for RDN's target &amp;amp; predictor networks
+def featurize_state(state):
+    scaled = scaler.transform([state]) # Perform standardization by centering and scaling
+    featurized = featurizer.transform(scaled) # Transform X separately by each transformer, concatenate results.
+    return featurized[0]
+
+def featurize_batch_state(batch_states):
+    fs_list = []
+    for s in batch_states:
+        fs = featurize_state(s)
+        fs_list.append(fs)
+    return fs_list
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;Preprocessing, next state normalization for RDN:&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Variance is computed for the next states &lt;code class=&quot;highlighter-rouge&quot;&gt;buffer_s_&lt;/code&gt; using
+the &lt;code class=&quot;highlighter-rouge&quot;&gt;RunningStats&lt;/code&gt; class. During every training batch, the next states are
+normalize and clipped.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;def state_next_normalize(sample_size, running_stats_s_):
+
+  buffer_s_ = []
+  s = env.reset()
+  for i in range(sample_size):
+    a = env.action_space.sample()
+    s_, r, done, _ = env.step(a)
+    buffer_s_.append(s_)
+
+  running_stats_s_.update(np.array(buffer_s_))
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;if state_next_normal == True:
+  state_next_normalize(sample_size, running_stats_s_)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;tensorboard-graphs&quot;&gt;Tensorboard graphs:&lt;/h2&gt;
+
+&lt;p&gt;&lt;strong&gt;Big picture:&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;There are two main modules, the PPO and the RDN.&lt;/p&gt;
+
+&lt;p&gt;Current state, &lt;code class=&quot;highlighter-rouge&quot;&gt;state&lt;/code&gt; is passed into PPO.&lt;/p&gt;
+
+&lt;p&gt;Next state, &lt;code class=&quot;highlighter-rouge&quot;&gt;state_&lt;/code&gt; is passed into RDN.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/images/RDN_PPO_tf_graph_img/main.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;strong&gt;PPO module:&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;PPO module contains the actor network &amp;amp; the critic network.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/images/RDN_PPO_tf_graph_img/PPO.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;strong&gt;PPO’s actor:&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;At every iteration, an action is sampled from policy network &lt;code class=&quot;highlighter-rouge&quot;&gt;pi&lt;/code&gt;.
+&lt;img src=&quot;/assets/images/RDN_PPO_tf_graph_img/PPO_a.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;strong&gt;PPO’s critic:&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;The critic contains two value function networks. One for extrinsic rewards &amp;amp; one
+ for intrinsic rewards. Two sets of TD lambda returns &amp;amp; advantages are also
+ computed.&lt;/p&gt;
+
+&lt;p&gt;For extrinsic rewards: &lt;code class=&quot;highlighter-rouge&quot;&gt;tdlamret adv&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;For intrinsic rewards: &lt;code class=&quot;highlighter-rouge&quot;&gt;tdlamret_i adv_i&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;The TD lambda returns are used as the PPO’s critics targets in their respective
+networks while the advantages are summed &amp;amp; used as the advantage in the actor’s
+loss computation.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/images/RDN_PPO_tf_graph_img/PPO_c.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;strong&gt;RDN module:&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;RDN module contains the target network &amp;amp; the predictor network.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/images/RDN_PPO_tf_graph_img/RDN.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;strong&gt;RDN target network:&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;The target network is a fixed network, meaning that it’s never trained.
+It’s weights are randomized once during initialization. The target network is
+used to encode next states &lt;code class=&quot;highlighter-rouge&quot;&gt;state_&lt;/code&gt;. It’s output are encoded next states.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/images/RDN_PPO_tf_graph_img/RDN_t.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;strong&gt;RDN predictor network:&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;The &lt;code class=&quot;highlighter-rouge&quot;&gt;predictor_loss&lt;/code&gt; is the intrinsic reward. It is the difference between
+the predictor network’s output with the target network’s output. The predictor
+network is trying to guess the target network’s encoded output.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/images/RDN_PPO_tf_graph_img/RDN_p.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;key-to-note&quot;&gt;Key to note:&lt;/h2&gt;
+
+&lt;p&gt;All networks used in this program are linear.&lt;/p&gt;
+
+&lt;p&gt;The actor module is basically similar to this DPPO &lt;a href=&quot;https://github.com/ChuaCheowHuan/reinforcement_learning/blob/master/DPPO/DPPO_cont_GAE_dist_GPU.ipynb&quot;&gt;code&lt;/a&gt; documented in this &lt;a href=&quot;https://chuacheowhuan.github.io/DPPO_dist_tf/&quot;&gt;post&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;The difference is in the critic module. This implementation has two value
+functions in the critic module rather than one.&lt;/p&gt;
+
+&lt;p&gt;The &lt;code class=&quot;highlighter-rouge&quot;&gt;predictor_loss&lt;/code&gt; is the intrinsic reward.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/images/RDN_PPO_tf_graph_img/key.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;problems-encountered&quot;&gt;Problems encountered:&lt;/h2&gt;
+
+&lt;p&gt;The actor’s network occasionally returns ‘'’nan’’’ for action. This happens randomly, most likely caused by exploding gradients.
+Not initializing or randomly initializing actor’s weights results in nan when outputting action.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;a name=&quot;charts&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;program-output&quot;&gt;Program output:&lt;/h2&gt;
+
+&lt;p&gt;hit_counter 291 0.97&lt;/p&gt;
+
+&lt;p&gt;Number of steps per episode:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/images/RDN_PPO_tf_graph_img/output/steps.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Reward per episode:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/images/RDN_PPO_tf_graph_img/output/reward.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Moving average reward per episode:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/images/RDN_PPO_tf_graph_img/output/mv_avg.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;— 385.09387278556824 seconds —&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;references&quot;&gt;References:&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://arxiv.org/pdf/1810.12894.pdf&quot;&gt;Exploration by Random Network Distillation&lt;/a&gt;
+(Yuri Burda, Harrison Edwards, Amos Storkey, Oleg Klimov, 2018)&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">Random Distillation Network (RDN) with Proximal Policy Optimization (PPO) implentation in Tensorflow. This is a continuous version which solves the mountain car continuous problem (MountainCarContinuous-v0). The RDN helps learning with curiosity driven exploration.</summary></entry><entry><title type="html">A3C multi-threaded continuous version with N step targets</title><link href="https://chuacheowhuan.github.io/A3C_cont_thread_nStep/" rel="alternate" type="text/html" title="A3C multi-threaded continuous version with N step targets" /><published>2019-06-14T00:00:00+08:00</published><updated>2019-06-14T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/A3C_cont_thread_nStep</id><content type="html" xml:base="https://chuacheowhuan.github.io/A3C_cont_thread_nStep/">&lt;p&gt;An A3C (Asynchronous Advantage Actor Critic) implementation with
 Tensorflow. This is a multi-threaded &lt;strong&gt;continuous&lt;/strong&gt; version. The code is tested with
 Gym’s continuous action space environment, Pendulum-v0 on Colab.&lt;/p&gt;
 
@@ -1293,95 +1320,4 @@ E(&lt;script type=&quot;math/tex&quot;&gt;r_{4}&lt;/script&gt; +
 
 &lt;hr /&gt;
 
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">N-step Q-values estimation.</summary></entry><entry><title type="html">Python’s multiprocessing package</title><link href="https://chuacheowhuan.github.io/py_mpp/" rel="alternate" type="text/html" title="Python's multiprocessing package" /><published>2019-05-30T00:00:00+08:00</published><updated>2019-05-30T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/py_mpp</id><content type="html" xml:base="https://chuacheowhuan.github.io/py_mpp/">&lt;h2 id=&quot;pythons-multiprocessing-package-for-parallel-data-generation&quot;&gt;Python’s multiprocessing package for parallel data generation.&lt;/h2&gt;
-
-&lt;p&gt;This simple example program demonstrates how to use the Python’s multiprocessing package to achieve parallel data generation.&lt;/p&gt;
-
-&lt;p&gt;The main program has a chief that spawns multiple worker processes. Each worker spawns a single work process. The work process generates random integer data [1,3].&lt;/p&gt;
-
-&lt;p&gt;Each worker has it’s own local queue. When data is generated, it is stored in it’s local queue. When the local queue’s size is greater than 5, the data is retrieved &amp;amp; 0.1 is added to the data, this result is stored in the Chief’s global queue. When the Chief’s global queue’s size is greater than 3, the result is retrieved &amp;amp; printed on screen.&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://github.com/ChuaCheowHuan/misc_code_examples/blob/master/py/py_mpp.ipynb&quot;&gt;Full code&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;The Worker class:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;class Worker(object):
-  def __init__(self, worker_id, g_queue):
-    self.g_queue = g_queue
-    self.worker_id = worker_id
-    self.queue = Queue() # local worker queue
-    self.work_process = Process(target=self.work, args=())
-    self.work_process.start()
-    info(worker_id, self.work_process, &quot;Worker&quot;)
-
-  def work(self):
-
-    info(self.worker_id, self.work_process, &quot;work&quot;)
-
-    while True:
-      data = np.random.randint(1,4)
-      self.queue.put(data)
-
-      # process data in queue
-      if self.queue.qsize() &amp;gt; 5:
-        data = self.queue.get()
-        result = data + 0.1
-        self.g_queue.put(result) # send result to global queue
-
-      time.sleep(1) # work every x sec interval
-
-    return self.w_id  
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;The Chief class:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;class Chief(object):
-  def __init__(self, num_workers):
-    self.g_queue = Queue() # global queue    
-    self.num_workers = num_workers
-
-  def dispatch_workers(self):   
-    worker_processes = [Process(target=Worker(w_id, self.g_queue), args=()) for w_id in range(num_workers)]
-    return worker_processes
-
-  def result(self):
-    if self.g_queue.qsize() &amp;gt; 3:
-      result = self.g_queue.get()
-      print(&quot;result&quot;, result)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;The main program:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;if __name__ == '__main__':  
-  print('main parent process id:', os.getppid())
-  print('main process id:', os.getpid())
-
-  num_workers = 2
-  chief = Chief(num_workers)
-  workers_processes = chief.dispatch_workers()
-
-  i = 0
-  while True:    
-    time.sleep(2) # chk g_queue every x sec interval to get result
-    chief.result()
-    print(&quot;i=&quot;, i)
-
-    if i&amp;gt;9:
-      break
-    i+=1    
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;A helper display function:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;def info(worker_id, process, function_name):
-    print(&quot;worker_id=&quot;, worker_id,
-          'module name:', __name__,
-          'function name:', function_name,
-          'parent process:', os.getppid(),
-          'current process id:', os.getpid(),
-          'spawn process id:', process.pid)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">Python’s multiprocessing package for parallel data generation.</summary></entry></feed>
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">N-step Q-values estimation.</summary></entry></feed>
