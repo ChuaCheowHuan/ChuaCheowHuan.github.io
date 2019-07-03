@@ -1,4 +1,4 @@
-# Reinforcement learning
+# My Github pages repository
 
 This repository contains codes for my Github pages on my repositories.
 
