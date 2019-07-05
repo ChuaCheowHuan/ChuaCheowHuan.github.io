@@ -36,7 +36,7 @@ The command ```serve``` runs localhost.
 
 ```
 function lazy_jekyll_serve() {
-    cd /Users/hadron0/gitHubRepo/ChuaCheowHuan.github.io
+    cd /Users/tester/gitHubRepo/ChuaCheowHuan.github.io
     pwd
     bundle exec jekyll serve
 }
@@ -47,7 +47,7 @@ generating sitemap.xml & robot.txt.
 
 ```
 function lazy_jekyll_build() {
-    cd /Users/hadron0/gitHubRepo/ChuaCheowHuan.github.io
+    cd /Users/tester/gitHubRepo/ChuaCheowHuan.github.io
     pwd
     bundle exec jekyll build
 }
