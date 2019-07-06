@@ -14,6 +14,8 @@ output.
 
 Code on my [Github](https://github.com/ChuaCheowHuan/misc_code_examples/blob/master/py/np_array_manipulation.ipynb)
 
+---
+
 Setting up a Numpy array:
 
 ```
