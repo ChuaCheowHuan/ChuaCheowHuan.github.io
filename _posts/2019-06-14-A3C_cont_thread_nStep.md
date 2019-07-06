@@ -9,7 +9,7 @@ An A3C (Asynchronous Advantage Actor Critic) implementation with
 Tensorflow. This is a multi-threaded **continuous** version. The code is tested with
 Gym's continuous action space environment, Pendulum-v0 on Colab.
 
-[Full code](https://github.com/ChuaCheowHuan/reinforcement_learning/blob/master/A3C/A3C_cont_max.ipynb): (use maximum terms possible)
+Code on my [Github](https://github.com/ChuaCheowHuan/reinforcement_learning/blob/master/A3C/A3C_cont_max.ipynb): (use maximum terms possible)
 
 The majority of the code is very similar to the [discrete](https://chuacheowhuan.github.io/A3C_disc_thread_nStep/) version with the
 exceptions highlighted in the implementation details section:

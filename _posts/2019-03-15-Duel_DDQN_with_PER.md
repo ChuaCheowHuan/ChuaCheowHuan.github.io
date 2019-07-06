@@ -8,7 +8,7 @@ A **Dueling Double Deep Q Network with Priority Experience Replay (Duel DDQN wit
 implementation in tensorflow. The code is tested with Gym's discrete action space environment,
 CartPole-v0 on Colab.
 
-[Full code](https://github.com/ChuaCheowHuan/reinforcement_learning/tree/master/DQN_variants/duel_DDQN_PER)
+Code on my [Github](https://github.com/ChuaCheowHuan/reinforcement_learning/tree/master/DQN_variants/duel_DDQN_PER)
 
 ---
 

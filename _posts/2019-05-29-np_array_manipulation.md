@@ -4,13 +4,13 @@ author: Huan
 title: Numpy array manipulation
 ---
 
-## Simple numpy array manipulation examples. 
+## Simple numpy array manipulation examples.
 
 This Jupyter notebook contains simple
 examples on how to manipulate numpy arrays. The code blocks below shows the
 codes & it's corresponding display output.
 
-[Full code](https://github.com/ChuaCheowHuan/misc_code_examples/blob/master/py/np_array_manipulation.ipynb)
+Code on my [Github](https://github.com/ChuaCheowHuan/misc_code_examples/blob/master/py/np_array_manipulation.ipynb)
 
 Setting up a numpy array:
 

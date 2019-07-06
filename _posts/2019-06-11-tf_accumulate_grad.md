@@ -6,7 +6,7 @@ title: Accumulate gradients with Tensorflow
 ---
 This post demonstrates how to accumulate gradients with Tensorflow.
 
-[Full code](https://github.com/ChuaCheowHuan/misc_code_examples/blob/master/tf/tf_accumulate_grad.ipynb)
+Code on my [Github](https://github.com/ChuaCheowHuan/misc_code_examples/blob/master/tf/tf_accumulate_grad.ipynb)
 
 ```
 import tensorflow as tf
