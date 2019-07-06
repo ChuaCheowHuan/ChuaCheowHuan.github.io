@@ -6,6 +6,8 @@ title: Dueling DDQN with PER
 
 This post documents my implementation of the Dueling Double Deep Q Network with Priority Experience Replay (Duel DDQN with PER) algorithm.
 
+---
+
 A **Dueling Double Deep Q Network with Priority Experience Replay
 (Duel DDQN with PER)** implementation in tensorflow. The code is tested with
 Gym's discrete action space environment, CartPole-v0 on Colab.

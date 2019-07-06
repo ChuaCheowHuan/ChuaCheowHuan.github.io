@@ -9,6 +9,8 @@ This post documents my implementation of the A3C
 (Asynchronous Advantage Actor Critic) algorithm.
 (multi-threaded **continuous** version)
 
+---
+
 An A3C (Asynchronous Advantage Actor Critic) implementation with
 Tensorflow. This is a multi-threaded **continuous** version. The code is tested with
 Gym's continuous action space environment, Pendulum-v0 on Colab.

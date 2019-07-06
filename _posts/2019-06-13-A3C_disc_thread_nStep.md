@@ -8,6 +8,8 @@ This post documents my implementation of the A3C
 (Asynchronous Advantage Actor Critic) algorithm (discrete).
 (multi-threaded **discrete** version)
 
+---
+
 A3C (Asynchronous Advantage Actor Critic) implementation with Tensorflow.
 This is a multi-threaded **discrete** version. The code is tested with Gym's
 discrete action space environment, CartPole-v0 on Colab.

@@ -8,6 +8,8 @@ This post documents my implementation of the Distributed Proximal Policy
 Optimization (Distributed PPO or DPPO) algorithm.
 (**Distributed** continuous version)
 
+---
+
 Distributed Proximal Policy Optimization (Distributed PPO or DPPO) continuous
 version implementation with distributed Tensorflow and Python's multiprocessing
 package. This implementation uses normalized running rewards with GAE. The code

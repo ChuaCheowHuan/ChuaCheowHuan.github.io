@@ -3,8 +3,11 @@ layout: posts
 author: Huan
 title: .bash_profile for Mac
 ---
+
 This post demonstrates how to create customized functions to bundle commands in
 a .bash_profile file on Mac.
+
+---
 
 Edit .bash_profile for Mac.
 
