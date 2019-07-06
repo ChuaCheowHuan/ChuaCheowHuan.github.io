@@ -19,19 +19,19 @@
   <head>
     <meta charset="utf-8">
 
-<!-- begin _includes/seo.html --><title>DDQN - Every little gist</title>
-<meta name="description" content="This post documents my implementation of the Double Deep Q Network (DDQN)algorithm.">
+<!-- begin _includes/seo.html --><title>mpi4py - Every little gist</title>
+<meta name="description" content="pending">
 
 
 
 <meta property="og:type" content="article">
 <meta property="og:locale" content="en_US">
 <meta property="og:site_name" content="Every little gist">
-<meta property="og:title" content="DDQN">
-<meta property="og:url" content="https://chuacheowhuan.github.io/DDQN/">
+<meta property="og:title" content="mpi4py">
+<meta property="og:url" content="https://chuacheowhuan.github.io/mpi4py/">
 
 
-  <meta property="og:description" content="This post documents my implementation of the Double Deep Q Network (DDQN)algorithm.">
+  <meta property="og:description" content="pending">
 
 
 
@@ -41,7 +41,7 @@
 
 
 
-  <meta property="article:published_time" content="2019-03-07T00:00:00+08:00">
+  <meta property="article:published_time" content="2019-07-06T00:00:00+08:00">
 
 
 
@@ -52,7 +52,7 @@
   
 
 
-<link rel="canonical" href="https://chuacheowhuan.github.io/DDQN/">
+<link rel="canonical" href="https://chuacheowhuan.github.io/mpi4py/">
 
 
 
@@ -260,113 +260,11 @@
 
   <div class="archive">
     
-      <h1 id="page-title" class="page__title">DDQN</h1>
+      <h1 id="page-title" class="page__title">mpi4py</h1>
     
-    <p>This post documents my implementation of the Double Deep Q Network (DDQN)
-algorithm.</p>
+    <p>pending</p>
 
 <hr />
-
-<p>A <strong>Double Deep Q Network (DDQN)</strong> implementation in tensorflow with random experience replay.
-The code is tested with Gym’s discrete action space environment, CartPole-v0 on Colab.</p>
-
-<p>Code on my <a href="https://github.com/ChuaCheowHuan/reinforcement_learning/tree/master/DQN_variants/DDQN">Github</a></p>
-
-<h2 id="notations">Notations:</h2>
-
-<p>Model network = <script type="math/tex">Q_{\theta}</script></p>
-
-<p>Model parameter = <script type="math/tex">\theta</script></p>
-
-<p>Model network Q value =
-<script type="math/tex">Q_{\theta}</script>
-(s, a)</p>
-
-<p>Target network = <script type="math/tex">Q_{\phi}</script></p>
-
-<p>Target parameter = <script type="math/tex">\phi</script></p>
-
-<p>Target network Q value =
-<script type="math/tex">Q_{\phi}</script>
-(<script type="math/tex">s^{'}</script>,
-<script type="math/tex">a^{'}</script>)</p>
-
-<hr />
-
-<h2 id="equations">Equations:</h2>
-
-<p>TD target =
-r (s, a)
-<script type="math/tex">+</script>
-<script type="math/tex">\gamma</script>
-<script type="math/tex">Q_{\phi}</script>
-(<script type="math/tex">s^{'}</script>,
-<script type="math/tex">argmax_{a^{'}}</script>
-<script type="math/tex">Q_{\theta}</script>
-(s<script type="math/tex">^{'}</script>,
-a<script type="math/tex">^{'}</script>))</p>
-
-<p>TD error =
-(TD target)
-<script type="math/tex">-</script>
-(Model network Q value)
-=
-[r (s, a)
-<script type="math/tex">+</script>
-<script type="math/tex">\gamma</script>
-<script type="math/tex">Q_{\phi}</script>
-(<script type="math/tex">s^{'}</script>,
-<script type="math/tex">argmax_{a^{'}}</script>
-<script type="math/tex">Q_{\theta}</script>
-(s<script type="math/tex">^{'}</script>,
-a<script type="math/tex">^{'}</script>))]
-<script type="math/tex">-</script>
-<script type="math/tex">Q_{\theta}</script>
-(s, a)</p>
-
-<hr />
-
-<h2 id="key-implementation-details">Key implementation details:</h2>
-
-<p>Create a placeholder to feed Q values from model network:</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>self.model_s_next_Q_val = tf.placeholder(tf.float32, [None,self.num_actions], name='model_s_next_Q_val')
-</code></pre></div></div>
-
-<p>Select Q values from model network using <script type="math/tex">s^{'}</script> as features &amp; feed them to the training session:</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># select actions from model network
-model_s_next_Q_val = self.sess.run(self.model_Q_val, feed_dict={self.s: s_next})
-
-# training
-_, loss = self.sess.run([self.optimizer, self.loss],
-                        feed_dict = {self.s: s,
-                                     self.a: a,
-                                     self.r: r,
-                                     self.s_next: s_next,
-                                     self.done: done,
-                                     self.model_s_next_Q_val: model_s_next_Q_val})
-</code></pre></div></div>
-
-<p>Select minibatch actions with largest Q values from model network,
-create indices &amp; select corresponding minibatch actions from target network:</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>def td_target(self, s_next, r, done, model_s_next_Q_val, target_Q_val):
-    # select action with largest Q value from model network
-    model_max_a = tf.argmax(model_s_next_Q_val, axis=1, output_type=tf.dtypes.int32)
-
-    arr = tf.range(tf.shape(model_max_a)[0], dtype=tf.int32) # create row indices
-    indices = tf.stack([arr, model_max_a], axis=1) # create 2D indices        
-    max_target_Q_val = tf.gather_nd(target_Q_val, indices) # select minibatch actions from target network
-    max_target_Q_val = tf.reshape(max_target_Q_val, (self.minibatch_size,1))
-</code></pre></div></div>
-
-<hr />
-
-<h2 id="references">References:</h2>
-
-<p><a href="https://arxiv.org/pdf/1509.06461.pdf">Deep Reinforcement Learning with Double Q-learning
-(Hasselt, Guez &amp; Silver, 2016)</a></p>
 
 <hr />
 
@@ -438,7 +336,7 @@ create indices &amp; select corresponding minibatch actions from target network:
 
 
 
-  11 minute read
+  10 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">This post demonstrate how setup &amp; access Tensorflow graphs.
@@ -467,7 +365,7 @@ create indices &amp; select corresponding minibatch actions from target network:
 
 
 
-  15 minute read
+  13 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">This post demonstrates how to create customized functions to bundle commands in
@@ -497,7 +395,7 @@ a .bash_profile file on Mac.
 
 
 
-  87 minute read
+  81 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">This post documents my implementation of the Random Network Distillation (RND)
@@ -526,7 +424,7 @@ with Proximal Policy Optimization (PPO) algorithm.
 
 
 
-  70 minute read
+  59 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">This post documents my implementation of the Distributed Proximal Policy
@@ -557,7 +455,7 @@ Optimization (Distributed PPO or DPPO) algorithm.
 
 
 
-  25 minute read
+  24 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">This post documents my implementation of the A3C
@@ -588,7 +486,7 @@ Optimization (Distributed PPO or DPPO) algorithm.
 
 
 
-  31 minute read
+  30 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">This post documents my implementation of the A3C
@@ -619,7 +517,7 @@ Optimization (Distributed PPO or DPPO) algorithm.
 
 
 
-  69 minute read
+  62 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">This post documents my implementation of the A3C
@@ -679,7 +577,7 @@ Optimization (Distributed PPO or DPPO) algorithm.
 
 
 
-  75 minute read
+  73 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">This post demonstrates a simple usage example of distributed Tensorflow with
@@ -709,7 +607,7 @@ Python multiprocessing package.
 
 
 
-  77 minute read
+  70 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">This post documents my implementation of the N-step Q-values estimation
@@ -739,7 +637,7 @@ algorithm.
 
 
 
-  31 minute read
+  30 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">This post demonstrates how to use the Python’s multiprocessing package to
@@ -769,7 +667,7 @@ achieve parallel data generation.
 
 
 
-  31 minute read
+  30 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">This post provides a simple usage examples for common Numpy array manipulation.
@@ -798,7 +696,7 @@ achieve parallel data generation.
 
 
 
-  50 minute read
+  44 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">This post documents my implementation of the Dueling Double Deep Q Network with Priority Experience Replay (Duel DDQN with PER) algorithm.
@@ -827,7 +725,7 @@ achieve parallel data generation.
 
 
 
-  23 minute read
+  21 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">This post documents my implementation of the Dueling Double Deep Q Network
@@ -970,8 +868,8 @@ algorithm.
     
   <script>
     var disqus_config = function () {
-      this.page.url = "https://chuacheowhuan.github.io/DDQN/";  // Replace PAGE_URL with your page's canonical URL variable
-      this.page.identifier = "/DDQN"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+      this.page.url = "https://chuacheowhuan.github.io/mpi4py/";  // Replace PAGE_URL with your page's canonical URL variable
+      this.page.identifier = "/mpi4py"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
     };
     (function() { // DON'T EDIT BELOW THIS LINE
       var d = document, s = d.createElement('script');

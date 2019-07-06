@@ -1,4 +1,18 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.5">Jekyll</generator><link href="https://chuacheowhuan.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://chuacheowhuan.github.io/" rel="alternate" type="text/html" /><updated>2019-07-06T03:23:35+08:00</updated><id>https://chuacheowhuan.github.io/feed.xml</id><title type="html">Every little gist</title><subtitle></subtitle><author><name>Chua Cheow Huan</name></author><entry><title type="html">Tensorflow graphs in Tensorboard</title><link href="https://chuacheowhuan.github.io/tf_graph/" rel="alternate" type="text/html" title="Tensorflow graphs in Tensorboard" /><published>2019-07-04T00:00:00+08:00</published><updated>2019-07-04T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/tf_graph</id><content type="html" xml:base="https://chuacheowhuan.github.io/tf_graph/">&lt;p&gt;In order to access Tensorflow graphs, you need to use &lt;a href=&quot;https://www.tensorflow.org/tensorboard/r2/get_started&quot;&gt;Tensorboard&lt;/a&gt; which comes will Tensorflow installed.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.5">Jekyll</generator><link href="https://chuacheowhuan.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://chuacheowhuan.github.io/" rel="alternate" type="text/html" /><updated>2019-07-06T19:28:43+08:00</updated><id>https://chuacheowhuan.github.io/feed.xml</id><title type="html">Every little gist</title><subtitle></subtitle><author><name>Chua Cheow Huan</name></author><entry><title type="html">mpi4py</title><link href="https://chuacheowhuan.github.io/mpi4py/" rel="alternate" type="text/html" title="mpi4py" /><published>2019-07-06T00:00:00+08:00</published><updated>2019-07-06T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/mpi4py</id><content type="html" xml:base="https://chuacheowhuan.github.io/mpi4py/">&lt;p&gt;pending&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">pending</summary></entry><entry><title type="html">Tensorflow graphs in Tensorboard</title><link href="https://chuacheowhuan.github.io/tf_graph/" rel="alternate" type="text/html" title="Tensorflow graphs in Tensorboard" /><published>2019-07-04T00:00:00+08:00</published><updated>2019-07-04T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/tf_graph</id><content type="html" xml:base="https://chuacheowhuan.github.io/tf_graph/">&lt;p&gt;This post demonstrate how setup &amp;amp; access Tensorflow graphs.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;In order to access Tensorflow graphs, you need to use &lt;a href=&quot;https://www.tensorflow.org/tensorboard/r2/get_started&quot;&gt;Tensorboard&lt;/a&gt; which comes will Tensorflow
+installed.&lt;/p&gt;
+
+&lt;p&gt;The following snippet shows how to setup a &lt;code class=&quot;highlighter-rouge&quot;&gt;FileWriter&lt;/code&gt; with a Tensorflow
+graph.&lt;/p&gt;
 
 &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;tf.reset_default_graph()
 sess = tf.Session()
@@ -8,7 +22,8 @@ sess = tf.Session()
 
 sess.run(tf.global_variables_initializer())
 
-# Declare tf.summary.FileWriter where log is your output directory for Tensorboard &amp;amp; add the graph to the writer.
+# Declare tf.summary.FileWriter where log is your output directory for
+# Tensorboard &amp;amp; add the graph to the writer.
 writer = tf.summary.FileWriter('log', sess.graph)
 
 # Run your training loop
@@ -17,7 +32,7 @@ writer = tf.summary.FileWriter('log', sess.graph)
 writer.close()
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;p&gt;Run this command in terminal to open tensorboard:&lt;/p&gt;
+&lt;p&gt;Run this command in terminal to start tensorboard:&lt;/p&gt;
 &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;tensorboard --logdir log
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 &lt;p&gt;Navigate to &lt;code class=&quot;highlighter-rouge&quot;&gt;http://127.0.0.1:6006&lt;/code&gt; in your browser to access Tensorflow.
@@ -25,7 +40,12 @@ Your graph is in the graph tab.&lt;/p&gt;
 
 &lt;hr /&gt;
 
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">In order to access Tensorflow graphs, you need to use Tensorboard which comes will Tensorflow installed.</summary></entry><entry><title type="html">.bash_profile for Mac</title><link href="https://chuacheowhuan.github.io/bash_script/" rel="alternate" type="text/html" title=".bash_profile for Mac" /><published>2019-07-03T00:00:00+08:00</published><updated>2019-07-03T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/bash_script</id><content type="html" xml:base="https://chuacheowhuan.github.io/bash_script/">&lt;p&gt;Edit .bash_profile for Mac.&lt;/p&gt;
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">This post demonstrate how setup &amp;amp; access Tensorflow graphs.</summary></entry><entry><title type="html">.bash_profile for Mac</title><link href="https://chuacheowhuan.github.io/bash_script/" rel="alternate" type="text/html" title=".bash_profile for Mac" /><published>2019-07-03T00:00:00+08:00</published><updated>2019-07-03T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/bash_script</id><content type="html" xml:base="https://chuacheowhuan.github.io/bash_script/">&lt;p&gt;This post demonstrates how to create customized functions to bundle commands in
+a .bash_profile file on Mac.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;Edit .bash_profile for Mac.&lt;/p&gt;
 
 &lt;ol&gt;
   &lt;li&gt;Start Terminal&lt;/li&gt;
@@ -75,273 +95,13 @@ generating sitemap.xml &amp;amp; robot.txt.&lt;/p&gt;
 
 &lt;hr /&gt;
 
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">Edit .bash_profile for Mac.</summary></entry><entry><title type="html">DPPO distributed tensorflow</title><link href="https://chuacheowhuan.github.io/DPPO_dist_tf/" rel="alternate" type="text/html" title="DPPO distributed tensorflow" /><published>2019-06-25T00:00:00+08:00</published><updated>2019-06-25T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/DPPO_dist_tf</id><content type="html" xml:base="https://chuacheowhuan.github.io/DPPO_dist_tf/">&lt;p&gt;Distributed Proximal Policy Optimization (Distributed PPO or DPPO) continuous
-version implementation with distributed Tensorflow and Python’s multiprocessing
-package. This implementation uses normalized running rewards with GAE. The code
-is tested with Gym’s continuous action space environment, Pendulum-v0 on Colab.&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://github.com/ChuaCheowHuan/reinforcement_learning/blob/master/DPPO/DPPO_cont_GAE_dist_GPU.ipynb&quot;&gt;Full code&lt;/a&gt;:&lt;/p&gt;
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">This post demonstrates how to create customized functions to bundle commands in a .bash_profile file on Mac.</summary></entry><entry><title type="html">RND (Random Network Distillation) with Proximal Policy Optimization (PPO) Tensorflow</title><link href="https://chuacheowhuan.github.io/RND/" rel="alternate" type="text/html" title="RND (Random Network Distillation) with Proximal Policy Optimization (PPO) Tensorflow" /><published>2019-06-25T00:00:00+08:00</published><updated>2019-06-25T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/RND</id><content type="html" xml:base="https://chuacheowhuan.github.io/RND/">&lt;p&gt;This post documents my implementation of the Random Network Distillation (RND)
+with Proximal Policy Optimization (PPO) algorithm.
+(&lt;strong&gt;Distributed&lt;/strong&gt; continuous version)&lt;/p&gt;
 
 &lt;hr /&gt;
 
-&lt;h2 id=&quot;notations&quot;&gt;Notations:&lt;/h2&gt;
-
-&lt;p&gt;current policy =
-&lt;script type=&quot;math/tex&quot;&gt;{\pi}_{\theta}
-(a_{t}
-  {\mid} s_{t})&lt;/script&gt;&lt;/p&gt;
-
-&lt;p&gt;old policy =
-&lt;script type=&quot;math/tex&quot;&gt;{\pi}_{\theta_{old}}
-(a_{t}
-  {\mid} s_{t})&lt;/script&gt;&lt;/p&gt;
-
-&lt;p&gt;epsilon =
-&lt;script type=&quot;math/tex&quot;&gt;{\epsilon}&lt;/script&gt;&lt;/p&gt;
-
-&lt;p&gt;Advantage function = A&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;equations&quot;&gt;Equations:&lt;/h2&gt;
-
-&lt;p&gt;Truncated version of generalized advantage estimation (GAE) =&lt;/p&gt;
-
-&lt;p&gt;&lt;script type=&quot;math/tex&quot;&gt;A_{t}&lt;/script&gt;
-=
-&lt;script type=&quot;math/tex&quot;&gt;{\delta}_{t}
-+
-({\gamma}
-{\lambda})
-{\delta}_{t}
-+
-...
-+
-({\gamma}
-{\lambda})
-^{T-t+1}
-{\delta}_{T-1}&lt;/script&gt;&lt;/p&gt;
-
-&lt;p&gt;where
-&lt;script type=&quot;math/tex&quot;&gt;{\delta}_{t}&lt;/script&gt; =
-&lt;script type=&quot;math/tex&quot;&gt;{r}_{t} +
-{\gamma}
-V(s_{t+1}) -
-V(s_{t})&lt;/script&gt;&lt;/p&gt;
-
-&lt;p&gt;when &lt;script type=&quot;math/tex&quot;&gt;{\lambda}&lt;/script&gt; = 1,&lt;/p&gt;
-
-&lt;p&gt;&lt;script type=&quot;math/tex&quot;&gt;A_{t}&lt;/script&gt; =
-&lt;script type=&quot;math/tex&quot;&gt;-V(s_{t}) +
-r_{t} +
-{\gamma}r_{t+1} +
-... +
-{\gamma}^{T-t+1}
-r_{T-1} +
-{\gamma}^{T-t}
-V(s_{T})&lt;/script&gt;&lt;/p&gt;
-
-&lt;p&gt;Probability ratio =&lt;/p&gt;
-
-&lt;p&gt;&lt;script type=&quot;math/tex&quot;&gt;R_{t}({\theta})&lt;/script&gt; = &lt;script type=&quot;math/tex&quot;&gt;{\dfrac{ {\pi}_{\theta} (a_{t} {\mid} s_{t}) } { {\pi}_{\theta_{old}} (a_{t} {\mid} s_{t}) } }&lt;/script&gt;&lt;/p&gt;
-
-&lt;p&gt;Clipped Surrogate Objective function =&lt;/p&gt;
-
-&lt;p&gt;&lt;script type=&quot;math/tex&quot;&gt;L^{CLIP}
-({\theta})&lt;/script&gt;
-=
-&lt;script type=&quot;math/tex&quot;&gt;\mathop{\mathbb{E_{t}}}
-\lbrack
-min(
-  R_{t}({\theta})
-  A_{t}
-  ,
-  clip
-  (
-    R_{t}({\theta}),
-    1+{\epsilon},
-    1-{\epsilon}
-    )
-    A_{t}
-  )
-\rbrack&lt;/script&gt;&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;key-implementation-details&quot;&gt;Key implementation details:&lt;/h2&gt;
-
-&lt;p&gt;The following class is adapted from OpenAI’s baseline:
-This class is used for the normalization of rewards in this program before GAE
-computation.&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;class RunningStats(object):
-    def __init__(self, epsilon=1e-4, shape=()):
-        self.mean = np.zeros(shape, 'float64')
-        self.var = np.ones(shape, 'float64')
-        self.std = np.ones(shape, 'float64')
-        self.count = epsilon
-
-    def update(self, x):
-        batch_mean = np.mean(x, axis=0)
-        batch_var = np.var(x, axis=0)
-        batch_count = x.shape[0]
-        self.update_from_moments(batch_mean, batch_var, batch_count)
-
-    def update_from_moments(self, batch_mean, batch_var, batch_count):
-        delta = batch_mean - self.mean
-        new_mean = self.mean + delta * batch_count / (self.count + batch_count)
-        m_a = self.var * self.count
-        m_b = batch_var * batch_count
-        M2 = m_a + m_b + np.square(delta) * self.count * batch_count / (self.count + batch_count)
-        new_var = M2 / (self.count + batch_count)
-
-        self.mean = new_mean
-        self.var = new_var
-        self.std = np.maximum(np.sqrt(self.var), 1e-6)
-        self.count = batch_count + self.count
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;This function in the &lt;code class=&quot;highlighter-rouge&quot;&gt;PPO&lt;/code&gt; class is adapted from OpenAI’s Baseline,
-returns TD lamda return &amp;amp; advantage&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    def add_vtarg_and_adv(self, R, done, V, v_s_, gamma, lam):
-        # Compute target value using TD(lambda) estimator, and advantage with GAE(lambda)
-        # last element is only used for last vtarg, but we already zeroed it if last new = 1
-        done = np.append(done, 0)
-        V_plus = np.append(V, v_s_)
-        T = len(R)
-        adv = gaelam = np.empty(T, 'float32')
-        lastgaelam = 0
-        for t in reversed(range(T)):
-            nonterminal = 1-done[t+1]        
-            delta = R[t] + gamma * V_plus[t+1] * nonterminal - V_plus[t]
-            gaelam[t] = lastgaelam = delta + gamma * lam * nonterminal * lastgaelam   
-        #print(&quot;adv=&quot;, adv.shape)
-        #print(&quot;V=&quot;, V.shape)
-        #print(&quot;V_plus=&quot;, V_plus.shape)
-        tdlamret = np.vstack(adv) + V
-        #print(&quot;tdlamret=&quot;, tdlamret.shape)
-        return tdlamret, adv # tdlamret is critic_target or Qs      
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;The following code segment from the &lt;code class=&quot;highlighter-rouge&quot;&gt;PPO&lt;/code&gt; class defines the Clipped Surrogate
-Objective function:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;with tf.variable_scope('surrogate'):
-                    ratio = self.pi.prob(self.act) / self.oldpi.prob(self.act)
-                    surr = ratio * self.adv
-                    self.aloss = -tf.reduce_mean(tf.minimum(surr, tf.clip_by_value(ratio, 1.-epsilon, 1.+epsilon)*self.adv))
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;The following code segment from the &lt;code class=&quot;highlighter-rouge&quot;&gt;work()&lt;/code&gt; function in the worker class
-normalized the running rewards for each worker:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;self.running_stats_r.update(np.array(buffer_r))
-                    buffer_r = np.clip( (np.array(buffer_r) - self.running_stats_r.mean) / self.running_stats_r.std, -stats_CLIP, stats_CLIP )
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;The following code segment from the &lt;code class=&quot;highlighter-rouge&quot;&gt;work()&lt;/code&gt; function in the worker class computes
- the TD lamda return &amp;amp; advantage:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;tdlamret, adv = self.ppo.add_vtarg_and_adv(np.vstack(buffer_r), np.vstack(buffer_done), np.vstack(buffer_V), v_s_, GAMMA, lamda)
-
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;The following update function in the &lt;code class=&quot;highlighter-rouge&quot;&gt;PPO&lt;/code&gt; class does the training &amp;amp; the
-updating of global &amp;amp; local parameters (Note the at the beginning of training,
-  probability ratio = 1):&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;def update(self, s, a, r, adv):    
-    self.sess.run(self.update_oldpi_op)
-
-    for _ in range(A_EPOCH): # train actor
-        self.sess.run(self.atrain_op, {self.state: s, self.act: a, self.adv: adv})
-        # update actor
-        self.sess.run([self.push_actor_pi_params,
-                       self.pull_actor_pi_params],
-                      {self.state: s, self.act: a, self.adv: adv})
-    for _ in range(C_EPOCH): # train critic
-        # update critic
-        self.sess.run(self.ctrain_op, {self.state: s, self.discounted_r: r})
-        self.sess.run([self.push_critic_params,
-                       self.pull_critic_params],
-                      {self.state: s, self.discounted_r: r})   
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;The distributed Tensorflow &amp;amp; multiprocessing code sections are very similar to
-the ones describe in the following posts:&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://chuacheowhuan.github.io/A3C_dist_tf/&quot;&gt;A3C distributed tensorflow&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://chuacheowhuan.github.io/dist_tf/&quot;&gt;Distributed Tensorflow&lt;/a&gt;&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;references&quot;&gt;References:&lt;/h2&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://arxiv.org/pdf/1707.06347.pdf&quot;&gt;Proximal Policy Optimization Algorithms&lt;/a&gt;
-(Schulman, Wolski, Dhariwal, Radford, Klimov, 2017)&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://arxiv.org/pdf/1707.02286.pdf&quot;&gt;Emergence of Locomotion Behaviours in Rich Environments&lt;/a&gt;
-(Nicolas Heess, Dhruva TB, Srinivasan Sriram, Jay Lemmon, Josh Merel, Greg Wayne, et al., 2017)&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">Distributed Proximal Policy Optimization (Distributed PPO or DPPO) continuous version implementation with distributed Tensorflow and Python’s multiprocessing package. This implementation uses normalized running rewards with GAE. The code is tested with Gym’s continuous action space environment, Pendulum-v0 on Colab.</summary></entry><entry><title type="html">A3C distributed tensorflow</title><link href="https://chuacheowhuan.github.io/A3C_dist_tf/" rel="alternate" type="text/html" title="A3C distributed tensorflow" /><published>2019-06-25T00:00:00+08:00</published><updated>2019-06-25T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/A3C_dist_tf</id><content type="html" xml:base="https://chuacheowhuan.github.io/A3C_dist_tf/">&lt;p&gt;A3C (Asynchronous Advantage Actor Critic) implementation with &lt;strong&gt;distributed
-Tensorflow&lt;/strong&gt; &amp;amp; &lt;strong&gt;Python multiprocessing package&lt;/strong&gt;. This is a &lt;strong&gt;discrete&lt;/strong&gt;
-version with N-step targets (use maximum terms possible). The code is tested
-with Gym’s discrete action space environment, CartPole-v0 on Colab.&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://github.com/ChuaCheowHuan/reinforcement_learning/blob/master/A3C/A3C_disc_max_dist.ipynb&quot;&gt;Full code&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;The majority of the code is very similar to the &lt;a href=&quot;https://chuacheowhuan.github.io/A3C_disc_thread_nStep/&quot;&gt;discrete&lt;/a&gt; version with the
-exceptions highlighted in the implementation details section:
-—&lt;/p&gt;
-
-&lt;h2 id=&quot;key-implementation-details&quot;&gt;Key implementation details:&lt;/h2&gt;
-
-&lt;p&gt;Updating the global episode counter &amp;amp; adding the episodic return to a
-tf.FIFOqueue at the end of the work() function.&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;SESS.run(GLOBAL_EP.assign_add(1.0))
-qe = GLOBAL_RUNNING_R.enqueue(ep_r)
-SESS.run(qe)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;The distributed Tensorflow part is very similar to a simple example described in
-this &lt;a href=&quot;https://chuacheowhuan.github.io/dist_tf/&quot;&gt;post&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;Pin the global variables under the parameter server in both the parameter_server() &amp;amp; worker(worker_n) function:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;with tf.device(&quot;/job:ps/task:0&quot;):
-    GLOBAL_AC = ACNet(net_scope, sess, globalAC=None) # only need its params
-    GLOBAL_EP = tf.Variable(0.0, name='GLOBAL_EP') # num of global episodes   
-    # a queue of ep_r
-    GLOBAL_RUNNING_R = tf.FIFOQueue(max_global_episodes, tf.float32, shared_name=&quot;GLOBAL_RUNNING_R&quot;)        
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;In the parameter_server() function, check the size of the tf.FIFOqueue every 1 sec.
-If it’s full, dequeue the items in a list. the list will be used for display.&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;while True:
-    time.sleep(1.0)
-    #print(&quot;ps 1 GLOBAL_EP: &quot;, sess.run(GLOBAL_EP))
-    #print(&quot;ps 1 GLOBAL_RUNNING_R.size(): &quot;, sess.run(GLOBAL_RUNNING_R.size()))  
-    if sess.run(GLOBAL_RUNNING_R.size()) &amp;gt;= max_global_episodes: # GLOBAL_EP starts from 0, hence +1 to max_global_episodes          
-        time.sleep(5.0)
-        #print(&quot;ps 2 GLOBAL_RUNNING_R.size(): &quot;, sess.run(GLOBAL_RUNNING_R.size()))  
-        GLOBAL_RUNNING_R_list = []
-        for j in range(sess.run(GLOBAL_RUNNING_R.size())):
-            ep_r = sess.run(GLOBAL_RUNNING_R.dequeue())
-            GLOBAL_RUNNING_R_list.append(ep_r) # for display
-        break
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">A3C (Asynchronous Advantage Actor Critic) implementation with distributed Tensorflow &amp;amp; Python multiprocessing package. This is a discrete version with N-step targets (use maximum terms possible). The code is tested with Gym’s discrete action space environment, CartPole-v0 on Colab.</summary></entry><entry><title type="html">RND (Random Network Distillation) with Proximal Policy Optimization (PPO) Tensorflow</title><link href="https://chuacheowhuan.github.io/RND/" rel="alternate" type="text/html" title="RND (Random Network Distillation) with Proximal Policy Optimization (PPO) Tensorflow" /><published>2019-06-25T00:00:00+08:00</published><updated>2019-06-25T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/RND</id><content type="html" xml:base="https://chuacheowhuan.github.io/RND/">&lt;p&gt;Random Network Distillation (RND) with Proximal Policy Optimization (PPO)
+&lt;p&gt;Random Network Distillation (RND) with Proximal Policy Optimization (PPO)
 implentation in Tensorflow. This is a continuous version which solves the
 mountain car continuous problem (MountainCarContinuous-v0).
 The RND helps learning with curiosity driven exploration.&lt;/p&gt;
@@ -357,7 +117,7 @@ The URL for the new version is updated. Added random seeds for numpy &amp;amp; T
 &lt;p&gt;Checkout the &lt;a href=&quot;https://chuacheowhuan.github.io/RND/#charts&quot;&gt;resulting
 charts&lt;/a&gt; from the program output.&lt;/p&gt;
 
-&lt;p&gt;Full code:&lt;/p&gt;
+&lt;p&gt;Code on my Github:&lt;/p&gt;
 
 &lt;ul&gt;
   &lt;li&gt;
@@ -589,11 +349,296 @@ Not initializing or randomly initializing actor’s weights results in nan when 
 
 &lt;hr /&gt;
 
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">Random Network Distillation (RND) with Proximal Policy Optimization (PPO) implentation in Tensorflow. This is a continuous version which solves the mountain car continuous problem (MountainCarContinuous-v0). The RND helps learning with curiosity driven exploration.</summary></entry><entry><title type="html">A3C multi-threaded continuous version with N step targets</title><link href="https://chuacheowhuan.github.io/A3C_cont_thread_nStep/" rel="alternate" type="text/html" title="A3C multi-threaded continuous version with N step targets" /><published>2019-06-14T00:00:00+08:00</published><updated>2019-06-14T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/A3C_cont_thread_nStep</id><content type="html" xml:base="https://chuacheowhuan.github.io/A3C_cont_thread_nStep/">&lt;p&gt;An A3C (Asynchronous Advantage Actor Critic) implementation with
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">This post documents my implementation of the Random Network Distillation (RND) with Proximal Policy Optimization (PPO) algorithm. (Distributed continuous version)</summary></entry><entry><title type="html">DPPO distributed tensorflow</title><link href="https://chuacheowhuan.github.io/DPPO_dist_tf/" rel="alternate" type="text/html" title="DPPO distributed tensorflow" /><published>2019-06-25T00:00:00+08:00</published><updated>2019-06-25T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/DPPO_dist_tf</id><content type="html" xml:base="https://chuacheowhuan.github.io/DPPO_dist_tf/">&lt;p&gt;This post documents my implementation of the Distributed Proximal Policy
+Optimization (Distributed PPO or DPPO) algorithm.
+(&lt;strong&gt;Distributed&lt;/strong&gt; continuous version)&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;Distributed Proximal Policy Optimization (Distributed PPO or DPPO) continuous
+version implementation with distributed Tensorflow and Python’s multiprocessing
+package. This implementation uses normalized running rewards with GAE. The code
+is tested with Gym’s continuous action space environment, Pendulum-v0 on Colab.&lt;/p&gt;
+
+&lt;p&gt;Code on my &lt;a href=&quot;https://github.com/ChuaCheowHuan/reinforcement_learning/blob/master/DPPO/DPPO_cont_GAE_dist_GPU.ipynb&quot;&gt;Github&lt;/a&gt;:&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;notations&quot;&gt;Notations:&lt;/h2&gt;
+
+&lt;p&gt;current policy =
+&lt;script type=&quot;math/tex&quot;&gt;{\pi}_{\theta}
+(a_{t}
+  {\mid} s_{t})&lt;/script&gt;&lt;/p&gt;
+
+&lt;p&gt;old policy =
+&lt;script type=&quot;math/tex&quot;&gt;{\pi}_{\theta_{old}}
+(a_{t}
+  {\mid} s_{t})&lt;/script&gt;&lt;/p&gt;
+
+&lt;p&gt;epsilon =
+&lt;script type=&quot;math/tex&quot;&gt;{\epsilon}&lt;/script&gt;&lt;/p&gt;
+
+&lt;p&gt;Advantage function = A&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;equations&quot;&gt;Equations:&lt;/h2&gt;
+
+&lt;p&gt;Truncated version of generalized advantage estimation (GAE) =&lt;/p&gt;
+
+&lt;p&gt;&lt;script type=&quot;math/tex&quot;&gt;A_{t}&lt;/script&gt;
+=
+&lt;script type=&quot;math/tex&quot;&gt;{\delta}_{t}
++
+({\gamma}
+{\lambda})
+{\delta}_{t}
++
+...
++
+({\gamma}
+{\lambda})
+^{T-t+1}
+{\delta}_{T-1}&lt;/script&gt;&lt;/p&gt;
+
+&lt;p&gt;where
+&lt;script type=&quot;math/tex&quot;&gt;{\delta}_{t}&lt;/script&gt; =
+&lt;script type=&quot;math/tex&quot;&gt;{r}_{t} +
+{\gamma}
+V(s_{t+1}) -
+V(s_{t})&lt;/script&gt;&lt;/p&gt;
+
+&lt;p&gt;when &lt;script type=&quot;math/tex&quot;&gt;{\lambda}&lt;/script&gt; = 1,&lt;/p&gt;
+
+&lt;p&gt;&lt;script type=&quot;math/tex&quot;&gt;A_{t}&lt;/script&gt; =
+&lt;script type=&quot;math/tex&quot;&gt;-V(s_{t}) +
+r_{t} +
+{\gamma}r_{t+1} +
+... +
+{\gamma}^{T-t+1}
+r_{T-1} +
+{\gamma}^{T-t}
+V(s_{T})&lt;/script&gt;&lt;/p&gt;
+
+&lt;p&gt;Probability ratio =&lt;/p&gt;
+
+&lt;p&gt;&lt;script type=&quot;math/tex&quot;&gt;R_{t}({\theta})&lt;/script&gt; = &lt;script type=&quot;math/tex&quot;&gt;{\dfrac{ {\pi}_{\theta} (a_{t} {\mid} s_{t}) } { {\pi}_{\theta_{old}} (a_{t} {\mid} s_{t}) } }&lt;/script&gt;&lt;/p&gt;
+
+&lt;p&gt;Clipped Surrogate Objective function =&lt;/p&gt;
+
+&lt;p&gt;&lt;script type=&quot;math/tex&quot;&gt;L^{CLIP}
+({\theta})&lt;/script&gt;
+=
+&lt;script type=&quot;math/tex&quot;&gt;\mathop{\mathbb{E_{t}}}
+\lbrack
+min(
+  R_{t}({\theta})
+  A_{t}
+  ,
+  clip
+  (
+    R_{t}({\theta}),
+    1+{\epsilon},
+    1-{\epsilon}
+    )
+    A_{t}
+  )
+\rbrack&lt;/script&gt;&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;key-implementation-details&quot;&gt;Key implementation details:&lt;/h2&gt;
+
+&lt;p&gt;The following class is adapted from OpenAI’s baseline:
+This class is used for the normalization of rewards in this program before GAE
+computation.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;class RunningStats(object):
+    def __init__(self, epsilon=1e-4, shape=()):
+        self.mean = np.zeros(shape, 'float64')
+        self.var = np.ones(shape, 'float64')
+        self.std = np.ones(shape, 'float64')
+        self.count = epsilon
+
+    def update(self, x):
+        batch_mean = np.mean(x, axis=0)
+        batch_var = np.var(x, axis=0)
+        batch_count = x.shape[0]
+        self.update_from_moments(batch_mean, batch_var, batch_count)
+
+    def update_from_moments(self, batch_mean, batch_var, batch_count):
+        delta = batch_mean - self.mean
+        new_mean = self.mean + delta * batch_count / (self.count + batch_count)
+        m_a = self.var * self.count
+        m_b = batch_var * batch_count
+        M2 = m_a + m_b + np.square(delta) * self.count * batch_count / (self.count + batch_count)
+        new_var = M2 / (self.count + batch_count)
+
+        self.mean = new_mean
+        self.var = new_var
+        self.std = np.maximum(np.sqrt(self.var), 1e-6)
+        self.count = batch_count + self.count
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This function in the &lt;code class=&quot;highlighter-rouge&quot;&gt;PPO&lt;/code&gt; class is adapted from OpenAI’s Baseline,
+returns TD lamda return &amp;amp; advantage&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    def add_vtarg_and_adv(self, R, done, V, v_s_, gamma, lam):
+        # Compute target value using TD(lambda) estimator, and advantage with GAE(lambda)
+        # last element is only used for last vtarg, but we already zeroed it if last new = 1
+        done = np.append(done, 0)
+        V_plus = np.append(V, v_s_)
+        T = len(R)
+        adv = gaelam = np.empty(T, 'float32')
+        lastgaelam = 0
+        for t in reversed(range(T)):
+            nonterminal = 1-done[t+1]        
+            delta = R[t] + gamma * V_plus[t+1] * nonterminal - V_plus[t]
+            gaelam[t] = lastgaelam = delta + gamma * lam * nonterminal * lastgaelam   
+        #print(&quot;adv=&quot;, adv.shape)
+        #print(&quot;V=&quot;, V.shape)
+        #print(&quot;V_plus=&quot;, V_plus.shape)
+        tdlamret = np.vstack(adv) + V
+        #print(&quot;tdlamret=&quot;, tdlamret.shape)
+        return tdlamret, adv # tdlamret is critic_target or Qs      
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;The following code segment from the &lt;code class=&quot;highlighter-rouge&quot;&gt;PPO&lt;/code&gt; class defines the Clipped Surrogate
+Objective function:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;with tf.variable_scope('surrogate'):
+                    ratio = self.pi.prob(self.act) / self.oldpi.prob(self.act)
+                    surr = ratio * self.adv
+                    self.aloss = -tf.reduce_mean(tf.minimum(surr, tf.clip_by_value(ratio, 1.-epsilon, 1.+epsilon)*self.adv))
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;The following code segment from the &lt;code class=&quot;highlighter-rouge&quot;&gt;work()&lt;/code&gt; function in the worker class
+normalized the running rewards for each worker:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;self.running_stats_r.update(np.array(buffer_r))
+                    buffer_r = np.clip( (np.array(buffer_r) - self.running_stats_r.mean) / self.running_stats_r.std, -stats_CLIP, stats_CLIP )
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;The following code segment from the &lt;code class=&quot;highlighter-rouge&quot;&gt;work()&lt;/code&gt; function in the worker class computes
+ the TD lamda return &amp;amp; advantage:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;tdlamret, adv = self.ppo.add_vtarg_and_adv(np.vstack(buffer_r), np.vstack(buffer_done), np.vstack(buffer_V), v_s_, GAMMA, lamda)
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;The following update function in the &lt;code class=&quot;highlighter-rouge&quot;&gt;PPO&lt;/code&gt; class does the training &amp;amp; the
+updating of global &amp;amp; local parameters (Note the at the beginning of training,
+  probability ratio = 1):&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;def update(self, s, a, r, adv):    
+    self.sess.run(self.update_oldpi_op)
+
+    for _ in range(A_EPOCH): # train actor
+        self.sess.run(self.atrain_op, {self.state: s, self.act: a, self.adv: adv})
+        # update actor
+        self.sess.run([self.push_actor_pi_params,
+                       self.pull_actor_pi_params],
+                      {self.state: s, self.act: a, self.adv: adv})
+    for _ in range(C_EPOCH): # train critic
+        # update critic
+        self.sess.run(self.ctrain_op, {self.state: s, self.discounted_r: r})
+        self.sess.run([self.push_critic_params,
+                       self.pull_critic_params],
+                      {self.state: s, self.discounted_r: r})   
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;The distributed Tensorflow &amp;amp; multiprocessing code sections are very similar to
+the ones describe in the following posts:&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://chuacheowhuan.github.io/A3C_dist_tf/&quot;&gt;A3C distributed tensorflow&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://chuacheowhuan.github.io/dist_tf/&quot;&gt;Distributed Tensorflow&lt;/a&gt;&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;references&quot;&gt;References:&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://arxiv.org/pdf/1707.06347.pdf&quot;&gt;Proximal Policy Optimization Algorithms&lt;/a&gt;
+(Schulman, Wolski, Dhariwal, Radford, Klimov, 2017)&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://arxiv.org/pdf/1707.02286.pdf&quot;&gt;Emergence of Locomotion Behaviours in Rich Environments&lt;/a&gt;
+(Nicolas Heess, Dhruva TB, Srinivasan Sriram, Jay Lemmon, Josh Merel, Greg Wayne, et al., 2017)&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">This post documents my implementation of the Distributed Proximal Policy Optimization (Distributed PPO or DPPO) algorithm. (Distributed continuous version)</summary></entry><entry><title type="html">A3C distributed tensorflow</title><link href="https://chuacheowhuan.github.io/A3C_dist_tf/" rel="alternate" type="text/html" title="A3C distributed tensorflow" /><published>2019-06-25T00:00:00+08:00</published><updated>2019-06-25T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/A3C_dist_tf</id><content type="html" xml:base="https://chuacheowhuan.github.io/A3C_dist_tf/">&lt;p&gt;This post documents my implementation of the A3C
+(Asynchronous Advantage Actor Critic) algorithm
+(&lt;strong&gt;Distributed&lt;/strong&gt; discrete version).&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;A3C (Asynchronous Advantage Actor Critic) implementation with &lt;strong&gt;distributed
+Tensorflow&lt;/strong&gt; &amp;amp; &lt;strong&gt;Python multiprocessing package&lt;/strong&gt;. This is a &lt;strong&gt;discrete&lt;/strong&gt;
+version with N-step targets (use maximum terms possible). The code is tested
+with Gym’s discrete action space environment, CartPole-v0 on Colab.&lt;/p&gt;
+
+&lt;p&gt;Code on my &lt;a href=&quot;https://github.com/ChuaCheowHuan/reinforcement_learning/blob/master/A3C/A3C_disc_max_dist.ipynb&quot;&gt;Github&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;The majority of the code is very similar to the &lt;a href=&quot;https://chuacheowhuan.github.io/A3C_disc_thread_nStep/&quot;&gt;discrete&lt;/a&gt; version with the
+exceptions highlighted in the implementation details section:&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;key-implementation-details&quot;&gt;Key implementation details:&lt;/h2&gt;
+
+&lt;p&gt;Updating the global episode counter &amp;amp; adding the episodic return to a
+tf.FIFOqueue at the end of the work() function.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;SESS.run(GLOBAL_EP.assign_add(1.0))
+qe = GLOBAL_RUNNING_R.enqueue(ep_r)
+SESS.run(qe)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;The distributed Tensorflow part is very similar to a simple example described in
+this &lt;a href=&quot;https://chuacheowhuan.github.io/dist_tf/&quot;&gt;post&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Pin the global variables under the parameter server in both the parameter_server() &amp;amp; worker(worker_n) function:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;with tf.device(&quot;/job:ps/task:0&quot;):
+    GLOBAL_AC = ACNet(net_scope, sess, globalAC=None) # only need its params
+    GLOBAL_EP = tf.Variable(0.0, name='GLOBAL_EP') # num of global episodes   
+    # a queue of ep_r
+    GLOBAL_RUNNING_R = tf.FIFOQueue(max_global_episodes, tf.float32, shared_name=&quot;GLOBAL_RUNNING_R&quot;)        
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;In the parameter_server() function, check the size of the tf.FIFOqueue every 1 sec.
+If it’s full, dequeue the items in a list. the list will be used for display.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;while True:
+    time.sleep(1.0)
+    #print(&quot;ps 1 GLOBAL_EP: &quot;, sess.run(GLOBAL_EP))
+    #print(&quot;ps 1 GLOBAL_RUNNING_R.size(): &quot;, sess.run(GLOBAL_RUNNING_R.size()))  
+    if sess.run(GLOBAL_RUNNING_R.size()) &amp;gt;= max_global_episodes: # GLOBAL_EP starts from 0, hence +1 to max_global_episodes          
+        time.sleep(5.0)
+        #print(&quot;ps 2 GLOBAL_RUNNING_R.size(): &quot;, sess.run(GLOBAL_RUNNING_R.size()))  
+        GLOBAL_RUNNING_R_list = []
+        for j in range(sess.run(GLOBAL_RUNNING_R.size())):
+            ep_r = sess.run(GLOBAL_RUNNING_R.dequeue())
+            GLOBAL_RUNNING_R_list.append(ep_r) # for display
+        break
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">This post documents my implementation of the A3C (Asynchronous Advantage Actor Critic) algorithm (Distributed discrete version).</summary></entry><entry><title type="html">A3C multi-threaded continuous version with N step targets</title><link href="https://chuacheowhuan.github.io/A3C_cont_thread_nStep/" rel="alternate" type="text/html" title="A3C multi-threaded continuous version with N step targets" /><published>2019-06-14T00:00:00+08:00</published><updated>2019-06-14T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/A3C_cont_thread_nStep</id><content type="html" xml:base="https://chuacheowhuan.github.io/A3C_cont_thread_nStep/">&lt;p&gt;This post documents my implementation of the A3C
+(Asynchronous Advantage Actor Critic) algorithm.
+(multi-threaded &lt;strong&gt;continuous&lt;/strong&gt; version)&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;An A3C (Asynchronous Advantage Actor Critic) implementation with
 Tensorflow. This is a multi-threaded &lt;strong&gt;continuous&lt;/strong&gt; version. The code is tested with
 Gym’s continuous action space environment, Pendulum-v0 on Colab.&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&quot;https://github.com/ChuaCheowHuan/reinforcement_learning/blob/master/A3C/A3C_cont_max.ipynb&quot;&gt;Full code&lt;/a&gt;: (use maximum terms possible)&lt;/p&gt;
+&lt;p&gt;Code on my &lt;a href=&quot;https://github.com/ChuaCheowHuan/reinforcement_learning/blob/master/A3C/A3C_cont_max.ipynb&quot;&gt;Github&lt;/a&gt;: (use maximum terms possible)&lt;/p&gt;
 
 &lt;p&gt;The majority of the code is very similar to the &lt;a href=&quot;https://chuacheowhuan.github.io/A3C_disc_thread_nStep/&quot;&gt;discrete&lt;/a&gt; version with the
 exceptions highlighted in the implementation details section:&lt;/p&gt;
@@ -659,13 +704,19 @@ networks(note that the critic’s network contains a LSTM layer):&lt;/p&gt;
 
 &lt;hr /&gt;
 
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">An A3C (Asynchronous Advantage Actor Critic) implementation with Tensorflow. This is a multi-threaded continuous version. The code is tested with Gym’s continuous action space environment, Pendulum-v0 on Colab.</summary></entry><entry><title type="html">A3C multi-threaded discrete version with N step targets</title><link href="https://chuacheowhuan.github.io/A3C_disc_thread_nStep/" rel="alternate" type="text/html" title="A3C multi-threaded discrete version with N step targets" /><published>2019-06-13T00:00:00+08:00</published><updated>2019-06-13T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/A3C_disc_thread_nStep</id><content type="html" xml:base="https://chuacheowhuan.github.io/A3C_disc_thread_nStep/">&lt;p&gt;An A3C (Asynchronous Advantage Actor Critic) implementation with
-Tensorflow. This is a multi-threaded &lt;strong&gt;discrete&lt;/strong&gt; version. The code is tested with
-Gym’s discrete action space environment, CartPole-v0 on Colab.&lt;/p&gt;
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">This post documents my implementation of the A3C (Asynchronous Advantage Actor Critic) algorithm. (multi-threaded continuous version)</summary></entry><entry><title type="html">A3C multi-threaded discrete version with N step targets</title><link href="https://chuacheowhuan.github.io/A3C_disc_thread_nStep/" rel="alternate" type="text/html" title="A3C multi-threaded discrete version with N step targets" /><published>2019-06-13T00:00:00+08:00</published><updated>2019-06-13T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/A3C_disc_thread_nStep</id><content type="html" xml:base="https://chuacheowhuan.github.io/A3C_disc_thread_nStep/">&lt;p&gt;This post documents my implementation of the A3C
+(Asynchronous Advantage Actor Critic) algorithm (discrete).
+(multi-threaded &lt;strong&gt;discrete&lt;/strong&gt; version)&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&quot;https://github.com/ChuaCheowHuan/reinforcement_learning/blob/master/A3C/A3C_disc_miss.ipynb&quot;&gt;Full code&lt;/a&gt;: (missing terms are treated as 0)&lt;/p&gt;
+&lt;hr /&gt;
 
-&lt;p&gt;&lt;a href=&quot;https://github.com/ChuaCheowHuan/reinforcement_learning/blob/master/A3C/A3C_disc_max.ipynb&quot;&gt;Full code&lt;/a&gt;: (use maximum terms possible)&lt;/p&gt;
+&lt;p&gt;A3C (Asynchronous Advantage Actor Critic) implementation with Tensorflow.
+This is a multi-threaded &lt;strong&gt;discrete&lt;/strong&gt; version. The code is tested with Gym’s
+discrete action space environment, CartPole-v0 on Colab.&lt;/p&gt;
+
+&lt;p&gt;Code on my &lt;a href=&quot;https://github.com/ChuaCheowHuan/reinforcement_learning/blob/master/A3C/A3C_disc_miss.ipynb&quot;&gt;Github&lt;/a&gt;: (missing terms are treated as 0)&lt;/p&gt;
+
+&lt;p&gt;Code on my &lt;a href=&quot;https://github.com/ChuaCheowHuan/reinforcement_learning/blob/master/A3C/A3C_disc_max.ipynb&quot;&gt;Github&lt;/a&gt;: (use maximum terms possible)&lt;/p&gt;
 
 &lt;hr /&gt;
 
@@ -852,9 +903,13 @@ COORD.join(worker_threads)
 
 &lt;hr /&gt;
 
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">An A3C (Asynchronous Advantage Actor Critic) implementation with Tensorflow. This is a multi-threaded discrete version. The code is tested with Gym’s discrete action space environment, CartPole-v0 on Colab.</summary></entry><entry><title type="html">Accumulate gradients with Tensorflow</title><link href="https://chuacheowhuan.github.io/tf_accumulate_grad/" rel="alternate" type="text/html" title="Accumulate gradients with Tensorflow" /><published>2019-06-11T00:00:00+08:00</published><updated>2019-06-11T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/tf_accumulate_grad</id><content type="html" xml:base="https://chuacheowhuan.github.io/tf_accumulate_grad/">&lt;p&gt;This post demonstrates how to accumulate gradients with Tensorflow.&lt;/p&gt;
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">This post documents my implementation of the A3C (Asynchronous Advantage Actor Critic) algorithm (discrete). (multi-threaded discrete version)</summary></entry><entry><title type="html">Accumulate gradients with Tensorflow</title><link href="https://chuacheowhuan.github.io/tf_accumulate_grad/" rel="alternate" type="text/html" title="Accumulate gradients with Tensorflow" /><published>2019-06-11T00:00:00+08:00</published><updated>2019-06-11T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/tf_accumulate_grad</id><content type="html" xml:base="https://chuacheowhuan.github.io/tf_accumulate_grad/">&lt;p&gt;This post demonstrates how to accumulate gradients with Tensorflow.&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&quot;https://github.com/ChuaCheowHuan/misc_code_examples/blob/master/tf/tf_accumulate_grad.ipynb&quot;&gt;Full code&lt;/a&gt;&lt;/p&gt;
+&lt;hr /&gt;
+
+&lt;p&gt;Code on my &lt;a href=&quot;https://github.com/ChuaCheowHuan/misc_code_examples/blob/master/tf/tf_accumulate_grad.ipynb&quot;&gt;Github&lt;/a&gt;&lt;/p&gt;
+
+&lt;hr /&gt;
 
 &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;import tensorflow as tf
 
@@ -882,11 +937,16 @@ def accumu_grad(self, OPT, loss, scope):
 
 &lt;hr /&gt;
 
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">This post demonstrates how to accumulate gradients with Tensorflow.</summary></entry><entry><title type="html">Distributed Tensorflow</title><link href="https://chuacheowhuan.github.io/dist_tf/" rel="alternate" type="text/html" title="Distributed Tensorflow" /><published>2019-06-09T00:00:00+08:00</published><updated>2019-06-09T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/dist_tf</id><content type="html" xml:base="https://chuacheowhuan.github.io/dist_tf/">&lt;p&gt;Distributed Tensorflow with Python multiprocessing package. This post
-demonstrates how to use distributed Tensorflow with Python’s
-multiprocessing package. A tf.FIFOQueue is used as a storage across processes.&lt;/p&gt;
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">This post demonstrates how to accumulate gradients with Tensorflow.</summary></entry><entry><title type="html">Distributed Tensorflow</title><link href="https://chuacheowhuan.github.io/dist_tf/" rel="alternate" type="text/html" title="Distributed Tensorflow" /><published>2019-06-09T00:00:00+08:00</published><updated>2019-06-09T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/dist_tf</id><content type="html" xml:base="https://chuacheowhuan.github.io/dist_tf/">&lt;p&gt;This post demonstrates a simple usage example of distributed Tensorflow with
+Python multiprocessing package.&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&quot;https://github.com/ChuaCheowHuan/misc_code_examples/blob/master/tf/dist_tf/dist_tf.ipynb&quot;&gt;Full code&lt;/a&gt;&lt;/p&gt;
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;distributed-tensorflow-with-python-multiprocessing-package&quot;&gt;Distributed Tensorflow with Python multiprocessing package.&lt;/h2&gt;
+
+&lt;p&gt;A tf.FIFOQueue is used as a storage across processes.&lt;/p&gt;
+
+&lt;p&gt;Code on my &lt;a href=&quot;https://github.com/ChuaCheowHuan/misc_code_examples/blob/master/tf/dist_tf/dist_tf.ipynb&quot;&gt;Github&lt;/a&gt;&lt;/p&gt;
 
 &lt;hr /&gt;
 
@@ -1073,251 +1133,4 @@ All done.
 
 &lt;hr /&gt;
 
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">Distributed Tensorflow with Python multiprocessing package. This post demonstrates how to use distributed Tensorflow with Python’s multiprocessing package. A tf.FIFOQueue is used as a storage across processes.</summary></entry><entry><title type="html">N-step targets</title><link href="https://chuacheowhuan.github.io/n_step_targets/" rel="alternate" type="text/html" title="N-step targets" /><published>2019-05-31T00:00:00+08:00</published><updated>2019-05-31T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/n_step_targets</id><content type="html" xml:base="https://chuacheowhuan.github.io/n_step_targets/">&lt;h2 id=&quot;n-step-q-values-estimation&quot;&gt;N-step Q-values estimation.&lt;/h2&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://github.com/ChuaCheowHuan/reinforcement_learning/blob/master/n_step_targets.ipynb&quot;&gt;Full code&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;The following two functions computes truncated Q-values estimates:&lt;/p&gt;
-
-&lt;p&gt;A) n_step_targets_missing&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;treats missing terms as 0.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;B) n_step_targets_max&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;use maximum terms possible.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;equations&quot;&gt;Equations:&lt;/h2&gt;
-
-&lt;p&gt;1-step truncated estimate:&lt;/p&gt;
-
-&lt;p&gt;&lt;script type=&quot;math/tex&quot;&gt;Q^{\pi}(s_{t}, a_{t})&lt;/script&gt; =
-E(&lt;script type=&quot;math/tex&quot;&gt;r_{t}&lt;/script&gt; +
-  &lt;script type=&quot;math/tex&quot;&gt;\gamma&lt;/script&gt; V(&lt;script type=&quot;math/tex&quot;&gt;s_{t+1}&lt;/script&gt;))&lt;/p&gt;
-
-&lt;p&gt;2-step truncated estimate:&lt;/p&gt;
-
-&lt;p&gt;&lt;script type=&quot;math/tex&quot;&gt;Q^{\pi}(s_{t}, a_{t})&lt;/script&gt; =
-E(&lt;script type=&quot;math/tex&quot;&gt;r_{t}&lt;/script&gt; +
-  &lt;script type=&quot;math/tex&quot;&gt;\gamma&lt;/script&gt; &lt;script type=&quot;math/tex&quot;&gt;r_{t+1}&lt;/script&gt; +
-  &lt;script type=&quot;math/tex&quot;&gt;\gamma^{2}&lt;/script&gt; V(&lt;script type=&quot;math/tex&quot;&gt;s_{t+2}&lt;/script&gt;))&lt;/p&gt;
-
-&lt;p&gt;3-step truncated estimate:&lt;/p&gt;
-
-&lt;p&gt;&lt;script type=&quot;math/tex&quot;&gt;Q^{\pi}(s_{t}, a_{t})&lt;/script&gt; =
-E(&lt;script type=&quot;math/tex&quot;&gt;r_{t}&lt;/script&gt; +
-  &lt;script type=&quot;math/tex&quot;&gt;\gamma&lt;/script&gt; &lt;script type=&quot;math/tex&quot;&gt;r_{t+1}&lt;/script&gt; +
-  &lt;script type=&quot;math/tex&quot;&gt;\gamma^{2}&lt;/script&gt; &lt;script type=&quot;math/tex&quot;&gt;r_{t+2}&lt;/script&gt; +
-  &lt;script type=&quot;math/tex&quot;&gt;\gamma^{3}&lt;/script&gt; V(&lt;script type=&quot;math/tex&quot;&gt;s_{t+3}&lt;/script&gt;))&lt;/p&gt;
-
-&lt;p&gt;N-step truncated estimate:&lt;/p&gt;
-
-&lt;p&gt;&lt;script type=&quot;math/tex&quot;&gt;Q^{\pi}(s_{t}, a_{t})&lt;/script&gt; =
-E(&lt;script type=&quot;math/tex&quot;&gt;r_{t}&lt;/script&gt; +
-  &lt;script type=&quot;math/tex&quot;&gt;\gamma&lt;/script&gt; &lt;script type=&quot;math/tex&quot;&gt;r_{t+1}&lt;/script&gt; +
-  &lt;script type=&quot;math/tex&quot;&gt;\gamma^{2}&lt;/script&gt; &lt;script type=&quot;math/tex&quot;&gt;r_{t+2}&lt;/script&gt; + … +
-  &lt;script type=&quot;math/tex&quot;&gt;\gamma^{n}&lt;/script&gt; V(&lt;script type=&quot;math/tex&quot;&gt;s_{t+n}&lt;/script&gt;))&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;example&quot;&gt;Example:&lt;/h2&gt;
-
-&lt;p&gt;Assuming we have the following variables setup:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;N=2 # N steps
-gamma=2
-t=5
-v_s_ = 10 # value of next state
-
-epr=np.arange(t).reshape(t,1)
-print(&quot;epr=&quot;, epr)
-
-baselines=np.arange(t).reshape(t,1)
-print(&quot;baselines=&quot;, baselines)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Display output of episodic rewards(epr) &amp;amp; baselines:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;epr= [[0]
- [1]
- [2]
- [3]
- [4]]
-
-baselines= [[0]
- [1]
- [2]
- [3]
- [4]]
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;hr /&gt;
-
-&lt;h3 id=&quot;a-this-function-computes-the-n-step-targets-treats-missing-terms-as-zero&quot;&gt;A) This function computes the n-step targets, treats missing terms as zero:&lt;/h3&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# if number of steps unavailable, missing terms treated as 0.
-def n_step_targets_missing(epr, baselines, gamma, N):
-  N = N+1
-  targets = np.zeros_like(epr)    
-  if N &amp;gt; epr.size:
-    N = epr.size
-  for t in range(epr.size):   
-    print(&quot;t=&quot;, t)
-    for n in range(N):
-      print(&quot;n=&quot;, n)
-      if t+n == epr.size:            
-        print('missing terms treated as 0, break') # last term for those with insufficient steps.
-        break # missing terms treated as 0
-      if n == N-1: # last term
-        targets[t] += (gamma**n) * baselines[t+n] # last term for those with sufficient steps
-        print('last term for those with sufficient steps, end inner n loop')
-      else:
-        targets[t] += (gamma**n) * epr[t+n] # non last terms
-  return targets
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Run the function n_step_targets_missing:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;print('n_step_targets_missing:')
-T = n_step_targets_missing(epr, baselines, gamma, N)
-print(T)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Display the output:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;n_step_targets_missing:
-t= 0
-n= 0
-n= 1
-n= 2
-last term for those with sufficient steps, end inner n loop
-t= 1
-n= 0
-n= 1
-n= 2
-last term for those with sufficient steps, end inner n loop
-t= 2
-n= 0
-n= 1
-n= 2
-last term for those with sufficient steps, end inner n loop
-t= 3
-n= 0
-n= 1
-n= 2
-missing terms treated as 0, break
-t= 4
-n= 0
-n= 1
-missing terms treated as 0, break
-[[10]
- [17]
- [24]
- [11]
- [ 4]]
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;For the output above, note that when t+n = 5 which is greater than the last index 4, missing terms are treated as 0.&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;h3 id=&quot;b-this-function-computes-the-n-step-targets-it-will-use-maximum-number-of-terms-possible&quot;&gt;B) This function computes the n-step targets, it will use maximum number of terms possible:&lt;/h3&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# if number of steps unavailable, use max steps available.
-# uses v_s_ as input
-def n_step_targets_max(epr, baselines, v_s_, gamma, N):
-  N = N+1
-  targets = np.zeros_like(epr)    
-  if N &amp;gt; epr.size:
-    N = epr.size
-  for t in range(epr.size):  
-    print(&quot;t=&quot;, t)
-    for n in range(N):
-      print(&quot;n=&quot;, n)
-      if t+n == epr.size:            
-        targets[t] += (gamma**n) * v_s_ # last term for those with insufficient steps.
-        print('last term for those with INSUFFICIENT steps, break')
-        break
-      if n == N-1:
-        targets[t] += (gamma**n) * baselines[t+n] # last term for those with sufficient steps
-        print('last term for those with sufficient steps, end inner n loop')
-      else:
-        targets[t] += (gamma**n) * epr[t+n] # non last terms
-  return targets
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Run the function n_step_targets_max:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;print('n_step_targets_max:')
-T = n_step_targets_max(epr, baselines, v_s_, gamma, N)
-print(T)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Display the output:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;n_step_targets_max:
-t= 0
-n= 0
-n= 1
-n= 2
-last term for those with sufficient steps, end inner n loop
-t= 1
-n= 0
-n= 1
-n= 2
-last term for those with sufficient steps, end inner n loop
-t= 2
-n= 0
-n= 1
-n= 2
-last term for those with sufficient steps, end inner n loop
-t= 3
-n= 0
-n= 1
-n= 2
-last term for those with INSUFFICIENT steps, break
-t= 4
-n= 0
-n= 1
-last term for those with INSUFFICIENT steps, break
-[[10]
- [17]
- [24]
- [51]
- [24]]
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;For the output above, note that when t+n = 5 which is greater than the last index 4,
-maximum terms are used where possible.
-( Last term for those with INSUFFICIENT steps is given by
-  (gamma**n) * v_s_ = &lt;script type=&quot;math/tex&quot;&gt;\gamma^{5}&lt;/script&gt; V(&lt;script type=&quot;math/tex&quot;&gt;s_{5}&lt;/script&gt;)), where v_s_ = V(&lt;script type=&quot;math/tex&quot;&gt;s_{5}&lt;/script&gt;)&lt;/p&gt;
-
-&lt;p&gt;When t = 2, normal 2 steps estimation:&lt;/p&gt;
-
-&lt;p&gt;&lt;script type=&quot;math/tex&quot;&gt;Q^{\pi}(s_{t}, a_{t})&lt;/script&gt; =
-E(&lt;script type=&quot;math/tex&quot;&gt;r_{2}&lt;/script&gt; +
-  &lt;script type=&quot;math/tex&quot;&gt;\gamma&lt;/script&gt; &lt;script type=&quot;math/tex&quot;&gt;r_{3}&lt;/script&gt; +
-  &lt;script type=&quot;math/tex&quot;&gt;\gamma^{4}&lt;/script&gt; V(&lt;script type=&quot;math/tex&quot;&gt;s_{4}&lt;/script&gt;))&lt;/p&gt;
-
-&lt;p&gt;When t = 3, 2 steps estimation with insufficient step, using v_s_ in the last term:&lt;/p&gt;
-
-&lt;p&gt;&lt;script type=&quot;math/tex&quot;&gt;Q^{\pi}(s_{t}, a_{t})&lt;/script&gt; =
-E(&lt;script type=&quot;math/tex&quot;&gt;r_{3}&lt;/script&gt; +
-  &lt;script type=&quot;math/tex&quot;&gt;\gamma&lt;/script&gt; &lt;script type=&quot;math/tex&quot;&gt;r_{4}&lt;/script&gt; +
-  &lt;script type=&quot;math/tex&quot;&gt;\gamma^{5}&lt;/script&gt; V(&lt;script type=&quot;math/tex&quot;&gt;s_{5}&lt;/script&gt;))&lt;/p&gt;
-
-&lt;p&gt;When t = 4, insufficient step for 2 steps estimation, resorting to 1 step estimation:&lt;/p&gt;
-
-&lt;p&gt;&lt;script type=&quot;math/tex&quot;&gt;Q^{\pi}(s_{t}, a_{t})&lt;/script&gt; =
-E(&lt;script type=&quot;math/tex&quot;&gt;r_{4}&lt;/script&gt; +
-   &lt;script type=&quot;math/tex&quot;&gt;\gamma^{5}&lt;/script&gt; V(&lt;script type=&quot;math/tex&quot;&gt;s_{5}&lt;/script&gt;))&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">N-step Q-values estimation.</summary></entry></feed>
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">This post demonstrates a simple usage example of distributed Tensorflow with Python multiprocessing package.</summary></entry></feed>
