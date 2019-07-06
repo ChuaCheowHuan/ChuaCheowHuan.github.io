@@ -4,6 +4,9 @@ author: Huan
 title: N-step targets
 ---
 
+This post documents my implementation of the N-step Q-values estimation
+algorithm.
+
 ## N-step Q-values estimation.
 
 Code on my [Github](https://github.com/ChuaCheowHuan/reinforcement_learning/blob/master/n_step_targets.ipynb)

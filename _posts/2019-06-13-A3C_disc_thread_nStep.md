@@ -4,9 +4,13 @@ author: Huan
 title: A3C multi-threaded discrete version with N step targets
 ---
 
-An A3C (Asynchronous Advantage Actor Critic) implementation with
-Tensorflow. This is a multi-threaded **discrete** version. The code is tested with
-Gym's discrete action space environment, CartPole-v0 on Colab.
+This post documents my implementation of the A3C
+(Asynchronous Advantage Actor Critic) algorithm (discrete).
+(multi-threaded **discrete** version)
+
+A3C (Asynchronous Advantage Actor Critic) implementation with Tensorflow.
+This is a multi-threaded **discrete** version. The code is tested with Gym's
+discrete action space environment, CartPole-v0 on Colab.
 
 Code on my [Github](https://github.com/ChuaCheowHuan/reinforcement_learning/blob/master/A3C/A3C_disc_miss.ipynb): (missing terms are treated as 0)
 
