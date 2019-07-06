@@ -6,8 +6,6 @@ title: Numpy array manipulation
 
 This post provides a simple usage examples for common Numpy array manipulation.
 
-## Simple numpy array manipulation examples.
-
 This Jupyter notebook contains simple examples on how to manipulate Numpy
 arrays. The code blocks below shows the codes & it's corresponding display
 output.
