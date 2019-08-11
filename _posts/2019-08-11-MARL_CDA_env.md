@@ -34,8 +34,8 @@ python CDA_env_disc_RLlib.py
 
 The figure below from Tensorboard shows the agents' performance:
 
-![](https://github.com/ChuaCheowHuan/MARL_env/blob/master/pic/agent0and1.png)
-![](https://github.com/ChuaCheowHuan/MARL_env/blob/master/pic/agent2and3.png)
+![image](/assets/images/MARL_CDA_env/agent0and1.png)
+![image](/assets/images/MARL_CDA_env/agent2and3.png)
 
 PPO agent is using policy 0 while policies 1 to 3 are used by the random agents.
 
