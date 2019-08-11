@@ -1,8 +1,7 @@
 ---
 layout: posts
 author: Huan
-title: Custom MARL (multi-agent reinforcement learning)
-CDA (continuous double auction) environment
+title: Custom MARL (multi-agent reinforcement learning) CDA (continuous double auction) environment
 ---
 
 Code on my [Github](https://github.com/ChuaCheowHuan/MARL_env)
