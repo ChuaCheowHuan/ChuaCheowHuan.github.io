@@ -41,7 +41,9 @@ PPO agent is using policy 0 while policies 1 to 3 are used by the random agents.
 
 # Dependencies:
 1) Tensorflow
+
 2) OpenAI's Gym
+
 3) Ray & RLlib
 
 # Installation:
@@ -55,7 +57,9 @@ pip install -e .
 
 # TODO:
 1) custom RLlib workflow to include custom RND + PPO policies.
+
 2) parametric or hybrid action space
+
 3) more documentation
 
 # Acknowledgements:
