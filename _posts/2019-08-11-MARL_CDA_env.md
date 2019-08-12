@@ -4,7 +4,7 @@ author: Huan
 title: Custom MARL (multi-agent reinforcement learning) CDA (continuous double auction) environment
 ---
 
-Code on my [Github](https://github.com/ChuaCheowHuan/MARL_env)
+Code on my [Github](https://github.com/ChuaCheowHuan/gym-continuousDoubleAuction)
 
 ---
 
@@ -26,7 +26,7 @@ CDA_env_disc_RLlib.py
 
 To run:
 ```
-cd MARL_env/gym-continuousDoubleAuction/gym_continuousDoubleAuction
+cd gym-continuousDoubleAuction/gym_continuousDoubleAuction
 ```
 ```
 python CDA_env_disc_RLlib.py
@@ -49,7 +49,7 @@ PPO agent is using policy 0 while policies 1 to 3 are used by the random agents.
 # Installation:
 The environment is installable via pip.
 ```
-cd MARL_env/gym-continuousDoubleAuction
+cd gym-continuousDoubleAuction
 ```
 ```
 pip install -e .
