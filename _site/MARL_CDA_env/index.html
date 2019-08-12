@@ -262,7 +262,7 @@
     
       <h1 id="page-title" class="page__title">Custom MARL (multi-agent reinforcement learning) CDA (continuous double auction) environment</h1>
     
-    <p>Code on my <a href="https://github.com/ChuaCheowHuan/MARL_env">Github</a></p>
+    <p>Code on my <a href="https://github.com/ChuaCheowHuan/gym-continuousDoubleAuction">Github</a></p>
 
 <hr />
 
@@ -282,34 +282,38 @@ against 3 random agents using this CDA environment is available in:</p>
 </code></pre></div></div>
 
 <p>To run:</p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cd MARL_env/gym-continuousDoubleAuction/gym_continuousDoubleAuction
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cd gym-continuousDoubleAuction/gym_continuousDoubleAuction
 </code></pre></div></div>
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>python CDA_env_disc_RLlib.py
 </code></pre></div></div>
 
 <p>The figure below from Tensorboard shows the agents’ performance:</p>
 
-<p><img src="https://github.com/ChuaCheowHuan/MARL_env/blob/master/pic/agent0and1.png" alt="" />
-<img src="https://github.com/ChuaCheowHuan/MARL_env/blob/master/pic/agent2and3.png" alt="" /></p>
+<p><img src="/assets/images/MARL_CDA_env/agent0and1.png" alt="image" />
+<img src="/assets/images/MARL_CDA_env/agent2and3.png" alt="image" /></p>
 
 <p>PPO agent is using policy 0 while policies 1 to 3 are used by the random agents.</p>
 
 <h1 id="dependencies">Dependencies:</h1>
-<p>1) Tensorflow
-2) OpenAI’s Gym
-3) Ray &amp; RLlib</p>
+<p>1) Tensorflow</p>
+
+<p>2) OpenAI’s Gym</p>
+
+<p>3) Ray &amp; RLlib</p>
 
 <h1 id="installation">Installation:</h1>
 <p>The environment is installable via pip.</p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cd MARL_env/gym-continuousDoubleAuction
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cd gym-continuousDoubleAuction
 </code></pre></div></div>
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pip install -e .
 </code></pre></div></div>
 
 <h1 id="todo">TODO:</h1>
-<p>1) custom RLlib workflow to include custom RND + PPO policies.
-2) parametric or hybrid action space
-3) more documentation</p>
+<p>1) custom RLlib workflow to include custom RND + PPO policies.</p>
+
+<p>2) parametric or hybrid action space</p>
+
+<p>3) more documentation</p>
 
 <h1 id="acknowledgements">Acknowledgements:</h1>
 <p>The orderbook matching engine is adapted from
