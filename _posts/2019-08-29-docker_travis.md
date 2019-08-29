@@ -127,7 +127,7 @@ script:
 
 ---
 
-After introducing the delay, this is the successful test result output in
+After introducing the delay, this is the successful test output in
 Travis's job log.
 
 ```
