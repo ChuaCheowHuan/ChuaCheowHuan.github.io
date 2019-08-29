@@ -36,7 +36,7 @@ A solution for this issue is to introduce a delay until connection is ready
 before executing the test.
 
 The delay has to be implemented in the ```docker-compose.yml``` file before
-migration & running of Django's server.
+migration & running of Django's server shown below:
 
 ```
 command: bash -c 'while !</dev/tcp/db/5432; do sleep 1; done; python3 manage.py migrate'
