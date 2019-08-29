@@ -12,6 +12,8 @@ Code on my [Github](https://github.com/ChuaCheowHuan/gym-continuousDoubleAuction
 
 ---
 
+**Function:**
+
 ```
 def make_RandomPolicy(_seed):
 
@@ -46,4 +48,18 @@ def make_RandomPolicy(_seed):
             pass
 
     return RandomPolicy
+```
+
+---
+
+**Usage example:**
+
+```
+# Setup PPO with an ensemble of `num_policies` different policies
+    policies = {"policy_{}".format(i): gen_policy(i) for i in range(args.num_policies)} # contains many "policy_graphs" in a policies dictionary
+
+    # override policy with random policy
+    policies["policy_{}".format(args.num_policies-3)] = (make_RandomPolicy(1), obs_space, act_space, {}) # random policy stored as the last item in policies dictionary
+    policies["policy_{}".format(args.num_policies-2)] = (make_RandomPolicy(2), obs_space, act_space, {}) # random policy stored as the last item in policies dictionary
+    policies["policy_{}".format(args.num_policies-1)] = (make_RandomPolicy(3), obs_space, act_space, {}) # random policy stored as the last item in policies dictionary
 ```
