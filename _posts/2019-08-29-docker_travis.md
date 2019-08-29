@@ -50,6 +50,8 @@ command: bash -c 'while !</dev/tcp/db/5432; do sleep 1; done; python3 manage.py 
 
 **Config files:**
 
+These are the relevant config files used in a Django project.
+
 The database configuration in ```settings.py```
 ```
 DATABASES = {
@@ -123,7 +125,8 @@ script:
 
 ---
 
-A successful test result in Travis's job log.
+After introducing the delay, this is the successful test result output in
+Travis's job log.
 
 ```
 .
