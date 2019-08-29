@@ -147,7 +147,7 @@ Travis's job log.
 
 ## References:
 
-[stackoverflow](https://stackoverflow.com/questions/35069027/docker-wait-for-postgresql-to-be-running)
+See this [post](https://stackoverflow.com/questions/35069027/docker-wait-for-postgresql-to-be-running) in stackoverflow. 
 
 ---
 
