@@ -1,10 +1,11 @@
 ---
 layout: posts
 author: Huan
-title: Django & Postgres with Docker in Travis CI
+title: Dockerized Postgres connection with Django web app in Travis CI
 ---
 
-Connecting Django & Postgres with Docker in Travis CI.
+Introducing a delay to allow proper connection between dockerized Postgres &
+Django web app in Travis CI.
 
 ---
 
@@ -13,8 +14,8 @@ Code on my [Github](https://github.com/ChuaCheowHuan/web_app)
 ---
 
 If you see the following error in the Travis's job log while attempting to test
-dockerized Django apps with Travis, it means that the postgres container has
-started but not yet ready to accept connections.
+dockerized Django apps with Travis, it means that the postgres docker container
+has started but not yet ready to accept connections.
 
 ```
 psycopg2.OperationalError: could not connect to server: Connection refused
@@ -147,7 +148,7 @@ Travis's job log.
 
 ## References:
 
-See this [post](https://stackoverflow.com/questions/35069027/docker-wait-for-postgresql-to-be-running) in stackoverflow. 
+See this [post](https://stackoverflow.com/questions/35069027/docker-wait-for-postgresql-to-be-running) in stackoverflow.
 
 ---
 

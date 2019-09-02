@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.5">Jekyll</generator><link href="https://chuacheowhuan.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://chuacheowhuan.github.io/" rel="alternate" type="text/html" /><updated>2019-09-02T18:08:03+08:00</updated><id>https://chuacheowhuan.github.io/feed.xml</id><title type="html">Every little gist</title><subtitle></subtitle><author><name>Chua Cheow Huan</name></author><entry><title type="html">Django + Postgres + Travis CI + Heroku CD</title><link href="https://chuacheowhuan.github.io/DPTH/" rel="alternate" type="text/html" title="Django + Postgres + Travis CI + Heroku CD" /><published>2019-09-02T00:00:00+08:00</published><updated>2019-09-02T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/DPTH</id><content type="html" xml:base="https://chuacheowhuan.github.io/DPTH/">&lt;p&gt;Basic workflow of testing a Django &amp;amp; Postgres web app with Travis
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.5">Jekyll</generator><link href="https://chuacheowhuan.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://chuacheowhuan.github.io/" rel="alternate" type="text/html" /><updated>2019-09-02T18:15:01+08:00</updated><id>https://chuacheowhuan.github.io/feed.xml</id><title type="html">Every little gist</title><subtitle></subtitle><author><name>Chua Cheow Huan</name></author><entry><title type="html">Django + Postgres + Travis CI + Heroku CD</title><link href="https://chuacheowhuan.github.io/DPTH/" rel="alternate" type="text/html" title="Django + Postgres + Travis CI + Heroku CD" /><published>2019-09-02T00:00:00+08:00</published><updated>2019-09-02T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/DPTH</id><content type="html" xml:base="https://chuacheowhuan.github.io/DPTH/">&lt;p&gt;Basic workflow of testing a Django &amp;amp; Postgres web app with Travis
 (continuous integration) &amp;amp; deployment to Heroku (continuous deployment).&lt;/p&gt;
 
 &lt;hr /&gt;
@@ -656,7 +656,8 @@ and web security is really beyond the scope of this post.&lt;/p&gt;
 
 &lt;hr /&gt;
 
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">Basic workflow of testing a dockerized Django &amp;amp; Postgres web app with Travis (continuous integration) &amp;amp; deployment to Heroku (continuous deployment).</summary></entry><entry><title type="html">Django &amp;amp; Postgres with Docker in Travis CI</title><link href="https://chuacheowhuan.github.io/docker_travis/" rel="alternate" type="text/html" title="Django &amp; Postgres with Docker in Travis CI" /><published>2019-08-29T00:00:00+08:00</published><updated>2019-08-29T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/docker_travis</id><content type="html" xml:base="https://chuacheowhuan.github.io/docker_travis/">&lt;p&gt;Connecting Django &amp;amp; Postgres with Docker in Travis CI.&lt;/p&gt;
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">Basic workflow of testing a dockerized Django &amp;amp; Postgres web app with Travis (continuous integration) &amp;amp; deployment to Heroku (continuous deployment).</summary></entry><entry><title type="html">Dockerized Postgres connection with Django web app in Travis CI</title><link href="https://chuacheowhuan.github.io/docker_travis/" rel="alternate" type="text/html" title="Dockerized Postgres connection with Django web app in Travis CI" /><published>2019-08-29T00:00:00+08:00</published><updated>2019-08-29T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/docker_travis</id><content type="html" xml:base="https://chuacheowhuan.github.io/docker_travis/">&lt;p&gt;Introducing a delay to allow proper connection between dockerized Postgres &amp;amp;
+Django web app in Travis CI.&lt;/p&gt;
 
 &lt;hr /&gt;
 
@@ -665,8 +666,8 @@ and web security is really beyond the scope of this post.&lt;/p&gt;
 &lt;hr /&gt;
 
 &lt;p&gt;If you see the following error in the Travis’s job log while attempting to test
-dockerized Django apps with Travis, it means that the postgres container has
-started but not yet ready to accept connections.&lt;/p&gt;
+dockerized Django apps with Travis, it means that the postgres docker container
+has started but not yet ready to accept connections.&lt;/p&gt;
 
 &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;psycopg2.OperationalError: could not connect to server: Connection refused
 539	Is the server running on host &quot;db&quot; (172.18.0.2) and accepting
@@ -795,7 +796,7 @@ Travis’s job log.&lt;/p&gt;
 
 &lt;hr /&gt;
 
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">Connecting Django &amp;amp; Postgres with Docker in Travis CI.</summary></entry><entry><title type="html">Random policy in RLlib</title><link href="https://chuacheowhuan.github.io/RLlib_rand_policy/" rel="alternate" type="text/html" title="Random policy in RLlib" /><published>2019-08-29T00:00:00+08:00</published><updated>2019-08-29T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/RLlib_rand_policy</id><content type="html" xml:base="https://chuacheowhuan.github.io/RLlib_rand_policy/">&lt;p&gt;Creating &amp;amp; seeding a random policy class in RLlib.&lt;/p&gt;
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">Introducing a delay to allow proper connection between dockerized Postgres &amp;amp; Django web app in Travis CI.</summary></entry><entry><title type="html">Random policy in RLlib</title><link href="https://chuacheowhuan.github.io/RLlib_rand_policy/" rel="alternate" type="text/html" title="Random policy in RLlib" /><published>2019-08-29T00:00:00+08:00</published><updated>2019-08-29T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/RLlib_rand_policy</id><content type="html" xml:base="https://chuacheowhuan.github.io/RLlib_rand_policy/">&lt;p&gt;Creating &amp;amp; seeding a random policy class in RLlib.&lt;/p&gt;
 
 &lt;hr /&gt;
 
