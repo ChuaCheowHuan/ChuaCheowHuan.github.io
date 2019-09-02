@@ -1,8 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.5">Jekyll</generator><link href="https://chuacheowhuan.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://chuacheowhuan.github.io/" rel="alternate" type="text/html" /><updated>2019-09-02T17:13:55+08:00</updated><id>https://chuacheowhuan.github.io/feed.xml</id><title type="html">Every little gist</title><subtitle></subtitle><author><name>Chua Cheow Huan</name></author><entry><title type="html">Django + Postgres + Travis CI + Heroku CD</title><link href="https://chuacheowhuan.github.io/DPTH/" rel="alternate" type="text/html" title="Django + Postgres + Travis CI + Heroku CD" /><published>2019-09-02T00:00:00+08:00</published><updated>2019-09-02T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/DPTH</id><content type="html" xml:base="https://chuacheowhuan.github.io/DPTH/">&lt;p&gt;Basic workflow of testing a Django &amp;amp; Postgres web app with Travis
-(continuous integration) &amp;amp; deployment to Heroku (continuous delivery).&lt;/p&gt;
-
-&lt;p&gt;See &lt;a href=&quot;https://chuacheowhuan.github.io/DPDTH&quot;&gt;Github&lt;/a&gt; for a Dockerized
-version.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.5">Jekyll</generator><link href="https://chuacheowhuan.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://chuacheowhuan.github.io/" rel="alternate" type="text/html" /><updated>2019-09-02T17:37:49+08:00</updated><id>https://chuacheowhuan.github.io/feed.xml</id><title type="html">Every little gist</title><subtitle></subtitle><author><name>Chua Cheow Huan</name></author><entry><title type="html">Django + Postgres + Travis CI + Heroku CD</title><link href="https://chuacheowhuan.github.io/DPTH/" rel="alternate" type="text/html" title="Django + Postgres + Travis CI + Heroku CD" /><published>2019-09-02T00:00:00+08:00</published><updated>2019-09-02T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/DPTH</id><content type="html" xml:base="https://chuacheowhuan.github.io/DPTH/">&lt;p&gt;Basic workflow of testing a Django &amp;amp; Postgres web app with Travis
+(continuous integration) &amp;amp; deployment to Heroku (continuous deployment).&lt;/p&gt;
 
 &lt;hr /&gt;
 
@@ -16,6 +13,11 @@ Travis &amp;amp; Heroku websites.&lt;/p&gt;
 &lt;hr /&gt;
 
 &lt;p&gt;Code on my &lt;a href=&quot;https://github.com/ChuaCheowHuan/web_app_DPTH&quot;&gt;Github&lt;/a&gt;&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;See &lt;a href=&quot;https://chuacheowhuan.github.io/DPDTH&quot;&gt;here&lt;/a&gt; for a Dockerized
+version.&lt;/p&gt;
 
 &lt;hr /&gt;
 
@@ -224,8 +226,19 @@ page. It is using the &lt;strong&gt;Heroku’s copy&lt;/strong&gt; of Postgres.&
 
 &lt;hr /&gt;
 
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">Basic workflow of testing a Django &amp;amp; Postgres web app with Travis (continuous integration) &amp;amp; deployment to Heroku (continuous delivery).</summary></entry><entry><title type="html">Django + Postgres + Docker + Travis CI + Heroku CD</title><link href="https://chuacheowhuan.github.io/DPDTH/" rel="alternate" type="text/html" title="Django + Postgres + Docker + Travis CI + Heroku CD" /><published>2019-09-02T00:00:00+08:00</published><updated>2019-09-02T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/DPDTH</id><content type="html" xml:base="https://chuacheowhuan.github.io/DPDTH/">&lt;p&gt;Basic workflow of testing a dockerized Django &amp;amp; Postgres web app with Travis
-(continuous integration) &amp;amp; deployment to Heroku (continuous delivery).&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Web security:&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Please note that web security has not been throughly consider in this basic
+workflow describe above. &lt;strong&gt;Do NOT&lt;/strong&gt; simply use the above workflow for
+production.&lt;/p&gt;
+
+&lt;p&gt;For example the &lt;code class=&quot;highlighter-rouge&quot;&gt;SECRET_KEY&lt;/code&gt; in the settings.py isn’t dealt with at all
+and web security is really beyond the scope of this post.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">Basic workflow of testing a Django &amp;amp; Postgres web app with Travis (continuous integration) &amp;amp; deployment to Heroku (continuous deployment).</summary></entry><entry><title type="html">Django + Postgres + Docker + Travis CI + Heroku CD</title><link href="https://chuacheowhuan.github.io/DPDTH/" rel="alternate" type="text/html" title="Django + Postgres + Docker + Travis CI + Heroku CD" /><published>2019-09-02T00:00:00+08:00</published><updated>2019-09-02T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/DPDTH</id><content type="html" xml:base="https://chuacheowhuan.github.io/DPDTH/">&lt;p&gt;Basic workflow of testing a dockerized Django &amp;amp; Postgres web app with Travis
+(continuous integration) &amp;amp; deployment to Heroku (continuous deployment).&lt;/p&gt;
 
 &lt;hr /&gt;
 
@@ -631,7 +644,18 @@ page. It is using the &lt;strong&gt;Heroku’s copy&lt;/strong&gt; of Postgres.&
 
 &lt;hr /&gt;
 
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">Basic workflow of testing a dockerized Django &amp;amp; Postgres web app with Travis (continuous integration) &amp;amp; deployment to Heroku (continuous delivery).</summary></entry><entry><title type="html">Django &amp;amp; Postgres with Docker in Travis CI</title><link href="https://chuacheowhuan.github.io/docker_travis/" rel="alternate" type="text/html" title="Django &amp; Postgres with Docker in Travis CI" /><published>2019-08-29T00:00:00+08:00</published><updated>2019-08-29T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/docker_travis</id><content type="html" xml:base="https://chuacheowhuan.github.io/docker_travis/">&lt;p&gt;Connecting Django &amp;amp; Postgres with Docker in Travis CI.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Web security:&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Please note that web security has not been throughly consider in this basic
+workflow describe above. &lt;strong&gt;Do NOT&lt;/strong&gt; simply use the above workflow for
+production.&lt;/p&gt;
+
+&lt;p&gt;For example the &lt;code class=&quot;highlighter-rouge&quot;&gt;SECRET_KEY&lt;/code&gt; in the settings.py isn’t dealt with at all
+and web security is really beyond the scope of this post.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">Basic workflow of testing a dockerized Django &amp;amp; Postgres web app with Travis (continuous integration) &amp;amp; deployment to Heroku (continuous deployment).</summary></entry><entry><title type="html">Django &amp;amp; Postgres with Docker in Travis CI</title><link href="https://chuacheowhuan.github.io/docker_travis/" rel="alternate" type="text/html" title="Django &amp; Postgres with Docker in Travis CI" /><published>2019-08-29T00:00:00+08:00</published><updated>2019-08-29T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/docker_travis</id><content type="html" xml:base="https://chuacheowhuan.github.io/docker_travis/">&lt;p&gt;Connecting Django &amp;amp; Postgres with Docker in Travis CI.&lt;/p&gt;
 
 &lt;hr /&gt;
 

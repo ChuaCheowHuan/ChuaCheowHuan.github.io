@@ -20,7 +20,7 @@
     <meta charset="utf-8">
 
 <!-- begin _includes/seo.html --><title>Django + Postgres + Docker + Travis CI + Heroku CD - Every little gist</title>
-<meta name="description" content="Basic workflow of testing a dockerized Django &amp; Postgres web app with Travis(continuous integration) &amp; deployment to Heroku (continuous delivery).">
+<meta name="description" content="Basic workflow of testing a dockerized Django &amp; Postgres web app with Travis(continuous integration) &amp; deployment to Heroku (continuous deployment).">
 
 
 
@@ -31,7 +31,7 @@
 <meta property="og:url" content="https://chuacheowhuan.github.io/DPDTH/">
 
 
-  <meta property="og:description" content="Basic workflow of testing a dockerized Django &amp; Postgres web app with Travis(continuous integration) &amp; deployment to Heroku (continuous delivery).">
+  <meta property="og:description" content="Basic workflow of testing a dockerized Django &amp; Postgres web app with Travis(continuous integration) &amp; deployment to Heroku (continuous deployment).">
 
 
 
@@ -263,7 +263,7 @@
       <h1 id="page-title" class="page__title">Django + Postgres + Docker + Travis CI + Heroku CD</h1>
     
     <p>Basic workflow of testing a dockerized Django &amp; Postgres web app with Travis
-(continuous integration) &amp; deployment to Heroku (continuous delivery).</p>
+(continuous integration) &amp; deployment to Heroku (continuous deployment).</p>
 
 <hr />
 
@@ -669,6 +669,17 @@ page. It is using the <strong>Heroku’s copy</strong> of Postgres.</p>
 
 <hr />
 
+<p><strong>Web security:</strong></p>
+
+<p>Please note that web security has not been throughly consider in this basic
+workflow describe above. <strong>Do NOT</strong> simply use the above workflow for
+production.</p>
+
+<p>For example the <code class="highlighter-rouge">SECRET_KEY</code> in the settings.py isn’t dealt with at all
+and web security is really beyond the scope of this post.</p>
+
+<hr />
+
 <p><br /></p>
 
 
@@ -708,11 +719,11 @@ page. It is using the <strong>Heroku’s copy</strong> of Postgres.</p>
 
 
 
-  59 minute read
+  65 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">Basic workflow of testing a Django &amp; Postgres web app with Travis
-(continuous integration) &amp; deployment to Heroku (continuous delivery).
+(continuous integration) &amp; deployment to Heroku (continuous deployment).
 
 </p>
   </article>
@@ -738,11 +749,11 @@ page. It is using the <strong>Heroku’s copy</strong> of Postgres.</p>
 
 
 
-  118 minute read
+  123 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">Basic workflow of testing a dockerized Django &amp; Postgres web app with Travis
-(continuous integration) &amp; deployment to Heroku (continuous delivery).
+(continuous integration) &amp; deployment to Heroku (continuous deployment).
 
 </p>
   </article>
