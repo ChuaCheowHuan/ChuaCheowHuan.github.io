@@ -19,19 +19,19 @@
   <head>
     <meta charset="utf-8">
 
-<!-- begin _includes/seo.html --><title>Random policy in RLlib - Every little gist</title>
-<meta name="description" content="Creating &amp; seeding a random policy class in RLlib.">
+<!-- begin _includes/seo.html --><title>Django + Postgres + Travis CI + Heroku CD - Every little gist</title>
+<meta name="description" content="Basic workflow of testing a Django &amp; Postgres web app with Travis(continuous integration) &amp; deployment to Heroku (continuous delivery).">
 
 
 
 <meta property="og:type" content="article">
 <meta property="og:locale" content="en_US">
 <meta property="og:site_name" content="Every little gist">
-<meta property="og:title" content="Random policy in RLlib">
-<meta property="og:url" content="https://chuacheowhuan.github.io/RLlib_rand_policy/">
+<meta property="og:title" content="Django + Postgres + Travis CI + Heroku CD">
+<meta property="og:url" content="https://chuacheowhuan.github.io/DPTH/">
 
 
-  <meta property="og:description" content="Creating &amp; seeding a random policy class in RLlib.">
+  <meta property="og:description" content="Basic workflow of testing a Django &amp; Postgres web app with Travis(continuous integration) &amp; deployment to Heroku (continuous delivery).">
 
 
 
@@ -41,7 +41,7 @@
 
 
 
-  <meta property="article:published_time" content="2019-08-29T00:00:00+08:00">
+  <meta property="article:published_time" content="2019-09-02T00:00:00+08:00">
 
 
 
@@ -52,7 +52,7 @@
   
 
 
-<link rel="canonical" href="https://chuacheowhuan.github.io/RLlib_rand_policy/">
+<link rel="canonical" href="https://chuacheowhuan.github.io/DPTH/">
 
 
 
@@ -260,65 +260,235 @@
 
   <div class="archive">
     
-      <h1 id="page-title" class="page__title">Random policy in RLlib</h1>
+      <h1 id="page-title" class="page__title">Django + Postgres + Travis CI + Heroku CD</h1>
     
-    <p>Creating &amp; seeding a random policy class in RLlib.</p>
+    <p>Basic workflow of testing a Django &amp; Postgres web app with Travis
+(continuous integration) &amp; deployment to Heroku (continuous delivery).</p>
+
+<p>See <a href="https://chuacheowhuan.github.io/DPDTH">Github</a> for a Dockerized
+version.</p>
 
 <hr />
 
-<p>Code on my <a href="https://github.com/ChuaCheowHuan/gym-continuousDoubleAuction/blob/master/gym_continuousDoubleAuction/CDA_env_cont_RLlib.py">Github</a></p>
+<p><strong>Prerequisite:</strong></p>
+
+<p>This post assumes that the reader has accounts with Github, Travis &amp; Heroku &amp;
+already has the accounts configured. For example, linking Travis with Github,
+setting up Postgres server in Heroku &amp; setting OS environment variables in
+Travis &amp; Heroku websites.</p>
 
 <hr />
 
-<p><strong>Function:</strong></p>
+<p>Code on my <a href="https://github.com/ChuaCheowHuan/web_app_DPTH">Github</a></p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>def make_RandomPolicy(_seed):
+<hr />
 
-    # a hand-coded policy that acts at random in the env (doesn't learn)
-    class RandomPolicy(Policy):
-        """Hand-coded policy that returns random actions."""
-        def __init__(self, observation_space, action_space, config):
-            self.observation_space = observation_space
-            self.action_space = action_space
-            self.action_space.seed(_seed)
+<p><strong>Which copy of Postgres to use during the different stages in the workflow?</strong></p>
 
-        def compute_actions(self,
-                            obs_batch,
-                            state_batches,
-                            prev_action_batch=None,
-                            prev_reward_batch=None,
-                            info_batch=None,
-                            episodes=None,
-                            **kwargs):
-            """Compute actions on a batch of observations."""
-            return [self.action_space.sample() for _ in obs_batch], [], {}
+<p>During development, the local Postgres database server is used. When testing in
+Travis, we’ll used Travis’s copy of Postgres &amp; when deploying, we’ll have to
+use Heroku’s copy.</p>
 
-        def learn_on_batch(self, samples):
-            """No learning."""
-            #return {}
-            pass
+<hr />
 
-        def get_weights(self):
-            pass
+<p><strong>makemigrations</strong></p>
 
-        def set_weights(self, weights):
-            pass
+<p>Always run <code class="highlighter-rouge">python manage.py makemigrations</code> before deployment to Heroku
+or in our case, before pushing to Github.</p>
 
-    return RandomPolicy
+<p>The actual <code class="highlighter-rouge">python manage.py migrate</code> for the Postgres server addon from
+Heroku will be run by the deploy section in the <code class="highlighter-rouge">.travis.yml</code> file.</p>
+
+<hr />
+
+<p><strong>Listing files &amp; directories in a tree:</strong></p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cd web_app_DPTH
+
+$ tree -a -I "CS50_web_dev|staticfiles|static|templates|LICENSE|README.md|__init__.py|settings_DPTH_.py|urls.py|wsgi.py|db.sqlite3|airline4_tests_.py|apps.py|migrations|views.py|models.py|flights.csv|manage.py|wait-for-it.sh|admin.py|.git|.travis_DPTH_.yml|Dockerfile|docker-compose.yml"  
+
+.
+├── .travis.yml
+├── Procfile
+├── airline
+│   └── settings.py
+├── flights
+│   └── tests.py
+└── requirements.txt
+</code></pre></div></div>
+
+<p>As shown in the tree above, the 5 files that matter in the workflow:</p>
+
+<p>1) tests.py</p>
+
+<p>2) settings.py</p>
+
+<p>3) requirements.txt</p>
+
+<p>4) .travis.yml</p>
+
+<p>5) Procfile</p>
+
+<p>We will look at the contents of each of the 5 files in the sections below.</p>
+
+<hr />
+
+<p><strong>tests.py</strong></p>
+
+<p>This is the test file that Travis will use for testing the app.
+You write whatever test you want for Travis to run with.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>from django.db.models import Max
+from django.test import Client, TestCase
+
+from .models import Airport, Flight, Passenger
+
+# Create your tests here.
+class FlightsTestCase(TestCase):
+
+    def setUp(self):
+
+        # Create airports.
+        a1 = Airport.objects.create(code="AAA", city="City A")
+        a2 = Airport.objects.create(code="BBB", city="City B")
+
+        # Create flights.
+        Flight.objects.create(origin=a1, destination=a2, duration=100)
+        Flight.objects.create(origin=a1, destination=a1, duration=200)
+        Flight.objects.create(origin=a2, destination=a1, duration=300)
+
+    # 1
+    def test_departures_count(self):
+        a = Airport.objects.get(code="AAA")
+        self.assertEqual(a.departures.count(), 2)
+
+    # 2
+    def test_arrivals_count(self):
+        a = Airport.objects.get(code="AAA")
+        self.assertEqual(a.arrivals.count(), 2)
+
+    # 3
+    def test_valid_flight(self):
+        a1 = Airport.objects.get(code="AAA")
+        a2 = Airport.objects.get(code="BBB")
+        f = Flight.objects.get(origin=a1, destination=a2)
+        self.assertTrue(f.is_valid_flight())
 </code></pre></div></div>
 
 <hr />
 
-<p><strong>Usage example:</strong></p>
+<p><strong>settings.py</strong></p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># Setup PPO with an ensemble of `num_policies` different policies
-    policies = {"policy_{}".format(i): gen_policy(i) for i in range(args.num_policies)} # contains many "policy_graphs" in a policies dictionary
+<p>Under the database section, the database credentials, as OS environment
+variables, has to be made available to Travis &amp; Heroku. They can be set in
+their respective websites.</p>
 
-    # override policy with random policy
-    policies["policy_{}".format(args.num_policies-3)] = (make_RandomPolicy(1), obs_space, act_space, {}) # random policy stored as the last item in policies dictionary
-    policies["policy_{}".format(args.num_policies-2)] = (make_RandomPolicy(2), obs_space, act_space, {}) # random policy stored as the last item in policies dictionary
-    policies["policy_{}".format(args.num_policies-1)] = (make_RandomPolicy(3), obs_space, act_space, {}) # random policy stored as the last item in policies dictionary
+<p>Add and/or edit the following to the <code class="highlighter-rouge">settings.py</code> file:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>import django_heroku
+import dj_database_url
 </code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>MIDDLEWARE = [
+    'django.middleware.security.SecurityMiddleware',
+
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # new
+
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+]
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.environ['DATABASE_NAME'],
+        'USER': os.environ['DATABASE_USER'],
+        'PASSWORD': os.environ['DATABASE_PASSWORD'],
+        'HOST': os.environ['DATABASE_HOST'],
+        'PORT': os.environ['DATABASE_PORT'],
+    }
+}
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>django_heroku.settings(locals())
+
+</code></pre></div></div>
+
+<hr />
+
+<p><strong>requirements.txt</strong></p>
+
+<p>This file lets Travis know what packages are needed for the app.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>django&gt;=2.0.11
+psycopg2
+psycopg2-binary
+dj-database-url==0.5.0
+gunicorn
+whitenoise
+django-heroku
+pytz
+sqlparse
+</code></pre></div></div>
+
+<hr />
+
+<p><strong>.travis.yml</strong></p>
+
+<p>This file contains instructions for Travis &amp; is needed when Travis starts
+running. <code class="highlighter-rouge">$HEROKU_API_KEY</code> can be generated from the Heroku website &amp;
+stored as an OS environment variable in the Travis website.
+The test is done with the <strong>Travis’s copy</strong> of Postgres.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>language: python
+python:
+    - 3.6
+services:
+    - postgresql
+install:
+    - pip install -r requirements.txt
+script:
+    - python manage.py test
+deploy:
+    provider: heroku
+    api_key: $HEROKU_API_KEY
+    app: webapp-dpth
+    run: python manage.py migrate
+    on: master
+</code></pre></div></div>
+
+<hr />
+
+<p><strong>Procfile</strong></p>
+
+<p>This file is for Heroku. It tells Heroku to deploy the web app using Gunicorn
+as the production server.</p>
+
+<p>Note that <code class="highlighter-rouge">airline</code> is the Django project name.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>web: gunicorn airline.wsgi
+</code></pre></div></div>
+
+<hr />
+
+<p><strong>The deployed web app</strong></p>
+
+<p>The web app is running on <a href="https://webapp-dpth.herokuapp.com">https://webapp-dpth.herokuapp.com</a></p>
+
+<p>This <a href="https://webapp-dpth.herokuapp.com/admin">link</a> brings you to the admin
+page. It is using the <strong>Heroku’s copy</strong> of Postgres.</p>
+
+<hr />
+
+<p><br /></p>
 
 
 <ul class="taxonomy__index">
@@ -357,7 +527,7 @@
 
 
 
-  59 minute read
+  56 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">Basic workflow of testing a Django &amp; Postgres web app with Travis
@@ -387,7 +557,7 @@
 
 
 
-  104 minute read
+  118 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">Basic workflow of testing a dockerized Django &amp; Postgres web app with Travis
@@ -417,7 +587,7 @@
 
 
 
-  15 minute read
+  42 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">Connecting Django &amp; Postgres with Docker in Travis CI.
@@ -1039,8 +1209,8 @@ algorithm.
     
   <script>
     var disqus_config = function () {
-      this.page.url = "https://chuacheowhuan.github.io/RLlib_rand_policy/";  // Replace PAGE_URL with your page's canonical URL variable
-      this.page.identifier = "/RLlib_rand_policy"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+      this.page.url = "https://chuacheowhuan.github.io/DPTH/";  // Replace PAGE_URL with your page's canonical URL variable
+      this.page.identifier = "/DPTH"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
     };
     (function() { // DON'T EDIT BELOW THIS LINE
       var d = document, s = d.createElement('script');

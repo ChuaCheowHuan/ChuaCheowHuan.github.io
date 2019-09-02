@@ -1,4 +1,637 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.5">Jekyll</generator><link href="https://chuacheowhuan.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://chuacheowhuan.github.io/" rel="alternate" type="text/html" /><updated>2019-08-29T13:10:11+08:00</updated><id>https://chuacheowhuan.github.io/feed.xml</id><title type="html">Every little gist</title><subtitle></subtitle><author><name>Chua Cheow Huan</name></author><entry><title type="html">Django &amp;amp; Postgres with Docker in Travis CI</title><link href="https://chuacheowhuan.github.io/docker_travis/" rel="alternate" type="text/html" title="Django &amp; Postgres with Docker in Travis CI" /><published>2019-08-29T00:00:00+08:00</published><updated>2019-08-29T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/docker_travis</id><content type="html" xml:base="https://chuacheowhuan.github.io/docker_travis/">&lt;p&gt;Connecting Django &amp;amp; Postgres with Docker in Travis CI.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.5">Jekyll</generator><link href="https://chuacheowhuan.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://chuacheowhuan.github.io/" rel="alternate" type="text/html" /><updated>2019-09-02T17:13:55+08:00</updated><id>https://chuacheowhuan.github.io/feed.xml</id><title type="html">Every little gist</title><subtitle></subtitle><author><name>Chua Cheow Huan</name></author><entry><title type="html">Django + Postgres + Travis CI + Heroku CD</title><link href="https://chuacheowhuan.github.io/DPTH/" rel="alternate" type="text/html" title="Django + Postgres + Travis CI + Heroku CD" /><published>2019-09-02T00:00:00+08:00</published><updated>2019-09-02T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/DPTH</id><content type="html" xml:base="https://chuacheowhuan.github.io/DPTH/">&lt;p&gt;Basic workflow of testing a Django &amp;amp; Postgres web app with Travis
+(continuous integration) &amp;amp; deployment to Heroku (continuous delivery).&lt;/p&gt;
+
+&lt;p&gt;See &lt;a href=&quot;https://chuacheowhuan.github.io/DPDTH&quot;&gt;Github&lt;/a&gt; for a Dockerized
+version.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;strong&gt;Prerequisite:&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;This post assumes that the reader has accounts with Github, Travis &amp;amp; Heroku &amp;amp;
+already has the accounts configured. For example, linking Travis with Github,
+setting up Postgres server in Heroku &amp;amp; setting OS environment variables in
+Travis &amp;amp; Heroku websites.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;Code on my &lt;a href=&quot;https://github.com/ChuaCheowHuan/web_app_DPTH&quot;&gt;Github&lt;/a&gt;&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;strong&gt;Which copy of Postgres to use during the different stages in the workflow?&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;During development, the local Postgres database server is used. When testing in
+Travis, we’ll used Travis’s copy of Postgres &amp;amp; when deploying, we’ll have to
+use Heroku’s copy.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;strong&gt;makemigrations&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Always run &lt;code class=&quot;highlighter-rouge&quot;&gt;python manage.py makemigrations&lt;/code&gt; before deployment to Heroku
+or in our case, before pushing to Github.&lt;/p&gt;
+
+&lt;p&gt;The actual &lt;code class=&quot;highlighter-rouge&quot;&gt;python manage.py migrate&lt;/code&gt; for the Postgres server addon from
+Heroku will be run by the deploy section in the &lt;code class=&quot;highlighter-rouge&quot;&gt;.travis.yml&lt;/code&gt; file.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;strong&gt;Listing files &amp;amp; directories in a tree:&lt;/strong&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;cd web_app_DPTH
+
+$ tree -a -I &quot;CS50_web_dev|staticfiles|static|templates|LICENSE|README.md|__init__.py|settings_DPTH_.py|urls.py|wsgi.py|db.sqlite3|airline4_tests_.py|apps.py|migrations|views.py|models.py|flights.csv|manage.py|wait-for-it.sh|admin.py|.git|.travis_DPTH_.yml|Dockerfile|docker-compose.yml&quot;  
+
+.
+├── .travis.yml
+├── Procfile
+├── airline
+│   └── settings.py
+├── flights
+│   └── tests.py
+└── requirements.txt
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;As shown in the tree above, the 5 files that matter in the workflow:&lt;/p&gt;
+
+&lt;p&gt;1) tests.py&lt;/p&gt;
+
+&lt;p&gt;2) settings.py&lt;/p&gt;
+
+&lt;p&gt;3) requirements.txt&lt;/p&gt;
+
+&lt;p&gt;4) .travis.yml&lt;/p&gt;
+
+&lt;p&gt;5) Procfile&lt;/p&gt;
+
+&lt;p&gt;We will look at the contents of each of the 5 files in the sections below.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;strong&gt;tests.py&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;This is the test file that Travis will use for testing the app.
+You write whatever test you want for Travis to run with.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;from django.db.models import Max
+from django.test import Client, TestCase
+
+from .models import Airport, Flight, Passenger
+
+# Create your tests here.
+class FlightsTestCase(TestCase):
+
+    def setUp(self):
+
+        # Create airports.
+        a1 = Airport.objects.create(code=&quot;AAA&quot;, city=&quot;City A&quot;)
+        a2 = Airport.objects.create(code=&quot;BBB&quot;, city=&quot;City B&quot;)
+
+        # Create flights.
+        Flight.objects.create(origin=a1, destination=a2, duration=100)
+        Flight.objects.create(origin=a1, destination=a1, duration=200)
+        Flight.objects.create(origin=a2, destination=a1, duration=300)
+
+    # 1
+    def test_departures_count(self):
+        a = Airport.objects.get(code=&quot;AAA&quot;)
+        self.assertEqual(a.departures.count(), 2)
+
+    # 2
+    def test_arrivals_count(self):
+        a = Airport.objects.get(code=&quot;AAA&quot;)
+        self.assertEqual(a.arrivals.count(), 2)
+
+    # 3
+    def test_valid_flight(self):
+        a1 = Airport.objects.get(code=&quot;AAA&quot;)
+        a2 = Airport.objects.get(code=&quot;BBB&quot;)
+        f = Flight.objects.get(origin=a1, destination=a2)
+        self.assertTrue(f.is_valid_flight())
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;strong&gt;settings.py&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Under the database section, the database credentials, as OS environment
+variables, has to be made available to Travis &amp;amp; Heroku. They can be set in
+their respective websites.&lt;/p&gt;
+
+&lt;p&gt;Add and/or edit the following to the &lt;code class=&quot;highlighter-rouge&quot;&gt;settings.py&lt;/code&gt; file:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;import django_heroku
+import dj_database_url
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;MIDDLEWARE = [
+    'django.middleware.security.SecurityMiddleware',
+
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # new
+
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+]
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.environ['DATABASE_NAME'],
+        'USER': os.environ['DATABASE_USER'],
+        'PASSWORD': os.environ['DATABASE_PASSWORD'],
+        'HOST': os.environ['DATABASE_HOST'],
+        'PORT': os.environ['DATABASE_PORT'],
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;django_heroku.settings(locals())
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;strong&gt;requirements.txt&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;This file lets Travis know what packages are needed for the app.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;django&amp;gt;=2.0.11
+psycopg2
+psycopg2-binary
+dj-database-url==0.5.0
+gunicorn
+whitenoise
+django-heroku
+pytz
+sqlparse
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;strong&gt;.travis.yml&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;This file contains instructions for Travis &amp;amp; is needed when Travis starts
+running. &lt;code class=&quot;highlighter-rouge&quot;&gt;$HEROKU_API_KEY&lt;/code&gt; can be generated from the Heroku website &amp;amp;
+stored as an OS environment variable in the Travis website.
+The test is done with the &lt;strong&gt;Travis’s copy&lt;/strong&gt; of Postgres.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;language: python
+python:
+    - 3.6
+services:
+    - postgresql
+install:
+    - pip install -r requirements.txt
+script:
+    - python manage.py test
+deploy:
+    provider: heroku
+    api_key: $HEROKU_API_KEY
+    app: webapp-dpth
+    run: python manage.py migrate
+    on: master
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;strong&gt;Procfile&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;This file is for Heroku. It tells Heroku to deploy the web app using Gunicorn
+as the production server.&lt;/p&gt;
+
+&lt;p&gt;Note that &lt;code class=&quot;highlighter-rouge&quot;&gt;airline&lt;/code&gt; is the Django project name.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;web: gunicorn airline.wsgi
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;strong&gt;The deployed web app&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;The web app is running on &lt;a href=&quot;https://webapp-dpth.herokuapp.com&quot;&gt;https://webapp-dpth.herokuapp.com&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;This &lt;a href=&quot;https://webapp-dpth.herokuapp.com/admin&quot;&gt;link&lt;/a&gt; brings you to the admin
+page. It is using the &lt;strong&gt;Heroku’s copy&lt;/strong&gt; of Postgres.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">Basic workflow of testing a Django &amp;amp; Postgres web app with Travis (continuous integration) &amp;amp; deployment to Heroku (continuous delivery).</summary></entry><entry><title type="html">Django + Postgres + Docker + Travis CI + Heroku CD</title><link href="https://chuacheowhuan.github.io/DPDTH/" rel="alternate" type="text/html" title="Django + Postgres + Docker + Travis CI + Heroku CD" /><published>2019-09-02T00:00:00+08:00</published><updated>2019-09-02T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/DPDTH</id><content type="html" xml:base="https://chuacheowhuan.github.io/DPDTH/">&lt;p&gt;Basic workflow of testing a dockerized Django &amp;amp; Postgres web app with Travis
+(continuous integration) &amp;amp; deployment to Heroku (continuous delivery).&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;strong&gt;Prerequisite:&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;1) This post assumes that the reader has accounts with Github, Travis &amp;amp; Heroku
+&amp;amp; already has the accounts configured. For example, linking Travis with Github,
+adding a Postgres server in Heroku &amp;amp; setting OS environment variables in
+Travis &amp;amp; Heroku websites.&lt;/p&gt;
+
+&lt;p&gt;2) Basic working knowledge of Django &amp;amp; Docker.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;Code on my &lt;a href=&quot;https://github.com/ChuaCheowHuan/web_app_DPDTH&quot;&gt;Github&lt;/a&gt;&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;strong&gt;Which copy of Postgres to use during the different stages in the workflow?&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;During development, we won’t be using a local copy of Postgres database
+server. The Docker’s copy of Postgres is used.&lt;/p&gt;
+
+&lt;p&gt;When testing in Travis, we don’t have to ask Travis for a copy of Postgres, we
+won’t be using Travis’s copy, we’ll be using the Docker’s copy.&lt;/p&gt;
+
+&lt;p&gt;During deployment, we have to use Heroku’s copy.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;strong&gt;makemigrations&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Always run &lt;code class=&quot;highlighter-rouge&quot;&gt;docker-compose web run python manage.py makemigrations&lt;/code&gt; before
+deployment to Heroku or in our case, before pushing to Github.&lt;/p&gt;
+
+&lt;p&gt;The actual &lt;code class=&quot;highlighter-rouge&quot;&gt;python manage.py migrate&lt;/code&gt; for the Postgres server addon from
+Heroku will be run in the &lt;code class=&quot;highlighter-rouge&quot;&gt;Procfile&lt;/code&gt; file.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;strong&gt;Listing files &amp;amp; directories in a tree:&lt;/strong&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;cd web_app_DPDTH
+
+$ tree -a -I &quot;CS50_web_dev|staticfiles|static|templates|LICENSE|README.md|__init__.py|settings_DPTH_.py|urls.py|wsgi.py|db.sqlite3|airline4_tests_.py|apps.py|migrations|views.py|models.py|flights.csv|manage.py|wait-for-it.sh|admin.py|.git|.travis_DPTH_.yml|__pycache__&quot;
+
+.
+├── .travis.yml
+├── .travis_DPDTH_.yml
+├── .travis_old.yml
+├── Dockerfile
+├── Procfile
+├── airline
+│   └── settings.py
+├── docker-compose.yml
+├── docker_push.sh
+├── flights
+│   └── tests.py
+├── heroku-container-release.sh
+└── requirements.txt
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;As shown in the tree above, the 9 files that matter in the workflow:&lt;/p&gt;
+
+&lt;p&gt;1) tests.py&lt;/p&gt;
+
+&lt;p&gt;2) settings.py&lt;/p&gt;
+
+&lt;p&gt;3) requirements.txt&lt;/p&gt;
+
+&lt;p&gt;4) Dockerfile&lt;/p&gt;
+
+&lt;p&gt;5) docker-compose.yml&lt;/p&gt;
+
+&lt;p&gt;6) .travis.yml&lt;/p&gt;
+
+&lt;p&gt;7) docker_push.sh&lt;/p&gt;
+
+&lt;p&gt;8) heroku-container-release.sh&lt;/p&gt;
+
+&lt;p&gt;9) Procfile&lt;/p&gt;
+
+&lt;p&gt;We will look at the contents of each of the 9 files in the sections below.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;strong&gt;tests.py&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;This is the test file that Travis will use for testing the app.
+You write whatever test you want for Travis to run with.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;from django.db.models import Max
+from django.test import Client, TestCase
+
+from .models import Airport, Flight, Passenger
+
+# Create your tests here.
+class FlightsTestCase(TestCase):
+
+    def setUp(self):
+
+        # Create airports.
+        a1 = Airport.objects.create(code=&quot;AAA&quot;, city=&quot;City A&quot;)
+        a2 = Airport.objects.create(code=&quot;BBB&quot;, city=&quot;City B&quot;)
+
+        # Create flights.
+        Flight.objects.create(origin=a1, destination=a2, duration=100)
+        Flight.objects.create(origin=a1, destination=a1, duration=200)
+        Flight.objects.create(origin=a2, destination=a1, duration=300)
+
+    # 1
+    def test_departures_count(self):
+        a = Airport.objects.get(code=&quot;AAA&quot;)
+        self.assertEqual(a.departures.count(), 2)
+
+    # 2
+    def test_arrivals_count(self):
+        a = Airport.objects.get(code=&quot;AAA&quot;)
+        self.assertEqual(a.arrivals.count(), 2)
+
+    # 3
+    def test_valid_flight(self):
+        a1 = Airport.objects.get(code=&quot;AAA&quot;)
+        a2 = Airport.objects.get(code=&quot;BBB&quot;)
+        f = Flight.objects.get(origin=a1, destination=a2)
+        self.assertTrue(f.is_valid_flight())
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;strong&gt;settings.py&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Under the database section, the &lt;code class=&quot;highlighter-rouge&quot;&gt;DATABASES['default']&lt;/code&gt; sets the default
+database so the default database is the one connected by the OS environment
+variable &lt;code class=&quot;highlighter-rouge&quot;&gt;DATABASE_URL&lt;/code&gt;, however if this is unavailable, we’ll use the one
+defined with &lt;code class=&quot;highlighter-rouge&quot;&gt;'HOST': 'db'&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;This setup allows us to use &lt;code class=&quot;highlighter-rouge&quot;&gt;'HOST': 'db'&lt;/code&gt; which is the Docker’s copy of
+postgres during development phase &amp;amp; also during tesing phase with Travis
+while using the Heroku’s copy during deployment which is provided by
+connecting to the &lt;code class=&quot;highlighter-rouge&quot;&gt;DATABASE_URL&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;The &lt;code class=&quot;highlighter-rouge&quot;&gt;DATABASE_URL&lt;/code&gt;, as an OS environment variable which is generated by
+Heroku after a Database is added to the web app in the Heroku website.&lt;/p&gt;
+
+&lt;p&gt;Add and/or edit the following to the &lt;code class=&quot;highlighter-rouge&quot;&gt;settings.py&lt;/code&gt; file:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;import django_heroku
+import dj_database_url
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;MIDDLEWARE = [
+    'django.middleware.security.SecurityMiddleware',
+
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # new
+
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+]
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'postgres',
+        'USER': 'postgres',
+        'PASSWORD': 'postgres',
+        'HOST': 'db', # Docker's copy of postgres
+        'PORT': 5432,
+        #'PORT': 5433,
+    }
+}
+
+DATABASE_URL = os.environ.get('DATABASE_URL')
+db_from_env = dj_database_url.config(default=DATABASE_URL, conn_max_age=500, ssl_require=True)
+DATABASES['default'].update(db_from_env)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;django_heroku.settings(locals())
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;strong&gt;requirements.txt&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;This file lets Docker &amp;amp; Travis know what packages are needed for the app.
+This is needed in &lt;code class=&quot;highlighter-rouge&quot;&gt;Dockerfile&lt;/code&gt; &amp;amp; &lt;code class=&quot;highlighter-rouge&quot;&gt;.travis.yml&lt;/code&gt; files.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;django&amp;gt;=2.0.11
+psycopg2
+psycopg2-binary
+dj-database-url==0.5.0
+gunicorn
+whitenoise
+django-heroku
+pytz
+sqlparse
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;strong&gt;Dockerfile&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;This contains the instructions for building a Docker image.&lt;/p&gt;
+
+&lt;p&gt;The &lt;code class=&quot;highlighter-rouge&quot;&gt;CMD gunicorn airline.wsgi:application --bind 0.0.0.0:$PORT&lt;/code&gt; tells
+Docker to use gunicorn as the web server.
+See &lt;a href=&quot;https://devcenter.heroku.com/articles/container-registry-and-runtime#testing-an-image-locally&quot;&gt;here&lt;/a&gt;
+for details.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;FROM python:3
+
+WORKDIR /usr/src/app
+
+ADD requirements.txt /usr/src/app
+
+RUN pip install -r requirements.txt
+
+ADD . /usr/src/app
+
+# collect static files
+RUN python manage.py collectstatic --noinput
+
+CMD gunicorn airline.wsgi:application --bind 0.0.0.0:$PORT
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;strong&gt;docker-compose.yml&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;This contains the instructions on how to run a Docker containers which is an
+instance of a Docker image.&lt;/p&gt;
+
+&lt;p&gt;Notice the &lt;code class=&quot;highlighter-rouge&quot;&gt;sleep&lt;/code&gt; delay introduced in the 2 &lt;code class=&quot;highlighter-rouge&quot;&gt;command:&lt;/code&gt; sections.
+See &lt;a href=&quot;https://chuacheowhuan.github.io/docker_travis/&quot;&gt;here&lt;/a&gt; for details.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;version: '3'
+
+services:
+    db:
+        image: postgres
+    migration:
+        build: .
+        command: bash -c 'while !&amp;lt;/dev/tcp/db/5432; do sleep 1; done; python3 manage.py migrate'
+        volumes:
+            - .:/usr/src/app
+        depends_on:
+            - db
+    web:
+        build: .
+#        container_name: webapp-dpdth
+        image: webapp-dpdth
+        command: bash -c 'while !&amp;lt;/dev/tcp/db/5432; do sleep 1; done; python3 manage.py runserver 0.0.0.0:8000'
+        volumes:
+            - .:/usr/src/app
+        ports:
+            - &quot;8000:8000&quot;
+        depends_on:
+            - db
+            - migration
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;strong&gt;.travis.yml&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;This file contains instructions for Travis. Notice that we’re not using the
+Postgres from Travis because we’re using Postgres from Docker directly.
+The &lt;code class=&quot;highlighter-rouge&quot;&gt;postgresql&lt;/code&gt; is therefore commented out under the &lt;code class=&quot;highlighter-rouge&quot;&gt;services:&lt;/code&gt;
+section.&lt;/p&gt;
+
+&lt;p&gt;Under &lt;code class=&quot;highlighter-rouge&quot;&gt;script:&lt;/code&gt;, we ask Travis to run the test using Docker with
+the &lt;code class=&quot;highlighter-rouge&quot;&gt;docker-compose&lt;/code&gt; command.&lt;/p&gt;
+
+&lt;p&gt;Under &lt;code class=&quot;highlighter-rouge&quot;&gt;deploy:&lt;/code&gt;, we execute a &lt;code class=&quot;highlighter-rouge&quot;&gt;docker_push.sh&lt;/code&gt; script, more details in
+the sections below.&lt;/p&gt;
+
+&lt;p&gt;The &lt;code class=&quot;highlighter-rouge&quot;&gt;skip_cleanup: true&lt;/code&gt; tells Travis not to remove any files that it
+deems unnecessary after deployment. Travis does not have permission to do that
+on Heroku anyway.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;language: python
+python:
+    - 3.6
+services:
+    - docker
+#    - postgresql
+install:
+    - pip install -r requirements.txt
+script:
+    - docker-compose run web python manage.py test
+deploy:
+    provider: script
+    script: bash docker_push.sh
+    skip_cleanup: true
+    on:
+        branch: master
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;strong&gt;Workflow for after testing with Travis to deployment to Heroku&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;The main workflow after testing to deployment is as such:&lt;/p&gt;
+
+&lt;p&gt;tag image -&amp;gt; push image to registry -&amp;gt; release image&lt;/p&gt;
+
+&lt;p&gt;We’ll see how to do that in the following script files:&lt;/p&gt;
+
+&lt;p&gt;1) docker_push.sh&lt;/p&gt;
+
+&lt;p&gt;2) heroku-container-release.sh&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;strong&gt;docker_push.sh&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;This file does several things listed as follows:&lt;/p&gt;
+
+&lt;p&gt;1) Login to the Heroku’s image registry.&lt;/p&gt;
+
+&lt;p&gt;2) &lt;code class=&quot;highlighter-rouge&quot;&gt;tag&lt;/code&gt; the source image &lt;code class=&quot;highlighter-rouge&quot;&gt;webapp-dpdth:latest&lt;/code&gt; to the target
+image &lt;code class=&quot;highlighter-rouge&quot;&gt;registry.heroku.com/webapp-dpdth/web&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;3) Push the target image to Heroku’s registry if the branch tested on Travis
+is a master branch &amp;amp; that it’s not a PR.&lt;/p&gt;
+
+&lt;p&gt;4) Change ownership &amp;amp; permission of files to allow Travis to execute
+the &lt;code class=&quot;highlighter-rouge&quot;&gt;heroku-container-release.sh&lt;/code&gt; script.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;#!/bin/bash&lt;/span&gt;
+
+&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;docker login &lt;span class=&quot;nt&quot;&gt;--username&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$HEROKU_DOCKER_USERNAME&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;--password&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$HEROKU_AUTH_TOKEN&lt;/span&gt; registry.heroku.com
+&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;docker tag webapp-dpdth:latest registry.heroku.com/webapp-dpdth/web
+&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$TRAVIS_BRANCH&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;master&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$TRAVIS_PULL_REQUEST&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;false&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;then &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;docker push registry.heroku.com/webapp-dpdth/web&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;fi
+
+&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;chmod&lt;/span&gt; +x heroku-container-release.sh
+&lt;span class=&quot;nb&quot;&gt;sudo chown&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$USER&lt;/span&gt;:docker ~/.docker
+&lt;span class=&quot;nb&quot;&gt;sudo chown&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$USER&lt;/span&gt;:docker ~/.docker/config.json
+&lt;span class=&quot;nb&quot;&gt;sudo chmod &lt;/span&gt;g+rw ~/.docker/config.json
+
+./heroku-container-release.sh
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;strong&gt;heroku-container-release.sh&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;This file is for releasing a Docker image via Heroku’s API.
+Replace &lt;code class=&quot;highlighter-rouge&quot;&gt;webapp-dpdth&lt;/code&gt; with your app name on Heroku.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;#!/bin/bash&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;imageId&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;$(&lt;/span&gt;docker inspect registry.heroku.com/webapp-dpdth/web &lt;span class=&quot;nt&quot;&gt;--format&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;={{&lt;/span&gt;.Id&lt;span class=&quot;o&quot;&gt;}}&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;payload&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'{&quot;updates&quot;:[{&quot;type&quot;:&quot;web&quot;,&quot;docker_image&quot;:&quot;'&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$imageId&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'&quot;}]}'&lt;/span&gt;
+curl &lt;span class=&quot;nt&quot;&gt;-n&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-X&lt;/span&gt; PATCH https://api.heroku.com/apps/webapp-dpdth/formation &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;-d&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$payload&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;-H&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;Content-Type: application/json&quot;&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;-H&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;Accept: application/vnd.heroku+json; version=3.docker-releases&quot;&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;-H&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;Authorization: Bearer &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$HEROKU_AUTH_TOKEN&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;See &lt;a href=&quot;https://devcenter.heroku.com/articles/container-registry-and-runtime#releasing-an-image&quot;&gt;here&lt;/a&gt;
+for details.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;strong&gt;Procfile&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;This file is for Heroku. The command in the &lt;code class=&quot;highlighter-rouge&quot;&gt;release:&lt;/code&gt; section will run
+after a Docker image is released. It will run the &lt;code class=&quot;highlighter-rouge&quot;&gt;migrate&lt;/code&gt; command
+with &lt;code class=&quot;highlighter-rouge&quot;&gt;--noinput&lt;/code&gt; option. Without running &lt;code class=&quot;highlighter-rouge&quot;&gt;migrate&lt;/code&gt;, the database on
+Heroku may not function correctly.&lt;/p&gt;
+
+&lt;p&gt;It also tells Heroku to deploy the web app using Gunicorn as the production
+server.&lt;/p&gt;
+
+&lt;p&gt;Note that &lt;code class=&quot;highlighter-rouge&quot;&gt;airline&lt;/code&gt; is the Django project name. It’s not the web app name
+in the Django project &amp;amp; is also not the web app name in Heroku.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;release: python manage.py migrate --noinput
+web: gunicorn airline.wsgi
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;strong&gt;The deployed web app&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;The web app is running on &lt;a href=&quot;https://webapp-dpdth.herokuapp.com&quot;&gt;https://webapp-dpdth.herokuapp.com&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;This &lt;a href=&quot;https://webapp-dpdth.herokuapp.com/admin&quot;&gt;link&lt;/a&gt; brings you to the admin
+page. It is using the &lt;strong&gt;Heroku’s copy&lt;/strong&gt; of Postgres.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">Basic workflow of testing a dockerized Django &amp;amp; Postgres web app with Travis (continuous integration) &amp;amp; deployment to Heroku (continuous delivery).</summary></entry><entry><title type="html">Django &amp;amp; Postgres with Docker in Travis CI</title><link href="https://chuacheowhuan.github.io/docker_travis/" rel="alternate" type="text/html" title="Django &amp; Postgres with Docker in Travis CI" /><published>2019-08-29T00:00:00+08:00</published><updated>2019-08-29T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/docker_travis</id><content type="html" xml:base="https://chuacheowhuan.github.io/docker_travis/">&lt;p&gt;Connecting Django &amp;amp; Postgres with Docker in Travis CI.&lt;/p&gt;
 
 &lt;hr /&gt;
 
@@ -133,7 +766,7 @@ Travis’s job log.&lt;/p&gt;
 
 &lt;h2 id=&quot;references&quot;&gt;References:&lt;/h2&gt;
 
-&lt;p&gt;&lt;a href=&quot;https://stackoverflow.com/questions/35069027/docker-wait-for-postgresql-to-be-running&quot;&gt;stackoverflow&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;See this &lt;a href=&quot;https://stackoverflow.com/questions/35069027/docker-wait-for-postgresql-to-be-running&quot;&gt;post&lt;/a&gt; in stackoverflow.&lt;/p&gt;
 
 &lt;hr /&gt;
 
@@ -885,279 +1518,4 @@ If it’s full, dequeue the items in a list. the list will be used for display.&
 
 &lt;hr /&gt;
 
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">This post documents my implementation of the A3C (Asynchronous Advantage Actor Critic) algorithm (Distributed discrete version).</summary></entry><entry><title type="html">A3C multi-threaded continuous version with N step targets</title><link href="https://chuacheowhuan.github.io/A3C_cont_thread_nStep/" rel="alternate" type="text/html" title="A3C multi-threaded continuous version with N step targets" /><published>2019-06-14T00:00:00+08:00</published><updated>2019-06-14T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/A3C_cont_thread_nStep</id><content type="html" xml:base="https://chuacheowhuan.github.io/A3C_cont_thread_nStep/">&lt;p&gt;This post documents my implementation of the A3C
-(Asynchronous Advantage Actor Critic) algorithm.
-(multi-threaded &lt;strong&gt;continuous&lt;/strong&gt; version)&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;An A3C (Asynchronous Advantage Actor Critic) implementation with
-Tensorflow. This is a multi-threaded &lt;strong&gt;continuous&lt;/strong&gt; version. The code is tested with
-Gym’s continuous action space environment, Pendulum-v0 on Colab.&lt;/p&gt;
-
-&lt;p&gt;Code on my &lt;a href=&quot;https://github.com/ChuaCheowHuan/reinforcement_learning/blob/master/A3C/A3C_cont_max.ipynb&quot;&gt;Github&lt;/a&gt;: (use maximum terms possible)&lt;/p&gt;
-
-&lt;p&gt;The majority of the code is very similar to the &lt;a href=&quot;https://chuacheowhuan.github.io/A3C_disc_thread_nStep/&quot;&gt;discrete&lt;/a&gt; version with the
-exceptions highlighted in the implementation details section:&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;key-implementation-details&quot;&gt;Key implementation details:&lt;/h2&gt;
-
-&lt;p&gt;Action selection:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;with tf.name_scope('select_action'):
-    #mean = mean * action_bound[1]                   
-    mean = mean * ( action_bound[1] - action_bound[0] ) / 2
-    sigma += 1e-4
-    normal_dist = tf.distributions.Normal(mean, sigma)                     
-    self.choose_a = tf.clip_by_value(tf.squeeze(normal_dist.sample(1), axis=[0, 1]), action_bound[0], action_bound[1])                  
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Loss function of the actor network:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;with tf.name_scope('actor_loss'):
-    log_prob = normal_dist.log_prob(self.a)
-    #actor_component = log_prob * tf.stop_gradient(TD_err)
-    actor_component = log_prob * tf.stop_gradient(self.baselined_returns)
-    entropy = -tf.reduce_mean(normal_dist.entropy()) # Compute the differential entropy of the multivariate normal.                   
-    self.actor_loss = -tf.reduce_mean( ENTROPY_BETA * entropy + actor_component)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;The following code segment creates a LSTM layer:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;def _lstm(self, Inputs, cell_size):
-        # [time_step, feature] =&amp;gt; [time_step, batch, feature]
-        s = tf.expand_dims(Inputs, axis=1, name='time_major')  
-        lstm_cell = tf.nn.rnn_cell.LSTMCell(cell_size)
-        self.init_state = lstm_cell.zero_state(batch_size=1, dtype=tf.float32)
-        outputs, self.final_state = tf.nn.dynamic_rnn(cell=lstm_cell, inputs=s, initial_state=self.init_state, time_major=True)
-        # joined state representation          
-        lstm_out = tf.reshape(outputs, [-1, cell_size], name='flatten_rnn_outputs')  
-        return lstm_out
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;The following function in the ACNet class creates the actor and critic’s neural
-networks(note that the critic’s network contains a LSTM layer):&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;def _create_net(self, scope):
-    w_init = tf.glorot_uniform_initializer()
-    #w_init = tf.random_normal_initializer(0., .1)
-    with tf.variable_scope('actor'):                        
-        hidden = tf.layers.dense(self.s, actor_hidden, tf.nn.relu6, kernel_initializer=w_init, name='hidden')            
-        #lstm_out = self._lstm(hidden, cell_size)
-        # tanh range = [-1,1]
-        mean = tf.layers.dense(hidden, num_actions, tf.nn.tanh, kernel_initializer=w_init, name='mean')
-        # softplus range = {0,inf}
-        sigma = tf.layers.dense(hidden, num_actions, tf.nn.softplus, kernel_initializer=w_init, name='sigma')
-    with tf.variable_scope('critic'):
-        hidden = tf.layers.dense(self.s, critic_hidden, tf.nn.relu6, kernel_initializer=w_init, name='hidden')
-        lstm_out = self._lstm(hidden, cell_size)
-        V = tf.layers.dense(lstm_out, 1, kernel_initializer=w_init, name='V')  
-    actor_params = tf.get_collection(tf.GraphKeys.TRAINABLE_VARIABLES, scope=scope + '/actor')
-    critic_params = tf.get_collection(tf.GraphKeys.TRAINABLE_VARIABLES, scope=scope + '/critic')
-    return mean, sigma, V, actor_params, critic_params
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">This post documents my implementation of the A3C (Asynchronous Advantage Actor Critic) algorithm. (multi-threaded continuous version)</summary></entry><entry><title type="html">A3C multi-threaded discrete version with N step targets</title><link href="https://chuacheowhuan.github.io/A3C_disc_thread_nStep/" rel="alternate" type="text/html" title="A3C multi-threaded discrete version with N step targets" /><published>2019-06-13T00:00:00+08:00</published><updated>2019-06-13T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/A3C_disc_thread_nStep</id><content type="html" xml:base="https://chuacheowhuan.github.io/A3C_disc_thread_nStep/">&lt;p&gt;This post documents my implementation of the A3C
-(Asynchronous Advantage Actor Critic) algorithm (discrete).
-(multi-threaded &lt;strong&gt;discrete&lt;/strong&gt; version)&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;A3C (Asynchronous Advantage Actor Critic) implementation with Tensorflow.
-This is a multi-threaded &lt;strong&gt;discrete&lt;/strong&gt; version. The code is tested with Gym’s
-discrete action space environment, CartPole-v0 on Colab.&lt;/p&gt;
-
-&lt;p&gt;Code on my &lt;a href=&quot;https://github.com/ChuaCheowHuan/reinforcement_learning/blob/master/A3C/A3C_disc_miss.ipynb&quot;&gt;Github&lt;/a&gt;: (missing terms are treated as 0)&lt;/p&gt;
-
-&lt;p&gt;Code on my &lt;a href=&quot;https://github.com/ChuaCheowHuan/reinforcement_learning/blob/master/A3C/A3C_disc_max.ipynb&quot;&gt;Github&lt;/a&gt;: (use maximum terms possible)&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;notations&quot;&gt;Notations:&lt;/h2&gt;
-
-&lt;p&gt;Actor network = &lt;script type=&quot;math/tex&quot;&gt;{\pi}_{\theta}&lt;/script&gt;&lt;/p&gt;
-
-&lt;p&gt;Actor network parameter = &lt;script type=&quot;math/tex&quot;&gt;{\theta}&lt;/script&gt;&lt;/p&gt;
-
-&lt;p&gt;Critic network = &lt;script type=&quot;math/tex&quot;&gt;V_{\phi}&lt;/script&gt;&lt;/p&gt;
-
-&lt;p&gt;Critic network parameter = &lt;script type=&quot;math/tex&quot;&gt;\phi&lt;/script&gt;&lt;/p&gt;
-
-&lt;p&gt;Advantage function = A&lt;/p&gt;
-
-&lt;p&gt;Number of trajectories = m&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;equations&quot;&gt;Equations:&lt;/h2&gt;
-
-&lt;p&gt;Actor component: log&lt;script type=&quot;math/tex&quot;&gt;{\pi}_{\theta}&lt;/script&gt; &lt;script type=&quot;math/tex&quot;&gt;(a_{t} {\mid} s_{t})&lt;/script&gt;&lt;/p&gt;
-
-&lt;p&gt;Critic component = Advantage function = A = &lt;script type=&quot;math/tex&quot;&gt;Q(s_{t}, a_{t})&lt;/script&gt; - &lt;script type=&quot;math/tex&quot;&gt;V_{\phi}(s_{t})&lt;/script&gt;&lt;/p&gt;
-
-&lt;p&gt;Q values with N-step truncated estimate :&lt;/p&gt;
-
-&lt;p&gt;&lt;script type=&quot;math/tex&quot;&gt;Q^{\pi}(s_{t}, a_{t})&lt;/script&gt; = E(&lt;script type=&quot;math/tex&quot;&gt;r_{t}&lt;/script&gt; + &lt;script type=&quot;math/tex&quot;&gt;\gamma&lt;/script&gt; &lt;script type=&quot;math/tex&quot;&gt;r_{t+1}&lt;/script&gt; + &lt;script type=&quot;math/tex&quot;&gt;\gamma^{2}&lt;/script&gt; &lt;script type=&quot;math/tex&quot;&gt;r_{t+2}&lt;/script&gt; + … + &lt;script type=&quot;math/tex&quot;&gt;\gamma^{n}&lt;/script&gt; V(&lt;script type=&quot;math/tex&quot;&gt;s_{t+n}&lt;/script&gt;))&lt;/p&gt;
-
-&lt;p&gt;Check this &lt;a href=&quot;https://chuacheowhuan.github.io/n_step_targets/&quot;&gt;post&lt;/a&gt; for more information on N-step truncated estimate.&lt;/p&gt;
-
-&lt;p&gt;Policy gradient estimator&lt;/p&gt;
-
-&lt;p&gt;= &lt;script type=&quot;math/tex&quot;&gt;\nabla_\theta J(\theta)&lt;/script&gt;&lt;/p&gt;
-
-&lt;p&gt;= &lt;script type=&quot;math/tex&quot;&gt;{\dfrac{1}{m}}&lt;/script&gt; &lt;script type=&quot;math/tex&quot;&gt;{\sum\limits_{i=1}^{m}}&lt;/script&gt; &lt;script type=&quot;math/tex&quot;&gt;{\sum\limits_{t=0}^{T}}&lt;/script&gt; &lt;script type=&quot;math/tex&quot;&gt;\nabla_\theta&lt;/script&gt; log&lt;script type=&quot;math/tex&quot;&gt;{\pi}_{\theta}&lt;/script&gt; &lt;script type=&quot;math/tex&quot;&gt;(a_{t} {\mid} s_{t})&lt;/script&gt; &lt;script type=&quot;math/tex&quot;&gt;Q(s_{t}, a_{t})&lt;/script&gt; - &lt;script type=&quot;math/tex&quot;&gt;V_{\phi}(s_{t})&lt;/script&gt;&lt;/p&gt;
-
-&lt;p&gt;= &lt;script type=&quot;math/tex&quot;&gt;{\dfrac{1}{m}}&lt;/script&gt; &lt;script type=&quot;math/tex&quot;&gt;{\sum\limits_{i=1}^{m}}&lt;/script&gt; &lt;script type=&quot;math/tex&quot;&gt;{\sum\limits_{t=0}^{T}}&lt;/script&gt; &lt;script type=&quot;math/tex&quot;&gt;\nabla_\theta&lt;/script&gt; log&lt;script type=&quot;math/tex&quot;&gt;{\pi}_{\theta}&lt;/script&gt; &lt;script type=&quot;math/tex&quot;&gt;(a_{t} {\mid} s_{t})&lt;/script&gt; A&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;key-implementation-details&quot;&gt;Key implementation details:&lt;/h2&gt;
-
-&lt;p&gt;The &lt;code class=&quot;highlighter-rouge&quot;&gt;ACNet&lt;/code&gt; class defines the models (Tensorflow graphs) and contains both
-the actor and the critic networks. The &lt;code class=&quot;highlighter-rouge&quot;&gt;Worker&lt;/code&gt; class contains the work
-function that does the main bulk of the computation. A copy of &lt;code class=&quot;highlighter-rouge&quot;&gt;ACNet&lt;/code&gt; is
-declared globally &amp;amp; it’s parameters are shared by the threaded workers. Each
-worker also have it’s own local copy of &lt;code class=&quot;highlighter-rouge&quot;&gt;ACNet&lt;/code&gt;. Workers are instantiated &amp;amp;
-threaded in the main program.&lt;/p&gt;
-
-&lt;h3 id=&quot;acnet-class&quot;&gt;ACNet class:&lt;/h3&gt;
-
-&lt;p&gt;Loss function for the actor network for the discrete environment:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;with tf.name_scope('actor_loss'):
-    log_prob = tf.reduce_sum(tf.log(self.action_prob + 1e-5) * tf.one_hot(self.a, num_actions, dtype=tf.float32), axis=1, keep_dims=True)
-    actor_component = log_prob * tf.stop_gradient(self.baselined_returns)
-    # entropy for exploration
-    entropy = -tf.reduce_sum(self.action_prob * tf.log(self.action_prob + 1e-5), axis=1, keep_dims=True)  # encourage exploration
-    self.actor_loss = tf.reduce_mean( -(ENTROPY_BETA * entropy + actor_component) )                                        
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;Loss function for the critic network for the discrete environment:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;TD_err = tf.subtract(self.critic_target, self.V, name='TD_err')
-      .
-      .
-      .
-with tf.name_scope('critic_loss'):
-    self.critic_loss = tf.reduce_mean(tf.square(TD_err))
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;The following function in the ACNet class creates the actor and critic’s neural
-networks:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;def _create_net(self, scope):
-    w_init = tf.glorot_uniform_initializer()
-    with tf.variable_scope('actor'):
-        hidden = tf.layers.dense(self.s, actor_hidden, tf.nn.relu6, kernel_initializer=w_init, name='hidden')
-        action_prob = tf.layers.dense(hidden, num_actions, tf.nn.softmax, kernel_initializer=w_init, name='action_prob')        
-    with tf.variable_scope('critic'):
-        hidden = tf.layers.dense(self.s, critic_hidden, tf.nn.relu6, kernel_initializer=w_init, name='hidden')
-        V = tf.layers.dense(hidden, 1, kernel_initializer=w_init, name='V')         
-    actor_params = tf.get_collection(tf.GraphKeys.TRAINABLE_VARIABLES, scope=scope + '/actor')
-    critic_params = tf.get_collection(tf.GraphKeys.TRAINABLE_VARIABLES, scope=scope + '/critic')       
-    return action_prob, V, actor_params, critic_params
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;worker-class&quot;&gt;Worker class:&lt;/h3&gt;
-
-&lt;p&gt;Discounted rewards are used as critic’s targets:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;critic_target = self.discount_rewards(buffer_r, GAMMA, V_s)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;N-step returns are used in the computation of the Advantage function
-(baselined_returns):&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# Advantage function
-baselined_returns = n_step_targets - baseline
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;2 versions of N-step targets could be used:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;
-    &lt;p&gt;missing terms are treated as 0.&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;use maximum terms possible.&lt;/p&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Check this &lt;a href=&quot;https://chuacheowhuan.github.io/n_step_targets/&quot;&gt;post&lt;/a&gt; for more
-information on N-step targets.&lt;/p&gt;
-
-&lt;p&gt;The following code segment accumulates gradients &amp;amp; apply them to the local
-critic network:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;self.AC.accumu_grad_critic(feed_dict) # accumulating gradients for local critic  
-self.AC.apply_accumu_grad_critic(feed_dict)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;The following code segment computes the advantage function(baselined_returns):&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;baseline = SESS.run(self.AC.V, {self.AC.s: buffer_s}) # Value function
-epr = np.vstack(buffer_r).astype(np.float32)
-n_step_targets = self.compute_n_step_targets_missing(epr, baseline, GAMMA, N_step) # Q values
-# Advantage function
-baselined_returns = n_step_targets - baseline
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;The following code segment accumulates gradients for the local actor network:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;self.AC.accumu_grad_actor(feed_dict) # accumulating gradients for local actor  
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;The following code segment push the parameters from the local networks to the
-global networks and then pulls the updated global parameters to the local
-networks:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# update
-self.AC.push_global_actor(feed_dict)                
-self.AC.push_global_critic(feed_dict)
-    .
-    .
-    .
-self.AC.pull_global()
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;The following code segment initialize storage for accumulated local gradients.&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;self.AC.init_grad_storage_actor() # initialize storage for accumulated gradients.
-self.AC.init_grad_storage_critic()            
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Check this &lt;a href=&quot;https://chuacheowhuan.github.io/tf_accumulate_grad/&quot;&gt;post&lt;/a&gt; for more
-information on how to accumulate gradients in Tensorflow.&lt;/p&gt;
-
-&lt;h2 id=&quot;main-program&quot;&gt;Main program:&lt;/h2&gt;
-
-&lt;p&gt;The following code segment creates the workers:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;workers = []
-for i in range(num_workers): # Create worker
-    i_name = 'W_%i' % i # worker name
-    workers.append(Worker(i_name, GLOBAL_AC))
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;The following code segment threads the workers:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;worker_threads = []
-for worker in workers:
-    job = lambda: worker.work()
-    t = threading.Thread(target=job)
-    t.start()
-    worker_threads.append(t)
-COORD.join(worker_threads)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h2 id=&quot;references&quot;&gt;References:&lt;/h2&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://arxiv.org/pdf/1602.01783.pdf&quot;&gt;Asynchronous Methods for Deep Reinforcement Learning
-(Mnih, Badia, Mirza, Graves, Harley, Lillicrap, et al., 2016)&lt;/a&gt;&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">This post documents my implementation of the A3C (Asynchronous Advantage Actor Critic) algorithm (discrete). (multi-threaded discrete version)</summary></entry></feed>
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">This post documents my implementation of the A3C (Asynchronous Advantage Actor Critic) algorithm (Distributed discrete version).</summary></entry></feed>

@@ -19,19 +19,19 @@
   <head>
     <meta charset="utf-8">
 
-<!-- begin _includes/seo.html --><title>Random policy in RLlib - Every little gist</title>
-<meta name="description" content="Creating &amp; seeding a random policy class in RLlib.">
+<!-- begin _includes/seo.html --><title>Django + Postgres + Docker + Travis CI + Heroku CD - Every little gist</title>
+<meta name="description" content="Basic workflow of testing a dockerized Django &amp; Postgres web app with Travis(continuous integration) &amp; deployment to Heroku (continuous delivery).">
 
 
 
 <meta property="og:type" content="article">
 <meta property="og:locale" content="en_US">
 <meta property="og:site_name" content="Every little gist">
-<meta property="og:title" content="Random policy in RLlib">
-<meta property="og:url" content="https://chuacheowhuan.github.io/RLlib_rand_policy/">
+<meta property="og:title" content="Django + Postgres + Docker + Travis CI + Heroku CD">
+<meta property="og:url" content="https://chuacheowhuan.github.io/DPDTH/">
 
 
-  <meta property="og:description" content="Creating &amp; seeding a random policy class in RLlib.">
+  <meta property="og:description" content="Basic workflow of testing a dockerized Django &amp; Postgres web app with Travis(continuous integration) &amp; deployment to Heroku (continuous delivery).">
 
 
 
@@ -41,7 +41,7 @@
 
 
 
-  <meta property="article:published_time" content="2019-08-29T00:00:00+08:00">
+  <meta property="article:published_time" content="2019-09-02T00:00:00+08:00">
 
 
 
@@ -52,7 +52,7 @@
   
 
 
-<link rel="canonical" href="https://chuacheowhuan.github.io/RLlib_rand_policy/">
+<link rel="canonical" href="https://chuacheowhuan.github.io/DPDTH/">
 
 
 
@@ -260,65 +260,416 @@
 
   <div class="archive">
     
-      <h1 id="page-title" class="page__title">Random policy in RLlib</h1>
+      <h1 id="page-title" class="page__title">Django + Postgres + Docker + Travis CI + Heroku CD</h1>
     
-    <p>Creating &amp; seeding a random policy class in RLlib.</p>
+    <p>Basic workflow of testing a dockerized Django &amp; Postgres web app with Travis
+(continuous integration) &amp; deployment to Heroku (continuous delivery).</p>
 
 <hr />
 
-<p>Code on my <a href="https://github.com/ChuaCheowHuan/gym-continuousDoubleAuction/blob/master/gym_continuousDoubleAuction/CDA_env_cont_RLlib.py">Github</a></p>
+<p><strong>Prerequisite:</strong></p>
+
+<p>1) This post assumes that the reader has accounts with Github, Travis &amp; Heroku
+&amp; already has the accounts configured. For example, linking Travis with Github,
+adding a Postgres server in Heroku &amp; setting OS environment variables in
+Travis &amp; Heroku websites.</p>
+
+<p>2) Basic working knowledge of Django &amp; Docker.</p>
 
 <hr />
 
-<p><strong>Function:</strong></p>
+<p>Code on my <a href="https://github.com/ChuaCheowHuan/web_app_DPDTH">Github</a></p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>def make_RandomPolicy(_seed):
+<hr />
 
-    # a hand-coded policy that acts at random in the env (doesn't learn)
-    class RandomPolicy(Policy):
-        """Hand-coded policy that returns random actions."""
-        def __init__(self, observation_space, action_space, config):
-            self.observation_space = observation_space
-            self.action_space = action_space
-            self.action_space.seed(_seed)
+<p><strong>Which copy of Postgres to use during the different stages in the workflow?</strong></p>
 
-        def compute_actions(self,
-                            obs_batch,
-                            state_batches,
-                            prev_action_batch=None,
-                            prev_reward_batch=None,
-                            info_batch=None,
-                            episodes=None,
-                            **kwargs):
-            """Compute actions on a batch of observations."""
-            return [self.action_space.sample() for _ in obs_batch], [], {}
+<p>During development, we won’t be using a local copy of Postgres database
+server. The Docker’s copy of Postgres is used.</p>
 
-        def learn_on_batch(self, samples):
-            """No learning."""
-            #return {}
-            pass
+<p>When testing in Travis, we don’t have to ask Travis for a copy of Postgres, we
+won’t be using Travis’s copy, we’ll be using the Docker’s copy.</p>
 
-        def get_weights(self):
-            pass
+<p>During deployment, we have to use Heroku’s copy.</p>
 
-        def set_weights(self, weights):
-            pass
+<hr />
 
-    return RandomPolicy
+<p><strong>makemigrations</strong></p>
+
+<p>Always run <code class="highlighter-rouge">docker-compose web run python manage.py makemigrations</code> before
+deployment to Heroku or in our case, before pushing to Github.</p>
+
+<p>The actual <code class="highlighter-rouge">python manage.py migrate</code> for the Postgres server addon from
+Heroku will be run in the <code class="highlighter-rouge">Procfile</code> file.</p>
+
+<hr />
+
+<p><strong>Listing files &amp; directories in a tree:</strong></p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cd web_app_DPDTH
+
+$ tree -a -I "CS50_web_dev|staticfiles|static|templates|LICENSE|README.md|__init__.py|settings_DPTH_.py|urls.py|wsgi.py|db.sqlite3|airline4_tests_.py|apps.py|migrations|views.py|models.py|flights.csv|manage.py|wait-for-it.sh|admin.py|.git|.travis_DPTH_.yml|__pycache__"
+
+.
+├── .travis.yml
+├── .travis_DPDTH_.yml
+├── .travis_old.yml
+├── Dockerfile
+├── Procfile
+├── airline
+│   └── settings.py
+├── docker-compose.yml
+├── docker_push.sh
+├── flights
+│   └── tests.py
+├── heroku-container-release.sh
+└── requirements.txt
+
+</code></pre></div></div>
+
+<p>As shown in the tree above, the 9 files that matter in the workflow:</p>
+
+<p>1) tests.py</p>
+
+<p>2) settings.py</p>
+
+<p>3) requirements.txt</p>
+
+<p>4) Dockerfile</p>
+
+<p>5) docker-compose.yml</p>
+
+<p>6) .travis.yml</p>
+
+<p>7) docker_push.sh</p>
+
+<p>8) heroku-container-release.sh</p>
+
+<p>9) Procfile</p>
+
+<p>We will look at the contents of each of the 9 files in the sections below.</p>
+
+<hr />
+
+<p><strong>tests.py</strong></p>
+
+<p>This is the test file that Travis will use for testing the app.
+You write whatever test you want for Travis to run with.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>from django.db.models import Max
+from django.test import Client, TestCase
+
+from .models import Airport, Flight, Passenger
+
+# Create your tests here.
+class FlightsTestCase(TestCase):
+
+    def setUp(self):
+
+        # Create airports.
+        a1 = Airport.objects.create(code="AAA", city="City A")
+        a2 = Airport.objects.create(code="BBB", city="City B")
+
+        # Create flights.
+        Flight.objects.create(origin=a1, destination=a2, duration=100)
+        Flight.objects.create(origin=a1, destination=a1, duration=200)
+        Flight.objects.create(origin=a2, destination=a1, duration=300)
+
+    # 1
+    def test_departures_count(self):
+        a = Airport.objects.get(code="AAA")
+        self.assertEqual(a.departures.count(), 2)
+
+    # 2
+    def test_arrivals_count(self):
+        a = Airport.objects.get(code="AAA")
+        self.assertEqual(a.arrivals.count(), 2)
+
+    # 3
+    def test_valid_flight(self):
+        a1 = Airport.objects.get(code="AAA")
+        a2 = Airport.objects.get(code="BBB")
+        f = Flight.objects.get(origin=a1, destination=a2)
+        self.assertTrue(f.is_valid_flight())
 </code></pre></div></div>
 
 <hr />
 
-<p><strong>Usage example:</strong></p>
+<p><strong>settings.py</strong></p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># Setup PPO with an ensemble of `num_policies` different policies
-    policies = {"policy_{}".format(i): gen_policy(i) for i in range(args.num_policies)} # contains many "policy_graphs" in a policies dictionary
+<p>Under the database section, the <code class="highlighter-rouge">DATABASES['default']</code> sets the default
+database so the default database is the one connected by the OS environment
+variable <code class="highlighter-rouge">DATABASE_URL</code>, however if this is unavailable, we’ll use the one
+defined with <code class="highlighter-rouge">'HOST': 'db'</code>.</p>
 
-    # override policy with random policy
-    policies["policy_{}".format(args.num_policies-3)] = (make_RandomPolicy(1), obs_space, act_space, {}) # random policy stored as the last item in policies dictionary
-    policies["policy_{}".format(args.num_policies-2)] = (make_RandomPolicy(2), obs_space, act_space, {}) # random policy stored as the last item in policies dictionary
-    policies["policy_{}".format(args.num_policies-1)] = (make_RandomPolicy(3), obs_space, act_space, {}) # random policy stored as the last item in policies dictionary
+<p>This setup allows us to use <code class="highlighter-rouge">'HOST': 'db'</code> which is the Docker’s copy of
+postgres during development phase &amp; also during tesing phase with Travis
+while using the Heroku’s copy during deployment which is provided by
+connecting to the <code class="highlighter-rouge">DATABASE_URL</code>.</p>
+
+<p>The <code class="highlighter-rouge">DATABASE_URL</code>, as an OS environment variable which is generated by
+Heroku after a Database is added to the web app in the Heroku website.</p>
+
+<p>Add and/or edit the following to the <code class="highlighter-rouge">settings.py</code> file:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>import django_heroku
+import dj_database_url
 </code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>MIDDLEWARE = [
+    'django.middleware.security.SecurityMiddleware',
+
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # new
+
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+]
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'postgres',
+        'USER': 'postgres',
+        'PASSWORD': 'postgres',
+        'HOST': 'db', # Docker's copy of postgres
+        'PORT': 5432,
+        #'PORT': 5433,
+    }
+}
+
+DATABASE_URL = os.environ.get('DATABASE_URL')
+db_from_env = dj_database_url.config(default=DATABASE_URL, conn_max_age=500, ssl_require=True)
+DATABASES['default'].update(db_from_env)
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>django_heroku.settings(locals())
+
+</code></pre></div></div>
+
+<hr />
+
+<p><strong>requirements.txt</strong></p>
+
+<p>This file lets Docker &amp; Travis know what packages are needed for the app.
+This is needed in <code class="highlighter-rouge">Dockerfile</code> &amp; <code class="highlighter-rouge">.travis.yml</code> files.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>django&gt;=2.0.11
+psycopg2
+psycopg2-binary
+dj-database-url==0.5.0
+gunicorn
+whitenoise
+django-heroku
+pytz
+sqlparse
+</code></pre></div></div>
+
+<hr />
+
+<p><strong>Dockerfile</strong></p>
+
+<p>This contains the instructions for building a Docker image.</p>
+
+<p>The <code class="highlighter-rouge">CMD gunicorn airline.wsgi:application --bind 0.0.0.0:$PORT</code> tells
+Docker to use gunicorn as the web server.
+See <a href="https://devcenter.heroku.com/articles/container-registry-and-runtime#testing-an-image-locally">here</a>
+for details.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>FROM python:3
+
+WORKDIR /usr/src/app
+
+ADD requirements.txt /usr/src/app
+
+RUN pip install -r requirements.txt
+
+ADD . /usr/src/app
+
+# collect static files
+RUN python manage.py collectstatic --noinput
+
+CMD gunicorn airline.wsgi:application --bind 0.0.0.0:$PORT
+</code></pre></div></div>
+
+<hr />
+
+<p><strong>docker-compose.yml</strong></p>
+
+<p>This contains the instructions on how to run a Docker containers which is an
+instance of a Docker image.</p>
+
+<p>Notice the <code class="highlighter-rouge">sleep</code> delay introduced in the 2 <code class="highlighter-rouge">command:</code> sections.
+See <a href="https://chuacheowhuan.github.io/docker_travis/">here</a> for details.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>version: '3'
+
+services:
+    db:
+        image: postgres
+    migration:
+        build: .
+        command: bash -c 'while !&lt;/dev/tcp/db/5432; do sleep 1; done; python3 manage.py migrate'
+        volumes:
+            - .:/usr/src/app
+        depends_on:
+            - db
+    web:
+        build: .
+#        container_name: webapp-dpdth
+        image: webapp-dpdth
+        command: bash -c 'while !&lt;/dev/tcp/db/5432; do sleep 1; done; python3 manage.py runserver 0.0.0.0:8000'
+        volumes:
+            - .:/usr/src/app
+        ports:
+            - "8000:8000"
+        depends_on:
+            - db
+            - migration
+
+</code></pre></div></div>
+
+<hr />
+
+<p><strong>.travis.yml</strong></p>
+
+<p>This file contains instructions for Travis. Notice that we’re not using the
+Postgres from Travis because we’re using Postgres from Docker directly.
+The <code class="highlighter-rouge">postgresql</code> is therefore commented out under the <code class="highlighter-rouge">services:</code>
+section.</p>
+
+<p>Under <code class="highlighter-rouge">script:</code>, we ask Travis to run the test using Docker with
+the <code class="highlighter-rouge">docker-compose</code> command.</p>
+
+<p>Under <code class="highlighter-rouge">deploy:</code>, we execute a <code class="highlighter-rouge">docker_push.sh</code> script, more details in
+the sections below.</p>
+
+<p>The <code class="highlighter-rouge">skip_cleanup: true</code> tells Travis not to remove any files that it
+deems unnecessary after deployment. Travis does not have permission to do that
+on Heroku anyway.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>language: python
+python:
+    - 3.6
+services:
+    - docker
+#    - postgresql
+install:
+    - pip install -r requirements.txt
+script:
+    - docker-compose run web python manage.py test
+deploy:
+    provider: script
+    script: bash docker_push.sh
+    skip_cleanup: true
+    on:
+        branch: master
+</code></pre></div></div>
+
+<hr />
+
+<p><strong>Workflow for after testing with Travis to deployment to Heroku</strong></p>
+
+<p>The main workflow after testing to deployment is as such:</p>
+
+<p>tag image -&gt; push image to registry -&gt; release image</p>
+
+<p>We’ll see how to do that in the following script files:</p>
+
+<p>1) docker_push.sh</p>
+
+<p>2) heroku-container-release.sh</p>
+
+<hr />
+
+<p><strong>docker_push.sh</strong></p>
+
+<p>This file does several things listed as follows:</p>
+
+<p>1) Login to the Heroku’s image registry.</p>
+
+<p>2) <code class="highlighter-rouge">tag</code> the source image <code class="highlighter-rouge">webapp-dpdth:latest</code> to the target
+image <code class="highlighter-rouge">registry.heroku.com/webapp-dpdth/web</code>.</p>
+
+<p>3) Push the target image to Heroku’s registry if the branch tested on Travis
+is a master branch &amp; that it’s not a PR.</p>
+
+<p>4) Change ownership &amp; permission of files to allow Travis to execute
+the <code class="highlighter-rouge">heroku-container-release.sh</code> script.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/bin/bash</span>
+
+<span class="nb">sudo </span>docker login <span class="nt">--username</span> <span class="nv">$HEROKU_DOCKER_USERNAME</span> <span class="nt">--password</span> <span class="nv">$HEROKU_AUTH_TOKEN</span> registry.heroku.com
+<span class="nb">sudo </span>docker tag webapp-dpdth:latest registry.heroku.com/webapp-dpdth/web
+<span class="k">if</span> <span class="o">[</span> <span class="nv">$TRAVIS_BRANCH</span> <span class="o">==</span> <span class="s2">"master"</span> <span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="o">[</span> <span class="nv">$TRAVIS_PULL_REQUEST</span> <span class="o">==</span> <span class="s2">"false"</span> <span class="o">]</span><span class="p">;</span> <span class="k">then </span><span class="nb">sudo </span>docker push registry.heroku.com/webapp-dpdth/web<span class="p">;</span> <span class="k">fi
+
+</span><span class="nb">chmod</span> +x heroku-container-release.sh
+<span class="nb">sudo chown</span> <span class="nv">$USER</span>:docker ~/.docker
+<span class="nb">sudo chown</span> <span class="nv">$USER</span>:docker ~/.docker/config.json
+<span class="nb">sudo chmod </span>g+rw ~/.docker/config.json
+
+./heroku-container-release.sh
+
+</code></pre></div></div>
+
+<hr />
+
+<p><strong>heroku-container-release.sh</strong></p>
+
+<p>This file is for releasing a Docker image via Heroku’s API.
+Replace <code class="highlighter-rouge">webapp-dpdth</code> with your app name on Heroku.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/bin/bash</span>
+<span class="nv">imageId</span><span class="o">=</span><span class="k">$(</span>docker inspect registry.heroku.com/webapp-dpdth/web <span class="nt">--format</span><span class="o">={{</span>.Id<span class="o">}}</span><span class="k">)</span>
+<span class="nv">payload</span><span class="o">=</span><span class="s1">'{"updates":[{"type":"web","docker_image":"'</span><span class="s2">"</span><span class="nv">$imageId</span><span class="s2">"</span><span class="s1">'"}]}'</span>
+curl <span class="nt">-n</span> <span class="nt">-X</span> PATCH https://api.heroku.com/apps/webapp-dpdth/formation <span class="se">\</span>
+<span class="nt">-d</span> <span class="s2">"</span><span class="nv">$payload</span><span class="s2">"</span> <span class="se">\</span>
+<span class="nt">-H</span> <span class="s2">"Content-Type: application/json"</span> <span class="se">\</span>
+<span class="nt">-H</span> <span class="s2">"Accept: application/vnd.heroku+json; version=3.docker-releases"</span> <span class="se">\</span>
+<span class="nt">-H</span> <span class="s2">"Authorization: Bearer </span><span class="nv">$HEROKU_AUTH_TOKEN</span><span class="s2">"</span>
+</code></pre></div></div>
+
+<p>See <a href="https://devcenter.heroku.com/articles/container-registry-and-runtime#releasing-an-image">here</a>
+for details.</p>
+
+<hr />
+
+<p><strong>Procfile</strong></p>
+
+<p>This file is for Heroku. The command in the <code class="highlighter-rouge">release:</code> section will run
+after a Docker image is released. It will run the <code class="highlighter-rouge">migrate</code> command
+with <code class="highlighter-rouge">--noinput</code> option. Without running <code class="highlighter-rouge">migrate</code>, the database on
+Heroku may not function correctly.</p>
+
+<p>It also tells Heroku to deploy the web app using Gunicorn as the production
+server.</p>
+
+<p>Note that <code class="highlighter-rouge">airline</code> is the Django project name. It’s not the web app name
+in the Django project &amp; is also not the web app name in Heroku.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>release: python manage.py migrate --noinput
+web: gunicorn airline.wsgi
+</code></pre></div></div>
+
+<hr />
+
+<p><strong>The deployed web app</strong></p>
+
+<p>The web app is running on <a href="https://webapp-dpdth.herokuapp.com">https://webapp-dpdth.herokuapp.com</a></p>
+
+<p>This <a href="https://webapp-dpdth.herokuapp.com/admin">link</a> brings you to the admin
+page. It is using the <strong>Heroku’s copy</strong> of Postgres.</p>
+
+<hr />
+
+<p><br /></p>
 
 
 <ul class="taxonomy__index">
@@ -387,7 +738,7 @@
 
 
 
-  104 minute read
+  118 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">Basic workflow of testing a dockerized Django &amp; Postgres web app with Travis
@@ -417,7 +768,7 @@
 
 
 
-  15 minute read
+  42 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">Connecting Django &amp; Postgres with Docker in Travis CI.
@@ -1039,8 +1390,8 @@ algorithm.
     
   <script>
     var disqus_config = function () {
-      this.page.url = "https://chuacheowhuan.github.io/RLlib_rand_policy/";  // Replace PAGE_URL with your page's canonical URL variable
-      this.page.identifier = "/RLlib_rand_policy"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+      this.page.url = "https://chuacheowhuan.github.io/DPDTH/";  // Replace PAGE_URL with your page's canonical URL variable
+      this.page.identifier = "/DPDTH"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
     };
     (function() { // DON'T EDIT BELOW THIS LINE
       var d = document, s = d.createElement('script');
