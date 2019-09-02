@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.5">Jekyll</generator><link href="https://chuacheowhuan.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://chuacheowhuan.github.io/" rel="alternate" type="text/html" /><updated>2019-09-02T17:37:49+08:00</updated><id>https://chuacheowhuan.github.io/feed.xml</id><title type="html">Every little gist</title><subtitle></subtitle><author><name>Chua Cheow Huan</name></author><entry><title type="html">Django + Postgres + Travis CI + Heroku CD</title><link href="https://chuacheowhuan.github.io/DPTH/" rel="alternate" type="text/html" title="Django + Postgres + Travis CI + Heroku CD" /><published>2019-09-02T00:00:00+08:00</published><updated>2019-09-02T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/DPTH</id><content type="html" xml:base="https://chuacheowhuan.github.io/DPTH/">&lt;p&gt;Basic workflow of testing a Django &amp;amp; Postgres web app with Travis
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.5">Jekyll</generator><link href="https://chuacheowhuan.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://chuacheowhuan.github.io/" rel="alternate" type="text/html" /><updated>2019-09-02T17:49:36+08:00</updated><id>https://chuacheowhuan.github.io/feed.xml</id><title type="html">Every little gist</title><subtitle></subtitle><author><name>Chua Cheow Huan</name></author><entry><title type="html">Django + Postgres + Travis CI + Heroku CD</title><link href="https://chuacheowhuan.github.io/DPTH/" rel="alternate" type="text/html" title="Django + Postgres + Travis CI + Heroku CD" /><published>2019-09-02T00:00:00+08:00</published><updated>2019-09-02T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/DPTH</id><content type="html" xml:base="https://chuacheowhuan.github.io/DPTH/">&lt;p&gt;Basic workflow of testing a Django &amp;amp; Postgres web app with Travis
 (continuous integration) &amp;amp; deployment to Heroku (continuous deployment).&lt;/p&gt;
 
 &lt;hr /&gt;
@@ -232,7 +232,7 @@ page. It is using the &lt;strong&gt;Heroku’s copy&lt;/strong&gt; of Postgres.&
 workflow describe above. &lt;strong&gt;Do NOT&lt;/strong&gt; simply use the above workflow for
 production.&lt;/p&gt;
 
-&lt;p&gt;For example the &lt;code class=&quot;highlighter-rouge&quot;&gt;SECRET_KEY&lt;/code&gt; in the settings.py isn’t dealt with at all
+&lt;p&gt;For example the &lt;code class=&quot;highlighter-rouge&quot;&gt;SECRET_KEY&lt;/code&gt; in the &lt;code class=&quot;highlighter-rouge&quot;&gt;settings.py&lt;/code&gt; isn’t dealt with at all
 and web security is really beyond the scope of this post.&lt;/p&gt;
 
 &lt;hr /&gt;
@@ -650,7 +650,7 @@ page. It is using the &lt;strong&gt;Heroku’s copy&lt;/strong&gt; of Postgres.&
 workflow describe above. &lt;strong&gt;Do NOT&lt;/strong&gt; simply use the above workflow for
 production.&lt;/p&gt;
 
-&lt;p&gt;For example the &lt;code class=&quot;highlighter-rouge&quot;&gt;SECRET_KEY&lt;/code&gt; in the settings.py isn’t dealt with at all
+&lt;p&gt;For example the &lt;code class=&quot;highlighter-rouge&quot;&gt;SECRET_KEY&lt;/code&gt; in the &lt;code class=&quot;highlighter-rouge&quot;&gt;settings.py&lt;/code&gt; isn’t dealt with at all
 and web security is really beyond the scope of this post.&lt;/p&gt;
 
 &lt;hr /&gt;
