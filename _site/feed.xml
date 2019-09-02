@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.5">Jekyll</generator><link href="https://chuacheowhuan.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://chuacheowhuan.github.io/" rel="alternate" type="text/html" /><updated>2019-09-02T17:49:36+08:00</updated><id>https://chuacheowhuan.github.io/feed.xml</id><title type="html">Every little gist</title><subtitle></subtitle><author><name>Chua Cheow Huan</name></author><entry><title type="html">Django + Postgres + Travis CI + Heroku CD</title><link href="https://chuacheowhuan.github.io/DPTH/" rel="alternate" type="text/html" title="Django + Postgres + Travis CI + Heroku CD" /><published>2019-09-02T00:00:00+08:00</published><updated>2019-09-02T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/DPTH</id><content type="html" xml:base="https://chuacheowhuan.github.io/DPTH/">&lt;p&gt;Basic workflow of testing a Django &amp;amp; Postgres web app with Travis
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.5">Jekyll</generator><link href="https://chuacheowhuan.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://chuacheowhuan.github.io/" rel="alternate" type="text/html" /><updated>2019-09-02T18:08:03+08:00</updated><id>https://chuacheowhuan.github.io/feed.xml</id><title type="html">Every little gist</title><subtitle></subtitle><author><name>Chua Cheow Huan</name></author><entry><title type="html">Django + Postgres + Travis CI + Heroku CD</title><link href="https://chuacheowhuan.github.io/DPTH/" rel="alternate" type="text/html" title="Django + Postgres + Travis CI + Heroku CD" /><published>2019-09-02T00:00:00+08:00</published><updated>2019-09-02T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/DPTH</id><content type="html" xml:base="https://chuacheowhuan.github.io/DPTH/">&lt;p&gt;Basic workflow of testing a Django &amp;amp; Postgres web app with Travis
 (continuous integration) &amp;amp; deployment to Heroku (continuous deployment).&lt;/p&gt;
 
 &lt;hr /&gt;
@@ -571,7 +571,8 @@ deploy:
 &lt;p&gt;1) Login to the Heroku’s image registry.&lt;/p&gt;
 
 &lt;p&gt;2) &lt;code class=&quot;highlighter-rouge&quot;&gt;tag&lt;/code&gt; the source image &lt;code class=&quot;highlighter-rouge&quot;&gt;webapp-dpdth:latest&lt;/code&gt; to the target
-image &lt;code class=&quot;highlighter-rouge&quot;&gt;registry.heroku.com/webapp-dpdth/web&lt;/code&gt;.&lt;/p&gt;
+image &lt;code class=&quot;highlighter-rouge&quot;&gt;registry.heroku.com/webapp-dpdth/web&lt;/code&gt;.
+Replace &lt;code class=&quot;highlighter-rouge&quot;&gt;webapp-dpdth&lt;/code&gt; with your app name on Heroku.&lt;/p&gt;
 
 &lt;p&gt;3) Push the target image to Heroku’s registry if the branch tested on Travis
 is a master branch &amp;amp; that it’s not a PR.&lt;/p&gt;

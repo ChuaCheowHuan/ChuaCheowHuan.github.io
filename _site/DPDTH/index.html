@@ -596,7 +596,8 @@ deploy:
 <p>1) Login to the Heroku’s image registry.</p>
 
 <p>2) <code class="highlighter-rouge">tag</code> the source image <code class="highlighter-rouge">webapp-dpdth:latest</code> to the target
-image <code class="highlighter-rouge">registry.heroku.com/webapp-dpdth/web</code>.</p>
+image <code class="highlighter-rouge">registry.heroku.com/webapp-dpdth/web</code>.
+Replace <code class="highlighter-rouge">webapp-dpdth</code> with your app name on Heroku.</p>
 
 <p>3) Push the target image to Heroku’s registry if the branch tested on Travis
 is a master branch &amp; that it’s not a PR.</p>
@@ -749,7 +750,7 @@ and web security is really beyond the scope of this post.</p>
 
 
 
-  123 minute read
+  124 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">Basic workflow of testing a dockerized Django &amp; Postgres web app with Travis
