@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.5">Jekyll</generator><link href="https://chuacheowhuan.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://chuacheowhuan.github.io/" rel="alternate" type="text/html" /><updated>2019-09-02T18:15:01+08:00</updated><id>https://chuacheowhuan.github.io/feed.xml</id><title type="html">Every little gist</title><subtitle></subtitle><author><name>Chua Cheow Huan</name></author><entry><title type="html">Django + Postgres + Travis CI + Heroku CD</title><link href="https://chuacheowhuan.github.io/DPTH/" rel="alternate" type="text/html" title="Django + Postgres + Travis CI + Heroku CD" /><published>2019-09-02T00:00:00+08:00</published><updated>2019-09-02T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/DPTH</id><content type="html" xml:base="https://chuacheowhuan.github.io/DPTH/">&lt;p&gt;Basic workflow of testing a Django &amp;amp; Postgres web app with Travis
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.5">Jekyll</generator><link href="https://chuacheowhuan.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://chuacheowhuan.github.io/" rel="alternate" type="text/html" /><updated>2019-09-04T13:55:13+08:00</updated><id>https://chuacheowhuan.github.io/feed.xml</id><title type="html">Every little gist</title><subtitle></subtitle><author><name>Chua Cheow Huan</name></author><entry><title type="html">Django + Postgres + Travis CI + Heroku CD</title><link href="https://chuacheowhuan.github.io/DPTH/" rel="alternate" type="text/html" title="Django + Postgres + Travis CI + Heroku CD" /><published>2019-09-02T00:00:00+08:00</published><updated>2019-09-02T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/DPTH</id><content type="html" xml:base="https://chuacheowhuan.github.io/DPTH/">&lt;p&gt;Basic workflow of testing a Django &amp;amp; Postgres web app with Travis
 (continuous integration) &amp;amp; deployment to Heroku (continuous deployment).&lt;/p&gt;
 
 &lt;hr /&gt;
@@ -219,10 +219,18 @@ as the production server.&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;The deployed web app&lt;/strong&gt;&lt;/p&gt;
 
-&lt;p&gt;The web app is running on &lt;a href=&quot;https://webapp-dpth.herokuapp.com&quot;&gt;https://webapp-dpth.herokuapp.com&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;With the above files in place, push to Github &amp;amp; Travis will start testing.
+After all tests passed, deployment starts. If there isn’t any failures, the
+web app will be running on:&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://webapp-dpth.herokuapp.com&quot;&gt;https://webapp-dpth.herokuapp.com&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;This &lt;a href=&quot;https://webapp-dpth.herokuapp.com/admin&quot;&gt;link&lt;/a&gt; brings you to the admin
 page. It is using the &lt;strong&gt;Heroku’s copy&lt;/strong&gt; of Postgres.&lt;/p&gt;
+
+&lt;p&gt;This &lt;a href=&quot;https://travis-ci.com/ChuaCheowHuan/web_app_DPTH/builds/125456399&quot;&gt;link&lt;/a&gt;
+brings you to my built log in Travis.com which shows how a successful
+test/deploy built looks like.&lt;/p&gt;
 
 &lt;hr /&gt;
 
@@ -638,10 +646,17 @@ web: gunicorn airline.wsgi
 
 &lt;p&gt;&lt;strong&gt;The deployed web app&lt;/strong&gt;&lt;/p&gt;
 
-&lt;p&gt;The web app is running on &lt;a href=&quot;https://webapp-dpdth.herokuapp.com&quot;&gt;https://webapp-dpdth.herokuapp.com&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;With the above files in place, push to Github &amp;amp; Travis will start testing.
+After all tests passed, deployment starts. If there isn’t any failures,
+the web app will be running on:&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://webapp-dpdth.herokuapp.com&quot;&gt;https://webapp-dpdth.herokuapp.com&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;This &lt;a href=&quot;https://webapp-dpdth.herokuapp.com/admin&quot;&gt;link&lt;/a&gt; brings you to the admin
 page. It is using the &lt;strong&gt;Heroku’s copy&lt;/strong&gt; of Postgres.&lt;/p&gt;
+
+&lt;p&gt;This &lt;a href=&quot;https://travis-ci.com/ChuaCheowHuan/web_app_DPDTH/builds/125458792&quot;&gt;link&lt;/a&gt; brings you to my built log in Travis.com which shows how a successful
+test/deploy built looks like.&lt;/p&gt;
 
 &lt;hr /&gt;
 
