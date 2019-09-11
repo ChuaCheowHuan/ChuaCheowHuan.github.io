@@ -9,10 +9,6 @@ This example uses Proximal Policy Optimization with Ray (RLlib).
 
 ---
 
-Code on my [Github](https://github.com/ChuaCheowHuan/sagemaker_Ray_RLlib_custom_env)
-
----
-
 **The training script:**
 
 ```
@@ -101,9 +97,6 @@ if __name__ == "__main__":
 ---
 
 **The Jupyter notebook:**
-
-See [here](https://nbviewer.jupyter.org/github/ChuaCheowHuan/sagemaker_Ray_RLlib_custom_env/blob/master/mod_op/mod_op_sp.ipynb)
-for notebook with output.
 
 ```
 !/bin/bash ./setup.sh
