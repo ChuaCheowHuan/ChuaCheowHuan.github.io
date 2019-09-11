@@ -9,6 +9,10 @@ This example uses Proximal Policy Optimization with Ray (RLlib).
 
 ---
 
+Code on my [Github](https://github.com/ChuaCheowHuan/sagemaker_Ray_RLlib_custom_env)
+
+---
+
 **The training script:**
 
 ```
