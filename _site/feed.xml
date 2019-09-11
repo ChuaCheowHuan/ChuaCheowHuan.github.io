@@ -1,251 +1,148 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.5">Jekyll</generator><link href="https://chuacheowhuan.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://chuacheowhuan.github.io/" rel="alternate" type="text/html" /><updated>2019-09-04T14:30:39+08:00</updated><id>https://chuacheowhuan.github.io/feed.xml</id><title type="html">Every little gist</title><subtitle></subtitle><author><name>Chua Cheow Huan</name></author><entry><title type="html">Django + Postgres + Travis CI + Heroku CD</title><link href="https://chuacheowhuan.github.io/DPTH/" rel="alternate" type="text/html" title="Django + Postgres + Travis CI + Heroku CD" /><published>2019-09-02T00:00:00+08:00</published><updated>2019-09-02T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/DPTH</id><content type="html" xml:base="https://chuacheowhuan.github.io/DPTH/">&lt;p&gt;Basic workflow of testing a Django &amp;amp; Postgres web app with Travis
-(continuous integration) &amp;amp; deployment to Heroku (continuous deployment).&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.5">Jekyll</generator><link href="https://chuacheowhuan.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://chuacheowhuan.github.io/" rel="alternate" type="text/html" /><updated>2019-09-11T15:04:44+08:00</updated><id>https://chuacheowhuan.github.io/feed.xml</id><title type="html">Every little gist</title><subtitle></subtitle><author><name>Chua Cheow Huan</name></author><entry><title type="html">Reinforcement learning custom environment in Sagemaker with Ray (RLlib)</title><link href="https://chuacheowhuan.github.io/sagemaker_RL_custom_env/" rel="alternate" type="text/html" title="Reinforcement learning custom environment in Sagemaker with Ray (RLlib)" /><published>2019-09-11T00:00:00+08:00</published><updated>2019-09-11T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/sagemaker_RL_custom_env</id><content type="html" xml:base="https://chuacheowhuan.github.io/sagemaker_RL_custom_env/">&lt;p&gt;Demo setup for simple (reinforcement learning) custom environment in Sagemaker.
+This example uses Proximal Policy Optimization with Ray (RLlib).&lt;/p&gt;
 
 &lt;hr /&gt;
 
-&lt;p&gt;&lt;strong&gt;Prerequisite:&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;This post assumes that the reader has accounts with Github, Travis &amp;amp; Heroku &amp;amp;
-already has the accounts configured. For example, linking Travis with Github,
-setting up Postgres server in Heroku &amp;amp; setting OS environment variables in
-Travis &amp;amp; Heroku websites.&lt;/p&gt;
+&lt;p&gt;Code on my &lt;a href=&quot;https://github.com/ChuaCheowHuan/sagemaker_Ray_RLlib_custom_env&quot;&gt;Github&lt;/a&gt;&lt;/p&gt;
 
 &lt;hr /&gt;
 
-&lt;p&gt;Code on my &lt;a href=&quot;https://github.com/ChuaCheowHuan/web_app_DPTH&quot;&gt;Github&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;The training script:&lt;/strong&gt;&lt;/p&gt;
 
-&lt;hr /&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;import json
+import os
 
-&lt;p&gt;See &lt;a href=&quot;https://chuacheowhuan.github.io/DPDTH&quot;&gt;here&lt;/a&gt; for a Dockerized
-version.&lt;/p&gt;
+import gym
+import ray
+from ray.tune import run_experiments
+import ray.rllib.agents.a3c as a3c
+import ray.rllib.agents.ppo as ppo
+from ray.tune.registry import register_env
+from mod_op_env import ArrivalSim
 
-&lt;hr /&gt;
+from sagemaker_rl.ray_launcher import SageMakerRayLauncher
 
-&lt;p&gt;&lt;strong&gt;Which copy of Postgres to use during the different stages in the workflow?&lt;/strong&gt;&lt;/p&gt;
+&quot;&quot;&quot;
+def create_environment(env_config):
+    import gym
+#     from gym.spaces import Space
+    from gym.envs.registration import register
+    # This import must happen inside the method so that worker processes import this code
+    register(
+        id='ArrivalSim-v0',
+        entry_point='env:ArrivalSim',
+        kwargs= {'price' : 40}
+    )
+    return gym.make('ArrivalSim-v0')
+&quot;&quot;&quot;
+def create_environment(env_config):
+    price = 30.0
+    # This import must happen inside the method so that worker processes import this code
+    from mod_op_env import ArrivalSim
+    return ArrivalSim(price)
 
-&lt;p&gt;During development, the local Postgres database server is used. When testing in
-Travis, we’ll used Travis’s copy of Postgres &amp;amp; when deploying, we’ll have to
-use Heroku’s copy.&lt;/p&gt;
 
-&lt;hr /&gt;
+class MyLauncher(SageMakerRayLauncher):
+    def __init__(self):        
+        super(MyLauncher, self).__init__()
+        self.num_gpus = int(os.environ.get(&quot;SM_NUM_GPUS&quot;, 0))
+        self.hosts_info = json.loads(os.environ.get(&quot;SM_RESOURCE_CONFIG&quot;))[&quot;hosts&quot;]
+        self.num_total_gpus = self.num_gpus * len(self.hosts_info)
 
-&lt;p&gt;&lt;strong&gt;makemigrations&lt;/strong&gt;&lt;/p&gt;
+    def register_env_creator(self):
+        register_env(&quot;ArrivalSim-v0&quot;, create_environment)
 
-&lt;p&gt;Always run &lt;code class=&quot;highlighter-rouge&quot;&gt;python manage.py makemigrations&lt;/code&gt; before deployment to Heroku
-or in our case, before pushing to Github.&lt;/p&gt;
+    def get_experiment_config(self):
+        return {
+          &quot;training&quot;: {
+            &quot;env&quot;: &quot;ArrivalSim-v0&quot;,
+            &quot;run&quot;: &quot;PPO&quot;,
+            &quot;stop&quot;: {
+              &quot;training_iteration&quot;: 3,
+            },
 
-&lt;p&gt;The actual &lt;code class=&quot;highlighter-rouge&quot;&gt;python manage.py migrate&lt;/code&gt; for the Postgres server addon from
-Heroku will be run by the deploy section in the &lt;code class=&quot;highlighter-rouge&quot;&gt;.travis.yml&lt;/code&gt; file.&lt;/p&gt;
+            &quot;local_dir&quot;: &quot;/opt/ml/model/&quot;,
+            &quot;checkpoint_freq&quot; : 3,
 
-&lt;hr /&gt;
+            &quot;config&quot;: {                                
+              #&quot;num_workers&quot;: max(self.num_total_gpus-1, 1),
+              &quot;num_workers&quot;: max(self.num_cpus-1, 1),
+              #&quot;use_gpu_for_workers&quot;: False,
+              &quot;train_batch_size&quot;: 128, #5,
+              &quot;sample_batch_size&quot;: 32, #1,
+              &quot;gpu_fraction&quot;: 0.3,
+              &quot;optimizer&quot;: {
+                &quot;grads_per_step&quot;: 10
+              },
+            },
+            #&quot;trial_resources&quot;: {&quot;cpu&quot;: 1, &quot;gpu&quot;: 0, &quot;extra_gpu&quot;: max(self.num_total_gpus-1, 1), &quot;extra_cpu&quot;: 0},
+            #&quot;trial_resources&quot;: {&quot;cpu&quot;: 1, &quot;gpu&quot;: 0, &quot;extra_gpu&quot;: max(self.num_total_gpus-1, 0),
+            #                    &quot;extra_cpu&quot;: max(self.num_cpus-1, 1)},
+            &quot;trial_resources&quot;: {&quot;cpu&quot;: 1,
+                                &quot;extra_cpu&quot;: max(self.num_cpus-1, 1)},              
+          }
+        }
 
-&lt;p&gt;&lt;strong&gt;Listing files &amp;amp; directories in a tree:&lt;/strong&gt;&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;cd web_app_DPTH
-
-$ tree -a -I &quot;CS50_web_dev|staticfiles|static|templates|LICENSE|README.md|__init__.py|settings_DPTH_.py|urls.py|wsgi.py|db.sqlite3|airline4_tests_.py|apps.py|migrations|views.py|models.py|flights.csv|manage.py|wait-for-it.sh|admin.py|.git|.travis_DPTH_.yml|Dockerfile|docker-compose.yml&quot;  
-
-.
-├── .travis.yml
-├── Procfile
-├── airline
-│   └── settings.py
-├── flights
-│   └── tests.py
-└── requirements.txt
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;As shown in the tree above, the 5 files that matter in the workflow:&lt;/p&gt;
-
-&lt;p&gt;1) tests.py&lt;/p&gt;
-
-&lt;p&gt;2) settings.py&lt;/p&gt;
-
-&lt;p&gt;3) requirements.txt&lt;/p&gt;
-
-&lt;p&gt;4) .travis.yml&lt;/p&gt;
-
-&lt;p&gt;5) Procfile&lt;/p&gt;
-
-&lt;p&gt;We will look at the contents of each of the 5 files in the sections below.&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;&lt;strong&gt;tests.py&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;This is the test file that Travis will use for testing the app.
-You write whatever test you want for Travis to run with.&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;from django.db.models import Max
-from django.test import Client, TestCase
-
-from .models import Airport, Flight, Passenger
-
-# Create your tests here.
-class FlightsTestCase(TestCase):
-
-    def setUp(self):
-
-        # Create airports.
-        a1 = Airport.objects.create(code=&quot;AAA&quot;, city=&quot;City A&quot;)
-        a2 = Airport.objects.create(code=&quot;BBB&quot;, city=&quot;City B&quot;)
-
-        # Create flights.
-        Flight.objects.create(origin=a1, destination=a2, duration=100)
-        Flight.objects.create(origin=a1, destination=a1, duration=200)
-        Flight.objects.create(origin=a2, destination=a1, duration=300)
-
-    # 1
-    def test_departures_count(self):
-        a = Airport.objects.get(code=&quot;AAA&quot;)
-        self.assertEqual(a.departures.count(), 2)
-
-    # 2
-    def test_arrivals_count(self):
-        a = Airport.objects.get(code=&quot;AAA&quot;)
-        self.assertEqual(a.arrivals.count(), 2)
-
-    # 3
-    def test_valid_flight(self):
-        a1 = Airport.objects.get(code=&quot;AAA&quot;)
-        a2 = Airport.objects.get(code=&quot;BBB&quot;)
-        f = Flight.objects.get(origin=a1, destination=a2)
-        self.assertTrue(f.is_valid_flight())
+if __name__ == &quot;__main__&quot;:
+    os.environ[&quot;LC_ALL&quot;] = &quot;C.UTF-8&quot;
+    os.environ[&quot;LANG&quot;] = &quot;C.UTF-8&quot;
+    os.environ[&quot;RAY_USE_XRAY&quot;] = &quot;1&quot;
+    print(ppo.DEFAULT_CONFIG)
+    MyLauncher().train_main()
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;hr /&gt;
 
-&lt;p&gt;&lt;strong&gt;settings.py&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;The Jupyter notebook:&lt;/strong&gt;&lt;/p&gt;
 
-&lt;p&gt;Under the database section, the database credentials, as OS environment
-variables, has to be made available to Travis &amp;amp; Heroku. They can be set in
-their respective websites.&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;!/bin/bash ./setup.sh
 
-&lt;p&gt;Add and/or edit the following to the &lt;code class=&quot;highlighter-rouge&quot;&gt;settings.py&lt;/code&gt; file:&lt;/p&gt;
+from time import gmtime, strftime
+import sagemaker
+role = sagemaker.get_execution_role()
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;import django_heroku
-import dj_database_url
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+sage_session = sagemaker.session.Session()
+s3_bucket = sage_session.default_bucket()  
+s3_output_path = 's3://{}/'.format(s3_bucket)
+print(&quot;S3 bucket path: {}&quot;.format(s3_output_path))
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',
+job_name_prefix = 'ArrivalSim'
 
-    'whitenoise.middleware.WhiteNoiseMiddleware',  # new
+from sagemaker.rl import RLEstimator, RLToolkit, RLFramework
 
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
-]
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+estimator = RLEstimator(entry_point=&quot;mod_op_train.py&quot;, # Our launcher code
+                        source_dir='src', # Directory where the supporting files are at. All of this will be
+                                          # copied into the container.
+                        dependencies=[&quot;common/sagemaker_rl&quot;], # some other utils files.
+                        toolkit=RLToolkit.RAY, # We want to run using the Ray toolkit against the ray container image.
+                        framework=RLFramework.TENSORFLOW, # The code is in tensorflow backend.
+                        toolkit_version='0.5.3', # Toolkit version. This will also choose an apporpriate tf version.                                               
+                        #toolkit_version='0.6.5', # Toolkit version. This will also choose an apporpriate tf version.                        
+                        role=role, # The IAM role that we created at the begining.
+                        #train_instance_type=&quot;ml.m4.xlarge&quot;, # Since we want to run fast, lets run on GPUs.
+                        train_instance_type=&quot;local&quot;, # Since we want to run fast, lets run on GPUs.
+                        train_instance_count=1, # Single instance will also work, but running distributed makes things
+                                                # fast, particularly in the case of multiple rollout training.
+                        output_path=s3_output_path, # The path where we can expect our trained model.
+                        base_job_name=job_name_prefix, # This is the name we setup above to be to track our job.
+                        hyperparameters = {      # Some hyperparameters for Ray toolkit to operate.
+                          &quot;s3_bucket&quot;: s3_bucket,
+                          &quot;rl.training.stop.training_iteration&quot;: 2, # Number of iterations.
+                          &quot;rl.training.checkpoint_freq&quot;: 2,
+                        },
+                        #metric_definitions=metric_definitions, # This will bring all the logs out into the notebook.
+                    )
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ['DATABASE_NAME'],
-        'USER': os.environ['DATABASE_USER'],
-        'PASSWORD': os.environ['DATABASE_PASSWORD'],
-        'HOST': os.environ['DATABASE_HOST'],
-        'PORT': os.environ['DATABASE_PORT'],
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;django_heroku.settings(locals())
-
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;&lt;strong&gt;requirements.txt&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;This file lets Travis know what packages are needed for the app.&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;django&amp;gt;=2.0.11
-psycopg2
-psycopg2-binary
-dj-database-url==0.5.0
-gunicorn
-whitenoise
-django-heroku
-pytz
-sqlparse
+estimator.fit()
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;hr /&gt;
 
-&lt;p&gt;&lt;strong&gt;.travis.yml&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;This file contains instructions for Travis &amp;amp; is needed when Travis starts
-running. &lt;code class=&quot;highlighter-rouge&quot;&gt;$HEROKU_API_KEY&lt;/code&gt; can be generated from the Heroku website &amp;amp;
-stored as an OS environment variable in the Travis website.
-The test is done with the &lt;strong&gt;Travis’s copy&lt;/strong&gt; of Postgres.&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;language: python
-python:
-    - 3.6
-services:
-    - postgresql
-install:
-    - pip install -r requirements.txt
-script:
-    - python manage.py test
-deploy:
-    provider: heroku
-    api_key: $HEROKU_API_KEY
-    app: webapp-dpth
-    run: python manage.py migrate
-    on: master
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;See related &lt;a href=&quot;https://stackoverflow.com/questions/57724414/how-to-make-the-inputs-and-model-have-the-same-shape-rllib-ray-sagemaker-reinfo/57762933#57762933&quot;&gt;issue/motivation&lt;/a&gt;.&lt;/p&gt;
 
 &lt;hr /&gt;
 
-&lt;p&gt;&lt;strong&gt;Procfile&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;This file is for Heroku. It tells Heroku to deploy the web app using Gunicorn
-as the production server.&lt;/p&gt;
-
-&lt;p&gt;Note that &lt;code class=&quot;highlighter-rouge&quot;&gt;airline&lt;/code&gt; is the Django project name.&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;web: gunicorn airline.wsgi
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;&lt;strong&gt;The deployed web app&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;With the above files in place, push to Github &amp;amp; Travis will start testing.
-After all tests passed, deployment starts. If there isn’t any failures, the
-web app will be running on:&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://webapp-dpth.herokuapp.com&quot;&gt;https://webapp-dpth.herokuapp.com&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;This &lt;a href=&quot;https://webapp-dpth.herokuapp.com/admin&quot;&gt;link&lt;/a&gt; brings you to the admin
-page. It is using the &lt;strong&gt;Heroku’s copy&lt;/strong&gt; of Postgres.&lt;/p&gt;
-
-&lt;p&gt;This &lt;a href=&quot;https://travis-ci.com/ChuaCheowHuan/web_app_DPTH/builds/125456399&quot;&gt;link&lt;/a&gt;
-brings you to my built log in Travis.com which shows how a successful
-test/deploy built looks like.&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;&lt;strong&gt;Web security:&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;Please note that web security has not been throughly consider in this basic
-workflow describe above. &lt;strong&gt;Do NOT&lt;/strong&gt; simply use the above workflow for
-production.&lt;/p&gt;
-
-&lt;p&gt;For example the &lt;code class=&quot;highlighter-rouge&quot;&gt;SECRET_KEY&lt;/code&gt; in the &lt;code class=&quot;highlighter-rouge&quot;&gt;settings.py&lt;/code&gt; isn’t dealt with at all
-and web security is really beyond the scope of this post.&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">Basic workflow of testing a Django &amp;amp; Postgres web app with Travis (continuous integration) &amp;amp; deployment to Heroku (continuous deployment).</summary></entry><entry><title type="html">Django + Postgres + Docker + Travis CI + Heroku CD</title><link href="https://chuacheowhuan.github.io/DPDTH/" rel="alternate" type="text/html" title="Django + Postgres + Docker + Travis CI + Heroku CD" /><published>2019-09-02T00:00:00+08:00</published><updated>2019-09-02T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/DPDTH</id><content type="html" xml:base="https://chuacheowhuan.github.io/DPDTH/">&lt;p&gt;Basic workflow of testing a dockerized Django &amp;amp; Postgres web app with Travis
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">Demo setup for simple (reinforcement learning) custom environment in Sagemaker. This example uses Proximal Policy Optimization with Ray (RLlib).</summary></entry><entry><title type="html">Django + Postgres + Docker + Travis CI + Heroku CD</title><link href="https://chuacheowhuan.github.io/DPDTH/" rel="alternate" type="text/html" title="Django + Postgres + Docker + Travis CI + Heroku CD" /><published>2019-09-02T00:00:00+08:00</published><updated>2019-09-02T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/DPDTH</id><content type="html" xml:base="https://chuacheowhuan.github.io/DPDTH/">&lt;p&gt;Basic workflow of testing a dockerized Django &amp;amp; Postgres web app with Travis
 (continuous integration) &amp;amp; deployment to Heroku (continuous deployment).&lt;/p&gt;
 
 &lt;hr /&gt;
@@ -671,7 +568,254 @@ and web security is really beyond the scope of this post.&lt;/p&gt;
 
 &lt;hr /&gt;
 
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">Basic workflow of testing a dockerized Django &amp;amp; Postgres web app with Travis (continuous integration) &amp;amp; deployment to Heroku (continuous deployment).</summary></entry><entry><title type="html">Dockerized Postgres connection with Django web app in Travis CI</title><link href="https://chuacheowhuan.github.io/docker_travis/" rel="alternate" type="text/html" title="Dockerized Postgres connection with Django web app in Travis CI" /><published>2019-08-29T00:00:00+08:00</published><updated>2019-08-29T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/docker_travis</id><content type="html" xml:base="https://chuacheowhuan.github.io/docker_travis/">&lt;p&gt;Introducing a delay to allow proper connection between dockerized Postgres &amp;amp;
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">Basic workflow of testing a dockerized Django &amp;amp; Postgres web app with Travis (continuous integration) &amp;amp; deployment to Heroku (continuous deployment).</summary></entry><entry><title type="html">Django + Postgres + Travis CI + Heroku CD</title><link href="https://chuacheowhuan.github.io/DPTH/" rel="alternate" type="text/html" title="Django + Postgres + Travis CI + Heroku CD" /><published>2019-09-02T00:00:00+08:00</published><updated>2019-09-02T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/DPTH</id><content type="html" xml:base="https://chuacheowhuan.github.io/DPTH/">&lt;p&gt;Basic workflow of testing a Django &amp;amp; Postgres web app with Travis
+(continuous integration) &amp;amp; deployment to Heroku (continuous deployment).&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;strong&gt;Prerequisite:&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;This post assumes that the reader has accounts with Github, Travis &amp;amp; Heroku &amp;amp;
+already has the accounts configured. For example, linking Travis with Github,
+setting up Postgres server in Heroku &amp;amp; setting OS environment variables in
+Travis &amp;amp; Heroku websites.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;Code on my &lt;a href=&quot;https://github.com/ChuaCheowHuan/web_app_DPTH&quot;&gt;Github&lt;/a&gt;&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;See &lt;a href=&quot;https://chuacheowhuan.github.io/DPDTH&quot;&gt;here&lt;/a&gt; for a Dockerized
+version.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;strong&gt;Which copy of Postgres to use during the different stages in the workflow?&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;During development, the local Postgres database server is used. When testing in
+Travis, we’ll used Travis’s copy of Postgres &amp;amp; when deploying, we’ll have to
+use Heroku’s copy.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;strong&gt;makemigrations&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Always run &lt;code class=&quot;highlighter-rouge&quot;&gt;python manage.py makemigrations&lt;/code&gt; before deployment to Heroku
+or in our case, before pushing to Github.&lt;/p&gt;
+
+&lt;p&gt;The actual &lt;code class=&quot;highlighter-rouge&quot;&gt;python manage.py migrate&lt;/code&gt; for the Postgres server addon from
+Heroku will be run by the deploy section in the &lt;code class=&quot;highlighter-rouge&quot;&gt;.travis.yml&lt;/code&gt; file.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;strong&gt;Listing files &amp;amp; directories in a tree:&lt;/strong&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;cd web_app_DPTH
+
+$ tree -a -I &quot;CS50_web_dev|staticfiles|static|templates|LICENSE|README.md|__init__.py|settings_DPTH_.py|urls.py|wsgi.py|db.sqlite3|airline4_tests_.py|apps.py|migrations|views.py|models.py|flights.csv|manage.py|wait-for-it.sh|admin.py|.git|.travis_DPTH_.yml|Dockerfile|docker-compose.yml&quot;  
+
+.
+├── .travis.yml
+├── Procfile
+├── airline
+│   └── settings.py
+├── flights
+│   └── tests.py
+└── requirements.txt
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;As shown in the tree above, the 5 files that matter in the workflow:&lt;/p&gt;
+
+&lt;p&gt;1) tests.py&lt;/p&gt;
+
+&lt;p&gt;2) settings.py&lt;/p&gt;
+
+&lt;p&gt;3) requirements.txt&lt;/p&gt;
+
+&lt;p&gt;4) .travis.yml&lt;/p&gt;
+
+&lt;p&gt;5) Procfile&lt;/p&gt;
+
+&lt;p&gt;We will look at the contents of each of the 5 files in the sections below.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;strong&gt;tests.py&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;This is the test file that Travis will use for testing the app.
+You write whatever test you want for Travis to run with.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;from django.db.models import Max
+from django.test import Client, TestCase
+
+from .models import Airport, Flight, Passenger
+
+# Create your tests here.
+class FlightsTestCase(TestCase):
+
+    def setUp(self):
+
+        # Create airports.
+        a1 = Airport.objects.create(code=&quot;AAA&quot;, city=&quot;City A&quot;)
+        a2 = Airport.objects.create(code=&quot;BBB&quot;, city=&quot;City B&quot;)
+
+        # Create flights.
+        Flight.objects.create(origin=a1, destination=a2, duration=100)
+        Flight.objects.create(origin=a1, destination=a1, duration=200)
+        Flight.objects.create(origin=a2, destination=a1, duration=300)
+
+    # 1
+    def test_departures_count(self):
+        a = Airport.objects.get(code=&quot;AAA&quot;)
+        self.assertEqual(a.departures.count(), 2)
+
+    # 2
+    def test_arrivals_count(self):
+        a = Airport.objects.get(code=&quot;AAA&quot;)
+        self.assertEqual(a.arrivals.count(), 2)
+
+    # 3
+    def test_valid_flight(self):
+        a1 = Airport.objects.get(code=&quot;AAA&quot;)
+        a2 = Airport.objects.get(code=&quot;BBB&quot;)
+        f = Flight.objects.get(origin=a1, destination=a2)
+        self.assertTrue(f.is_valid_flight())
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;strong&gt;settings.py&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Under the database section, the database credentials, as OS environment
+variables, has to be made available to Travis &amp;amp; Heroku. They can be set in
+their respective websites.&lt;/p&gt;
+
+&lt;p&gt;Add and/or edit the following to the &lt;code class=&quot;highlighter-rouge&quot;&gt;settings.py&lt;/code&gt; file:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;import django_heroku
+import dj_database_url
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;MIDDLEWARE = [
+    'django.middleware.security.SecurityMiddleware',
+
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # new
+
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+]
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.environ['DATABASE_NAME'],
+        'USER': os.environ['DATABASE_USER'],
+        'PASSWORD': os.environ['DATABASE_PASSWORD'],
+        'HOST': os.environ['DATABASE_HOST'],
+        'PORT': os.environ['DATABASE_PORT'],
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;django_heroku.settings(locals())
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;strong&gt;requirements.txt&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;This file lets Travis know what packages are needed for the app.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;django&amp;gt;=2.0.11
+psycopg2
+psycopg2-binary
+dj-database-url==0.5.0
+gunicorn
+whitenoise
+django-heroku
+pytz
+sqlparse
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;strong&gt;.travis.yml&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;This file contains instructions for Travis &amp;amp; is needed when Travis starts
+running. &lt;code class=&quot;highlighter-rouge&quot;&gt;$HEROKU_API_KEY&lt;/code&gt; can be generated from the Heroku website &amp;amp;
+stored as an OS environment variable in the Travis website.
+The test is done with the &lt;strong&gt;Travis’s copy&lt;/strong&gt; of Postgres.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;language: python
+python:
+    - 3.6
+services:
+    - postgresql
+install:
+    - pip install -r requirements.txt
+script:
+    - python manage.py test
+deploy:
+    provider: heroku
+    api_key: $HEROKU_API_KEY
+    app: webapp-dpth
+    run: python manage.py migrate
+    on: master
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;strong&gt;Procfile&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;This file is for Heroku. It tells Heroku to deploy the web app using Gunicorn
+as the production server.&lt;/p&gt;
+
+&lt;p&gt;Note that &lt;code class=&quot;highlighter-rouge&quot;&gt;airline&lt;/code&gt; is the Django project name.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;web: gunicorn airline.wsgi
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;strong&gt;The deployed web app&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;With the above files in place, push to Github &amp;amp; Travis will start testing.
+After all tests passed, deployment starts. If there isn’t any failures, the
+web app will be running on:&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://webapp-dpth.herokuapp.com&quot;&gt;https://webapp-dpth.herokuapp.com&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;This &lt;a href=&quot;https://webapp-dpth.herokuapp.com/admin&quot;&gt;link&lt;/a&gt; brings you to the admin
+page. It is using the &lt;strong&gt;Heroku’s copy&lt;/strong&gt; of Postgres.&lt;/p&gt;
+
+&lt;p&gt;This &lt;a href=&quot;https://travis-ci.com/ChuaCheowHuan/web_app_DPTH/builds/125456399&quot;&gt;link&lt;/a&gt;
+brings you to my built log in Travis.com which shows how a successful
+test/deploy built looks like.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;strong&gt;Web security:&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Please note that web security has not been throughly consider in this basic
+workflow describe above. &lt;strong&gt;Do NOT&lt;/strong&gt; simply use the above workflow for
+production.&lt;/p&gt;
+
+&lt;p&gt;For example the &lt;code class=&quot;highlighter-rouge&quot;&gt;SECRET_KEY&lt;/code&gt; in the &lt;code class=&quot;highlighter-rouge&quot;&gt;settings.py&lt;/code&gt; isn’t dealt with at all
+and web security is really beyond the scope of this post.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">Basic workflow of testing a Django &amp;amp; Postgres web app with Travis (continuous integration) &amp;amp; deployment to Heroku (continuous deployment).</summary></entry><entry><title type="html">Dockerized Postgres connection with Django web app in Travis CI</title><link href="https://chuacheowhuan.github.io/docker_travis/" rel="alternate" type="text/html" title="Dockerized Postgres connection with Django web app in Travis CI" /><published>2019-08-29T00:00:00+08:00</published><updated>2019-08-29T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/docker_travis</id><content type="html" xml:base="https://chuacheowhuan.github.io/docker_travis/">&lt;p&gt;Introducing a delay to allow proper connection between dockerized Postgres &amp;amp;
 Django web app in Travis CI.&lt;/p&gt;
 
 &lt;hr /&gt;
@@ -1500,63 +1644,4 @@ the ones describe in the following posts:&lt;/p&gt;
 
 &lt;hr /&gt;
 
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">This post documents my implementation of the Distributed Proximal Policy Optimization (Distributed PPO or DPPO) algorithm. (Distributed continuous version)</summary></entry><entry><title type="html">A3C distributed tensorflow</title><link href="https://chuacheowhuan.github.io/A3C_dist_tf/" rel="alternate" type="text/html" title="A3C distributed tensorflow" /><published>2019-06-25T00:00:00+08:00</published><updated>2019-06-25T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/A3C_dist_tf</id><content type="html" xml:base="https://chuacheowhuan.github.io/A3C_dist_tf/">&lt;p&gt;This post documents my implementation of the A3C
-(Asynchronous Advantage Actor Critic) algorithm
-(&lt;strong&gt;Distributed&lt;/strong&gt; discrete version).&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;A3C (Asynchronous Advantage Actor Critic) implementation with &lt;strong&gt;distributed
-Tensorflow&lt;/strong&gt; &amp;amp; &lt;strong&gt;Python multiprocessing package&lt;/strong&gt;. This is a &lt;strong&gt;discrete&lt;/strong&gt;
-version with N-step targets (use maximum terms possible). The code is tested
-with Gym’s discrete action space environment, CartPole-v0 on Colab.&lt;/p&gt;
-
-&lt;p&gt;Code on my &lt;a href=&quot;https://github.com/ChuaCheowHuan/reinforcement_learning/blob/master/A3C/A3C_disc_max_dist.ipynb&quot;&gt;Github&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;The majority of the code is very similar to the &lt;a href=&quot;https://chuacheowhuan.github.io/A3C_disc_thread_nStep/&quot;&gt;discrete&lt;/a&gt; version with the
-exceptions highlighted in the implementation details section:&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;key-implementation-details&quot;&gt;Key implementation details:&lt;/h2&gt;
-
-&lt;p&gt;Updating the global episode counter &amp;amp; adding the episodic return to a
-tf.FIFOqueue at the end of the work() function.&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;SESS.run(GLOBAL_EP.assign_add(1.0))
-qe = GLOBAL_RUNNING_R.enqueue(ep_r)
-SESS.run(qe)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;The distributed Tensorflow part is very similar to a simple example described in
-this &lt;a href=&quot;https://chuacheowhuan.github.io/dist_tf/&quot;&gt;post&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;Pin the global variables under the parameter server in both the parameter_server() &amp;amp; worker(worker_n) function:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;with tf.device(&quot;/job:ps/task:0&quot;):
-    GLOBAL_AC = ACNet(net_scope, sess, globalAC=None) # only need its params
-    GLOBAL_EP = tf.Variable(0.0, name='GLOBAL_EP') # num of global episodes   
-    # a queue of ep_r
-    GLOBAL_RUNNING_R = tf.FIFOQueue(max_global_episodes, tf.float32, shared_name=&quot;GLOBAL_RUNNING_R&quot;)        
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;In the parameter_server() function, check the size of the tf.FIFOqueue every 1 sec.
-If it’s full, dequeue the items in a list. the list will be used for display.&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;while True:
-    time.sleep(1.0)
-    #print(&quot;ps 1 GLOBAL_EP: &quot;, sess.run(GLOBAL_EP))
-    #print(&quot;ps 1 GLOBAL_RUNNING_R.size(): &quot;, sess.run(GLOBAL_RUNNING_R.size()))  
-    if sess.run(GLOBAL_RUNNING_R.size()) &amp;gt;= max_global_episodes: # GLOBAL_EP starts from 0, hence +1 to max_global_episodes          
-        time.sleep(5.0)
-        #print(&quot;ps 2 GLOBAL_RUNNING_R.size(): &quot;, sess.run(GLOBAL_RUNNING_R.size()))  
-        GLOBAL_RUNNING_R_list = []
-        for j in range(sess.run(GLOBAL_RUNNING_R.size())):
-            ep_r = sess.run(GLOBAL_RUNNING_R.dequeue())
-            GLOBAL_RUNNING_R_list.append(ep_r) # for display
-        break
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">This post documents my implementation of the A3C (Asynchronous Advantage Actor Critic) algorithm (Distributed discrete version).</summary></entry></feed>
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">This post documents my implementation of the Distributed Proximal Policy Optimization (Distributed PPO or DPPO) algorithm. (Distributed continuous version)</summary></entry></feed>

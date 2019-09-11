@@ -19,19 +19,19 @@
   <head>
     <meta charset="utf-8">
 
-<!-- begin _includes/seo.html --><title>DPPO distributed tensorflow - Every little gist</title>
-<meta name="description" content="This post documents my implementation of the Distributed Proximal PolicyOptimization (Distributed PPO or DPPO) algorithm.(Distributed continuous version)">
+<!-- begin _includes/seo.html --><title>Reinforcement learning custom environment in Sagemaker with Ray (RLlib) - Every little gist</title>
+<meta name="description" content="Demo setup for simple (reinforcement learning) custom environment in Sagemaker.This example uses Proximal Policy Optimization with Ray (RLlib).">
 
 
 
 <meta property="og:type" content="article">
 <meta property="og:locale" content="en_US">
 <meta property="og:site_name" content="Every little gist">
-<meta property="og:title" content="DPPO distributed tensorflow">
-<meta property="og:url" content="https://chuacheowhuan.github.io/DPPO_dist_tf/">
+<meta property="og:title" content="Reinforcement learning custom environment in Sagemaker with Ray (RLlib)">
+<meta property="og:url" content="https://chuacheowhuan.github.io/sagemaker_RL_custom_env/">
 
 
-  <meta property="og:description" content="This post documents my implementation of the Distributed Proximal PolicyOptimization (Distributed PPO or DPPO) algorithm.(Distributed continuous version)">
+  <meta property="og:description" content="Demo setup for simple (reinforcement learning) custom environment in Sagemaker.This example uses Proximal Policy Optimization with Ray (RLlib).">
 
 
 
@@ -41,7 +41,7 @@
 
 
 
-  <meta property="article:published_time" content="2019-06-25T00:00:00+08:00">
+  <meta property="article:published_time" content="2019-09-11T00:00:00+08:00">
 
 
 
@@ -52,7 +52,7 @@
   
 
 
-<link rel="canonical" href="https://chuacheowhuan.github.io/DPPO_dist_tf/">
+<link rel="canonical" href="https://chuacheowhuan.github.io/sagemaker_RL_custom_env/">
 
 
 
@@ -260,225 +260,149 @@
 
   <div class="archive">
     
-      <h1 id="page-title" class="page__title">DPPO distributed tensorflow</h1>
+      <h1 id="page-title" class="page__title">Reinforcement learning custom environment in Sagemaker with Ray (RLlib)</h1>
     
-    <p>This post documents my implementation of the Distributed Proximal Policy
-Optimization (Distributed PPO or DPPO) algorithm.
-(<strong>Distributed</strong> continuous version)</p>
+    <p>Demo setup for simple (reinforcement learning) custom environment in Sagemaker.
+This example uses Proximal Policy Optimization with Ray (RLlib).</p>
 
 <hr />
 
-<p>Distributed Proximal Policy Optimization (Distributed PPO or DPPO) continuous
-version implementation with distributed Tensorflow and Python’s multiprocessing
-package. This implementation uses normalized running rewards with GAE. The code
-is tested with Gym’s continuous action space environment, Pendulum-v0 on Colab.</p>
-
-<p>Code on my <a href="https://github.com/ChuaCheowHuan/reinforcement_learning/blob/master/DPPO/DPPO_cont_GAE_dist_GPU.ipynb">Github</a>:</p>
+<p>Code on my <a href="https://github.com/ChuaCheowHuan/sagemaker_Ray_RLlib_custom_env">Github</a></p>
 
 <hr />
 
-<h2 id="notations">Notations:</h2>
+<p><strong>The training script:</strong></p>
 
-<p>current policy =
-<script type="math/tex">{\pi}_{\theta}
-(a_{t}
-  {\mid} s_{t})</script></p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>import json
+import os
 
-<p>old policy =
-<script type="math/tex">{\pi}_{\theta_{old}}
-(a_{t}
-  {\mid} s_{t})</script></p>
+import gym
+import ray
+from ray.tune import run_experiments
+import ray.rllib.agents.a3c as a3c
+import ray.rllib.agents.ppo as ppo
+from ray.tune.registry import register_env
+from mod_op_env import ArrivalSim
 
-<p>epsilon =
-<script type="math/tex">{\epsilon}</script></p>
+from sagemaker_rl.ray_launcher import SageMakerRayLauncher
 
-<p>Advantage function = A</p>
-
-<hr />
-
-<h2 id="equations">Equations:</h2>
-
-<p>Truncated version of generalized advantage estimation (GAE) =</p>
-
-<p><script type="math/tex">A_{t}</script>
-=
-<script type="math/tex">{\delta}_{t}
-+
-({\gamma}
-{\lambda})
-{\delta}_{t}
-+
-...
-+
-({\gamma}
-{\lambda})
-^{T-t+1}
-{\delta}_{T-1}</script></p>
-
-<p>where
-<script type="math/tex">{\delta}_{t}</script> =
-<script type="math/tex">{r}_{t} +
-{\gamma}
-V(s_{t+1}) -
-V(s_{t})</script></p>
-
-<p>when <script type="math/tex">{\lambda}</script> = 1,</p>
-
-<p><script type="math/tex">A_{t}</script> =
-<script type="math/tex">-V(s_{t}) +
-r_{t} +
-{\gamma}r_{t+1} +
-... +
-{\gamma}^{T-t+1}
-r_{T-1} +
-{\gamma}^{T-t}
-V(s_{T})</script></p>
-
-<p>Probability ratio =</p>
-
-<p><script type="math/tex">R_{t}({\theta})</script> = <script type="math/tex">{\dfrac{ {\pi}_{\theta} (a_{t} {\mid} s_{t}) } { {\pi}_{\theta_{old}} (a_{t} {\mid} s_{t}) } }</script></p>
-
-<p>Clipped Surrogate Objective function =</p>
-
-<p><script type="math/tex">L^{CLIP}
-({\theta})</script>
-=
-<script type="math/tex">\mathop{\mathbb{E_{t}}}
-\lbrack
-min(
-  R_{t}({\theta})
-  A_{t}
-  ,
-  clip
-  (
-    R_{t}({\theta}),
-    1+{\epsilon},
-    1-{\epsilon}
+"""
+def create_environment(env_config):
+    import gym
+#     from gym.spaces import Space
+    from gym.envs.registration import register
+    # This import must happen inside the method so that worker processes import this code
+    register(
+        id='ArrivalSim-v0',
+        entry_point='env:ArrivalSim',
+        kwargs= {'price' : 40}
     )
-    A_{t}
-  )
-\rbrack</script></p>
+    return gym.make('ArrivalSim-v0')
+"""
+def create_environment(env_config):
+    price = 30.0
+    # This import must happen inside the method so that worker processes import this code
+    from mod_op_env import ArrivalSim
+    return ArrivalSim(price)
 
-<hr />
 
-<h2 id="key-implementation-details">Key implementation details:</h2>
+class MyLauncher(SageMakerRayLauncher):
+    def __init__(self):        
+        super(MyLauncher, self).__init__()
+        self.num_gpus = int(os.environ.get("SM_NUM_GPUS", 0))
+        self.hosts_info = json.loads(os.environ.get("SM_RESOURCE_CONFIG"))["hosts"]
+        self.num_total_gpus = self.num_gpus * len(self.hosts_info)
 
-<p>The following class is adapted from OpenAI’s baseline:
-This class is used for the normalization of rewards in this program before GAE
-computation.</p>
+    def register_env_creator(self):
+        register_env("ArrivalSim-v0", create_environment)
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>class RunningStats(object):
-    def __init__(self, epsilon=1e-4, shape=()):
-        self.mean = np.zeros(shape, 'float64')
-        self.var = np.ones(shape, 'float64')
-        self.std = np.ones(shape, 'float64')
-        self.count = epsilon
+    def get_experiment_config(self):
+        return {
+          "training": {
+            "env": "ArrivalSim-v0",
+            "run": "PPO",
+            "stop": {
+              "training_iteration": 3,
+            },
 
-    def update(self, x):
-        batch_mean = np.mean(x, axis=0)
-        batch_var = np.var(x, axis=0)
-        batch_count = x.shape[0]
-        self.update_from_moments(batch_mean, batch_var, batch_count)
+            "local_dir": "/opt/ml/model/",
+            "checkpoint_freq" : 3,
 
-    def update_from_moments(self, batch_mean, batch_var, batch_count):
-        delta = batch_mean - self.mean
-        new_mean = self.mean + delta * batch_count / (self.count + batch_count)
-        m_a = self.var * self.count
-        m_b = batch_var * batch_count
-        M2 = m_a + m_b + np.square(delta) * self.count * batch_count / (self.count + batch_count)
-        new_var = M2 / (self.count + batch_count)
+            "config": {                                
+              #"num_workers": max(self.num_total_gpus-1, 1),
+              "num_workers": max(self.num_cpus-1, 1),
+              #"use_gpu_for_workers": False,
+              "train_batch_size": 128, #5,
+              "sample_batch_size": 32, #1,
+              "gpu_fraction": 0.3,
+              "optimizer": {
+                "grads_per_step": 10
+              },
+            },
+            #"trial_resources": {"cpu": 1, "gpu": 0, "extra_gpu": max(self.num_total_gpus-1, 1), "extra_cpu": 0},
+            #"trial_resources": {"cpu": 1, "gpu": 0, "extra_gpu": max(self.num_total_gpus-1, 0),
+            #                    "extra_cpu": max(self.num_cpus-1, 1)},
+            "trial_resources": {"cpu": 1,
+                                "extra_cpu": max(self.num_cpus-1, 1)},              
+          }
+        }
 
-        self.mean = new_mean
-        self.var = new_var
-        self.std = np.maximum(np.sqrt(self.var), 1e-6)
-        self.count = batch_count + self.count
-</code></pre></div></div>
-
-<p>This function in the <code class="highlighter-rouge">PPO</code> class is adapted from OpenAI’s Baseline,
-returns TD lamda return &amp; advantage</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    def add_vtarg_and_adv(self, R, done, V, v_s_, gamma, lam):
-        # Compute target value using TD(lambda) estimator, and advantage with GAE(lambda)
-        # last element is only used for last vtarg, but we already zeroed it if last new = 1
-        done = np.append(done, 0)
-        V_plus = np.append(V, v_s_)
-        T = len(R)
-        adv = gaelam = np.empty(T, 'float32')
-        lastgaelam = 0
-        for t in reversed(range(T)):
-            nonterminal = 1-done[t+1]        
-            delta = R[t] + gamma * V_plus[t+1] * nonterminal - V_plus[t]
-            gaelam[t] = lastgaelam = delta + gamma * lam * nonterminal * lastgaelam   
-        #print("adv=", adv.shape)
-        #print("V=", V.shape)
-        #print("V_plus=", V_plus.shape)
-        tdlamret = np.vstack(adv) + V
-        #print("tdlamret=", tdlamret.shape)
-        return tdlamret, adv # tdlamret is critic_target or Qs      
-</code></pre></div></div>
-
-<p>The following code segment from the <code class="highlighter-rouge">PPO</code> class defines the Clipped Surrogate
-Objective function:</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>with tf.variable_scope('surrogate'):
-                    ratio = self.pi.prob(self.act) / self.oldpi.prob(self.act)
-                    surr = ratio * self.adv
-                    self.aloss = -tf.reduce_mean(tf.minimum(surr, tf.clip_by_value(ratio, 1.-epsilon, 1.+epsilon)*self.adv))
-</code></pre></div></div>
-
-<p>The following code segment from the <code class="highlighter-rouge">work()</code> function in the worker class
-normalized the running rewards for each worker:</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>self.running_stats_r.update(np.array(buffer_r))
-                    buffer_r = np.clip( (np.array(buffer_r) - self.running_stats_r.mean) / self.running_stats_r.std, -stats_CLIP, stats_CLIP )
-</code></pre></div></div>
-
-<p>The following code segment from the <code class="highlighter-rouge">work()</code> function in the worker class computes
- the TD lamda return &amp; advantage:</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>tdlamret, adv = self.ppo.add_vtarg_and_adv(np.vstack(buffer_r), np.vstack(buffer_done), np.vstack(buffer_V), v_s_, GAMMA, lamda)
-
-</code></pre></div></div>
-
-<p>The following update function in the <code class="highlighter-rouge">PPO</code> class does the training &amp; the
-updating of global &amp; local parameters (Note the at the beginning of training,
-  probability ratio = 1):</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>def update(self, s, a, r, adv):    
-    self.sess.run(self.update_oldpi_op)
-
-    for _ in range(A_EPOCH): # train actor
-        self.sess.run(self.atrain_op, {self.state: s, self.act: a, self.adv: adv})
-        # update actor
-        self.sess.run([self.push_actor_pi_params,
-                       self.pull_actor_pi_params],
-                      {self.state: s, self.act: a, self.adv: adv})
-    for _ in range(C_EPOCH): # train critic
-        # update critic
-        self.sess.run(self.ctrain_op, {self.state: s, self.discounted_r: r})
-        self.sess.run([self.push_critic_params,
-                       self.pull_critic_params],
-                      {self.state: s, self.discounted_r: r})   
+if __name__ == "__main__":
+    os.environ["LC_ALL"] = "C.UTF-8"
+    os.environ["LANG"] = "C.UTF-8"
+    os.environ["RAY_USE_XRAY"] = "1"
+    print(ppo.DEFAULT_CONFIG)
+    MyLauncher().train_main()
 </code></pre></div></div>
 
 <hr />
 
-<p>The distributed Tensorflow &amp; multiprocessing code sections are very similar to
-the ones describe in the following posts:</p>
+<p><strong>The Jupyter notebook:</strong></p>
 
-<p><a href="https://chuacheowhuan.github.io/A3C_dist_tf/">A3C distributed tensorflow</a></p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>!/bin/bash ./setup.sh
 
-<p><a href="https://chuacheowhuan.github.io/dist_tf/">Distributed Tensorflow</a></p>
+from time import gmtime, strftime
+import sagemaker
+role = sagemaker.get_execution_role()
+
+sage_session = sagemaker.session.Session()
+s3_bucket = sage_session.default_bucket()  
+s3_output_path = 's3://{}/'.format(s3_bucket)
+print("S3 bucket path: {}".format(s3_output_path))
+
+job_name_prefix = 'ArrivalSim'
+
+from sagemaker.rl import RLEstimator, RLToolkit, RLFramework
+
+estimator = RLEstimator(entry_point="mod_op_train.py", # Our launcher code
+                        source_dir='src', # Directory where the supporting files are at. All of this will be
+                                          # copied into the container.
+                        dependencies=["common/sagemaker_rl"], # some other utils files.
+                        toolkit=RLToolkit.RAY, # We want to run using the Ray toolkit against the ray container image.
+                        framework=RLFramework.TENSORFLOW, # The code is in tensorflow backend.
+                        toolkit_version='0.5.3', # Toolkit version. This will also choose an apporpriate tf version.                                               
+                        #toolkit_version='0.6.5', # Toolkit version. This will also choose an apporpriate tf version.                        
+                        role=role, # The IAM role that we created at the begining.
+                        #train_instance_type="ml.m4.xlarge", # Since we want to run fast, lets run on GPUs.
+                        train_instance_type="local", # Since we want to run fast, lets run on GPUs.
+                        train_instance_count=1, # Single instance will also work, but running distributed makes things
+                                                # fast, particularly in the case of multiple rollout training.
+                        output_path=s3_output_path, # The path where we can expect our trained model.
+                        base_job_name=job_name_prefix, # This is the name we setup above to be to track our job.
+                        hyperparameters = {      # Some hyperparameters for Ray toolkit to operate.
+                          "s3_bucket": s3_bucket,
+                          "rl.training.stop.training_iteration": 2, # Number of iterations.
+                          "rl.training.checkpoint_freq": 2,
+                        },
+                        #metric_definitions=metric_definitions, # This will bring all the logs out into the notebook.
+                    )
+
+estimator.fit()
+</code></pre></div></div>
 
 <hr />
 
-<h2 id="references">References:</h2>
-
-<p><a href="https://arxiv.org/pdf/1707.06347.pdf">Proximal Policy Optimization Algorithms</a>
-(Schulman, Wolski, Dhariwal, Radford, Klimov, 2017)</p>
-
-<p><a href="https://arxiv.org/pdf/1707.02286.pdf">Emergence of Locomotion Behaviours in Rich Environments</a>
-(Nicolas Heess, Dhruva TB, Srinivasan Sriram, Jay Lemmon, Josh Merel, Greg Wayne, et al., 2017)</p>
+<p>See related <a href="https://stackoverflow.com/questions/57724414/how-to-make-the-inputs-and-model-have-the-same-shape-rllib-ray-sagemaker-reinfo/57762933#57762933">issue/motivation</a>.</p>
 
 <hr />
 
@@ -521,7 +445,7 @@ the ones describe in the following posts:</p>
 
 
 
-  48 minute read
+  47 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">Demo setup for simple (reinforcement learning) custom environment in Sagemaker.
@@ -551,7 +475,7 @@ This example uses Proximal Policy Optimization with Ray (RLlib).
 
 
 
-  69 minute read
+  66 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">Basic workflow of testing a Django &amp; Postgres web app with Travis
@@ -581,7 +505,7 @@ This example uses Proximal Policy Optimization with Ray (RLlib).
 
 
 
-  114 minute read
+  129 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">Basic workflow of testing a dockerized Django &amp; Postgres web app with Travis
@@ -611,7 +535,7 @@ This example uses Proximal Policy Optimization with Ray (RLlib).
 
 
 
-  16 minute read
+  43 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">Introducing a delay to allow proper connection between dockerized Postgres &amp;
@@ -641,7 +565,7 @@ Django web app in Travis CI.
 
 
 
-  18 minute read
+  17 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">Creating &amp; seeding a random policy class in RLlib.
@@ -670,7 +594,7 @@ Django web app in Travis CI.
 
 
 
-  25 minute read
+  23 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">A custom MARL (multi-agent reinforcement learning) environment where multiple
@@ -700,7 +624,7 @@ agents trade against one another in a CDA (continuous double auction).
 
 
 
-  11 minute read
+  10 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">This post demonstrate how setup &amp; access Tensorflow graphs.
@@ -729,7 +653,7 @@ agents trade against one another in a CDA (continuous double auction).
 
 
 
-  15 minute read
+  13 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">This post demonstrates how to create customized functions to bundle commands in
@@ -759,7 +683,7 @@ a .bash_profile file on Mac.
 
 
 
-  87 minute read
+  81 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">This post documents my implementation of the Random Network Distillation (RND)
@@ -1234,8 +1158,8 @@ algorithm.
     
   <script>
     var disqus_config = function () {
-      this.page.url = "https://chuacheowhuan.github.io/DPPO_dist_tf/";  // Replace PAGE_URL with your page's canonical URL variable
-      this.page.identifier = "/DPPO_dist_tf"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+      this.page.url = "https://chuacheowhuan.github.io/sagemaker_RL_custom_env/";  // Replace PAGE_URL with your page's canonical URL variable
+      this.page.identifier = "/sagemaker_RL_custom_env"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
     };
     (function() { // DON'T EDIT BELOW THIS LINE
       var d = document, s = d.createElement('script');
