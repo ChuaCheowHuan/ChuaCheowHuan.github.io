@@ -19,19 +19,19 @@
   <head>
     <meta charset="utf-8">
 
-<!-- begin _includes/seo.html --><title>Dockerized Postgres connection with Django web app in Travis CI - Every little gist</title>
-<meta name="description" content="Introducing a delay to allow proper connection between dockerized Postgres &amp;Django web app in Travis CI.">
+<!-- begin _includes/seo.html --><title>Custom Sagemaker reinforcement learning container - Every little gist</title>
+<meta name="description" content="Building &amp; testing custom Sagemaker RL container.">
 
 
 
 <meta property="og:type" content="article">
 <meta property="og:locale" content="en_US">
 <meta property="og:site_name" content="Every little gist">
-<meta property="og:title" content="Dockerized Postgres connection with Django web app in Travis CI">
-<meta property="og:url" content="https://chuacheowhuan.github.io/docker_travis/">
+<meta property="og:title" content="Custom Sagemaker reinforcement learning container">
+<meta property="og:url" content="https://chuacheowhuan.github.io/custom_sagemaker_RL_container/">
 
 
-  <meta property="og:description" content="Introducing a delay to allow proper connection between dockerized Postgres &amp;Django web app in Travis CI.">
+  <meta property="og:description" content="Building &amp; testing custom Sagemaker RL container.">
 
 
 
@@ -41,7 +41,7 @@
 
 
 
-  <meta property="article:published_time" content="2019-08-29T00:00:00+08:00">
+  <meta property="article:published_time" content="2019-09-15T00:00:00+08:00">
 
 
 
@@ -52,7 +52,7 @@
   
 
 
-<link rel="canonical" href="https://chuacheowhuan.github.io/docker_travis/">
+<link rel="canonical" href="https://chuacheowhuan.github.io/custom_sagemaker_RL_container/">
 
 
 
@@ -260,145 +260,191 @@
 
   <div class="archive">
     
-      <h1 id="page-title" class="page__title">Dockerized Postgres connection with Django web app in Travis CI</h1>
+      <h1 id="page-title" class="page__title">Custom Sagemaker reinforcement learning container</h1>
     
-    <p>Introducing a delay to allow proper connection between dockerized Postgres &amp;
-Django web app in Travis CI.</p>
+    <p>Building &amp; testing custom Sagemaker RL container.</p>
+
+<p>Instead of using the official SageMaker supported version of Ray RLlib
+(version 0.5.3 &amp; 0.6.5), I want to use version 0.7.3. In order to do so, I have
+to build &amp; test my custom Sagemaker RL container.</p>
 
 <hr />
 
-<p>Code on my <a href="https://github.com/ChuaCheowHuan/web_app">Github</a></p>
+<p><strong>The Dockerfile:</strong></p>
 
-<hr />
+<p>Add the Dockerfile below to <code class="highlighter-rouge">sagemaker-rl-container/ray/docker/0.7.3/</code>:</p>
 
-<p>If you see the following error in the Travis’s job log while attempting to test
-dockerized Django apps with Travis, it means that the postgres docker container
-has started but not yet ready to accept connections.</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ARG processor
+#FROM 520713654638.dkr.ecr.us-west-2.amazonaws.com/sagemaker-tensorflow-scriptmode:1.14.0-$processor-py3
+FROM 520713654638.dkr.ecr.us-west-2.amazonaws.com/sagemaker-tensorflow-scriptmode:1.12.0-$processor-py3
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>psycopg2.OperationalError: could not connect to server: Connection refused
-539	Is the server running on host "db" (172.18.0.2) and accepting
-540	TCP/IP connections on port 5432?
+RUN apt-get update &amp;&amp; apt-get install -y --no-install-recommends \
+        build-essential \
+        jq \
+        libav-tools \
+        libjpeg-dev \
+        libxrender1 \
+        python3.6-dev \
+        python3-opengl \
+        wget \
+        xvfb &amp;&amp; \
+    apt-get clean &amp;&amp; \
+    rm -rf /var/lib/apt/lists/*
 
-.
-.
-.
+RUN pip install --no-cache-dir \
+    Cython==0.29.7 \
+    gym==0.14.0 \
+    lz4==2.1.10 \
+    opencv-python-headless==4.1.0.25 \
+    PyOpenGL==3.1.0 \
+    pyyaml==5.1.1 \
+    redis&gt;=3.2.2 \
+    ray==0.7.3 \
+    ray[rllib]==0.7.3 \
+    scipy==1.3.0
 
-django.db.utils.OperationalError: could not connect to server: Connection
-refused 587	Is the server running on host "db" (172.18.0.2) and accepting
-588	TCP/IP connections on port 5432?
+# https://click.palletsprojects.com/en/7.x/python3/
+ENV LC_ALL=C.UTF-8
+ENV LANG=C.UTF-8
 
-The command "docker-compose run web python manage.py test" exited with 1.
-</code></pre></div></div>
+# Copy workaround script for incorrect hostname
+COPY lib/changehostname.c /
 
-<p>A solution for this issue is to introduce a delay until connection is ready
-before executing the test.</p>
+COPY lib/start.sh /usr/local/bin/start.sh
+RUN chmod +x /usr/local/bin/start.sh
 
-<p>The delay has to be implemented in the <code class="highlighter-rouge">docker-compose.yml</code> file before
-migration &amp; running of Django’s server shown below:</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>command: bash -c 'while !&lt;/dev/tcp/db/5432; do sleep 1; done; python3 manage.py migrate'
-</code></pre></div></div>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>command: bash -c 'while !&lt;/dev/tcp/db/5432; do sleep 1; done; python3 manage.py runserver 0.0.0.0:8000'
-</code></pre></div></div>
-
-<hr />
-
-<p><strong>Config files:</strong></p>
-
-<p>These are the relevant config files used in a Django project with the delay
-introduced in the <code class="highlighter-rouge">docker-compose.yml</code> file. The actual command to run the
-test is in the <code class="highlighter-rouge">.travis.yml</code> file.</p>
-
-<p>The database configuration in <code class="highlighter-rouge">settings.py</code></p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres',
-        'USER': 'postgres',
-        'HOST': 'db',
-        'PORT': 5432,
-        #'PORT': 5433,
-    }
-}
-</code></pre></div></div>
-
-<p>The <code class="highlighter-rouge">Dockerfile</code>:</p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>FROM python:3
-WORKDIR /usr/src/app
-ADD requirements.txt /usr/src/app
-RUN pip install -r requirements.txt
-ADD . /usr/src/app
-</code></pre></div></div>
-
-<p>The <code class="highlighter-rouge">docker-compose.yml</code> file:</p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>version: '3'
-
-services:
-    db:
-        image: postgres
-    migration:
-        build: .
-#        command: python3 manage.py migrate
-        command: bash -c 'while !&lt;/dev/tcp/db/5432; do sleep 1; done; python3 manage.py migrate'
-        volumes:
-            - .:/usr/src/app
-        depends_on:
-            - db
-    web:
-        build: .
-#        command: python3 manage.py runserver 0.0.0.0:8000
-        command: bash -c 'while !&lt;/dev/tcp/db/5432; do sleep 1; done; python3 manage.py runserver 0.0.0.0:8000'
-        volumes:
-            - .:/usr/src/app
-        ports:
-            - "8000:8000"
-        depends_on:
-            - db
-            - migration
-</code></pre></div></div>
-
-<p>The <code class="highlighter-rouge">.travis.yml</code> file:</p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>language: python
-python:
-    - 3.6
-services:
-    - docker
-#    - postgres
-install:
-    - pip install -r requirements.txt
-#before_script:
-#    - psql -c 'create database testdb;' -U postgres
-#    - psql -c 'create database travisci;' -U postgres
-script:
-#    - docker-compose build
-#    - docker-compose run web python manage.py migrate
-    - docker-compose run web python manage.py test
-#    - python manage.py test
+# Starts framework
+ENTRYPOINT ["bash", "-m", "start.sh"]
 </code></pre></div></div>
 
 <hr />
 
-<p>After introducing the delay, this is the successful test output in
-Travis’s job log.</p>
+<p><strong>Remove unneeded test files:</strong></p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>.
-.
-.
-.......
-528----------------------------------------------------------------------
-529Ran 10 tests in 0.126s
-530
-531OK
-532Destroying test database for alias 'default'...
-533The command "docker-compose run web python manage.py test" exited with 0.
+<p>Backup the <code class="highlighter-rouge">test</code> folder as <code class="highlighter-rouge">test_bkup</code>
+in <code class="highlighter-rouge">sagemaker-rl-container/</code>.</p>
+
+<p>Remove the following files not used in testing
+in <code class="highlighter-rouge">sagemaker-rl-container/test/integration/local/</code>:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>test_coach.py
+test_vw_cb_explore.py
+test_vw_cbify.py
+test_vw_serving.py
 </code></pre></div></div>
 
 <hr />
 
-<h2 id="references">References:</h2>
+<p><strong>Add/replace codes in test files to get role:</strong></p>
 
-<p>See this <a href="https://stackoverflow.com/questions/35069027/docker-wait-for-postgresql-to-be-running">post</a> in stackoverflow.</p>
+<p>In the <code class="highlighter-rouge">sagemaker-rl-container/test/conftest.py</code>file, add/replace the
+following:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>from sagemaker import get_execution_role
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#parser.addoption('--role', default='SageMakerContainerBuildIntegrationTests')
+parser.addoption('--role', default=get_execution_role()),
+
+</code></pre></div></div>
+
+<p>In the following files:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sagemaker-rl-container/test/integration/local/test_gym.py
+sagemaker-rl-container/test/integration/local/test_ray.py
+</code></pre></div></div>
+
+<p>Add/replace the following:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>from sagemaker import get_execution_role
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#role='SageMakerRole',
+role = get_execution_role(),
+</code></pre></div></div>
+
+<hr />
+
+<p><strong>Build the image:</strong></p>
+
+<p>In SageMaker, start a Jupyter notebook instance &amp; open a terminal.</p>
+
+<p>Login into SageMaker ECR account:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ (aws ecr get-login --no-include-email --region &lt;region&gt; --registry-ids 520713654638)
+</code></pre></div></div>
+
+<p>Copy &amp; paste the output from the above command into the terminal &amp; press Enter.</p>
+
+<hr />
+
+<p>Pull the base Tensorflow image from the aws ecr:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ docker pull 520713654638.dkr.ecr.us-west-2.amazonaws.com/sagemaker-tensorflow-scriptmode:1.12.0-cpu-py3
+</code></pre></div></div>
+
+<p>Build the Ray image using the <code class="highlighter-rouge">Dockerfile.tf</code> from above:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ docker build -t tf-ray:0.7.3-cpu-py3 -f ray/docker/0.7.3/Dockerfile.tf --build-arg processor=cpu .
+</code></pre></div></div>
+
+<hr />
+
+<p><strong>Local testing:</strong></p>
+
+<p>Install dependencies for testing:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ cd sagemaker-rl-container
+$ pip install .
+</code></pre></div></div>
+
+<p>Run the command below for local testing:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>clear &amp;&amp; \
+docker images &amp;&amp; \
+pytest test/integration/local --framework tensorflow \
+                              --toolkit ray \
+                              --toolkit-version 0.7.3 \
+                              --docker-base-name tf-ray \
+                              --tag 0.7.3-cpu-py3 \
+                              --processor cpu | tee test_output.txt
+</code></pre></div></div>
+
+<p>The output from the test will be saved in test_output.txt.</p>
+
+<hr />
+
+<p><strong>Useful Docker commands:</strong></p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ docker login
+
+$ docker ps -a
+
+$ docker images
+
+$ docker tag ba542f0b9706 123456789012.dkr.ecr.us-west-2.amazonaws.com/custom-smk-rl-ctn:tf-1.12.0-cpu-py3
+
+$ docker push 123456789012.dkr.ecr.us-west-2.amazonaws.com/custom-smk-rl-ctn:tf-1.12.0-cpu-py3
+
+$ docker rm &lt;container&gt;
+
+$ docker rmi &lt;image&gt;
+</code></pre></div></div>
+
+<hr />
+
+<p><strong>Useful AWS commands:</strong></p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ aws ecr describe-repositories
+
+$ aws ecr list-images --repository-name custom-smk-rl-ctn
+</code></pre></div></div>
+
+<hr />
+
+<p><strong>References:</strong></p>
+
+<p><a href="https://github.com/aws/sagemaker-rl-container">https://github.com/aws/sagemaker-rl-container</a></p>
 
 <hr />
 
@@ -441,7 +487,7 @@ Travis’s job log.</p>
 
 
 
-  42 minute read
+  39 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">Building &amp; testing custom Sagemaker RL container.
@@ -470,7 +516,7 @@ Travis’s job log.</p>
 
 
 
-  49 minute read
+  48 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">Demo setup for simple (reinforcement learning) custom environment in Sagemaker.
@@ -500,7 +546,7 @@ This example uses Proximal Policy Optimization with Ray (RLlib).
 
 
 
-  69 minute read
+  66 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">Basic workflow of testing a Django &amp; Postgres web app with Travis
@@ -530,7 +576,7 @@ This example uses Proximal Policy Optimization with Ray (RLlib).
 
 
 
-  114 minute read
+  129 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">Basic workflow of testing a dockerized Django &amp; Postgres web app with Travis
@@ -1183,8 +1229,8 @@ algorithm.
     
   <script>
     var disqus_config = function () {
-      this.page.url = "https://chuacheowhuan.github.io/docker_travis/";  // Replace PAGE_URL with your page's canonical URL variable
-      this.page.identifier = "/docker_travis"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+      this.page.url = "https://chuacheowhuan.github.io/custom_sagemaker_RL_container/";  // Replace PAGE_URL with your page's canonical URL variable
+      this.page.identifier = "/custom_sagemaker_RL_container"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
     };
     (function() { // DON'T EDIT BELOW THIS LINE
       var d = document, s = d.createElement('script');

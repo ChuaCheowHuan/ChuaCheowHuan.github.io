@@ -1,4 +1,190 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.5">Jekyll</generator><link href="https://chuacheowhuan.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://chuacheowhuan.github.io/" rel="alternate" type="text/html" /><updated>2019-09-11T15:04:44+08:00</updated><id>https://chuacheowhuan.github.io/feed.xml</id><title type="html">Every little gist</title><subtitle></subtitle><author><name>Chua Cheow Huan</name></author><entry><title type="html">Reinforcement learning custom environment in Sagemaker with Ray (RLlib)</title><link href="https://chuacheowhuan.github.io/sagemaker_RL_custom_env/" rel="alternate" type="text/html" title="Reinforcement learning custom environment in Sagemaker with Ray (RLlib)" /><published>2019-09-11T00:00:00+08:00</published><updated>2019-09-11T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/sagemaker_RL_custom_env</id><content type="html" xml:base="https://chuacheowhuan.github.io/sagemaker_RL_custom_env/">&lt;p&gt;Demo setup for simple (reinforcement learning) custom environment in Sagemaker.
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.5">Jekyll</generator><link href="https://chuacheowhuan.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://chuacheowhuan.github.io/" rel="alternate" type="text/html" /><updated>2019-09-16T01:48:29+08:00</updated><id>https://chuacheowhuan.github.io/feed.xml</id><title type="html">Every little gist</title><subtitle></subtitle><author><name>Chua Cheow Huan</name></author><entry><title type="html">Custom Sagemaker reinforcement learning container</title><link href="https://chuacheowhuan.github.io/custom_sagemaker_RL_container/" rel="alternate" type="text/html" title="Custom Sagemaker reinforcement learning container" /><published>2019-09-15T00:00:00+08:00</published><updated>2019-09-15T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/custom_sagemaker_RL_container</id><content type="html" xml:base="https://chuacheowhuan.github.io/custom_sagemaker_RL_container/">&lt;p&gt;Building &amp;amp; testing custom Sagemaker RL container.&lt;/p&gt;
+
+&lt;p&gt;Instead of using the official SageMaker supported version of Ray RLlib
+(version 0.5.3 &amp;amp; 0.6.5), I want to use version 0.7.3. In order to do so, I have
+to build &amp;amp; test my custom Sagemaker RL container.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;strong&gt;The Dockerfile:&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Add the Dockerfile below to &lt;code class=&quot;highlighter-rouge&quot;&gt;sagemaker-rl-container/ray/docker/0.7.3/&lt;/code&gt;:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;ARG processor
+#FROM 520713654638.dkr.ecr.us-west-2.amazonaws.com/sagemaker-tensorflow-scriptmode:1.14.0-$processor-py3
+FROM 520713654638.dkr.ecr.us-west-2.amazonaws.com/sagemaker-tensorflow-scriptmode:1.12.0-$processor-py3
+
+RUN apt-get update &amp;amp;&amp;amp; apt-get install -y --no-install-recommends \
+        build-essential \
+        jq \
+        libav-tools \
+        libjpeg-dev \
+        libxrender1 \
+        python3.6-dev \
+        python3-opengl \
+        wget \
+        xvfb &amp;amp;&amp;amp; \
+    apt-get clean &amp;amp;&amp;amp; \
+    rm -rf /var/lib/apt/lists/*
+
+RUN pip install --no-cache-dir \
+    Cython==0.29.7 \
+    gym==0.14.0 \
+    lz4==2.1.10 \
+    opencv-python-headless==4.1.0.25 \
+    PyOpenGL==3.1.0 \
+    pyyaml==5.1.1 \
+    redis&amp;gt;=3.2.2 \
+    ray==0.7.3 \
+    ray[rllib]==0.7.3 \
+    scipy==1.3.0
+
+# https://click.palletsprojects.com/en/7.x/python3/
+ENV LC_ALL=C.UTF-8
+ENV LANG=C.UTF-8
+
+# Copy workaround script for incorrect hostname
+COPY lib/changehostname.c /
+
+COPY lib/start.sh /usr/local/bin/start.sh
+RUN chmod +x /usr/local/bin/start.sh
+
+# Starts framework
+ENTRYPOINT [&quot;bash&quot;, &quot;-m&quot;, &quot;start.sh&quot;]
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;strong&gt;Remove unneeded test files:&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Backup the &lt;code class=&quot;highlighter-rouge&quot;&gt;test&lt;/code&gt; folder as &lt;code class=&quot;highlighter-rouge&quot;&gt;test_bkup&lt;/code&gt;
+in &lt;code class=&quot;highlighter-rouge&quot;&gt;sagemaker-rl-container/&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Remove the following files not used in testing
+in &lt;code class=&quot;highlighter-rouge&quot;&gt;sagemaker-rl-container/test/integration/local/&lt;/code&gt;:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;test_coach.py
+test_vw_cb_explore.py
+test_vw_cbify.py
+test_vw_serving.py
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;strong&gt;Add/replace codes in test files to get role:&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;In the &lt;code class=&quot;highlighter-rouge&quot;&gt;sagemaker-rl-container/test/conftest.py&lt;/code&gt;file, add/replace the
+following:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;from sagemaker import get_execution_role
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;#parser.addoption('--role', default='SageMakerContainerBuildIntegrationTests')
+parser.addoption('--role', default=get_execution_role()),
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;In the following files:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sagemaker-rl-container/test/integration/local/test_gym.py
+sagemaker-rl-container/test/integration/local/test_ray.py
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Add/replace the following:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;from sagemaker import get_execution_role
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;#role='SageMakerRole',
+role = get_execution_role(),
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;strong&gt;Build the image:&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;In SageMaker, start a Jupyter notebook instance &amp;amp; open a terminal.&lt;/p&gt;
+
+&lt;p&gt;Login into SageMaker ECR account:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ (aws ecr get-login --no-include-email --region &amp;lt;region&amp;gt; --registry-ids 520713654638)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Copy &amp;amp; paste the output from the above command into the terminal &amp;amp; press Enter.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;Pull the base Tensorflow image from the aws ecr:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ docker pull 520713654638.dkr.ecr.us-west-2.amazonaws.com/sagemaker-tensorflow-scriptmode:1.12.0-cpu-py3
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Build the Ray image using the &lt;code class=&quot;highlighter-rouge&quot;&gt;Dockerfile.tf&lt;/code&gt; from above:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ docker build -t tf-ray:0.7.3-cpu-py3 -f ray/docker/0.7.3/Dockerfile.tf --build-arg processor=cpu .
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;strong&gt;Local testing:&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Install dependencies for testing:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ cd sagemaker-rl-container
+$ pip install .
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Run the command below for local testing:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;clear &amp;amp;&amp;amp; \
+docker images &amp;amp;&amp;amp; \
+pytest test/integration/local --framework tensorflow \
+                              --toolkit ray \
+                              --toolkit-version 0.7.3 \
+                              --docker-base-name tf-ray \
+                              --tag 0.7.3-cpu-py3 \
+                              --processor cpu | tee test_output.txt
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;The output from the test will be saved in test_output.txt.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;strong&gt;Useful Docker commands:&lt;/strong&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ docker login
+
+$ docker ps -a
+
+$ docker images
+
+$ docker tag ba542f0b9706 123456789012.dkr.ecr.us-west-2.amazonaws.com/custom-smk-rl-ctn:tf-1.12.0-cpu-py3
+
+$ docker push 123456789012.dkr.ecr.us-west-2.amazonaws.com/custom-smk-rl-ctn:tf-1.12.0-cpu-py3
+
+$ docker rm &amp;lt;container&amp;gt;
+
+$ docker rmi &amp;lt;image&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;strong&gt;Useful AWS commands:&lt;/strong&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ aws ecr describe-repositories
+
+$ aws ecr list-images --repository-name custom-smk-rl-ctn
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;strong&gt;References:&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/aws/sagemaker-rl-container&quot;&gt;https://github.com/aws/sagemaker-rl-container&lt;/a&gt;&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">Building &amp;amp; testing custom Sagemaker RL container.</summary></entry><entry><title type="html">Reinforcement learning custom environment in Sagemaker with Ray (RLlib)</title><link href="https://chuacheowhuan.github.io/sagemaker_RL_custom_env/" rel="alternate" type="text/html" title="Reinforcement learning custom environment in Sagemaker with Ray (RLlib)" /><published>2019-09-11T00:00:00+08:00</published><updated>2019-09-11T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/sagemaker_RL_custom_env</id><content type="html" xml:base="https://chuacheowhuan.github.io/sagemaker_RL_custom_env/">&lt;p&gt;Demo setup for simple (reinforcement learning) custom environment in Sagemaker.
 This example uses Proximal Policy Optimization with Ray (RLlib).&lt;/p&gt;
 
 &lt;hr /&gt;
@@ -135,6 +321,12 @@ estimator = RLEstimator(entry_point=&quot;mod_op_train.py&quot;, # Our launcher 
 
 estimator.fit()
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;strong&gt;The container in Sagemaker Jupyter notebook instance:&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/images/sagemaker_container.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
 
 &lt;hr /&gt;
 
@@ -1170,261 +1362,7 @@ generating sitemap.xml &amp;amp; robot.txt.&lt;/p&gt;
 
 &lt;hr /&gt;
 
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">This post demonstrates how to create customized functions to bundle commands in a .bash_profile file on Mac.</summary></entry><entry><title type="html">RND (Random Network Distillation) with Proximal Policy Optimization (PPO) Tensorflow</title><link href="https://chuacheowhuan.github.io/RND/" rel="alternate" type="text/html" title="RND (Random Network Distillation) with Proximal Policy Optimization (PPO) Tensorflow" /><published>2019-06-25T00:00:00+08:00</published><updated>2019-06-25T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/RND</id><content type="html" xml:base="https://chuacheowhuan.github.io/RND/">&lt;p&gt;This post documents my implementation of the Random Network Distillation (RND)
-with Proximal Policy Optimization (PPO) algorithm.
-(&lt;strong&gt;continuous&lt;/strong&gt; version)&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;Random Network Distillation (RND) with Proximal Policy Optimization (PPO)
-implentation in Tensorflow. This is a continuous version which solves the
-mountain car continuous problem (MountainCarContinuous-v0).
-The RND helps learning with curiosity driven exploration.&lt;/p&gt;
-
-&lt;p&gt;The agent starts to converge correctly at around 30 episodes &amp;amp; reached the flag
-291 times out of 300 episodes (97% hit rate). It takes 385.09387278556824
-seconds to complete 300 episodes on Google’s Colab.&lt;/p&gt;
-
-&lt;p&gt;Edit: A new version which corrects a numerical error(causes nan action) takes
-780.2065596580505 seconds for 300 episodes. Both versions have similar results.
-The URL for the new version is updated. Added random seeds for numpy &amp;amp; Tensorflow global seed &amp;amp; ops seed achieve better consistency &amp;amp; faster convergence.&lt;/p&gt;
-
-&lt;p&gt;Checkout the &lt;a href=&quot;https://chuacheowhuan.github.io/RND/#charts&quot;&gt;resulting
-charts&lt;/a&gt; from the program output.&lt;/p&gt;
-
-&lt;p&gt;Code on my Github:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;
-    &lt;p&gt;&lt;a href=&quot;https://github.com/ChuaCheowHuan/reinforcement_learning/blob/master/RND_PPO/RND_PPO_cont_ftr_nsn_mtcar_php.py&quot;&gt;Python file&lt;/a&gt;,&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;&lt;a href=&quot;https://github.com/ChuaCheowHuan/reinforcement_learning/blob/master/RND_PPO/RND_PPO_cont_ftr_nsn_mtCar_php.ipynb&quot;&gt;Jupyter notebook&lt;/a&gt;
-(The Jupyter notebook, which also contain the resulting charts at the end, can be run directly on Google’s Colab.)&lt;/p&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;notations--equations&quot;&gt;Notations &amp;amp; equations&lt;/h2&gt;
-
-&lt;p&gt;fixed feature from target network =
-&lt;script type=&quot;math/tex&quot;&gt;{ f (s_{t+1}) }&lt;/script&gt;&lt;/p&gt;
-
-&lt;p&gt;predicted feature from predictor network =
-&lt;script type=&quot;math/tex&quot;&gt;{ f ^\prime  (s_{t+1}) }&lt;/script&gt;&lt;/p&gt;
-
-&lt;p&gt;intrinsic reward =
-&lt;script type=&quot;math/tex&quot;&gt;r_{i}&lt;/script&gt; =
-||
-&lt;script type=&quot;math/tex&quot;&gt;{ f ^\prime  (s_{t+1}) }&lt;/script&gt; -
-&lt;script type=&quot;math/tex&quot;&gt;{ f (s_{t+1}) }&lt;/script&gt;
-||
-&lt;script type=&quot;math/tex&quot;&gt;{}{^2}&lt;/script&gt;&lt;/p&gt;
-
-&lt;p&gt;For notations &amp;amp; equations regarding PPO, refer to this
-&lt;a href=&quot;https://chuacheowhuan.github.io/DPPO_dist_tf/&quot;&gt;post&lt;/a&gt;.&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;key-implementation-details&quot;&gt;Key implementation details:&lt;/h2&gt;
-
-&lt;p&gt;&lt;strong&gt;Preprocessing, state featurization:&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;Prior to training, the states are featurized with the RBF kernel.&lt;/p&gt;
-
-&lt;p&gt;(states are also featurized during every training batch.)&lt;/p&gt;
-
-&lt;p&gt;Refer to scikit-learn.org documentation: &lt;a href=&quot;https://scikit-learn.org/stable/modules/kernel_approximation.html#rbf-kernel-approx&quot;&gt;5.7.2. Radial Basis Function Kernel&lt;/a&gt; for more information on RBF kernel.&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;if state_ftr == True:
-&quot;&quot;&quot;
-The following code for state featurization is adapted &amp;amp; modified from dennybritz's repository located at:
-https://github.com/dennybritz/reinforcement-learning/blob/master/PolicyGradient/Continuous%20MountainCar%20Actor%20Critic%20Solution.ipynb
-&quot;&quot;&quot;
-    # Feature Preprocessing: Normalize to zero mean and unit variance
-    # We use a few samples from the observation space to do this
-    states = np.array([env.observation_space.sample() for x in range(sample_size)]) # pre-trained, states preprocessing
-    scaler = sklearn.preprocessing.StandardScaler()
-    scaler.fit(states) # Compute the mean and std to be used for later scaling.
-
-    # convert states to a featurizes representation.
-    # We use RBF kernels with different variances to cover different parts of the space
-    featurizer = sklearn.pipeline.FeatureUnion([ # Concatenates results of multiple transformer objects.
-            (&quot;rbf1&quot;, RBFSampler(gamma=5.0, n_components=n_comp)),
-            (&quot;rbf2&quot;, RBFSampler(gamma=2.0, n_components=n_comp)),
-            (&quot;rbf3&quot;, RBFSampler(gamma=1.0, n_components=n_comp)),
-            (&quot;rbf4&quot;, RBFSampler(gamma=0.5, n_components=n_comp))
-            ])
-    featurizer.fit(
-        scaler.transform(states)) # Perform standardization by centering and scaling
-
-# state featurization of state(s) only,
-# not used on s_ for RND's target &amp;amp; predictor networks
-def featurize_state(state):
-    scaled = scaler.transform([state]) # Perform standardization by centering and scaling
-    featurized = featurizer.transform(scaled) # Transform X separately by each transformer, concatenate results.
-    return featurized[0]
-
-def featurize_batch_state(batch_states):
-    fs_list = []
-    for s in batch_states:
-        fs = featurize_state(s)
-        fs_list.append(fs)
-    return fs_list
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;&lt;strong&gt;Preprocessing, next state normalization for RND:&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;Variance is computed for the next states &lt;code class=&quot;highlighter-rouge&quot;&gt;buffer_s_&lt;/code&gt; using
-the &lt;code class=&quot;highlighter-rouge&quot;&gt;RunningStats&lt;/code&gt; class. During every training batch, the next states are
-normalize and clipped.&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;def state_next_normalize(sample_size, running_stats_s_):
-
-  buffer_s_ = []
-  s = env.reset()
-  for i in range(sample_size):
-    a = env.action_space.sample()
-    s_, r, done, _ = env.step(a)
-    buffer_s_.append(s_)
-
-  running_stats_s_.update(np.array(buffer_s_))
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;if state_next_normal == True:
-  state_next_normalize(sample_size, running_stats_s_)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;tensorboard-graphs&quot;&gt;Tensorboard graphs:&lt;/h2&gt;
-
-&lt;p&gt;&lt;strong&gt;Big picture:&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;There are two main modules, the PPO and the RND.&lt;/p&gt;
-
-&lt;p&gt;Current state, &lt;code class=&quot;highlighter-rouge&quot;&gt;state&lt;/code&gt; is passed into PPO.&lt;/p&gt;
-
-&lt;p&gt;Next state, &lt;code class=&quot;highlighter-rouge&quot;&gt;state_&lt;/code&gt; is passed into RND.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/images/RND_PPO_tf_graph_img/main.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;&lt;strong&gt;PPO module:&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;PPO module contains the actor network &amp;amp; the critic network.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/images/RND_PPO_tf_graph_img/PPO.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;&lt;strong&gt;PPO’s actor:&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;At every iteration, an action is sampled from policy network &lt;code class=&quot;highlighter-rouge&quot;&gt;pi&lt;/code&gt;.
-&lt;img src=&quot;/assets/images/RND_PPO_tf_graph_img/PPO_a.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;&lt;strong&gt;PPO’s critic:&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;The critic contains two value function networks. One for extrinsic rewards &amp;amp; one
- for intrinsic rewards. Two sets of TD lambda returns &amp;amp; advantages are also
- computed.&lt;/p&gt;
-
-&lt;p&gt;For extrinsic rewards: &lt;code class=&quot;highlighter-rouge&quot;&gt;tdlamret adv&lt;/code&gt;&lt;/p&gt;
-
-&lt;p&gt;For intrinsic rewards: &lt;code class=&quot;highlighter-rouge&quot;&gt;tdlamret_i adv_i&lt;/code&gt;&lt;/p&gt;
-
-&lt;p&gt;The TD lambda returns are used as the PPO’s critics targets in their respective
-networks while the advantages are summed &amp;amp; used as the advantage in the actor’s
-loss computation.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/images/RND_PPO_tf_graph_img/PPO_c.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;&lt;strong&gt;RND module:&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;RND module contains the target network &amp;amp; the predictor network.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/images/RND_PPO_tf_graph_img/RND.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;&lt;strong&gt;RND target network:&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;The target network is a fixed network, meaning that it’s never trained.
-It’s weights are randomized once during initialization. The target network is
-used to encode next states &lt;code class=&quot;highlighter-rouge&quot;&gt;state_&lt;/code&gt;. It’s output are encoded next states.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/images/RND_PPO_tf_graph_img/RND_t.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;&lt;strong&gt;RND predictor network:&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;The &lt;code class=&quot;highlighter-rouge&quot;&gt;predictor_loss&lt;/code&gt; is the intrinsic reward. It is the difference between
-the predictor network’s output with the target network’s output. The predictor
-network is trying to guess the target network’s encoded output.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/images/RND_PPO_tf_graph_img/RND_p.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;key-to-note&quot;&gt;Key to note:&lt;/h2&gt;
-
-&lt;p&gt;All networks used in this program are linear.&lt;/p&gt;
-
-&lt;p&gt;The actor module is basically similar to this DPPO &lt;a href=&quot;https://github.com/ChuaCheowHuan/reinforcement_learning/blob/master/DPPO/DPPO_cont_GAE_dist_GPU.ipynb&quot;&gt;code&lt;/a&gt; documented in this &lt;a href=&quot;https://chuacheowhuan.github.io/DPPO_dist_tf/&quot;&gt;post&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;The difference is in the critic module. This implementation has two value
-functions in the critic module rather than one.&lt;/p&gt;
-
-&lt;p&gt;The &lt;code class=&quot;highlighter-rouge&quot;&gt;predictor_loss&lt;/code&gt; is the intrinsic reward.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/images/RND_PPO_tf_graph_img/key.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;problems-encountered&quot;&gt;Problems encountered:&lt;/h2&gt;
-
-&lt;p&gt;The actor’s network occasionally returns ‘'’nan’’’ for action. This happens randomly, most likely caused by exploding gradients.
-Not initializing or randomly initializing actor’s weights results in nan when outputting action.&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;&lt;a name=&quot;charts&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-
-&lt;h2 id=&quot;program-output&quot;&gt;Program output:&lt;/h2&gt;
-
-&lt;p&gt;hit_counter 291 0.97&lt;/p&gt;
-
-&lt;p&gt;Number of steps per episode:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/images/RND_PPO_tf_graph_img/output/steps.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Reward per episode:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/images/RND_PPO_tf_graph_img/output/reward.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Moving average reward per episode:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/images/RND_PPO_tf_graph_img/output/mv_avg.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;— 385.09387278556824 seconds —&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;references&quot;&gt;References:&lt;/h2&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://arxiv.org/pdf/1810.12894.pdf&quot;&gt;Exploration by Random Network Distillation&lt;/a&gt;
-(Yuri Burda, Harrison Edwards, Amos Storkey, Oleg Klimov, 2018)&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">This post documents my implementation of the Random Network Distillation (RND) with Proximal Policy Optimization (PPO) algorithm. (continuous version)</summary></entry><entry><title type="html">DPPO distributed tensorflow</title><link href="https://chuacheowhuan.github.io/DPPO_dist_tf/" rel="alternate" type="text/html" title="DPPO distributed tensorflow" /><published>2019-06-25T00:00:00+08:00</published><updated>2019-06-25T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/DPPO_dist_tf</id><content type="html" xml:base="https://chuacheowhuan.github.io/DPPO_dist_tf/">&lt;p&gt;This post documents my implementation of the Distributed Proximal Policy
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">This post demonstrates how to create customized functions to bundle commands in a .bash_profile file on Mac.</summary></entry><entry><title type="html">DPPO distributed tensorflow</title><link href="https://chuacheowhuan.github.io/DPPO_dist_tf/" rel="alternate" type="text/html" title="DPPO distributed tensorflow" /><published>2019-06-25T00:00:00+08:00</published><updated>2019-06-25T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/DPPO_dist_tf</id><content type="html" xml:base="https://chuacheowhuan.github.io/DPPO_dist_tf/">&lt;p&gt;This post documents my implementation of the Distributed Proximal Policy
 Optimization (Distributed PPO or DPPO) algorithm.
 (&lt;strong&gt;Distributed&lt;/strong&gt; continuous version)&lt;/p&gt;
 
