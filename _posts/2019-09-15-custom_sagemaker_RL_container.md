@@ -44,7 +44,8 @@ RUN pip install --no-cache-dir \
     redis>=3.2.2 \
     ray==0.7.3 \
     ray[rllib]==0.7.3 \
-    scipy==1.3.0
+    scipy==1.3.0 \
+    requests
 
 # https://click.palletsprojects.com/en/7.x/python3/
 ENV LC_ALL=C.UTF-8
@@ -121,7 +122,8 @@ In SageMaker, start a Jupyter notebook instance & open a terminal.
 Login into SageMaker ECR account:
 
 ```
-$ (aws ecr get-login --no-include-email --region <region> --registry-ids 520713654638)
+$ (aws ecr get-login --no-include-email --region <region> --registry-ids <AWS_ACC_ID>)
+$ (aws ecr get-login --no-include-email --region us-west-2 --registry-ids 520713654638)
 ```
 
 Copy & paste the output from the above command into the terminal & press Enter.
@@ -137,7 +139,7 @@ $ docker pull 520713654638.dkr.ecr.us-west-2.amazonaws.com/sagemaker-tensorflow-
 Build the Ray image using the ```Dockerfile.tf``` from above:
 
 ```
-$ docker build -t tf-ray:0.7.3-cpu-py3 -f ray/docker/0.7.3/Dockerfile.tf --build-arg processor=cpu .
+$ docker build -t custom-smk-rl-ctn:tf-1.12.0-ray-0.7.3-cpu-py3 -f ray/docker/0.7.3/Dockerfile.tf --build-arg processor=cpu .
 ```
 
 ---
@@ -159,27 +161,90 @@ docker images && \
 pytest test/integration/local --framework tensorflow \
                               --toolkit ray \
                               --toolkit-version 0.7.3 \
-                              --docker-base-name tf-ray \
-                              --tag 0.7.3-cpu-py3 \
-                              --processor cpu | tee test_output.txt
+                              --docker-base-name custom-smk-rl-ctn \
+                              --tag tf-1.12.0-ray-0.7.3-cpu-py3 \
+                              --processor cpu | tee local_test_output.txt
 ```
 
-The output from the test will be saved in test_output.txt.
+The output from the test will be saved in local_test_output.txt.
+
+---
+
+**Pushing to registry on AWS ECR:**
+
+```
+$ (aws ecr get-login --no-include-email --region <region> --registry-ids <AWS_ACC_ID>)
+$ (aws ecr get-login --no-include-email --region us-west-2  --registry-ids 123456789012)
+# Copy & paste output to terminal & press enter.
+
+$ aws ecr create-repository --repository-name <repo_name>
+$ aws ecr create-repository --repository-name custom-smk-rl-ctn
+
+$ docker tag <image_ID> <AWS_ACC_ID>.dkr.ecr.us-west-2.amazonaws.com/<repo_name>:<tag>
+$ docker tag ba542f0b9706 <123456789012>.dkr.ecr.us-west-2.amazonaws.com/custom-smk-rl-ctn:tf-1.12.0-cpu-py3
+$ docker tag ba542f0b9706 <123456789012>.dkr.ecr.us-west-2.amazonaws.com/custom-smk-rl-ctn:tf-1.12.0-ray-0.7.3-cpu-py3
+
+$ docker push <AWS_ACC_ID>.dkr.ecr.us-west-2.amazonaws.com/<repo_name>:<tag>
+$ docker push <123456789012>.dkr.ecr.us-west-2.amazonaws.com/custom-smk-rl-ctn:tf-1.12.0-cpu-py3
+$ docker push <123456789012>.dkr.ecr.us-west-2.amazonaws.com/custom-smk-rl-ctn:tf-1.12.0-ray-0.7.3-cpu-py3
+
+
+$ aws ecr describe-repositories
+
+$ aws ecr list-images --repository-name <repo_name>
+$ aws ecr list-images --repository-name custom-smk-rl-ctn
+```
+
+---
+
+**Testing with AWS SageMaker ML instance:**
+
+Run the command below for testing with SageMaker:
+
+```
+clear && \
+docker images && \
+pytest test/integration/sagemaker --aws-id 123456789012 \
+                                  --instance-type ml.m4.xlarge \
+                                  --framework tensorflow \
+                                  --toolkit ray \
+                                  --toolkit-version 0.7.3 \
+                                  --docker-base-name custom-smk-rl-ctn \
+                                  --tag tf-1.12.0-ray-0.7.3-cpu-py3 | tee SageMaker_test_output.txt
+```
+
+The output from the test will be saved in SageMaker_test_output.txt.
+
+---
+
+**Pushing to registry on Docker hub:**
+
+```
+$ docker login
+
+$ docker tag <image_ID> <DockerHubUserName>/<repo_name>:<tag>
+$ docker tag ba542f0b9706 <DockerHubUserName>/custom-smk-rl-ctn:tf-1.12.0-cpu-py3
+$ docker tag ba542f0b9706 <DockerHubUserName>/custom-smk-rl-ctn:tf-1.12.0-ray-0.7.3-cpu-py3
+
+$ docker push <DockerHubUserName>/<repo_name>:<tag>
+$ docker push <DockerHubUserName>/custom-smk-rl-ctn:tf-1.12.0-cpu-py3
+$ docker push <DockerHubUserName>/custom-smk-rl-ctn:tf-1.12.0-ray-0.7.3-cpu-py3
+```
+
+---
+
+**Training with custom SageMaker RL container:**
+
+
 
 ---
 
 **Useful Docker commands:**
 
 ```
-$ docker login
-
 $ docker ps -a
 
 $ docker images
-
-$ docker tag ba542f0b9706 123456789012.dkr.ecr.us-west-2.amazonaws.com/custom-smk-rl-ctn:tf-1.12.0-cpu-py3
-
-$ docker push 123456789012.dkr.ecr.us-west-2.amazonaws.com/custom-smk-rl-ctn:tf-1.12.0-cpu-py3
 
 $ docker rm <container>
 
@@ -191,9 +256,7 @@ $ docker rmi <image>
 **Useful AWS commands:**
 
 ```
-$ aws ecr describe-repositories
-
-$ aws ecr list-images --repository-name custom-smk-rl-ctn
+$ aws ecr delete-repository --force --repository-name <repo_name>
 ```
 
 ---
