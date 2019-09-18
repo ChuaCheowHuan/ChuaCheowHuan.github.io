@@ -235,7 +235,25 @@ $ docker push <DockerHubUserName>/custom-smk-rl-ctn:tf-1.12.0-ray-0.7.3-cpu-py3
 
 **Training with custom SageMaker RL container:**
 
+To avoid the ```get_agent_class``` not found error when using
+Ray (RLlib) >= 0.65.
 
+In ```common/sagemaker_RL/ray_launcher.py```:
+
+Replace this:
+
+```
+from ray.rllib.agents.agent import get_agent_class
+```
+
+With this:
+
+```
+try: # new
+    from ray.rllib.agents.agent import get_agent_class    
+except ImportError:
+    from ray.rllib.agents.registry import get_agent_class   
+```
 
 ---
 
