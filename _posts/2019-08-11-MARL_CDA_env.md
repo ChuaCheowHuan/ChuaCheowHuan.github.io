@@ -125,8 +125,8 @@ $ tensorboard --logdir ~/ray_results
 
 The figure below from Tensorboard shows the agents' performance:
 
-![](https://github.com/ChuaCheowHuan/gym-continuousDoubleAuction/blob/master/pic/agent0and1.png)
-![](https://github.com/ChuaCheowHuan/gym-continuousDoubleAuction/blob/master/pic/agent2and3.png)
+![image](https://github.com/ChuaCheowHuan/gym-continuousDoubleAuction/blob/master/pic/agent0and1.png)
+![image](https://github.com/ChuaCheowHuan/gym-continuousDoubleAuction/blob/master/pic/agent2and3.png)
 
 PPO agent is using policy 0 while policies 1 to 3 are used by the random agents.
 
