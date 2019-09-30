@@ -11,7 +11,10 @@ algorithm.
 
 ## N-step Q-values estimation.
 
-Code on my [Github](https://github.com/ChuaCheowHuan/reinforcement_learning/blob/master/n_step_targets.ipynb)
+Code on my [Github](https://github.com/ChuaCheowHuan/reinforcement_learning/tree/master/misc/n_step_targets.ipynb)
+
+If Github is not loading the Jupyter notebook, a known Github issue, click [here](https://nbviewer.jupyter.org/github/ChuaCheowHuan/reinforcement_learning/tree/master/misc/n_step_targets.ipynb) to view the
+notebook on Jupyter's nbviewer.
 
 The following two functions computes truncated Q-values estimates:
 

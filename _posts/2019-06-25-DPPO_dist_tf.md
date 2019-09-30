@@ -15,7 +15,12 @@ version implementation with distributed Tensorflow and Python's multiprocessing
 package. This implementation uses normalized running rewards with GAE. The code
 is tested with Gym's continuous action space environment, Pendulum-v0 on Colab.
 
+---
+
 Code on my [Github](https://github.com/ChuaCheowHuan/reinforcement_learning/blob/master/DPPO/DPPO_cont_GAE_dist_GPU.ipynb):
+
+If Github is not loading the Jupyter notebook, a known Github issue, click [here](https://nbviewer.jupyter.org/github/ChuaCheowHuan/reinforcement_learning/blob/master/DPPO/DPPO_cont_GAE_dist_GPU.ipynb)
+to view the notebook on Jupyter's nbviewer.
 
 ---
 

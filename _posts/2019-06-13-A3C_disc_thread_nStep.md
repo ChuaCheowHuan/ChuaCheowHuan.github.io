@@ -14,9 +14,19 @@ A3C (Asynchronous Advantage Actor Critic) implementation with Tensorflow.
 This is a multi-threaded **discrete** version. The code is tested with Gym's
 discrete action space environment, CartPole-v0 on Colab.
 
+---
+
 Code on my [Github](https://github.com/ChuaCheowHuan/reinforcement_learning/blob/master/A3C/A3C_disc_miss.ipynb): (missing terms are treated as 0)
 
+If Github is not loading the Jupyter notebook, a known Github issue, click [here](https://nbviewer.jupyter.org/github/ChuaCheowHuan/reinforcement_learning/blob/master/A3C/A3C_disc_miss.ipynb)
+to view the notebook on Jupyter's nbviewer.
+
+---
+
 Code on my [Github](https://github.com/ChuaCheowHuan/reinforcement_learning/blob/master/A3C/A3C_disc_max.ipynb): (use maximum terms possible)
+
+If Github is not loading the Jupyter notebook, a known Github issue, click [here](https://nbviewer.jupyter.org/github/ChuaCheowHuan/reinforcement_learning/blob/master/A3C/A3C_disc_max.ipynb)
+to view the notebook on Jupyter's nbviewer.
 
 ---
 

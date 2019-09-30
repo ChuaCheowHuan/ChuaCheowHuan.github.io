@@ -12,7 +12,12 @@ This Jupyter notebook contains simple examples on how to manipulate Numpy
 arrays. The code blocks below shows the codes & it's corresponding display
 output.
 
-Code on my [Github](https://github.com/ChuaCheowHuan/misc_code_examples/blob/master/py/np_array_manipulation.ipynb)
+---
+
+Code on my [Github](https://github.com/ChuaCheowHuan/reinforcement_learning/tree/master/misc/np_array_manipulation.ipynb)
+
+If Github is not loading the Jupyter notebook, a known Github issue, click [here](https://nbviewer.jupyter.org/github/ChuaCheowHuan/reinforcement_learning/tree/master/misc/np_array_manipulation.ipynb) to
+view the notebook on Jupyter's nbviewer.
 
 ---
 

@@ -12,7 +12,10 @@ A **Dueling Double Deep Q Network with Priority Experience Replay
 (Duel DDQN with PER)** implementation in tensorflow. The code is tested with
 Gym's discrete action space environment, CartPole-v0 on Colab.
 
-Code on my [Github](https://github.com/ChuaCheowHuan/reinforcement_learning/tree/master/DQN_variants/duel_DDQN_PER)
+Code on my [Github](https://github.com/ChuaCheowHuan/reinforcement_learning/tree/master/DQN_variants/duel_DDQN_PER/duelling_DDQN_PER_cartpole.ipynb)
+
+If Github is not loading the Jupyter notebook, a known Github issue, click [here](https://nbviewer.jupyter.org/github/ChuaCheowHuan/reinforcement_learning/blob/master/DQN_variants/duel_DDQN_PER/duelling_DDQN_PER_cartpole.ipynb)
+to view the notebook on Jupyter's nbviewer.
 
 ---
 

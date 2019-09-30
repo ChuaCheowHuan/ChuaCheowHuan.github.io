@@ -9,7 +9,10 @@ This post demonstrates how to accumulate gradients with Tensorflow.
 
 ---
 
-Code on my [Github](https://github.com/ChuaCheowHuan/misc_code_examples/blob/master/tf/tf_accumulate_grad.ipynb)
+Code on my [Github](https://github.com/ChuaCheowHuan/reinforcement_learning/tree/master/misc/tf_accumulate_grad.ipynb)
+
+If Github is not loading the Jupyter notebook, a known Github issue, click [here](https://nbviewer.jupyter.org/github/ChuaCheowHuan/reinforcement_learning/tree/master/misc/tf_accumulate_grad.ipynb) to view the
+notebook on Jupyter's nbviewer.
 
 ---
 
