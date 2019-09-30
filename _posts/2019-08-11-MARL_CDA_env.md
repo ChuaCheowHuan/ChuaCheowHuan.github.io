@@ -118,7 +118,8 @@ TERMINATED trials:
  - PPO_continuousDoubleAuction-v0_0:	TERMINATED, [3 CPUs, 0 GPUs], [pid=10220], 649 s, 10 iter, 40000 ts, 0 rew
 ```
 
-Running the following tensorboard command:
+Running the following tensorboard command & navigate to ```localhost:6006``` in
+your browser to access the tensorboard graphs:
 ```
 $ tensorboard --logdir ~/ray_results
 ```
