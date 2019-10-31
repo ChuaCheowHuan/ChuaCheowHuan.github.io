@@ -148,7 +148,7 @@ estimator.fit()
 
 **The container in Sagemaker Jupyter notebook instance:**
 
-![image](/assets/images/sagemaker_container.png)
+![image](/assets/images/blog/sagemaker_container.png)
 
 ---
 

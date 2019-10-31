@@ -158,6 +158,12 @@ Refer to appendix B.2.1, under the section, "Proportional prioritization", from 
 
 ---
 
+## Tensorflow graph:
+
+![image](/assets/images/blog/Duel DDQN_PER_tf_graph.png)
+
+---
+
 ## References:
 
 [Prioritized experience replay (Schaul et al., 2016)](https://arxiv.org/pdf/1511.05952.pdf)

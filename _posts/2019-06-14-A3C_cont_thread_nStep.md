@@ -92,4 +92,18 @@ def _create_net(self, scope):
 
 ---
 
+## Tensorflow graph:
+
+![image](/assets/images/A3C_tf_graphs_img/cont_max/main.png)
+
+![image](/assets/images/A3C_tf_graphs_img/cont_max/actor.png)
+
+![image](/assets/images/A3C_tf_graphs_img/cont_max/critic.png)
+
+![image](/assets/images/A3C_tf_graphs_img/cont_max/w0.png)
+
+![image](/assets/images/A3C_tf_graphs_img/cont_max/params.png)
+
+---
+
 <br>

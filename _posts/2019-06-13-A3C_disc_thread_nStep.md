@@ -213,6 +213,24 @@ for worker in workers:
 COORD.join(worker_threads)
 ```
 
+---
+
+## Tensorflow graph:
+
+![image](/assets/images/A3C_tf_graphs_img/disc_max/main.png)
+
+![image](/assets/images/A3C_tf_graphs_img/disc_max/global.png)
+
+![image](/assets/images/A3C_tf_graphs_img/disc_max/actor.png)
+
+![image](/assets/images/A3C_tf_graphs_img/disc_max/critic.png)
+
+![image](/assets/images/A3C_tf_graphs_img/disc_max/w0.png)
+
+![image](/assets/images/A3C_tf_graphs_img/disc_max/params.png)
+
+---
+
 ## References:
 
 [Asynchronous Methods for Deep Reinforcement Learning
