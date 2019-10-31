@@ -160,7 +160,7 @@ Refer to appendix B.2.1, under the section, "Proportional prioritization", from 
 
 ## Tensorflow graph:
 
-![image](/assets/images/DQN_variants_tf_graph_img/Duel DDQN_PER_tf_graph.png)
+![image](/assets/images/DQN_variants_tf_graph_img/Duel_DDQN_PER_tf_graph.png)
 
 ---
 
