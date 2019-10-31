@@ -301,7 +301,8 @@ RUN pip install --no-cache-dir \
     redis&gt;=3.2.2 \
     ray==0.7.3 \
     ray[rllib]==0.7.3 \
-    scipy==1.3.0
+    scipy==1.3.0 \
+    requests
 
 # https://click.palletsprojects.com/en/7.x/python3/
 ENV LC_ALL=C.UTF-8
@@ -371,7 +372,8 @@ role = get_execution_role(),
 
 <p>Login into SageMaker ECR account:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ (aws ecr get-login --no-include-email --region &lt;region&gt; --registry-ids 520713654638)
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ (aws ecr get-login --no-include-email --region &lt;region&gt; --registry-ids &lt;AWS_ACC_ID&gt;)
+$ (aws ecr get-login --no-include-email --region us-west-2 --registry-ids 520713654638)
 </code></pre></div></div>
 
 <p>Copy &amp; paste the output from the above command into the terminal &amp; press Enter.</p>
@@ -385,7 +387,7 @@ role = get_execution_role(),
 
 <p>Build the Ray image using the <code class="highlighter-rouge">Dockerfile.tf</code> from above:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ docker build -t tf-ray:0.7.3-cpu-py3 -f ray/docker/0.7.3/Dockerfile.tf --build-arg processor=cpu .
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ docker build -t custom-smk-rl-ctn:tf-1.12.0-ray-0.7.3-cpu-py3 -f ray/docker/0.7.3/Dockerfile.tf --build-arg processor=cpu .
 </code></pre></div></div>
 
 <hr />
@@ -405,26 +407,84 @@ docker images &amp;&amp; \
 pytest test/integration/local --framework tensorflow \
                               --toolkit ray \
                               --toolkit-version 0.7.3 \
-                              --docker-base-name tf-ray \
-                              --tag 0.7.3-cpu-py3 \
-                              --processor cpu | tee test_output.txt
+                              --docker-base-name custom-smk-rl-ctn \
+                              --tag tf-1.12.0-ray-0.7.3-cpu-py3 \
+                              --processor cpu | tee local_test_output.txt
 </code></pre></div></div>
 
-<p>The output from the test will be saved in test_output.txt.</p>
+<p>The output from the test will be saved in local_test_output.txt.</p>
+
+<hr />
+
+<p><strong>Pushing to registry on AWS ECR:</strong></p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ (aws ecr get-login --no-include-email --region &lt;region&gt; --registry-ids &lt;AWS_ACC_ID&gt;)
+$ (aws ecr get-login --no-include-email --region us-west-2  --registry-ids 123456789012)
+# Copy &amp; paste output to terminal &amp; press enter.
+
+$ aws ecr create-repository --repository-name &lt;repo_name&gt;
+$ aws ecr create-repository --repository-name custom-smk-rl-ctn
+
+$ docker tag &lt;image_ID&gt; &lt;AWS_ACC_ID&gt;.dkr.ecr.us-west-2.amazonaws.com/&lt;repo_name&gt;:&lt;tag&gt;
+$ docker tag ba542f0b9706 &lt;123456789012&gt;.dkr.ecr.us-west-2.amazonaws.com/custom-smk-rl-ctn:tf-1.12.0-cpu-py3
+$ docker tag ba542f0b9706 &lt;123456789012&gt;.dkr.ecr.us-west-2.amazonaws.com/custom-smk-rl-ctn:tf-1.12.0-ray-0.7.3-cpu-py3
+
+$ docker push &lt;AWS_ACC_ID&gt;.dkr.ecr.us-west-2.amazonaws.com/&lt;repo_name&gt;:&lt;tag&gt;
+$ docker push &lt;123456789012&gt;.dkr.ecr.us-west-2.amazonaws.com/custom-smk-rl-ctn:tf-1.12.0-cpu-py3
+$ docker push &lt;123456789012&gt;.dkr.ecr.us-west-2.amazonaws.com/custom-smk-rl-ctn:tf-1.12.0-ray-0.7.3-cpu-py3
+
+
+$ aws ecr describe-repositories
+
+$ aws ecr list-images --repository-name &lt;repo_name&gt;
+$ aws ecr list-images --repository-name custom-smk-rl-ctn
+</code></pre></div></div>
+
+<hr />
+
+<p><strong>Testing with AWS SageMaker ML instance:</strong></p>
+
+<p>Run the command below for testing with SageMaker:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>clear &amp;&amp; \
+docker images &amp;&amp; \
+pytest test/integration/sagemaker --aws-id 123456789012 \
+                                  --instance-type ml.m4.xlarge \
+                                  --framework tensorflow \
+                                  --toolkit ray \
+                                  --toolkit-version 0.7.3 \
+                                  --docker-base-name custom-smk-rl-ctn \
+                                  --tag tf-1.12.0-ray-0.7.3-cpu-py3 | tee SageMaker_test_output.txt
+</code></pre></div></div>
+
+<p>The output from the test will be saved in SageMaker_test_output.txt.</p>
+
+<hr />
+
+<p><strong>Pushing to registry on Docker hub:</strong></p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ docker login
+
+$ docker tag &lt;image_ID&gt; &lt;DockerHubUserName&gt;/&lt;repo_name&gt;:&lt;tag&gt;
+$ docker tag ba542f0b9706 &lt;DockerHubUserName&gt;/custom-smk-rl-ctn:tf-1.12.0-cpu-py3
+$ docker tag ba542f0b9706 &lt;DockerHubUserName&gt;/custom-smk-rl-ctn:tf-1.12.0-ray-0.7.3-cpu-py3
+
+$ docker push &lt;DockerHubUserName&gt;/&lt;repo_name&gt;:&lt;tag&gt;
+$ docker push &lt;DockerHubUserName&gt;/custom-smk-rl-ctn:tf-1.12.0-cpu-py3
+$ docker push &lt;DockerHubUserName&gt;/custom-smk-rl-ctn:tf-1.12.0-ray-0.7.3-cpu-py3
+</code></pre></div></div>
+
+<hr />
+
+<p><strong>Training with custom SageMaker RL container:</strong></p>
 
 <hr />
 
 <p><strong>Useful Docker commands:</strong></p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ docker login
-
-$ docker ps -a
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ docker ps -a
 
 $ docker images
-
-$ docker tag ba542f0b9706 123456789012.dkr.ecr.us-west-2.amazonaws.com/custom-smk-rl-ctn:tf-1.12.0-cpu-py3
-
-$ docker push 123456789012.dkr.ecr.us-west-2.amazonaws.com/custom-smk-rl-ctn:tf-1.12.0-cpu-py3
 
 $ docker rm &lt;container&gt;
 
@@ -435,9 +495,7 @@ $ docker rmi &lt;image&gt;
 
 <p><strong>Useful AWS commands:</strong></p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ aws ecr describe-repositories
-
-$ aws ecr list-images --repository-name custom-smk-rl-ctn
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ aws ecr delete-repository --force --repository-name &lt;repo_name&gt;
 </code></pre></div></div>
 
 <hr />
@@ -487,7 +545,7 @@ $ aws ecr list-images --repository-name custom-smk-rl-ctn
 
 
 
-  39 minute read
+  57 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">Building &amp; testing custom Sagemaker RL container.
@@ -665,7 +723,7 @@ Django web app in Travis CI.
 
 
 
-  23 minute read
+  51 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">A custom MARL (multi-agent reinforcement learning) environment where multiple
@@ -695,7 +753,7 @@ agents trade against one another in a CDA (continuous double auction).
 
 
 
-  10 minute read
+  12 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">This post demonstrate how setup &amp; access Tensorflow graphs.
@@ -754,7 +812,7 @@ a .bash_profile file on Mac.
 
 
 
-  81 minute read
+  83 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">This post documents my implementation of the Random Network Distillation (RND)
@@ -785,7 +843,7 @@ with Proximal Policy Optimization (PPO) algorithm.
 
 
 
-  59 minute read
+  61 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">This post documents my implementation of the Distributed Proximal Policy
@@ -816,7 +874,7 @@ Optimization (Distributed PPO or DPPO) algorithm.
 
 
 
-  24 minute read
+  26 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">This post documents my implementation of the A3C
@@ -847,7 +905,7 @@ Optimization (Distributed PPO or DPPO) algorithm.
 
 
 
-  30 minute read
+  33 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">This post documents my implementation of the A3C
@@ -878,7 +936,7 @@ Optimization (Distributed PPO or DPPO) algorithm.
 
 
 
-  62 minute read
+  66 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">This post documents my implementation of the A3C
@@ -909,7 +967,7 @@ Optimization (Distributed PPO or DPPO) algorithm.
 
 
 
-  15 minute read
+  17 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">This post demonstrates how to accumulate gradients with Tensorflow.
@@ -938,7 +996,7 @@ Optimization (Distributed PPO or DPPO) algorithm.
 
 
 
-  73 minute read
+  76 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">This post demonstrates a simple usage example of distributed Tensorflow with
@@ -968,7 +1026,7 @@ Python multiprocessing package.
 
 
 
-  70 minute read
+  72 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">This post documents my implementation of the N-step Q-values estimation
@@ -998,7 +1056,7 @@ algorithm.
 
 
 
-  30 minute read
+  32 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">This post demonstrates how to use the Python’s multiprocessing package to
@@ -1028,7 +1086,7 @@ achieve parallel data generation.
 
 
 
-  30 minute read
+  32 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">This post provides a simple usage examples for common Numpy array manipulation.
@@ -1057,7 +1115,7 @@ achieve parallel data generation.
 
 
 
-  44 minute read
+  46 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">This post documents my implementation of the Dueling Double Deep Q Network with Priority Experience Replay (Duel DDQN with PER) algorithm.
@@ -1086,7 +1144,7 @@ achieve parallel data generation.
 
 
 
-  21 minute read
+  23 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">This post documents my implementation of the Dueling Double Deep Q Network
@@ -1116,7 +1174,7 @@ achieve parallel data generation.
 
 
 
-  25 minute read
+  27 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">This post documents my implementation of the Double Deep Q Network (DDQN)
@@ -1146,7 +1204,7 @@ algorithm.
 
 
 
-  19 minute read
+  22 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">This post documents my implementation of the Deep Q Network (DQN) algorithm.

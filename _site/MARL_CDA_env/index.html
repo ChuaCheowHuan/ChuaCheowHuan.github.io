@@ -277,6 +277,8 @@ of the agents themselves through their interaction with the limit order book.</p
 <p>At each time step, the environment emits the top k rows of the aggregated
 order book as observations to the agents.</p>
 
+<hr />
+
 <h1 id="example">Example:</h1>
 <p>An example of using RLlib to pit 1 PPO (Proximal Policy Optimization) agent
 against 3 random agents using this CDA environment is available in:</p>
@@ -284,9 +286,96 @@ against 3 random agents using this CDA environment is available in:</p>
 </code></pre></div></div>
 
 <p>To run:</p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cd gym-continuousDoubleAuction/gym_continuousDoubleAuction
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ cd gym-continuousDoubleAuction/gym_continuousDoubleAuction
+
+$ python CDA_env_disc_RLlib.py
 </code></pre></div></div>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>python CDA_env_disc_RLlib.py
+
+<p>Sample training output results:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>.
+.
+.
+Result for PPO_continuousDoubleAuction-v0_0:
+  custom_metrics: {}
+  date: 2019-09-30_21-16-20
+  done: true
+  episode_len_mean: 1001.0
+  episode_reward_max: 0.0
+  episode_reward_mean: 0.0
+  episode_reward_min: 0.0
+  episodes_this_iter: 4
+  episodes_total: 38
+  experiment_id: 56cbdad4389343eca5cfd49eadeb3554
+  hostname: Duality0.local
+  info:
+    grad_time_ms: 15007.219
+    learner:
+      policy_0:
+        cur_kl_coeff: 0.0003906250058207661
+        cur_lr: 4.999999873689376e-05
+        entropy: 10.819798469543457
+        entropy_coeff: 0.0
+        kl: 8.689265087014064e-06
+        model: {}
+        policy_loss: 153.9163055419922
+        total_loss: 843138688.0
+        vf_explained_var: 0.0
+        vf_loss: 843138496.0
+    num_steps_sampled: 40000
+    num_steps_trained: 40000
+    opt_peak_throughput: 266.538
+    opt_samples: 4000.0
+    sample_peak_throughput: 80.462
+    sample_time_ms: 49713.208
+    update_time_ms: 176.14
+  iterations_since_restore: 10
+  node_ip: 192.168.1.12
+  num_healthy_workers: 2
+  off_policy_estimator: {}
+  pid: 10220
+  policy_reward_mean:
+    policy_0: 12414.421052631578
+    policy_1: -301.39473684210526
+    policy_2: -952.1578947368421
+    policy_3: -11160.868421052632
+  sampler_perf:
+    mean_env_wait_ms: 18.1753569144153
+    mean_inference_ms: 4.126144958830859
+    mean_processing_ms: 1.5262831265657335
+  time_since_restore: 649.1416146755219
+  time_this_iter_s: 61.54709506034851
+  time_total_s: 649.1416146755219
+  timestamp: 1569849380
+  timesteps_since_restore: 40000
+  timesteps_this_iter: 4000
+  timesteps_total: 40000
+  training_iteration: 10
+  trial_id: ea67f638
+
+2019-09-30 21:16:20,507	WARNING util.py:145 -- The `process_trial` operation took 0.4397752285003662 seconds to complete, which may be a performance bottleneck.
+2019-09-30 21:16:21,407	WARNING util.py:145 -- The `experiment_checkpoint` operation took 0.899777889251709 seconds to complete, which may be a performance bottleneck.
+== Status ==
+Using FIFO scheduling algorithm.
+Resources requested: 0/4 CPUs, 0/0 GPUs
+Memory usage on this node: 3.3/4.3 GB
+Result logdir: /Users/hadron0/ray_results/PPO
+Number of trials: 1 ({'TERMINATED': 1})
+TERMINATED trials:
+ - PPO_continuousDoubleAuction-v0_0:	TERMINATED, [3 CPUs, 0 GPUs], [pid=10220], 649 s, 10 iter, 40000 ts, 0 rew
+
+== Status ==
+Using FIFO scheduling algorithm.
+Resources requested: 0/4 CPUs, 0/0 GPUs
+Memory usage on this node: 3.3/4.3 GB
+Result logdir: /Users/hadron0/ray_results/PPO
+Number of trials: 1 ({'TERMINATED': 1})
+TERMINATED trials:
+ - PPO_continuousDoubleAuction-v0_0:	TERMINATED, [3 CPUs, 0 GPUs], [pid=10220], 649 s, 10 iter, 40000 ts, 0 rew
+</code></pre></div></div>
+
+<p>Running the following tensorboard command &amp; navigate to <code class="highlighter-rouge">localhost:6006</code> in
+your browser to access the tensorboard graphs:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ tensorboard --logdir ~/ray_results
 </code></pre></div></div>
 
 <p>The figure below from Tensorboard shows the agents’ performance:</p>
@@ -297,29 +386,27 @@ against 3 random agents using this CDA environment is available in:</p>
 <p>PPO agent is using policy 0 while policies 1 to 3 are used by the random agents.</p>
 
 <h1 id="dependencies">Dependencies:</h1>
-<p>1) Tensorflow</p>
-
-<p>2) OpenAI’s Gym</p>
-
-<p>3) Ray &amp; RLlib</p>
+<p>Please see <code class="highlighter-rouge">requirements.txt</code> in this repository.</p>
 
 <h1 id="installation">Installation:</h1>
 <p>The environment is installable via pip.</p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cd gym-continuousDoubleAuction
-</code></pre></div></div>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pip install -e .
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ cd gym-continuousDoubleAuction
+
+$ pip install -e .
 </code></pre></div></div>
 
 <h1 id="todo">TODO:</h1>
-<p>1) custom RLlib workflow to include custom RND + PPO policies.</p>
-
-<p>2) parametric or hybrid action space</p>
-
-<p>3) more documentation</p>
+<p>1) custom RLlib workflow to include custom RND + PPO policies.
+2) parametric or hybrid action space
+3) more robust tests
+3) better documentation</p>
 
 <h1 id="acknowledgements">Acknowledgements:</h1>
 <p>The orderbook matching engine is adapted from
 https://github.com/dyn4mik3/OrderBook</p>
+
+<h1 id="contributing">Contributing:</h1>
+<p>Please see <a href="https://github.com/ChuaCheowHuan/gym-continuousDoubleAuction/blob/master/CONTRIBUTING.md">CONTRIBUTING.md</a>.</p>
 
 <h1 id="disclaimer">Disclaimer:</h1>
 <p>This repository is only meant for research purposes &amp; is <strong>never</strong> meant to be
@@ -369,7 +456,7 @@ way.</p>
 
 
 
-  42 minute read
+  61 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">Building &amp; testing custom Sagemaker RL container.
@@ -547,7 +634,7 @@ Django web app in Travis CI.
 
 
 
-  23 minute read
+  51 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">A custom MARL (multi-agent reinforcement learning) environment where multiple
@@ -577,7 +664,7 @@ agents trade against one another in a CDA (continuous double auction).
 
 
 
-  10 minute read
+  12 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">This post demonstrate how setup &amp; access Tensorflow graphs.
@@ -636,7 +723,7 @@ a .bash_profile file on Mac.
 
 
 
-  81 minute read
+  83 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">This post documents my implementation of the Random Network Distillation (RND)
@@ -667,7 +754,7 @@ with Proximal Policy Optimization (PPO) algorithm.
 
 
 
-  59 minute read
+  61 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">This post documents my implementation of the Distributed Proximal Policy
@@ -698,7 +785,7 @@ Optimization (Distributed PPO or DPPO) algorithm.
 
 
 
-  24 minute read
+  26 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">This post documents my implementation of the A3C
@@ -729,7 +816,7 @@ Optimization (Distributed PPO or DPPO) algorithm.
 
 
 
-  30 minute read
+  33 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">This post documents my implementation of the A3C
@@ -760,7 +847,7 @@ Optimization (Distributed PPO or DPPO) algorithm.
 
 
 
-  62 minute read
+  66 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">This post documents my implementation of the A3C
@@ -791,7 +878,7 @@ Optimization (Distributed PPO or DPPO) algorithm.
 
 
 
-  15 minute read
+  17 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">This post demonstrates how to accumulate gradients with Tensorflow.
@@ -820,7 +907,7 @@ Optimization (Distributed PPO or DPPO) algorithm.
 
 
 
-  73 minute read
+  76 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">This post demonstrates a simple usage example of distributed Tensorflow with
@@ -850,7 +937,7 @@ Python multiprocessing package.
 
 
 
-  70 minute read
+  72 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">This post documents my implementation of the N-step Q-values estimation
@@ -880,7 +967,7 @@ algorithm.
 
 
 
-  30 minute read
+  32 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">This post demonstrates how to use the Python’s multiprocessing package to
@@ -910,7 +997,7 @@ achieve parallel data generation.
 
 
 
-  30 minute read
+  32 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">This post provides a simple usage examples for common Numpy array manipulation.
@@ -939,7 +1026,7 @@ achieve parallel data generation.
 
 
 
-  44 minute read
+  46 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">This post documents my implementation of the Dueling Double Deep Q Network with Priority Experience Replay (Duel DDQN with PER) algorithm.
@@ -968,7 +1055,7 @@ achieve parallel data generation.
 
 
 
-  21 minute read
+  23 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">This post documents my implementation of the Dueling Double Deep Q Network
@@ -998,7 +1085,7 @@ achieve parallel data generation.
 
 
 
-  25 minute read
+  27 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">This post documents my implementation of the Double Deep Q Network (DDQN)
@@ -1028,7 +1115,7 @@ algorithm.
 
 
 
-  19 minute read
+  22 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">This post documents my implementation of the Deep Q Network (DQN) algorithm.

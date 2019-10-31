@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.5">Jekyll</generator><link href="https://chuacheowhuan.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://chuacheowhuan.github.io/" rel="alternate" type="text/html" /><updated>2019-09-16T01:48:29+08:00</updated><id>https://chuacheowhuan.github.io/feed.xml</id><title type="html">Every little gist</title><subtitle></subtitle><author><name>Chua Cheow Huan</name></author><entry><title type="html">Custom Sagemaker reinforcement learning container</title><link href="https://chuacheowhuan.github.io/custom_sagemaker_RL_container/" rel="alternate" type="text/html" title="Custom Sagemaker reinforcement learning container" /><published>2019-09-15T00:00:00+08:00</published><updated>2019-09-15T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/custom_sagemaker_RL_container</id><content type="html" xml:base="https://chuacheowhuan.github.io/custom_sagemaker_RL_container/">&lt;p&gt;Building &amp;amp; testing custom Sagemaker RL container.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.5">Jekyll</generator><link href="https://chuacheowhuan.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://chuacheowhuan.github.io/" rel="alternate" type="text/html" /><updated>2019-10-31T21:04:29+08:00</updated><id>https://chuacheowhuan.github.io/feed.xml</id><title type="html">Every little gist</title><subtitle></subtitle><author><name>Chua Cheow Huan</name></author><entry><title type="html">Custom Sagemaker reinforcement learning container</title><link href="https://chuacheowhuan.github.io/custom_sagemaker_RL_container/" rel="alternate" type="text/html" title="Custom Sagemaker reinforcement learning container" /><published>2019-09-15T00:00:00+08:00</published><updated>2019-09-15T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/custom_sagemaker_RL_container</id><content type="html" xml:base="https://chuacheowhuan.github.io/custom_sagemaker_RL_container/">&lt;p&gt;Building &amp;amp; testing custom Sagemaker RL container.&lt;/p&gt;
 
 &lt;p&gt;Instead of using the official SageMaker supported version of Ray RLlib
 (version 0.5.3 &amp;amp; 0.6.5), I want to use version 0.7.3. In order to do so, I have
@@ -37,7 +37,8 @@ RUN pip install --no-cache-dir \
     redis&amp;gt;=3.2.2 \
     ray==0.7.3 \
     ray[rllib]==0.7.3 \
-    scipy==1.3.0
+    scipy==1.3.0 \
+    requests
 
 # https://click.palletsprojects.com/en/7.x/python3/
 ENV LC_ALL=C.UTF-8
@@ -107,7 +108,8 @@ role = get_execution_role(),
 
 &lt;p&gt;Login into SageMaker ECR account:&lt;/p&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ (aws ecr get-login --no-include-email --region &amp;lt;region&amp;gt; --registry-ids 520713654638)
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ (aws ecr get-login --no-include-email --region &amp;lt;region&amp;gt; --registry-ids &amp;lt;AWS_ACC_ID&amp;gt;)
+$ (aws ecr get-login --no-include-email --region us-west-2 --registry-ids 520713654638)
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;Copy &amp;amp; paste the output from the above command into the terminal &amp;amp; press Enter.&lt;/p&gt;
@@ -121,7 +123,7 @@ role = get_execution_role(),
 
 &lt;p&gt;Build the Ray image using the &lt;code class=&quot;highlighter-rouge&quot;&gt;Dockerfile.tf&lt;/code&gt; from above:&lt;/p&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ docker build -t tf-ray:0.7.3-cpu-py3 -f ray/docker/0.7.3/Dockerfile.tf --build-arg processor=cpu .
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ docker build -t custom-smk-rl-ctn:tf-1.12.0-ray-0.7.3-cpu-py3 -f ray/docker/0.7.3/Dockerfile.tf --build-arg processor=cpu .
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;hr /&gt;
@@ -141,26 +143,84 @@ docker images &amp;amp;&amp;amp; \
 pytest test/integration/local --framework tensorflow \
                               --toolkit ray \
                               --toolkit-version 0.7.3 \
-                              --docker-base-name tf-ray \
-                              --tag 0.7.3-cpu-py3 \
-                              --processor cpu | tee test_output.txt
+                              --docker-base-name custom-smk-rl-ctn \
+                              --tag tf-1.12.0-ray-0.7.3-cpu-py3 \
+                              --processor cpu | tee local_test_output.txt
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;p&gt;The output from the test will be saved in test_output.txt.&lt;/p&gt;
+&lt;p&gt;The output from the test will be saved in local_test_output.txt.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;strong&gt;Pushing to registry on AWS ECR:&lt;/strong&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ (aws ecr get-login --no-include-email --region &amp;lt;region&amp;gt; --registry-ids &amp;lt;AWS_ACC_ID&amp;gt;)
+$ (aws ecr get-login --no-include-email --region us-west-2  --registry-ids 123456789012)
+# Copy &amp;amp; paste output to terminal &amp;amp; press enter.
+
+$ aws ecr create-repository --repository-name &amp;lt;repo_name&amp;gt;
+$ aws ecr create-repository --repository-name custom-smk-rl-ctn
+
+$ docker tag &amp;lt;image_ID&amp;gt; &amp;lt;AWS_ACC_ID&amp;gt;.dkr.ecr.us-west-2.amazonaws.com/&amp;lt;repo_name&amp;gt;:&amp;lt;tag&amp;gt;
+$ docker tag ba542f0b9706 &amp;lt;123456789012&amp;gt;.dkr.ecr.us-west-2.amazonaws.com/custom-smk-rl-ctn:tf-1.12.0-cpu-py3
+$ docker tag ba542f0b9706 &amp;lt;123456789012&amp;gt;.dkr.ecr.us-west-2.amazonaws.com/custom-smk-rl-ctn:tf-1.12.0-ray-0.7.3-cpu-py3
+
+$ docker push &amp;lt;AWS_ACC_ID&amp;gt;.dkr.ecr.us-west-2.amazonaws.com/&amp;lt;repo_name&amp;gt;:&amp;lt;tag&amp;gt;
+$ docker push &amp;lt;123456789012&amp;gt;.dkr.ecr.us-west-2.amazonaws.com/custom-smk-rl-ctn:tf-1.12.0-cpu-py3
+$ docker push &amp;lt;123456789012&amp;gt;.dkr.ecr.us-west-2.amazonaws.com/custom-smk-rl-ctn:tf-1.12.0-ray-0.7.3-cpu-py3
+
+
+$ aws ecr describe-repositories
+
+$ aws ecr list-images --repository-name &amp;lt;repo_name&amp;gt;
+$ aws ecr list-images --repository-name custom-smk-rl-ctn
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;strong&gt;Testing with AWS SageMaker ML instance:&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Run the command below for testing with SageMaker:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;clear &amp;amp;&amp;amp; \
+docker images &amp;amp;&amp;amp; \
+pytest test/integration/sagemaker --aws-id 123456789012 \
+                                  --instance-type ml.m4.xlarge \
+                                  --framework tensorflow \
+                                  --toolkit ray \
+                                  --toolkit-version 0.7.3 \
+                                  --docker-base-name custom-smk-rl-ctn \
+                                  --tag tf-1.12.0-ray-0.7.3-cpu-py3 | tee SageMaker_test_output.txt
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;The output from the test will be saved in SageMaker_test_output.txt.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;strong&gt;Pushing to registry on Docker hub:&lt;/strong&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ docker login
+
+$ docker tag &amp;lt;image_ID&amp;gt; &amp;lt;DockerHubUserName&amp;gt;/&amp;lt;repo_name&amp;gt;:&amp;lt;tag&amp;gt;
+$ docker tag ba542f0b9706 &amp;lt;DockerHubUserName&amp;gt;/custom-smk-rl-ctn:tf-1.12.0-cpu-py3
+$ docker tag ba542f0b9706 &amp;lt;DockerHubUserName&amp;gt;/custom-smk-rl-ctn:tf-1.12.0-ray-0.7.3-cpu-py3
+
+$ docker push &amp;lt;DockerHubUserName&amp;gt;/&amp;lt;repo_name&amp;gt;:&amp;lt;tag&amp;gt;
+$ docker push &amp;lt;DockerHubUserName&amp;gt;/custom-smk-rl-ctn:tf-1.12.0-cpu-py3
+$ docker push &amp;lt;DockerHubUserName&amp;gt;/custom-smk-rl-ctn:tf-1.12.0-ray-0.7.3-cpu-py3
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;strong&gt;Training with custom SageMaker RL container:&lt;/strong&gt;&lt;/p&gt;
 
 &lt;hr /&gt;
 
 &lt;p&gt;&lt;strong&gt;Useful Docker commands:&lt;/strong&gt;&lt;/p&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ docker login
-
-$ docker ps -a
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ docker ps -a
 
 $ docker images
-
-$ docker tag ba542f0b9706 123456789012.dkr.ecr.us-west-2.amazonaws.com/custom-smk-rl-ctn:tf-1.12.0-cpu-py3
-
-$ docker push 123456789012.dkr.ecr.us-west-2.amazonaws.com/custom-smk-rl-ctn:tf-1.12.0-cpu-py3
 
 $ docker rm &amp;lt;container&amp;gt;
 
@@ -171,9 +231,7 @@ $ docker rmi &amp;lt;image&amp;gt;
 
 &lt;p&gt;&lt;strong&gt;Useful AWS commands:&lt;/strong&gt;&lt;/p&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ aws ecr describe-repositories
-
-$ aws ecr list-images --repository-name custom-smk-rl-ctn
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ aws ecr delete-repository --force --repository-name &amp;lt;repo_name&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;hr /&gt;
@@ -326,7 +384,7 @@ estimator.fit()
 
 &lt;p&gt;&lt;strong&gt;The container in Sagemaker Jupyter notebook instance:&lt;/strong&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/assets/images/sagemaker_container.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/images/blog/sagemaker_container.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
 
 &lt;hr /&gt;
 
@@ -1218,6 +1276,8 @@ of the agents themselves through their interaction with the limit order book.&lt
 &lt;p&gt;At each time step, the environment emits the top k rows of the aggregated
 order book as observations to the agents.&lt;/p&gt;
 
+&lt;hr /&gt;
+
 &lt;h1 id=&quot;example&quot;&gt;Example:&lt;/h1&gt;
 &lt;p&gt;An example of using RLlib to pit 1 PPO (Proximal Policy Optimization) agent
 against 3 random agents using this CDA environment is available in:&lt;/p&gt;
@@ -1225,9 +1285,96 @@ against 3 random agents using this CDA environment is available in:&lt;/p&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;To run:&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;cd gym-continuousDoubleAuction/gym_continuousDoubleAuction
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ cd gym-continuousDoubleAuction/gym_continuousDoubleAuction
+
+$ python CDA_env_disc_RLlib.py
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;python CDA_env_disc_RLlib.py
+
+&lt;p&gt;Sample training output results:&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;.
+.
+.
+Result for PPO_continuousDoubleAuction-v0_0:
+  custom_metrics: {}
+  date: 2019-09-30_21-16-20
+  done: true
+  episode_len_mean: 1001.0
+  episode_reward_max: 0.0
+  episode_reward_mean: 0.0
+  episode_reward_min: 0.0
+  episodes_this_iter: 4
+  episodes_total: 38
+  experiment_id: 56cbdad4389343eca5cfd49eadeb3554
+  hostname: Duality0.local
+  info:
+    grad_time_ms: 15007.219
+    learner:
+      policy_0:
+        cur_kl_coeff: 0.0003906250058207661
+        cur_lr: 4.999999873689376e-05
+        entropy: 10.819798469543457
+        entropy_coeff: 0.0
+        kl: 8.689265087014064e-06
+        model: {}
+        policy_loss: 153.9163055419922
+        total_loss: 843138688.0
+        vf_explained_var: 0.0
+        vf_loss: 843138496.0
+    num_steps_sampled: 40000
+    num_steps_trained: 40000
+    opt_peak_throughput: 266.538
+    opt_samples: 4000.0
+    sample_peak_throughput: 80.462
+    sample_time_ms: 49713.208
+    update_time_ms: 176.14
+  iterations_since_restore: 10
+  node_ip: 192.168.1.12
+  num_healthy_workers: 2
+  off_policy_estimator: {}
+  pid: 10220
+  policy_reward_mean:
+    policy_0: 12414.421052631578
+    policy_1: -301.39473684210526
+    policy_2: -952.1578947368421
+    policy_3: -11160.868421052632
+  sampler_perf:
+    mean_env_wait_ms: 18.1753569144153
+    mean_inference_ms: 4.126144958830859
+    mean_processing_ms: 1.5262831265657335
+  time_since_restore: 649.1416146755219
+  time_this_iter_s: 61.54709506034851
+  time_total_s: 649.1416146755219
+  timestamp: 1569849380
+  timesteps_since_restore: 40000
+  timesteps_this_iter: 4000
+  timesteps_total: 40000
+  training_iteration: 10
+  trial_id: ea67f638
+
+2019-09-30 21:16:20,507	WARNING util.py:145 -- The `process_trial` operation took 0.4397752285003662 seconds to complete, which may be a performance bottleneck.
+2019-09-30 21:16:21,407	WARNING util.py:145 -- The `experiment_checkpoint` operation took 0.899777889251709 seconds to complete, which may be a performance bottleneck.
+== Status ==
+Using FIFO scheduling algorithm.
+Resources requested: 0/4 CPUs, 0/0 GPUs
+Memory usage on this node: 3.3/4.3 GB
+Result logdir: /Users/hadron0/ray_results/PPO
+Number of trials: 1 ({'TERMINATED': 1})
+TERMINATED trials:
+ - PPO_continuousDoubleAuction-v0_0:	TERMINATED, [3 CPUs, 0 GPUs], [pid=10220], 649 s, 10 iter, 40000 ts, 0 rew
+
+== Status ==
+Using FIFO scheduling algorithm.
+Resources requested: 0/4 CPUs, 0/0 GPUs
+Memory usage on this node: 3.3/4.3 GB
+Result logdir: /Users/hadron0/ray_results/PPO
+Number of trials: 1 ({'TERMINATED': 1})
+TERMINATED trials:
+ - PPO_continuousDoubleAuction-v0_0:	TERMINATED, [3 CPUs, 0 GPUs], [pid=10220], 649 s, 10 iter, 40000 ts, 0 rew
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Running the following tensorboard command &amp;amp; navigate to &lt;code class=&quot;highlighter-rouge&quot;&gt;localhost:6006&lt;/code&gt; in
+your browser to access the tensorboard graphs:&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ tensorboard --logdir ~/ray_results
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;The figure below from Tensorboard shows the agents’ performance:&lt;/p&gt;
@@ -1238,29 +1385,27 @@ against 3 random agents using this CDA environment is available in:&lt;/p&gt;
 &lt;p&gt;PPO agent is using policy 0 while policies 1 to 3 are used by the random agents.&lt;/p&gt;
 
 &lt;h1 id=&quot;dependencies&quot;&gt;Dependencies:&lt;/h1&gt;
-&lt;p&gt;1) Tensorflow&lt;/p&gt;
-
-&lt;p&gt;2) OpenAI’s Gym&lt;/p&gt;
-
-&lt;p&gt;3) Ray &amp;amp; RLlib&lt;/p&gt;
+&lt;p&gt;Please see &lt;code class=&quot;highlighter-rouge&quot;&gt;requirements.txt&lt;/code&gt; in this repository.&lt;/p&gt;
 
 &lt;h1 id=&quot;installation&quot;&gt;Installation:&lt;/h1&gt;
 &lt;p&gt;The environment is installable via pip.&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;cd gym-continuousDoubleAuction
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;pip install -e .
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ cd gym-continuousDoubleAuction
+
+$ pip install -e .
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;h1 id=&quot;todo&quot;&gt;TODO:&lt;/h1&gt;
-&lt;p&gt;1) custom RLlib workflow to include custom RND + PPO policies.&lt;/p&gt;
-
-&lt;p&gt;2) parametric or hybrid action space&lt;/p&gt;
-
-&lt;p&gt;3) more documentation&lt;/p&gt;
+&lt;p&gt;1) custom RLlib workflow to include custom RND + PPO policies.
+2) parametric or hybrid action space
+3) more robust tests
+3) better documentation&lt;/p&gt;
 
 &lt;h1 id=&quot;acknowledgements&quot;&gt;Acknowledgements:&lt;/h1&gt;
 &lt;p&gt;The orderbook matching engine is adapted from
 https://github.com/dyn4mik3/OrderBook&lt;/p&gt;
+
+&lt;h1 id=&quot;contributing&quot;&gt;Contributing:&lt;/h1&gt;
+&lt;p&gt;Please see &lt;a href=&quot;https://github.com/ChuaCheowHuan/gym-continuousDoubleAuction/blob/master/CONTRIBUTING.md&quot;&gt;CONTRIBUTING.md&lt;/a&gt;.&lt;/p&gt;
 
 &lt;h1 id=&quot;disclaimer&quot;&gt;Disclaimer:&lt;/h1&gt;
 &lt;p&gt;This repository is only meant for research purposes &amp;amp; is &lt;strong&gt;never&lt;/strong&gt; meant to be
@@ -1282,11 +1427,11 @@ installed.&lt;/p&gt;
 graph.&lt;/p&gt;
 
 &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;tf.reset_default_graph()
-sess = tf.Session()
 
 # Your Tensorflow graph goes here.
 # ...
 
+sess = tf.Session()
 sess.run(tf.global_variables_initializer())
 
 # Declare tf.summary.FileWriter where log is your output directory for
@@ -1300,8 +1445,12 @@ writer.close()
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;Run this command in terminal to start tensorboard:&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;tensorboard --logdir log
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ tensorboard --logdir log
+
+$ tensorboard --logdir ~/ray_results
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;Where log is the log folder.&lt;/p&gt;
+
 &lt;p&gt;Navigate to &lt;code class=&quot;highlighter-rouge&quot;&gt;http://127.0.0.1:6006&lt;/code&gt; in your browser to access Tensorflow.
 Your graph is in the graph tab.&lt;/p&gt;
 
@@ -1373,7 +1522,12 @@ version implementation with distributed Tensorflow and Python’s multiprocessin
 package. This implementation uses normalized running rewards with GAE. The code
 is tested with Gym’s continuous action space environment, Pendulum-v0 on Colab.&lt;/p&gt;
 
+&lt;hr /&gt;
+
 &lt;p&gt;Code on my &lt;a href=&quot;https://github.com/ChuaCheowHuan/reinforcement_learning/blob/master/DPPO/DPPO_cont_GAE_dist_GPU.ipynb&quot;&gt;Github&lt;/a&gt;:&lt;/p&gt;
+
+&lt;p&gt;If Github is not loading the Jupyter notebook, a known Github issue, click &lt;a href=&quot;https://nbviewer.jupyter.org/github/ChuaCheowHuan/reinforcement_learning/blob/master/DPPO/DPPO_cont_GAE_dist_GPU.ipynb&quot;&gt;here&lt;/a&gt;
+to view the notebook on Jupyter’s nbviewer.&lt;/p&gt;
 
 &lt;hr /&gt;
 
