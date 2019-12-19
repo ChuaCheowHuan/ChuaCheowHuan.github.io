@@ -9,7 +9,9 @@ Django web app in Travis CI.
 
 ---
 
-Code on my [Github](https://github.com/ChuaCheowHuan/web_app)
+EDIT: Code URL updated.
+
+Code on my [Github](https://github.com/ChuaCheowHuan/web_app_DPDTH)
 
 ---
 
