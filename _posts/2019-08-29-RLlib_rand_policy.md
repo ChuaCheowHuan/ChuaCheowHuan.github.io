@@ -8,6 +8,8 @@ Creating & seeding a random policy class in RLlib.
 
 ---
 
+EDIT: Code URL updated below.
+
 Code on my [Github](https://github.com/ChuaCheowHuan/gym-continuousDoubleAuction/blob/master/gym_continuousDoubleAuction/CDA_env_disc_RLlib.py)
 
 ---
