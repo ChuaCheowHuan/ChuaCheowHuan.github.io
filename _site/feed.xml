@@ -1,4 +1,32 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.5">Jekyll</generator><link href="https://chuacheowhuan.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://chuacheowhuan.github.io/" rel="alternate" type="text/html" /><updated>2019-12-19T21:27:15+08:00</updated><id>https://chuacheowhuan.github.io/feed.xml</id><title type="html">Every little gist</title><subtitle></subtitle><author><name>Chua Cheow Huan</name></author><entry><title type="html">Custom Sagemaker reinforcement learning container</title><link href="https://chuacheowhuan.github.io/custom_sagemaker_RL_container/" rel="alternate" type="text/html" title="Custom Sagemaker reinforcement learning container" /><published>2019-09-15T00:00:00+08:00</published><updated>2019-09-15T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/custom_sagemaker_RL_container</id><content type="html" xml:base="https://chuacheowhuan.github.io/custom_sagemaker_RL_container/">&lt;p&gt;Building &amp;amp; testing custom Sagemaker RL container.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.5">Jekyll</generator><link href="https://chuacheowhuan.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://chuacheowhuan.github.io/" rel="alternate" type="text/html" /><updated>2019-12-25T16:17:22+08:00</updated><id>https://chuacheowhuan.github.io/feed.xml</id><title type="html">Every little gist</title><subtitle></subtitle><author><name>Chua Cheow Huan</name></author><entry><title type="html">Filter rows with same column values in Pandas dataframe</title><link href="https://chuacheowhuan.github.io/pandas_df_rm_row_with_same_col_val/" rel="alternate" type="text/html" title="Filter rows with same column values in Pandas dataframe" /><published>2019-12-25T00:00:00+08:00</published><updated>2019-12-25T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/pandas_df_rm_row_with_same_col_val</id><content type="html" xml:base="https://chuacheowhuan.github.io/pandas_df_rm_row_with_same_col_val/">&lt;p&gt;Filter rows with same column values in a Pandas dataframe.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;Assume the following Pandas dataframe where Q1 &amp;amp; Q2 are charges. A charge can
+either be +1 or -1.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;df = pd.DataFrame([[1,1],[-1,-1],[1,-1],[-1,1]], columns=['Q1', 'Q2'])
+
+   Q1  Q2
+0   1   1
+1  -1  -1
+2   1  -1
+3  -1   1
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;The following code produces a dataframe where each row only contains
+opposite charges, i.e if Q1 is 1, Q2 is -1 &amp;amp; vice versa.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;df = df[ (df.Q1 == 1) &amp;amp; (df.Q2 == -1) | (df.Q1 == -1) &amp;amp; (df.Q2 == 1) ]
+
+   Q1  Q2
+2   1  -1
+3  -1   1
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">Filter rows with same column values in a Pandas dataframe.</summary></entry><entry><title type="html">Custom Sagemaker reinforcement learning container</title><link href="https://chuacheowhuan.github.io/custom_sagemaker_RL_container/" rel="alternate" type="text/html" title="Custom Sagemaker reinforcement learning container" /><published>2019-09-15T00:00:00+08:00</published><updated>2019-09-15T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/custom_sagemaker_RL_container</id><content type="html" xml:base="https://chuacheowhuan.github.io/custom_sagemaker_RL_container/">&lt;p&gt;Building &amp;amp; testing custom Sagemaker RL container.&lt;/p&gt;
 
 &lt;p&gt;Instead of using the official SageMaker supported version of Ray RLlib
 (version 0.5.3 &amp;amp; 0.6.5), I want to use version 0.7.3. In order to do so, I have
@@ -1065,7 +1093,65 @@ and web security is really beyond the scope of this post.&lt;/p&gt;
 
 &lt;hr /&gt;
 
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">Basic workflow of testing a Django &amp;amp; Postgres web app with Travis (continuous integration) &amp;amp; deployment to Heroku (continuous deployment).</summary></entry><entry><title type="html">Dockerized Postgres connection with Django web app in Travis CI</title><link href="https://chuacheowhuan.github.io/docker_travis/" rel="alternate" type="text/html" title="Dockerized Postgres connection with Django web app in Travis CI" /><published>2019-08-29T00:00:00+08:00</published><updated>2019-08-29T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/docker_travis</id><content type="html" xml:base="https://chuacheowhuan.github.io/docker_travis/">&lt;p&gt;Introducing a delay to allow proper connection between dockerized Postgres &amp;amp;
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">Basic workflow of testing a Django &amp;amp; Postgres web app with Travis (continuous integration) &amp;amp; deployment to Heroku (continuous deployment).</summary></entry><entry><title type="html">Random policy in RLlib</title><link href="https://chuacheowhuan.github.io/RLlib_rand_policy/" rel="alternate" type="text/html" title="Random policy in RLlib" /><published>2019-08-29T00:00:00+08:00</published><updated>2019-08-29T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/RLlib_rand_policy</id><content type="html" xml:base="https://chuacheowhuan.github.io/RLlib_rand_policy/">&lt;p&gt;Creating &amp;amp; seeding a random policy class in RLlib.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;EDIT: Code URL updated below.&lt;/p&gt;
+
+&lt;p&gt;Code on my &lt;a href=&quot;https://github.com/ChuaCheowHuan/gym-continuousDoubleAuction/blob/master/gym_continuousDoubleAuction/CDA_env_disc_RLlib.py&quot;&gt;Github&lt;/a&gt;&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;strong&gt;Function:&lt;/strong&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;def make_RandomPolicy(_seed):
+
+    # a hand-coded policy that acts at random in the env (doesn't learn)
+    class RandomPolicy(Policy):
+        &quot;&quot;&quot;Hand-coded policy that returns random actions.&quot;&quot;&quot;
+        def __init__(self, observation_space, action_space, config):
+            self.observation_space = observation_space
+            self.action_space = action_space
+            self.action_space.seed(_seed)
+
+        def compute_actions(self,
+                            obs_batch,
+                            state_batches,
+                            prev_action_batch=None,
+                            prev_reward_batch=None,
+                            info_batch=None,
+                            episodes=None,
+                            **kwargs):
+            &quot;&quot;&quot;Compute actions on a batch of observations.&quot;&quot;&quot;
+            return [self.action_space.sample() for _ in obs_batch], [], {}
+
+        def learn_on_batch(self, samples):
+            &quot;&quot;&quot;No learning.&quot;&quot;&quot;
+            #return {}
+            pass
+
+        def get_weights(self):
+            pass
+
+        def set_weights(self, weights):
+            pass
+
+    return RandomPolicy
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;strong&gt;Usage example:&lt;/strong&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# Setup PPO with an ensemble of `num_policies` different policies
+    policies = {&quot;policy_{}&quot;.format(i): gen_policy(i) for i in range(args.num_policies)} # contains many &quot;policy_graphs&quot; in a policies dictionary
+
+    # override policy with random policy
+    policies[&quot;policy_{}&quot;.format(args.num_policies-3)] = (make_RandomPolicy(1), obs_space, act_space, {}) # random policy stored as the last item in policies dictionary
+    policies[&quot;policy_{}&quot;.format(args.num_policies-2)] = (make_RandomPolicy(2), obs_space, act_space, {}) # random policy stored as the last item in policies dictionary
+    policies[&quot;policy_{}&quot;.format(args.num_policies-1)] = (make_RandomPolicy(3), obs_space, act_space, {}) # random policy stored as the last item in policies dictionary
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name>Huan</name></author><summary type="html">Creating &amp;amp; seeding a random policy class in RLlib.</summary></entry><entry><title type="html">Dockerized Postgres connection with Django web app in Travis CI</title><link href="https://chuacheowhuan.github.io/docker_travis/" rel="alternate" type="text/html" title="Dockerized Postgres connection with Django web app in Travis CI" /><published>2019-08-29T00:00:00+08:00</published><updated>2019-08-29T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/docker_travis</id><content type="html" xml:base="https://chuacheowhuan.github.io/docker_travis/">&lt;p&gt;Introducing a delay to allow proper connection between dockerized Postgres &amp;amp;
 Django web app in Travis CI.&lt;/p&gt;
 
 &lt;hr /&gt;
@@ -1207,65 +1293,7 @@ Travis’s job log.&lt;/p&gt;
 
 &lt;hr /&gt;
 
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">Introducing a delay to allow proper connection between dockerized Postgres &amp;amp; Django web app in Travis CI.</summary></entry><entry><title type="html">Random policy in RLlib</title><link href="https://chuacheowhuan.github.io/RLlib_rand_policy/" rel="alternate" type="text/html" title="Random policy in RLlib" /><published>2019-08-29T00:00:00+08:00</published><updated>2019-08-29T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/RLlib_rand_policy</id><content type="html" xml:base="https://chuacheowhuan.github.io/RLlib_rand_policy/">&lt;p&gt;Creating &amp;amp; seeding a random policy class in RLlib.&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;EDIT: Code URL updated below.&lt;/p&gt;
-
-&lt;p&gt;Code on my &lt;a href=&quot;https://github.com/ChuaCheowHuan/gym-continuousDoubleAuction/blob/master/gym_continuousDoubleAuction/CDA_env_disc_RLlib.py&quot;&gt;Github&lt;/a&gt;&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;&lt;strong&gt;Function:&lt;/strong&gt;&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;def make_RandomPolicy(_seed):
-
-    # a hand-coded policy that acts at random in the env (doesn't learn)
-    class RandomPolicy(Policy):
-        &quot;&quot;&quot;Hand-coded policy that returns random actions.&quot;&quot;&quot;
-        def __init__(self, observation_space, action_space, config):
-            self.observation_space = observation_space
-            self.action_space = action_space
-            self.action_space.seed(_seed)
-
-        def compute_actions(self,
-                            obs_batch,
-                            state_batches,
-                            prev_action_batch=None,
-                            prev_reward_batch=None,
-                            info_batch=None,
-                            episodes=None,
-                            **kwargs):
-            &quot;&quot;&quot;Compute actions on a batch of observations.&quot;&quot;&quot;
-            return [self.action_space.sample() for _ in obs_batch], [], {}
-
-        def learn_on_batch(self, samples):
-            &quot;&quot;&quot;No learning.&quot;&quot;&quot;
-            #return {}
-            pass
-
-        def get_weights(self):
-            pass
-
-        def set_weights(self, weights):
-            pass
-
-    return RandomPolicy
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;&lt;strong&gt;Usage example:&lt;/strong&gt;&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# Setup PPO with an ensemble of `num_policies` different policies
-    policies = {&quot;policy_{}&quot;.format(i): gen_policy(i) for i in range(args.num_policies)} # contains many &quot;policy_graphs&quot; in a policies dictionary
-
-    # override policy with random policy
-    policies[&quot;policy_{}&quot;.format(args.num_policies-3)] = (make_RandomPolicy(1), obs_space, act_space, {}) # random policy stored as the last item in policies dictionary
-    policies[&quot;policy_{}&quot;.format(args.num_policies-2)] = (make_RandomPolicy(2), obs_space, act_space, {}) # random policy stored as the last item in policies dictionary
-    policies[&quot;policy_{}&quot;.format(args.num_policies-1)] = (make_RandomPolicy(3), obs_space, act_space, {}) # random policy stored as the last item in policies dictionary
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name>Huan</name></author><summary type="html">Creating &amp;amp; seeding a random policy class in RLlib.</summary></entry><entry><title type="html">Custom MARL (multi-agent reinforcement learning) CDA (continuous double auction) environment</title><link href="https://chuacheowhuan.github.io/MARL_CDA_env/" rel="alternate" type="text/html" title="Custom MARL (multi-agent reinforcement learning) CDA (continuous double auction) environment" /><published>2019-08-11T00:00:00+08:00</published><updated>2019-08-11T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/MARL_CDA_env</id><content type="html" xml:base="https://chuacheowhuan.github.io/MARL_CDA_env/">&lt;p&gt;A custom MARL (multi-agent reinforcement learning) environment where multiple
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">Introducing a delay to allow proper connection between dockerized Postgres &amp;amp; Django web app in Travis CI.</summary></entry><entry><title type="html">Custom MARL (multi-agent reinforcement learning) CDA (continuous double auction) environment</title><link href="https://chuacheowhuan.github.io/MARL_CDA_env/" rel="alternate" type="text/html" title="Custom MARL (multi-agent reinforcement learning) CDA (continuous double auction) environment" /><published>2019-08-11T00:00:00+08:00</published><updated>2019-08-11T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/MARL_CDA_env</id><content type="html" xml:base="https://chuacheowhuan.github.io/MARL_CDA_env/">&lt;p&gt;A custom MARL (multi-agent reinforcement learning) environment where multiple
 agents trade against one another in a CDA (continuous double auction).&lt;/p&gt;
 
 &lt;hr /&gt;
@@ -1515,229 +1543,4 @@ generating sitemap.xml &amp;amp; robot.txt.&lt;/p&gt;
 
 &lt;hr /&gt;
 
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">This post demonstrates how to create customized functions to bundle commands in a .bash_profile file on Mac.</summary></entry><entry><title type="html">DPPO distributed tensorflow</title><link href="https://chuacheowhuan.github.io/DPPO_dist_tf/" rel="alternate" type="text/html" title="DPPO distributed tensorflow" /><published>2019-06-25T00:00:00+08:00</published><updated>2019-06-25T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/DPPO_dist_tf</id><content type="html" xml:base="https://chuacheowhuan.github.io/DPPO_dist_tf/">&lt;p&gt;This post documents my implementation of the Distributed Proximal Policy
-Optimization (Distributed PPO or DPPO) algorithm.
-(&lt;strong&gt;Distributed&lt;/strong&gt; continuous version)&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;Distributed Proximal Policy Optimization (Distributed PPO or DPPO) continuous
-version implementation with distributed Tensorflow and Python’s multiprocessing
-package. This implementation uses normalized running rewards with GAE. The code
-is tested with Gym’s continuous action space environment, Pendulum-v0 on Colab.&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;Code on my &lt;a href=&quot;https://github.com/ChuaCheowHuan/reinforcement_learning/blob/master/DPPO/DPPO_cont_GAE_dist_GPU.ipynb&quot;&gt;Github&lt;/a&gt;:&lt;/p&gt;
-
-&lt;p&gt;If Github is not loading the Jupyter notebook, a known Github issue, click &lt;a href=&quot;https://nbviewer.jupyter.org/github/ChuaCheowHuan/reinforcement_learning/blob/master/DPPO/DPPO_cont_GAE_dist_GPU.ipynb&quot;&gt;here&lt;/a&gt;
-to view the notebook on Jupyter’s nbviewer.&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;notations&quot;&gt;Notations:&lt;/h2&gt;
-
-&lt;p&gt;current policy =
-&lt;script type=&quot;math/tex&quot;&gt;{\pi}_{\theta}
-(a_{t}
-  {\mid} s_{t})&lt;/script&gt;&lt;/p&gt;
-
-&lt;p&gt;old policy =
-&lt;script type=&quot;math/tex&quot;&gt;{\pi}_{\theta_{old}}
-(a_{t}
-  {\mid} s_{t})&lt;/script&gt;&lt;/p&gt;
-
-&lt;p&gt;epsilon =
-&lt;script type=&quot;math/tex&quot;&gt;{\epsilon}&lt;/script&gt;&lt;/p&gt;
-
-&lt;p&gt;Advantage function = A&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;equations&quot;&gt;Equations:&lt;/h2&gt;
-
-&lt;p&gt;Truncated version of generalized advantage estimation (GAE) =&lt;/p&gt;
-
-&lt;p&gt;&lt;script type=&quot;math/tex&quot;&gt;A_{t}&lt;/script&gt;
-=
-&lt;script type=&quot;math/tex&quot;&gt;{\delta}_{t}
-+
-({\gamma}
-{\lambda})
-{\delta}_{t}
-+
-...
-+
-({\gamma}
-{\lambda})
-^{T-t+1}
-{\delta}_{T-1}&lt;/script&gt;&lt;/p&gt;
-
-&lt;p&gt;where
-&lt;script type=&quot;math/tex&quot;&gt;{\delta}_{t}&lt;/script&gt; =
-&lt;script type=&quot;math/tex&quot;&gt;{r}_{t} +
-{\gamma}
-V(s_{t+1}) -
-V(s_{t})&lt;/script&gt;&lt;/p&gt;
-
-&lt;p&gt;when &lt;script type=&quot;math/tex&quot;&gt;{\lambda}&lt;/script&gt; = 1,&lt;/p&gt;
-
-&lt;p&gt;&lt;script type=&quot;math/tex&quot;&gt;A_{t}&lt;/script&gt; =
-&lt;script type=&quot;math/tex&quot;&gt;-V(s_{t}) +
-r_{t} +
-{\gamma}r_{t+1} +
-... +
-{\gamma}^{T-t+1}
-r_{T-1} +
-{\gamma}^{T-t}
-V(s_{T})&lt;/script&gt;&lt;/p&gt;
-
-&lt;p&gt;Probability ratio =&lt;/p&gt;
-
-&lt;p&gt;&lt;script type=&quot;math/tex&quot;&gt;R_{t}({\theta})&lt;/script&gt; = &lt;script type=&quot;math/tex&quot;&gt;{\dfrac{ {\pi}_{\theta} (a_{t} {\mid} s_{t}) } { {\pi}_{\theta_{old}} (a_{t} {\mid} s_{t}) } }&lt;/script&gt;&lt;/p&gt;
-
-&lt;p&gt;Clipped Surrogate Objective function =&lt;/p&gt;
-
-&lt;p&gt;&lt;script type=&quot;math/tex&quot;&gt;L^{CLIP}
-({\theta})&lt;/script&gt;
-=
-&lt;script type=&quot;math/tex&quot;&gt;\mathop{\mathbb{E_{t}}}
-\lbrack
-min(
-  R_{t}({\theta})
-  A_{t}
-  ,
-  clip
-  (
-    R_{t}({\theta}),
-    1+{\epsilon},
-    1-{\epsilon}
-    )
-    A_{t}
-  )
-\rbrack&lt;/script&gt;&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;key-implementation-details&quot;&gt;Key implementation details:&lt;/h2&gt;
-
-&lt;p&gt;The following class is adapted from OpenAI’s baseline:
-This class is used for the normalization of rewards in this program before GAE
-computation.&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;class RunningStats(object):
-    def __init__(self, epsilon=1e-4, shape=()):
-        self.mean = np.zeros(shape, 'float64')
-        self.var = np.ones(shape, 'float64')
-        self.std = np.ones(shape, 'float64')
-        self.count = epsilon
-
-    def update(self, x):
-        batch_mean = np.mean(x, axis=0)
-        batch_var = np.var(x, axis=0)
-        batch_count = x.shape[0]
-        self.update_from_moments(batch_mean, batch_var, batch_count)
-
-    def update_from_moments(self, batch_mean, batch_var, batch_count):
-        delta = batch_mean - self.mean
-        new_mean = self.mean + delta * batch_count / (self.count + batch_count)
-        m_a = self.var * self.count
-        m_b = batch_var * batch_count
-        M2 = m_a + m_b + np.square(delta) * self.count * batch_count / (self.count + batch_count)
-        new_var = M2 / (self.count + batch_count)
-
-        self.mean = new_mean
-        self.var = new_var
-        self.std = np.maximum(np.sqrt(self.var), 1e-6)
-        self.count = batch_count + self.count
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;This function in the &lt;code class=&quot;highlighter-rouge&quot;&gt;PPO&lt;/code&gt; class is adapted from OpenAI’s Baseline,
-returns TD lamda return &amp;amp; advantage&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    def add_vtarg_and_adv(self, R, done, V, v_s_, gamma, lam):
-        # Compute target value using TD(lambda) estimator, and advantage with GAE(lambda)
-        # last element is only used for last vtarg, but we already zeroed it if last new = 1
-        done = np.append(done, 0)
-        V_plus = np.append(V, v_s_)
-        T = len(R)
-        adv = gaelam = np.empty(T, 'float32')
-        lastgaelam = 0
-        for t in reversed(range(T)):
-            nonterminal = 1-done[t+1]        
-            delta = R[t] + gamma * V_plus[t+1] * nonterminal - V_plus[t]
-            gaelam[t] = lastgaelam = delta + gamma * lam * nonterminal * lastgaelam   
-        #print(&quot;adv=&quot;, adv.shape)
-        #print(&quot;V=&quot;, V.shape)
-        #print(&quot;V_plus=&quot;, V_plus.shape)
-        tdlamret = np.vstack(adv) + V
-        #print(&quot;tdlamret=&quot;, tdlamret.shape)
-        return tdlamret, adv # tdlamret is critic_target or Qs      
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;The following code segment from the &lt;code class=&quot;highlighter-rouge&quot;&gt;PPO&lt;/code&gt; class defines the Clipped Surrogate
-Objective function:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;with tf.variable_scope('surrogate'):
-                    ratio = self.pi.prob(self.act) / self.oldpi.prob(self.act)
-                    surr = ratio * self.adv
-                    self.aloss = -tf.reduce_mean(tf.minimum(surr, tf.clip_by_value(ratio, 1.-epsilon, 1.+epsilon)*self.adv))
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;The following code segment from the &lt;code class=&quot;highlighter-rouge&quot;&gt;work()&lt;/code&gt; function in the worker class
-normalized the running rewards for each worker:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;self.running_stats_r.update(np.array(buffer_r))
-                    buffer_r = np.clip( (np.array(buffer_r) - self.running_stats_r.mean) / self.running_stats_r.std, -stats_CLIP, stats_CLIP )
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;The following code segment from the &lt;code class=&quot;highlighter-rouge&quot;&gt;work()&lt;/code&gt; function in the worker class computes
- the TD lamda return &amp;amp; advantage:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;tdlamret, adv = self.ppo.add_vtarg_and_adv(np.vstack(buffer_r), np.vstack(buffer_done), np.vstack(buffer_V), v_s_, GAMMA, lamda)
-
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;The following update function in the &lt;code class=&quot;highlighter-rouge&quot;&gt;PPO&lt;/code&gt; class does the training &amp;amp; the
-updating of global &amp;amp; local parameters (Note the at the beginning of training,
-  probability ratio = 1):&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;def update(self, s, a, r, adv):    
-    self.sess.run(self.update_oldpi_op)
-
-    for _ in range(A_EPOCH): # train actor
-        self.sess.run(self.atrain_op, {self.state: s, self.act: a, self.adv: adv})
-        # update actor
-        self.sess.run([self.push_actor_pi_params,
-                       self.pull_actor_pi_params],
-                      {self.state: s, self.act: a, self.adv: adv})
-    for _ in range(C_EPOCH): # train critic
-        # update critic
-        self.sess.run(self.ctrain_op, {self.state: s, self.discounted_r: r})
-        self.sess.run([self.push_critic_params,
-                       self.pull_critic_params],
-                      {self.state: s, self.discounted_r: r})   
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;The distributed Tensorflow &amp;amp; multiprocessing code sections are very similar to
-the ones describe in the following posts:&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://chuacheowhuan.github.io/A3C_dist_tf/&quot;&gt;A3C distributed tensorflow&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://chuacheowhuan.github.io/dist_tf/&quot;&gt;Distributed Tensorflow&lt;/a&gt;&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;references&quot;&gt;References:&lt;/h2&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://arxiv.org/pdf/1707.06347.pdf&quot;&gt;Proximal Policy Optimization Algorithms&lt;/a&gt;
-(Schulman, Wolski, Dhariwal, Radford, Klimov, 2017)&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://arxiv.org/pdf/1707.02286.pdf&quot;&gt;Emergence of Locomotion Behaviours in Rich Environments&lt;/a&gt;
-(Nicolas Heess, Dhruva TB, Srinivasan Sriram, Jay Lemmon, Josh Merel, Greg Wayne, et al., 2017)&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">This post documents my implementation of the Distributed Proximal Policy Optimization (Distributed PPO or DPPO) algorithm. (Distributed continuous version)</summary></entry></feed>
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">This post demonstrates how to create customized functions to bundle commands in a .bash_profile file on Mac.</summary></entry></feed>

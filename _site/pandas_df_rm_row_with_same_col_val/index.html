@@ -19,19 +19,19 @@
   <head>
     <meta charset="utf-8">
 
-<!-- begin _includes/seo.html --><title>Random policy in RLlib - Every little gist</title>
-<meta name="description" content="Creating &amp; seeding a random policy class in RLlib.">
+<!-- begin _includes/seo.html --><title>Filter rows with same column values in Pandas dataframe - Every little gist</title>
+<meta name="description" content="Filter rows with same column values in a Pandas dataframe.">
 
 
 
 <meta property="og:type" content="article">
 <meta property="og:locale" content="en_US">
 <meta property="og:site_name" content="Every little gist">
-<meta property="og:title" content="Random policy in RLlib">
-<meta property="og:url" content="https://chuacheowhuan.github.io/RLlib_rand_policy/">
+<meta property="og:title" content="Filter rows with same column values in Pandas dataframe">
+<meta property="og:url" content="https://chuacheowhuan.github.io/pandas_df_rm_row_with_same_col_val/">
 
 
-  <meta property="og:description" content="Creating &amp; seeding a random policy class in RLlib.">
+  <meta property="og:description" content="Filter rows with same column values in a Pandas dataframe.">
 
 
 
@@ -41,7 +41,7 @@
 
 
 
-  <meta property="article:published_time" content="2019-08-29T00:00:00+08:00">
+  <meta property="article:published_time" content="2019-12-25T00:00:00+08:00">
 
 
 
@@ -52,7 +52,7 @@
   
 
 
-<link rel="canonical" href="https://chuacheowhuan.github.io/RLlib_rand_policy/">
+<link rel="canonical" href="https://chuacheowhuan.github.io/pandas_df_rm_row_with_same_col_val/">
 
 
 
@@ -260,67 +260,37 @@
 
   <div class="archive">
     
-      <h1 id="page-title" class="page__title">Random policy in RLlib</h1>
+      <h1 id="page-title" class="page__title">Filter rows with same column values in Pandas dataframe</h1>
     
-    <p>Creating &amp; seeding a random policy class in RLlib.</p>
+    <p>Filter rows with same column values in a Pandas dataframe.</p>
 
 <hr />
 
-<p>EDIT: Code URL updated below.</p>
+<p>Assume the following Pandas dataframe where Q1 &amp; Q2 are charges. A charge can
+either be +1 or -1.</p>
 
-<p>Code on my <a href="https://github.com/ChuaCheowHuan/gym-continuousDoubleAuction/blob/master/gym_continuousDoubleAuction/CDA_env_disc_RLlib.py">Github</a></p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>df = pd.DataFrame([[1,1],[-1,-1],[1,-1],[-1,1]], columns=['Q1', 'Q2'])
 
-<hr />
+   Q1  Q2
+0   1   1
+1  -1  -1
+2   1  -1
+3  -1   1
+</code></pre></div></div>
 
-<p><strong>Function:</strong></p>
+<p>The following code produces a dataframe where each row only contains
+opposite charges, i.e if Q1 is 1, Q2 is -1 &amp; vice versa.</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>def make_RandomPolicy(_seed):
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>df = df[ (df.Q1 == 1) &amp; (df.Q2 == -1) | (df.Q1 == -1) &amp; (df.Q2 == 1) ]
 
-    # a hand-coded policy that acts at random in the env (doesn't learn)
-    class RandomPolicy(Policy):
-        """Hand-coded policy that returns random actions."""
-        def __init__(self, observation_space, action_space, config):
-            self.observation_space = observation_space
-            self.action_space = action_space
-            self.action_space.seed(_seed)
-
-        def compute_actions(self,
-                            obs_batch,
-                            state_batches,
-                            prev_action_batch=None,
-                            prev_reward_batch=None,
-                            info_batch=None,
-                            episodes=None,
-                            **kwargs):
-            """Compute actions on a batch of observations."""
-            return [self.action_space.sample() for _ in obs_batch], [], {}
-
-        def learn_on_batch(self, samples):
-            """No learning."""
-            #return {}
-            pass
-
-        def get_weights(self):
-            pass
-
-        def set_weights(self, weights):
-            pass
-
-    return RandomPolicy
+   Q1  Q2
+2   1  -1
+3  -1   1
 </code></pre></div></div>
 
 <hr />
 
-<p><strong>Usage example:</strong></p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># Setup PPO with an ensemble of `num_policies` different policies
-    policies = {"policy_{}".format(i): gen_policy(i) for i in range(args.num_policies)} # contains many "policy_graphs" in a policies dictionary
-
-    # override policy with random policy
-    policies["policy_{}".format(args.num_policies-3)] = (make_RandomPolicy(1), obs_space, act_space, {}) # random policy stored as the last item in policies dictionary
-    policies["policy_{}".format(args.num_policies-2)] = (make_RandomPolicy(2), obs_space, act_space, {}) # random policy stored as the last item in policies dictionary
-    policies["policy_{}".format(args.num_policies-1)] = (make_RandomPolicy(3), obs_space, act_space, {}) # random policy stored as the last item in policies dictionary
-</code></pre></div></div>
+<p><br /></p>
 
 
 <ul class="taxonomy__index">
@@ -359,7 +329,7 @@
 
 
 
-  10 minute read
+  9 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">Filter rows with same column values in a Pandas dataframe.
@@ -388,7 +358,7 @@
 
 
 
-  61 minute read
+  57 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">Building &amp; testing custom Sagemaker RL container.
@@ -417,7 +387,7 @@
 
 
 
-  49 minute read
+  48 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">Demo setup for simple (reinforcement learning) custom environment in Sagemaker.
@@ -447,7 +417,7 @@ This example uses Proximal Policy Optimization with Ray (RLlib).
 
 
 
-  69 minute read
+  66 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">Basic workflow of testing a Django &amp; Postgres web app with Travis
@@ -477,7 +447,7 @@ This example uses Proximal Policy Optimization with Ray (RLlib).
 
 
 
-  114 minute read
+  129 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">Basic workflow of testing a dockerized Django &amp; Postgres web app with Travis
@@ -507,7 +477,7 @@ This example uses Proximal Policy Optimization with Ray (RLlib).
 
 
 
-  17 minute read
+  44 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">Introducing a delay to allow proper connection between dockerized Postgres &amp;
@@ -1130,8 +1100,8 @@ algorithm.
     
   <script>
     var disqus_config = function () {
-      this.page.url = "https://chuacheowhuan.github.io/RLlib_rand_policy/";  // Replace PAGE_URL with your page's canonical URL variable
-      this.page.identifier = "/RLlib_rand_policy"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+      this.page.url = "https://chuacheowhuan.github.io/pandas_df_rm_row_with_same_col_val/";  // Replace PAGE_URL with your page's canonical URL variable
+      this.page.identifier = "/pandas_df_rm_row_with_same_col_val"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
     };
     (function() { // DON'T EDIT BELOW THIS LINE
       var d = document, s = d.createElement('script');
