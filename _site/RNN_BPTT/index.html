@@ -302,6 +302,9 @@ step.</p>
 
 <p>The loss at time t with respect to the weights in the hidden layer.</p>
 
+<p>The terms in square brackets <script type="math/tex">[]</script> are written in such a way the the leftmost
+term is the most recent term while the rightmost is the oldest term.</p>
+
 <script type="math/tex; mode=display">\frac{\delta L_{t}} {\delta W} =
 \frac{\delta L_{t}} {\delta \hat{y}_{t}}
 \frac{\delta \hat{y}_{t}} {\delta L_{t}}
@@ -390,7 +393,7 @@ backwards in time to calculate this gradient.</p>
 
 
 
-  14 minute read
+  16 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">Notes on the math for RNN back propagation through time(BPTT).
