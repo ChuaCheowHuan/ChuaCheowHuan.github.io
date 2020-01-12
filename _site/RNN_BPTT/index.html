@@ -266,27 +266,35 @@
 
 <hr />
 
-<p>$\hat{y} = f_y (U h_t + b_y)$</p>
+<p><script type="math/tex">\hat{y}</script>  is the prediction.</p>
 
-<p>$\hat{y}$  is the prediction.
-$U$ is the weight matrix after the hidden layer.</p>
+<p><script type="math/tex">U</script> is the weight matrix after the hidden layer.</p>
 
-<p>$h_{t} = f_{h} (Vx_t + Wh_{t-1} + b_{h})$</p>
+<script type="math/tex; mode=display">\hat{y} = f_y (U h_t + b_y)</script>
 
-<p>$h_{t}$ is the hidden layer at time t.
-$f_{h}$ is the non linear function in the hidden layer.
-$V$ is the weight matrix before the hidden layer.
-$W_{h_{t-1}}$ is the weight matrix in the hidden layer at the previous time step.
-$b_{h}$ is the bias at the hidden layer.</p>
+<hr />
+
+<p><script type="math/tex">h_{t}</script> is the hidden layer at time t.</p>
+
+<p><script type="math/tex">f_{h}</script> is the non linear function in the hidden layer.</p>
+
+<p><script type="math/tex">V</script> is the weight matrix before the hidden layer.</p>
+
+<p><script type="math/tex">W_{h_{t-1}}</script> is the weight matrix in the hidden layer at the previous time
+step.</p>
+
+<p><script type="math/tex">b_{h}</script> is the bias at the hidden layer.</p>
+
+<script type="math/tex; mode=display">h_{t} = f_{h} (Vx_t + Wh_{t-1} + b_{h})</script>
 
 <hr />
 
 <p>No need to BPTT for this:</p>
 
-<p>$\frac{\delta L_{t}} {\delta U} =
+<script type="math/tex; mode=display">\frac{\delta L_{t}} {\delta U} =
 \sum_{i=0}^{T} \frac{\delta L_i} {\delta U} =
 \frac{\delta L_t} {\delta \hat{y}_t}
-\frac{\delta \hat{y}_t} {\delta U}$</p>
+\frac{\delta \hat{y}_t} {\delta U}</script>
 
 <hr />
 
@@ -294,9 +302,9 @@ $b_{h}$ is the bias at the hidden layer.</p>
 
 <p>The loss at time t with respect to the weights in the hidden layer.</p>
 
-<p>$\frac{\delta L_{t}} {\delta W} =
-\frac{\delta L_{t}} {\delta \hat{y}<em>{t}}
-\frac{\delta \hat{y}</em>{t}} {\delta L_{t}}
+<script type="math/tex; mode=display">\frac{\delta L_{t}} {\delta W} =
+\frac{\delta L_{t}} {\delta \hat{y}_{t}}
+\frac{\delta \hat{y}_{t}} {\delta L_{t}}
 [
 \frac{\delta h_{t}} {\delta W} +
 ( \frac{\delta h_{t}} {\delta h_{t-1}}
@@ -304,31 +312,31 @@ $b_{h}$ is the bias at the hidden layer.</p>
 ( \frac{\delta h_{t}} {\delta h_{t-2}}
 \frac{\delta h_{t-2}} {\delta W}
 \frac{\delta h_{t}} {\delta h_{t-1}}
-\frac{\delta h_{t-1}} {\delta W} ) + …
-]$</p>
+\frac{\delta h_{t-1}} {\delta W} ) + ...
+]</script>
 
-<p>$=
-\frac{\delta L_t} {\delta \hat{y}<em>t}
+<script type="math/tex; mode=display">=
+\frac{\delta L_t} {\delta \hat{y}_t}
 \frac{\delta \hat{y}_t} {\delta h_t}
-\sum</em>{k=0}^{t} [ \frac{\delta h_{t}} {\delta h_{t-1}} …
+\sum_{k=0}^{t} [ \frac{\delta h_{t}} {\delta h_{t-1}} ...
 ( \frac{\delta h_{k+2}} {\delta h_{k+1}}
 \frac{\delta h_{k+1}} {\delta W}
 \frac{\delta h_{k+1}} {\delta h_k}
 (\frac{\delta h_{k}} {\delta W} ) )
 ( \frac{\delta h_{k+1}} {\delta h_k}
-(\frac{\delta h_k} {\delta W} ) ) ]$</p>
+(\frac{\delta h_k} {\delta W} ) ) ]</script>
 
-<p>$=
-\frac{\delta L_t} {\delta \hat{y}<em>t}
+<script type="math/tex; mode=display">=
+\frac{\delta L_t} {\delta \hat{y}_t}
 \frac{\delta \hat{y}_t} {\delta h_t}
-\sum</em>{k=0}^{t}
+\sum_{k=0}^{t}
 ( \prod_{i=k+1}^{t}
 \frac{\delta h_{i}} {\delta h_{i-1}} )
-\frac{\delta h_k} {\delta W} ]$</p>
+\frac{\delta h_k} {\delta W} ]</script>
 
 <hr />
 
-<p>$\frac{\delta L_{t}} {\delta V}$</p>
+<script type="math/tex; mode=display">\frac{\delta L_{t}} {\delta V}</script>
 
 <p>BPTT also needs to be done for calculating the loss with respect to weight matrix V.
 The dependence between hidden units and weight matrix V is  not only in one place.
@@ -382,7 +390,7 @@ backwards in time to calculate this gradient.</p>
 
 
 
-  30 minute read
+  14 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">Notes on the math for RNN back propagation through time(BPTT).
