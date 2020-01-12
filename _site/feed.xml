@@ -1,4 +1,79 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.5">Jekyll</generator><link href="https://chuacheowhuan.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://chuacheowhuan.github.io/" rel="alternate" type="text/html" /><updated>2019-12-25T16:17:22+08:00</updated><id>https://chuacheowhuan.github.io/feed.xml</id><title type="html">Every little gist</title><subtitle></subtitle><author><name>Chua Cheow Huan</name></author><entry><title type="html">Filter rows with same column values in Pandas dataframe</title><link href="https://chuacheowhuan.github.io/pandas_df_rm_row_with_same_col_val/" rel="alternate" type="text/html" title="Filter rows with same column values in Pandas dataframe" /><published>2019-12-25T00:00:00+08:00</published><updated>2019-12-25T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/pandas_df_rm_row_with_same_col_val</id><content type="html" xml:base="https://chuacheowhuan.github.io/pandas_df_rm_row_with_same_col_val/">&lt;p&gt;Filter rows with same column values in a Pandas dataframe.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.5">Jekyll</generator><link href="https://chuacheowhuan.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://chuacheowhuan.github.io/" rel="alternate" type="text/html" /><updated>2020-01-13T00:13:07+08:00</updated><id>https://chuacheowhuan.github.io/feed.xml</id><title type="html">Every little gist</title><subtitle></subtitle><author><name>Chua Cheow Huan</name></author><entry><title type="html">RNN backprop thru time(BPTT)</title><link href="https://chuacheowhuan.github.io/RNN_BPTT/" rel="alternate" type="text/html" title="RNN backprop thru time(BPTT)" /><published>2020-01-12T00:00:00+08:00</published><updated>2020-01-12T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/RNN_BPTT</id><content type="html" xml:base="https://chuacheowhuan.github.io/RNN_BPTT/">&lt;p&gt;Notes on the math for RNN back propagation through time(BPTT).&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;$\hat{y} = f_y (U h_t + b_y)$&lt;/p&gt;
+
+&lt;p&gt;$\hat{y}$  is the prediction.
+$U$ is the weight matrix after the hidden layer.&lt;/p&gt;
+
+&lt;p&gt;$h_{t} = f_{h} (Vx_t + Wh_{t-1} + b_{h})$&lt;/p&gt;
+
+&lt;p&gt;$h_{t}$ is the hidden layer at time t.
+$f_{h}$ is the non linear function in the hidden layer.
+$V$ is the weight matrix before the hidden layer.
+$W_{h_{t-1}}$ is the weight matrix in the hidden layer at the previous time step.
+$b_{h}$ is the bias at the hidden layer.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;No need to BPTT for this:&lt;/p&gt;
+
+&lt;p&gt;$\frac{\delta L_{t}} {\delta U} =
+\sum_{i=0}^{T} \frac{\delta L_i} {\delta U} =
+\frac{\delta L_t} {\delta \hat{y}_t}
+\frac{\delta \hat{y}_t} {\delta U}$&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;strong&gt;BPTT&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;The loss at time t with respect to the weights in the hidden layer.&lt;/p&gt;
+
+&lt;p&gt;$\frac{\delta L_{t}} {\delta W} =
+\frac{\delta L_{t}} {\delta \hat{y}&lt;em&gt;{t}}
+\frac{\delta \hat{y}&lt;/em&gt;{t}} {\delta L_{t}}
+[
+\frac{\delta h_{t}} {\delta W} +
+( \frac{\delta h_{t}} {\delta h_{t-1}}
+\frac{\delta h_{t-1}} {\delta W} ) +
+( \frac{\delta h_{t}} {\delta h_{t-2}}
+\frac{\delta h_{t-2}} {\delta W}
+\frac{\delta h_{t}} {\delta h_{t-1}}
+\frac{\delta h_{t-1}} {\delta W} ) + …
+]$&lt;/p&gt;
+
+&lt;p&gt;$=
+\frac{\delta L_t} {\delta \hat{y}&lt;em&gt;t}
+\frac{\delta \hat{y}_t} {\delta h_t}
+\sum&lt;/em&gt;{k=0}^{t} [ \frac{\delta h_{t}} {\delta h_{t-1}} …
+( \frac{\delta h_{k+2}} {\delta h_{k+1}}
+\frac{\delta h_{k+1}} {\delta W}
+\frac{\delta h_{k+1}} {\delta h_k}
+(\frac{\delta h_{k}} {\delta W} ) )
+( \frac{\delta h_{k+1}} {\delta h_k}
+(\frac{\delta h_k} {\delta W} ) ) ]$&lt;/p&gt;
+
+&lt;p&gt;$=
+\frac{\delta L_t} {\delta \hat{y}&lt;em&gt;t}
+\frac{\delta \hat{y}_t} {\delta h_t}
+\sum&lt;/em&gt;{k=0}^{t}
+( \prod_{i=k+1}^{t}
+\frac{\delta h_{i}} {\delta h_{i-1}} )
+\frac{\delta h_k} {\delta W} ]$&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;$\frac{\delta L_{t}} {\delta V}$&lt;/p&gt;
+
+&lt;p&gt;BPTT also needs to be done for calculating the loss with respect to weight matrix V.
+The dependence between hidden units and weight matrix V is  not only in one place.
+Hidden units from all the previous time steps also depend on V so we need to go
+backwards in time to calculate this gradient.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">Notes on the math for RNN back propagation through time(BPTT).</summary></entry><entry><title type="html">Filter rows with same column values in Pandas dataframe</title><link href="https://chuacheowhuan.github.io/pandas_df_rm_row_with_same_col_val/" rel="alternate" type="text/html" title="Filter rows with same column values in Pandas dataframe" /><published>2019-12-25T00:00:00+08:00</published><updated>2019-12-25T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/pandas_df_rm_row_with_same_col_val</id><content type="html" xml:base="https://chuacheowhuan.github.io/pandas_df_rm_row_with_same_col_val/">&lt;p&gt;Filter rows with same column values in a Pandas dataframe.&lt;/p&gt;
 
 &lt;hr /&gt;
 
@@ -1093,65 +1168,7 @@ and web security is really beyond the scope of this post.&lt;/p&gt;
 
 &lt;hr /&gt;
 
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">Basic workflow of testing a Django &amp;amp; Postgres web app with Travis (continuous integration) &amp;amp; deployment to Heroku (continuous deployment).</summary></entry><entry><title type="html">Random policy in RLlib</title><link href="https://chuacheowhuan.github.io/RLlib_rand_policy/" rel="alternate" type="text/html" title="Random policy in RLlib" /><published>2019-08-29T00:00:00+08:00</published><updated>2019-08-29T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/RLlib_rand_policy</id><content type="html" xml:base="https://chuacheowhuan.github.io/RLlib_rand_policy/">&lt;p&gt;Creating &amp;amp; seeding a random policy class in RLlib.&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;EDIT: Code URL updated below.&lt;/p&gt;
-
-&lt;p&gt;Code on my &lt;a href=&quot;https://github.com/ChuaCheowHuan/gym-continuousDoubleAuction/blob/master/gym_continuousDoubleAuction/CDA_env_disc_RLlib.py&quot;&gt;Github&lt;/a&gt;&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;&lt;strong&gt;Function:&lt;/strong&gt;&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;def make_RandomPolicy(_seed):
-
-    # a hand-coded policy that acts at random in the env (doesn't learn)
-    class RandomPolicy(Policy):
-        &quot;&quot;&quot;Hand-coded policy that returns random actions.&quot;&quot;&quot;
-        def __init__(self, observation_space, action_space, config):
-            self.observation_space = observation_space
-            self.action_space = action_space
-            self.action_space.seed(_seed)
-
-        def compute_actions(self,
-                            obs_batch,
-                            state_batches,
-                            prev_action_batch=None,
-                            prev_reward_batch=None,
-                            info_batch=None,
-                            episodes=None,
-                            **kwargs):
-            &quot;&quot;&quot;Compute actions on a batch of observations.&quot;&quot;&quot;
-            return [self.action_space.sample() for _ in obs_batch], [], {}
-
-        def learn_on_batch(self, samples):
-            &quot;&quot;&quot;No learning.&quot;&quot;&quot;
-            #return {}
-            pass
-
-        def get_weights(self):
-            pass
-
-        def set_weights(self, weights):
-            pass
-
-    return RandomPolicy
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;&lt;strong&gt;Usage example:&lt;/strong&gt;&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# Setup PPO with an ensemble of `num_policies` different policies
-    policies = {&quot;policy_{}&quot;.format(i): gen_policy(i) for i in range(args.num_policies)} # contains many &quot;policy_graphs&quot; in a policies dictionary
-
-    # override policy with random policy
-    policies[&quot;policy_{}&quot;.format(args.num_policies-3)] = (make_RandomPolicy(1), obs_space, act_space, {}) # random policy stored as the last item in policies dictionary
-    policies[&quot;policy_{}&quot;.format(args.num_policies-2)] = (make_RandomPolicy(2), obs_space, act_space, {}) # random policy stored as the last item in policies dictionary
-    policies[&quot;policy_{}&quot;.format(args.num_policies-1)] = (make_RandomPolicy(3), obs_space, act_space, {}) # random policy stored as the last item in policies dictionary
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name>Huan</name></author><summary type="html">Creating &amp;amp; seeding a random policy class in RLlib.</summary></entry><entry><title type="html">Dockerized Postgres connection with Django web app in Travis CI</title><link href="https://chuacheowhuan.github.io/docker_travis/" rel="alternate" type="text/html" title="Dockerized Postgres connection with Django web app in Travis CI" /><published>2019-08-29T00:00:00+08:00</published><updated>2019-08-29T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/docker_travis</id><content type="html" xml:base="https://chuacheowhuan.github.io/docker_travis/">&lt;p&gt;Introducing a delay to allow proper connection between dockerized Postgres &amp;amp;
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">Basic workflow of testing a Django &amp;amp; Postgres web app with Travis (continuous integration) &amp;amp; deployment to Heroku (continuous deployment).</summary></entry><entry><title type="html">Dockerized Postgres connection with Django web app in Travis CI</title><link href="https://chuacheowhuan.github.io/docker_travis/" rel="alternate" type="text/html" title="Dockerized Postgres connection with Django web app in Travis CI" /><published>2019-08-29T00:00:00+08:00</published><updated>2019-08-29T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/docker_travis</id><content type="html" xml:base="https://chuacheowhuan.github.io/docker_travis/">&lt;p&gt;Introducing a delay to allow proper connection between dockerized Postgres &amp;amp;
 Django web app in Travis CI.&lt;/p&gt;
 
 &lt;hr /&gt;
@@ -1293,7 +1310,65 @@ Travis’s job log.&lt;/p&gt;
 
 &lt;hr /&gt;
 
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">Introducing a delay to allow proper connection between dockerized Postgres &amp;amp; Django web app in Travis CI.</summary></entry><entry><title type="html">Custom MARL (multi-agent reinforcement learning) CDA (continuous double auction) environment</title><link href="https://chuacheowhuan.github.io/MARL_CDA_env/" rel="alternate" type="text/html" title="Custom MARL (multi-agent reinforcement learning) CDA (continuous double auction) environment" /><published>2019-08-11T00:00:00+08:00</published><updated>2019-08-11T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/MARL_CDA_env</id><content type="html" xml:base="https://chuacheowhuan.github.io/MARL_CDA_env/">&lt;p&gt;A custom MARL (multi-agent reinforcement learning) environment where multiple
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">Introducing a delay to allow proper connection between dockerized Postgres &amp;amp; Django web app in Travis CI.</summary></entry><entry><title type="html">Random policy in RLlib</title><link href="https://chuacheowhuan.github.io/RLlib_rand_policy/" rel="alternate" type="text/html" title="Random policy in RLlib" /><published>2019-08-29T00:00:00+08:00</published><updated>2019-08-29T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/RLlib_rand_policy</id><content type="html" xml:base="https://chuacheowhuan.github.io/RLlib_rand_policy/">&lt;p&gt;Creating &amp;amp; seeding a random policy class in RLlib.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;EDIT: Code URL updated below.&lt;/p&gt;
+
+&lt;p&gt;Code on my &lt;a href=&quot;https://github.com/ChuaCheowHuan/gym-continuousDoubleAuction/blob/master/gym_continuousDoubleAuction/CDA_env_disc_RLlib.py&quot;&gt;Github&lt;/a&gt;&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;strong&gt;Function:&lt;/strong&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;def make_RandomPolicy(_seed):
+
+    # a hand-coded policy that acts at random in the env (doesn't learn)
+    class RandomPolicy(Policy):
+        &quot;&quot;&quot;Hand-coded policy that returns random actions.&quot;&quot;&quot;
+        def __init__(self, observation_space, action_space, config):
+            self.observation_space = observation_space
+            self.action_space = action_space
+            self.action_space.seed(_seed)
+
+        def compute_actions(self,
+                            obs_batch,
+                            state_batches,
+                            prev_action_batch=None,
+                            prev_reward_batch=None,
+                            info_batch=None,
+                            episodes=None,
+                            **kwargs):
+            &quot;&quot;&quot;Compute actions on a batch of observations.&quot;&quot;&quot;
+            return [self.action_space.sample() for _ in obs_batch], [], {}
+
+        def learn_on_batch(self, samples):
+            &quot;&quot;&quot;No learning.&quot;&quot;&quot;
+            #return {}
+            pass
+
+        def get_weights(self):
+            pass
+
+        def set_weights(self, weights):
+            pass
+
+    return RandomPolicy
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;strong&gt;Usage example:&lt;/strong&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# Setup PPO with an ensemble of `num_policies` different policies
+    policies = {&quot;policy_{}&quot;.format(i): gen_policy(i) for i in range(args.num_policies)} # contains many &quot;policy_graphs&quot; in a policies dictionary
+
+    # override policy with random policy
+    policies[&quot;policy_{}&quot;.format(args.num_policies-3)] = (make_RandomPolicy(1), obs_space, act_space, {}) # random policy stored as the last item in policies dictionary
+    policies[&quot;policy_{}&quot;.format(args.num_policies-2)] = (make_RandomPolicy(2), obs_space, act_space, {}) # random policy stored as the last item in policies dictionary
+    policies[&quot;policy_{}&quot;.format(args.num_policies-1)] = (make_RandomPolicy(3), obs_space, act_space, {}) # random policy stored as the last item in policies dictionary
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name>Huan</name></author><summary type="html">Creating &amp;amp; seeding a random policy class in RLlib.</summary></entry><entry><title type="html">Custom MARL (multi-agent reinforcement learning) CDA (continuous double auction) environment</title><link href="https://chuacheowhuan.github.io/MARL_CDA_env/" rel="alternate" type="text/html" title="Custom MARL (multi-agent reinforcement learning) CDA (continuous double auction) environment" /><published>2019-08-11T00:00:00+08:00</published><updated>2019-08-11T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/MARL_CDA_env</id><content type="html" xml:base="https://chuacheowhuan.github.io/MARL_CDA_env/">&lt;p&gt;A custom MARL (multi-agent reinforcement learning) environment where multiple
 agents trade against one another in a CDA (continuous double auction).&lt;/p&gt;
 
 &lt;hr /&gt;
@@ -1488,59 +1563,4 @@ Your graph is in the graph tab.&lt;/p&gt;
 
 &lt;hr /&gt;
 
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">This post demonstrate how setup &amp;amp; access Tensorflow graphs.</summary></entry><entry><title type="html">.bash_profile for Mac</title><link href="https://chuacheowhuan.github.io/bash_script/" rel="alternate" type="text/html" title=".bash_profile for Mac" /><published>2019-07-03T00:00:00+08:00</published><updated>2019-07-03T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/bash_script</id><content type="html" xml:base="https://chuacheowhuan.github.io/bash_script/">&lt;p&gt;This post demonstrates how to create customized functions to bundle commands in
-a .bash_profile file on Mac.&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;Edit .bash_profile for Mac.&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;Start Terminal&lt;/li&gt;
-  &lt;li&gt;Enter “cd ~/” to go to home folder&lt;/li&gt;
-  &lt;li&gt;Edit .bash_profile with “open -e .bash_profile” to open in TextEdit.&lt;/li&gt;
-  &lt;li&gt;Enter “. .bash_profile” to reload .bash_profile.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;examples&quot;&gt;Examples&lt;/h2&gt;
-
-&lt;p&gt;To bundle common git operations, add the following to .bash_profile file:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;function lazy_git() {
-    git checkout test_ver
-    git add .
-    git commit -a -m &quot;$1&quot;
-    git checkout master
-    git merge test_ver
-    git push
-    git checkout test_ver
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;hr /&gt;
-
-&lt;p&gt;To bundle common jekyll operations, add the following to .bash_profile file:&lt;/p&gt;
-
-&lt;p&gt;The command &lt;code class=&quot;highlighter-rouge&quot;&gt;serve&lt;/code&gt; runs localhost.&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;function lazy_jekyll_serve() {
-    cd /Users/tester/gitHubRepo/ChuaCheowHuan.github.io
-    pwd
-    bundle exec jekyll serve
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;The command &lt;code class=&quot;highlighter-rouge&quot;&gt;build&lt;/code&gt; build the site. This command is neccessary for
-generating sitemap.xml &amp;amp; robot.txt.&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;function lazy_jekyll_build() {
-    cd /Users/tester/gitHubRepo/ChuaCheowHuan.github.io
-    pwd
-    bundle exec jekyll build
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">This post demonstrates how to create customized functions to bundle commands in a .bash_profile file on Mac.</summary></entry></feed>
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">This post demonstrate how setup &amp;amp; access Tensorflow graphs.</summary></entry></feed>

@@ -19,19 +19,19 @@
   <head>
     <meta charset="utf-8">
 
-<!-- begin _includes/seo.html --><title>A3C multi-threaded discrete version with N step targets - Every little gist</title>
-<meta name="description" content="This post documents my implementation of the A3C(Asynchronous Advantage Actor Critic) algorithm (discrete).(multi-threaded discrete version)">
+<!-- begin _includes/seo.html --><title>RNN backprop thru time(BPTT) - Every little gist</title>
+<meta name="description" content="Notes on the math for RNN back propagation through time(BPTT).">
 
 
 
 <meta property="og:type" content="article">
 <meta property="og:locale" content="en_US">
 <meta property="og:site_name" content="Every little gist">
-<meta property="og:title" content="A3C multi-threaded discrete version with N step targets">
-<meta property="og:url" content="https://chuacheowhuan.github.io/A3C_disc_thread_nStep/">
+<meta property="og:title" content="RNN backprop thru time(BPTT)">
+<meta property="og:url" content="https://chuacheowhuan.github.io/RNN_BPTT/">
 
 
-  <meta property="og:description" content="This post documents my implementation of the A3C(Asynchronous Advantage Actor Critic) algorithm (discrete).(multi-threaded discrete version)">
+  <meta property="og:description" content="Notes on the math for RNN back propagation through time(BPTT).">
 
 
 
@@ -41,7 +41,7 @@
 
 
 
-  <meta property="article:published_time" content="2019-06-13T00:00:00+08:00">
+  <meta property="article:published_time" content="2020-01-12T00:00:00+08:00">
 
 
 
@@ -52,7 +52,7 @@
   
 
 
-<link rel="canonical" href="https://chuacheowhuan.github.io/A3C_disc_thread_nStep/">
+<link rel="canonical" href="https://chuacheowhuan.github.io/RNN_BPTT/">
 
 
 
@@ -260,232 +260,80 @@
 
   <div class="archive">
     
-      <h1 id="page-title" class="page__title">A3C multi-threaded discrete version with N step targets</h1>
+      <h1 id="page-title" class="page__title">RNN backprop thru time(BPTT)</h1>
     
-    <p>This post documents my implementation of the A3C
-(Asynchronous Advantage Actor Critic) algorithm (discrete).
-(multi-threaded <strong>discrete</strong> version)</p>
+    <p>Notes on the math for RNN back propagation through time(BPTT).</p>
 
 <hr />
 
-<p>A3C (Asynchronous Advantage Actor Critic) implementation with Tensorflow.
-This is a multi-threaded <strong>discrete</strong> version. The code is tested with Gym’s
-discrete action space environment, CartPole-v0 on Colab.</p>
+<p>$\hat{y} = f_y (U h_t + b_y)$</p>
+
+<p>$\hat{y}$  is the prediction.
+$U$ is the weight matrix after the hidden layer.</p>
+
+<p>$h_{t} = f_{h} (Vx_t + Wh_{t-1} + b_{h})$</p>
+
+<p>$h_{t}$ is the hidden layer at time t.
+$f_{h}$ is the non linear function in the hidden layer.
+$V$ is the weight matrix before the hidden layer.
+$W_{h_{t-1}}$ is the weight matrix in the hidden layer at the previous time step.
+$b_{h}$ is the bias at the hidden layer.</p>
 
 <hr />
 
-<p>Code on my <a href="https://github.com/ChuaCheowHuan/reinforcement_learning/blob/master/A3C/A3C_disc_miss.ipynb">Github</a>: (missing terms are treated as 0)</p>
+<p>No need to BPTT for this:</p>
 
-<p>If Github is not loading the Jupyter notebook, a known Github issue, click <a href="https://nbviewer.jupyter.org/github/ChuaCheowHuan/reinforcement_learning/blob/master/A3C/A3C_disc_miss.ipynb">here</a>
-to view the notebook on Jupyter’s nbviewer.</p>
-
-<hr />
-
-<p>Code on my <a href="https://github.com/ChuaCheowHuan/reinforcement_learning/blob/master/A3C/A3C_disc_max.ipynb">Github</a>: (use maximum terms possible)</p>
-
-<p>If Github is not loading the Jupyter notebook, a known Github issue, click <a href="https://nbviewer.jupyter.org/github/ChuaCheowHuan/reinforcement_learning/blob/master/A3C/A3C_disc_max.ipynb">here</a>
-to view the notebook on Jupyter’s nbviewer.</p>
+<p>$\frac{\delta L_{t}} {\delta U} =
+\sum_{i=0}^{T} \frac{\delta L_i} {\delta U} =
+\frac{\delta L_t} {\delta \hat{y}_t}
+\frac{\delta \hat{y}_t} {\delta U}$</p>
 
 <hr />
 
-<h2 id="notations">Notations:</h2>
+<p><strong>BPTT</strong></p>
 
-<p>Actor network = <script type="math/tex">{\pi}_{\theta}</script></p>
+<p>The loss at time t with respect to the weights in the hidden layer.</p>
 
-<p>Actor network parameter = <script type="math/tex">{\theta}</script></p>
+<p>$\frac{\delta L_{t}} {\delta W} =
+\frac{\delta L_{t}} {\delta \hat{y}<em>{t}}
+\frac{\delta \hat{y}</em>{t}} {\delta L_{t}}
+[
+\frac{\delta h_{t}} {\delta W} +
+( \frac{\delta h_{t}} {\delta h_{t-1}}
+\frac{\delta h_{t-1}} {\delta W} ) +
+( \frac{\delta h_{t}} {\delta h_{t-2}}
+\frac{\delta h_{t-2}} {\delta W}
+\frac{\delta h_{t}} {\delta h_{t-1}}
+\frac{\delta h_{t-1}} {\delta W} ) + …
+]$</p>
 
-<p>Critic network = <script type="math/tex">V_{\phi}</script></p>
+<p>$=
+\frac{\delta L_t} {\delta \hat{y}<em>t}
+\frac{\delta \hat{y}_t} {\delta h_t}
+\sum</em>{k=0}^{t} [ \frac{\delta h_{t}} {\delta h_{t-1}} …
+( \frac{\delta h_{k+2}} {\delta h_{k+1}}
+\frac{\delta h_{k+1}} {\delta W}
+\frac{\delta h_{k+1}} {\delta h_k}
+(\frac{\delta h_{k}} {\delta W} ) )
+( \frac{\delta h_{k+1}} {\delta h_k}
+(\frac{\delta h_k} {\delta W} ) ) ]$</p>
 
-<p>Critic network parameter = <script type="math/tex">\phi</script></p>
-
-<p>Advantage function = A</p>
-
-<p>Number of trajectories = m</p>
-
-<hr />
-
-<h2 id="equations">Equations:</h2>
-
-<p>Actor component: log<script type="math/tex">{\pi}_{\theta}</script> <script type="math/tex">(a_{t} {\mid} s_{t})</script></p>
-
-<p>Critic component = Advantage function = A = <script type="math/tex">Q(s_{t}, a_{t})</script> - <script type="math/tex">V_{\phi}(s_{t})</script></p>
-
-<p>Q values with N-step truncated estimate :</p>
-
-<p><script type="math/tex">Q^{\pi}(s_{t}, a_{t})</script> = E(<script type="math/tex">r_{t}</script> + <script type="math/tex">\gamma</script> <script type="math/tex">r_{t+1}</script> + <script type="math/tex">\gamma^{2}</script> <script type="math/tex">r_{t+2}</script> + … + <script type="math/tex">\gamma^{n}</script> V(<script type="math/tex">s_{t+n}</script>))</p>
-
-<p>Check this <a href="https://chuacheowhuan.github.io/n_step_targets/">post</a> for more information on N-step truncated estimate.</p>
-
-<p>Policy gradient estimator</p>
-
-<p>= <script type="math/tex">\nabla_\theta J(\theta)</script></p>
-
-<p>= <script type="math/tex">{\dfrac{1}{m}}</script> <script type="math/tex">{\sum\limits_{i=1}^{m}}</script> <script type="math/tex">{\sum\limits_{t=0}^{T}}</script> <script type="math/tex">\nabla_\theta</script> log<script type="math/tex">{\pi}_{\theta}</script> <script type="math/tex">(a_{t} {\mid} s_{t})</script> <script type="math/tex">Q(s_{t}, a_{t})</script> - <script type="math/tex">V_{\phi}(s_{t})</script></p>
-
-<p>= <script type="math/tex">{\dfrac{1}{m}}</script> <script type="math/tex">{\sum\limits_{i=1}^{m}}</script> <script type="math/tex">{\sum\limits_{t=0}^{T}}</script> <script type="math/tex">\nabla_\theta</script> log<script type="math/tex">{\pi}_{\theta}</script> <script type="math/tex">(a_{t} {\mid} s_{t})</script> A</p>
-
-<hr />
-
-<h2 id="key-implementation-details">Key implementation details:</h2>
-
-<p>The <code class="highlighter-rouge">ACNet</code> class defines the models (Tensorflow graphs) and contains both
-the actor and the critic networks. The <code class="highlighter-rouge">Worker</code> class contains the work
-function that does the main bulk of the computation. A copy of <code class="highlighter-rouge">ACNet</code> is
-declared globally &amp; it’s parameters are shared by the threaded workers. Each
-worker also have it’s own local copy of <code class="highlighter-rouge">ACNet</code>. Workers are instantiated &amp;
-threaded in the main program.</p>
-
-<h3 id="acnet-class">ACNet class:</h3>
-
-<p>Loss function for the actor network for the discrete environment:</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>with tf.name_scope('actor_loss'):
-    log_prob = tf.reduce_sum(tf.log(self.action_prob + 1e-5) * tf.one_hot(self.a, num_actions, dtype=tf.float32), axis=1, keep_dims=True)
-    actor_component = log_prob * tf.stop_gradient(self.baselined_returns)
-    # entropy for exploration
-    entropy = -tf.reduce_sum(self.action_prob * tf.log(self.action_prob + 1e-5), axis=1, keep_dims=True)  # encourage exploration
-    self.actor_loss = tf.reduce_mean( -(ENTROPY_BETA * entropy + actor_component) )                                        
-</code></pre></div></div>
-<p>Loss function for the critic network for the discrete environment:</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>TD_err = tf.subtract(self.critic_target, self.V, name='TD_err')
-      .
-      .
-      .
-with tf.name_scope('critic_loss'):
-    self.critic_loss = tf.reduce_mean(tf.square(TD_err))
-</code></pre></div></div>
-
-<p>The following function in the ACNet class creates the actor and critic’s neural
-networks:</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>def _create_net(self, scope):
-    w_init = tf.glorot_uniform_initializer()
-    with tf.variable_scope('actor'):
-        hidden = tf.layers.dense(self.s, actor_hidden, tf.nn.relu6, kernel_initializer=w_init, name='hidden')
-        action_prob = tf.layers.dense(hidden, num_actions, tf.nn.softmax, kernel_initializer=w_init, name='action_prob')        
-    with tf.variable_scope('critic'):
-        hidden = tf.layers.dense(self.s, critic_hidden, tf.nn.relu6, kernel_initializer=w_init, name='hidden')
-        V = tf.layers.dense(hidden, 1, kernel_initializer=w_init, name='V')         
-    actor_params = tf.get_collection(tf.GraphKeys.TRAINABLE_VARIABLES, scope=scope + '/actor')
-    critic_params = tf.get_collection(tf.GraphKeys.TRAINABLE_VARIABLES, scope=scope + '/critic')       
-    return action_prob, V, actor_params, critic_params
-</code></pre></div></div>
-
-<h3 id="worker-class">Worker class:</h3>
-
-<p>Discounted rewards are used as critic’s targets:</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>critic_target = self.discount_rewards(buffer_r, GAMMA, V_s)
-</code></pre></div></div>
-
-<p>N-step returns are used in the computation of the Advantage function
-(baselined_returns):</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># Advantage function
-baselined_returns = n_step_targets - baseline
-</code></pre></div></div>
-
-<p>2 versions of N-step targets could be used:</p>
-
-<ul>
-  <li>
-    <p>missing terms are treated as 0.</p>
-  </li>
-  <li>
-    <p>use maximum terms possible.</p>
-  </li>
-</ul>
-
-<p>Check this <a href="https://chuacheowhuan.github.io/n_step_targets/">post</a> for more
-information on N-step targets.</p>
-
-<p>The following code segment accumulates gradients &amp; apply them to the local
-critic network:</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>self.AC.accumu_grad_critic(feed_dict) # accumulating gradients for local critic  
-self.AC.apply_accumu_grad_critic(feed_dict)
-</code></pre></div></div>
-
-<p>The following code segment computes the advantage function(baselined_returns):</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>baseline = SESS.run(self.AC.V, {self.AC.s: buffer_s}) # Value function
-epr = np.vstack(buffer_r).astype(np.float32)
-n_step_targets = self.compute_n_step_targets_missing(epr, baseline, GAMMA, N_step) # Q values
-# Advantage function
-baselined_returns = n_step_targets - baseline
-</code></pre></div></div>
-
-<p>The following code segment accumulates gradients for the local actor network:</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>self.AC.accumu_grad_actor(feed_dict) # accumulating gradients for local actor  
-</code></pre></div></div>
-
-<p>The following code segment push the parameters from the local networks to the
-global networks and then pulls the updated global parameters to the local
-networks:</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># update
-self.AC.push_global_actor(feed_dict)                
-self.AC.push_global_critic(feed_dict)
-    .
-    .
-    .
-self.AC.pull_global()
-</code></pre></div></div>
-
-<p>The following code segment initialize storage for accumulated local gradients.</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>self.AC.init_grad_storage_actor() # initialize storage for accumulated gradients.
-self.AC.init_grad_storage_critic()            
-</code></pre></div></div>
-
-<p>Check this <a href="https://chuacheowhuan.github.io/tf_accumulate_grad/">post</a> for more
-information on how to accumulate gradients in Tensorflow.</p>
-
-<h2 id="main-program">Main program:</h2>
-
-<p>The following code segment creates the workers:</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>workers = []
-for i in range(num_workers): # Create worker
-    i_name = 'W_%i' % i # worker name
-    workers.append(Worker(i_name, GLOBAL_AC))
-</code></pre></div></div>
-
-<p>The following code segment threads the workers:</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>worker_threads = []
-for worker in workers:
-    job = lambda: worker.work()
-    t = threading.Thread(target=job)
-    t.start()
-    worker_threads.append(t)
-COORD.join(worker_threads)
-</code></pre></div></div>
+<p>$=
+\frac{\delta L_t} {\delta \hat{y}<em>t}
+\frac{\delta \hat{y}_t} {\delta h_t}
+\sum</em>{k=0}^{t}
+( \prod_{i=k+1}^{t}
+\frac{\delta h_{i}} {\delta h_{i-1}} )
+\frac{\delta h_k} {\delta W} ]$</p>
 
 <hr />
 
-<h2 id="tensorflow-graph">Tensorflow graph:</h2>
+<p>$\frac{\delta L_{t}} {\delta V}$</p>
 
-<p><img src="/assets/images/A3C_tf_graphs_img/disc_max/main.png" alt="image" /></p>
-
-<p><img src="/assets/images/A3C_tf_graphs_img/disc_max/global.png" alt="image" /></p>
-
-<p><img src="/assets/images/A3C_tf_graphs_img/disc_max/actor.png" alt="image" /></p>
-
-<p><img src="/assets/images/A3C_tf_graphs_img/disc_max/critic.png" alt="image" /></p>
-
-<p><img src="/assets/images/A3C_tf_graphs_img/disc_max/w0.png" alt="image" /></p>
-
-<p><img src="/assets/images/A3C_tf_graphs_img/disc_max/params.png" alt="image" /></p>
-
-<hr />
-
-<h2 id="references">References:</h2>
-
-<p><a href="https://arxiv.org/pdf/1602.01783.pdf">Asynchronous Methods for Deep Reinforcement Learning
-(Mnih, Badia, Mirza, Graves, Harley, Lillicrap, et al., 2016)</a></p>
+<p>BPTT also needs to be done for calculating the loss with respect to weight matrix V.
+The dependence between hidden units and weight matrix V is  not only in one place.
+Hidden units from all the previous time steps also depend on V so we need to go
+backwards in time to calculate this gradient.</p>
 
 <hr />
 
@@ -534,7 +382,7 @@ COORD.join(worker_threads)
 
 
 
-  31 minute read
+  30 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">Notes on the math for RNN back propagation through time(BPTT).
@@ -571,7 +419,7 @@ COORD.join(worker_threads)
 
 
 
-  10 minute read
+  9 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">Filter rows with same column values in a Pandas dataframe.
@@ -600,7 +448,7 @@ COORD.join(worker_threads)
 
 
 
-  61 minute read
+  57 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">Building &amp; testing custom Sagemaker RL container.
@@ -629,7 +477,7 @@ COORD.join(worker_threads)
 
 
 
-  49 minute read
+  48 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">Demo setup for simple (reinforcement learning) custom environment in Sagemaker.
@@ -659,7 +507,7 @@ This example uses Proximal Policy Optimization with Ray (RLlib).
 
 
 
-  69 minute read
+  66 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">Basic workflow of testing a Django &amp; Postgres web app with Travis
@@ -689,7 +537,7 @@ This example uses Proximal Policy Optimization with Ray (RLlib).
 
 
 
-  114 minute read
+  129 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">Basic workflow of testing a dockerized Django &amp; Postgres web app with Travis
@@ -719,7 +567,7 @@ This example uses Proximal Policy Optimization with Ray (RLlib).
 
 
 
-  17 minute read
+  44 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">Introducing a delay to allow proper connection between dockerized Postgres &amp;
@@ -778,7 +626,7 @@ Django web app in Travis CI.
 
 
 
-  53 minute read
+  51 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">A custom MARL (multi-agent reinforcement learning) environment where multiple
@@ -837,7 +685,7 @@ agents trade against one another in a CDA (continuous double auction).
 
 
 
-  15 minute read
+  13 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">This post demonstrates how to create customized functions to bundle commands in
@@ -867,7 +715,7 @@ a .bash_profile file on Mac.
 
 
 
-  89 minute read
+  83 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">This post documents my implementation of the Random Network Distillation (RND)
@@ -898,7 +746,7 @@ with Proximal Policy Optimization (PPO) algorithm.
 
 
 
-  72 minute read
+  61 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">This post documents my implementation of the Distributed Proximal Policy
@@ -929,7 +777,7 @@ Optimization (Distributed PPO or DPPO) algorithm.
 
 
 
-  27 minute read
+  26 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">This post documents my implementation of the A3C
@@ -960,7 +808,7 @@ Optimization (Distributed PPO or DPPO) algorithm.
 
 
 
-  35 minute read
+  33 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">This post documents my implementation of the A3C
@@ -1342,8 +1190,8 @@ algorithm.
     
   <script>
     var disqus_config = function () {
-      this.page.url = "https://chuacheowhuan.github.io/A3C_disc_thread_nStep/";  // Replace PAGE_URL with your page's canonical URL variable
-      this.page.identifier = "/A3C_disc_thread_nStep"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+      this.page.url = "https://chuacheowhuan.github.io/RNN_BPTT/";  // Replace PAGE_URL with your page's canonical URL variable
+      this.page.identifier = "/RNN_BPTT"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
     };
     (function() { // DON'T EDIT BELOW THIS LINE
       var d = document, s = d.createElement('script');
