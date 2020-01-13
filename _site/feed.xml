@@ -1,15 +1,17 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.5">Jekyll</generator><link href="https://chuacheowhuan.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://chuacheowhuan.github.io/" rel="alternate" type="text/html" /><updated>2020-01-13T15:53:02+08:00</updated><id>https://chuacheowhuan.github.io/feed.xml</id><title type="html">Every little gist</title><subtitle></subtitle><author><name>Chua Cheow Huan</name></author><entry><title type="html">RNN backprop thru time(BPTT), part 2, $$\frac{\delta h_{t}} {\delta h_{t-1}}$$</title><link href="https://chuacheowhuan.github.io/RNN_BPTT_2/" rel="alternate" type="text/html" title="RNN backprop thru time(BPTT), part 2, $$\frac{\delta h_{t}} {\delta h_{t-1}}$$" /><published>2020-01-13T00:00:00+08:00</published><updated>2020-01-13T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/RNN_BPTT_2</id><content type="html" xml:base="https://chuacheowhuan.github.io/RNN_BPTT_2/">&lt;p&gt;Notes on the math for RNN back propagation through time(BPTT), part 2. The 1st
-derivative of &lt;script type=&quot;math/tex&quot;&gt;h_t&lt;/script&gt; given respect to &lt;script type=&quot;math/tex&quot;&gt;h_{t-1}&lt;/script&gt;.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.5">Jekyll</generator><link href="https://chuacheowhuan.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://chuacheowhuan.github.io/" rel="alternate" type="text/html" /><updated>2020-01-13T15:58:41+08:00</updated><id>https://chuacheowhuan.github.io/feed.xml</id><title type="html">Every little gist</title><subtitle></subtitle><author><name>Chua Cheow Huan</name></author><entry><title type="html">RNN backprop thru time(BPTT), part 2, $$\frac{\delta h_{t}} {\delta h_{t-1}}$$</title><link href="https://chuacheowhuan.github.io/RNN_BPTT_2/" rel="alternate" type="text/html" title="RNN backprop thru time(BPTT), part 2, $$\frac{\delta h_{t}} {\delta h_{t-1}}$$" /><published>2020-01-13T00:00:00+08:00</published><updated>2020-01-13T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/RNN_BPTT_2</id><content type="html" xml:base="https://chuacheowhuan.github.io/RNN_BPTT_2/">&lt;p&gt;Notes on the math for RNN back propagation through time(BPTT), part 2. The 1st
+derivative of &lt;script type=&quot;math/tex&quot;&gt;h_t&lt;/script&gt; with respect to &lt;script type=&quot;math/tex&quot;&gt;h_{t-1}&lt;/script&gt;.&lt;/p&gt;
 
 &lt;hr /&gt;
-&lt;p&gt;Given a series X:
+&lt;p&gt;Given a series:
 &lt;script type=&quot;math/tex&quot;&gt;X = \{x_1, x_2...x_n\}&lt;/script&gt;&lt;/p&gt;
 
-&lt;p&gt;Given a set of functions that takes in X:
-&lt;script type=&quot;math/tex&quot;&gt;Y = F(X)&lt;/script&gt;&lt;/p&gt;
+&lt;p&gt;Given a set of functions that takes in &lt;script type=&quot;math/tex&quot;&gt;X&lt;/script&gt;:&lt;/p&gt;
 
-&lt;p&gt;We have a vector of functions:
-&lt;script type=&quot;math/tex&quot;&gt;Y =
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;Y = F(X)&lt;/script&gt;
+
+&lt;p&gt;We have a vector of functions:&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;Y =
 \begin{pmatrix}
 f_1(X) \\
 f_2(X) \\
@@ -17,7 +19,7 @@ f_2(X) \\
 . \\
 . \\
 f_n(X) \\
-\end{pmatrix}&lt;/script&gt;&lt;/p&gt;
+\end{pmatrix}&lt;/script&gt;
 
 &lt;hr /&gt;
 
@@ -34,6 +36,8 @@ f_n(X) \\
 
 &lt;p&gt;For the calculations below, we are only interested in the diagonal derivatives
 which are terms with the same subscript in the nominator &amp;amp; denominator (i.e: derivatives with respect to the same time step).&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\frac{\delta h_t} {\delta E_t} = diag(f'(E_t))&lt;/script&gt;
 
 &lt;hr /&gt;
 
@@ -52,7 +56,7 @@ diag(f'(E_t)) W&lt;/script&gt;
 
 &lt;hr /&gt;
 
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">Notes on the math for RNN back propagation through time(BPTT), part 2. The 1st derivative of given respect to .</summary></entry><entry><title type="html">RNN backprop thru time(BPTT)</title><link href="https://chuacheowhuan.github.io/RNN_BPTT/" rel="alternate" type="text/html" title="RNN backprop thru time(BPTT)" /><published>2020-01-12T00:00:00+08:00</published><updated>2020-01-12T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/RNN_BPTT</id><content type="html" xml:base="https://chuacheowhuan.github.io/RNN_BPTT/">&lt;p&gt;Notes on the math for RNN back propagation through time(BPTT).&lt;/p&gt;
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">Notes on the math for RNN back propagation through time(BPTT), part 2. The 1st derivative of with respect to .</summary></entry><entry><title type="html">RNN backprop thru time(BPTT)</title><link href="https://chuacheowhuan.github.io/RNN_BPTT/" rel="alternate" type="text/html" title="RNN backprop thru time(BPTT)" /><published>2020-01-12T00:00:00+08:00</published><updated>2020-01-12T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/RNN_BPTT</id><content type="html" xml:base="https://chuacheowhuan.github.io/RNN_BPTT/">&lt;p&gt;Notes on the math for RNN back propagation through time(BPTT).&lt;/p&gt;
 
 &lt;hr /&gt;
 

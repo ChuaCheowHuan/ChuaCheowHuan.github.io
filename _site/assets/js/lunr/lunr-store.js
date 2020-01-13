@@ -125,7 +125,7 @@ var store = [{
         "url": "https://chuacheowhuan.github.io/RNN_BPTT/",
         "teaser":"https://chuacheowhuan.github.io/assets/images/blog/ELG.png"},{
         "title": "RNN backprop thru time(BPTT), part 2, $$\\frac{\\delta h_{t}} {\\delta h_{t-1}}$$",
-        "excerpt":"Notes on the math for RNN back propagation through time(BPTT), part 2. The 1st derivative of  given respect to .    Given a series X:    Given a set of functions that takes in X:    We have a vector of functions:      A Jacobian is a matrix of 1st derivatives of the functions:     For the calculations below, we are only interested in the diagonal derivatives which are terms with the same subscript in the nominator &amp; denominator (i.e: derivatives with respect to the same time step).                    ","categories": [],
+        "excerpt":"Notes on the math for RNN back propagation through time(BPTT), part 2. The 1st derivative of  with respect to .    Given a series:    Given a set of functions that takes in :     We have a vector of functions:       A Jacobian is a matrix of 1st derivatives of the functions:     For the calculations below, we are only interested in the diagonal derivatives which are terms with the same subscript in the nominator &amp; denominator (i.e: derivatives with respect to the same time step).                      ","categories": [],
         "tags": [],
         "url": "https://chuacheowhuan.github.io/RNN_BPTT_2/",
         "teaser":"https://chuacheowhuan.github.io/assets/images/blog/ELG.png"}]

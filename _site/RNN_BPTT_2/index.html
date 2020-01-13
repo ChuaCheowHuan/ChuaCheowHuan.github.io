@@ -20,7 +20,7 @@
     <meta charset="utf-8">
 
 <!-- begin _includes/seo.html --><title>RNN backprop thru time(BPTT), part 2,  - Every little gist</title>
-<meta name="description" content="Notes on the math for RNN back propagation through time(BPTT), part 2. The 1stderivative of  given respect to .">
+<meta name="description" content="Notes on the math for RNN back propagation through time(BPTT), part 2. The 1stderivative of  with respect to .">
 
 
 
@@ -31,7 +31,7 @@
 <meta property="og:url" content="https://chuacheowhuan.github.io/RNN_BPTT_2/">
 
 
-  <meta property="og:description" content="Notes on the math for RNN back propagation through time(BPTT), part 2. The 1stderivative of  given respect to .">
+  <meta property="og:description" content="Notes on the math for RNN back propagation through time(BPTT), part 2. The 1stderivative of  with respect to .">
 
 
 
@@ -263,17 +263,19 @@
       <h1 id="page-title" class="page__title">RNN backprop thru time(BPTT), part 2, $$\frac{\delta h_{t}} {\delta h_{t-1}}$$</h1>
     
     <p>Notes on the math for RNN back propagation through time(BPTT), part 2. The 1st
-derivative of <script type="math/tex">h_t</script> given respect to <script type="math/tex">h_{t-1}</script>.</p>
+derivative of <script type="math/tex">h_t</script> with respect to <script type="math/tex">h_{t-1}</script>.</p>
 
 <hr />
-<p>Given a series X:
+<p>Given a series:
 <script type="math/tex">X = \{x_1, x_2...x_n\}</script></p>
 
-<p>Given a set of functions that takes in X:
-<script type="math/tex">Y = F(X)</script></p>
+<p>Given a set of functions that takes in <script type="math/tex">X</script>:</p>
 
-<p>We have a vector of functions:
-<script type="math/tex">Y =
+<script type="math/tex; mode=display">Y = F(X)</script>
+
+<p>We have a vector of functions:</p>
+
+<script type="math/tex; mode=display">Y =
 \begin{pmatrix}
 f_1(X) \\
 f_2(X) \\
@@ -281,7 +283,7 @@ f_2(X) \\
 . \\
 . \\
 f_n(X) \\
-\end{pmatrix}</script></p>
+\end{pmatrix}</script>
 
 <hr />
 
@@ -298,6 +300,8 @@ f_n(X) \\
 
 <p>For the calculations below, we are only interested in the diagonal derivatives
 which are terms with the same subscript in the nominator &amp; denominator (i.e: derivatives with respect to the same time step).</p>
+
+<script type="math/tex; mode=display">\frac{\delta h_t} {\delta E_t} = diag(f'(E_t))</script>
 
 <hr />
 
@@ -365,7 +369,7 @@ diag(f'(E_t)) W</script>
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">Notes on the math for RNN back propagation through time(BPTT), part 2. The 1st
-derivative of  given respect to .
+derivative of  with respect to .
 
 </p>
   </article>
