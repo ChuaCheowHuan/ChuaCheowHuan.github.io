@@ -305,34 +305,41 @@ step.</p>
 <p>The terms in square brackets <script type="math/tex">[]</script> are written in such a way the the leftmost
 term is the most recent term while the rightmost is the oldest term.</p>
 
+<p>When k = t, the product sequence (or factor) on the left of
+$\frac{\delta h_{t}} {\delta W}$, equals 1.</p>
+
 <script type="math/tex; mode=display">\frac{\delta L_{t}} {\delta W} =
 \frac{\delta L_{t}} {\delta \hat{y}_{t}}
 \frac{\delta \hat{y}_{t}} {\delta L_{t}}
 [
+(1)
 \frac{\delta h_{t}} {\delta W} +
-( \frac{\delta h_{t}} {\delta h_{t-1}}
-\frac{\delta h_{t-1}} {\delta W} ) +
-( \frac{\delta h_{t}} {\delta h_{t-2}}
-\frac{\delta h_{t-2}} {\delta W}
+(
 \frac{\delta h_{t}} {\delta h_{t-1}}
-\frac{\delta h_{t-1}} {\delta W} ) + ...
+\frac{\delta h_{t-1}} {\delta W} ) +
+(
+\frac{\delta h_{t}} {\delta h_{t-1}}
+\frac{\delta h_{t-1}} {\delta h_{t-2}}
+\frac{\delta h_{t-2}} {\delta W}
+) + ...
 ]</script>
 
 <script type="math/tex; mode=display">=
 \frac{\delta L_t} {\delta \hat{y}_t}
 \frac{\delta \hat{y}_t} {\delta h_t}
-\sum_{k=0}^{t} [ \frac{\delta h_{t}} {\delta h_{t-1}} ...
-( \frac{\delta h_{k+2}} {\delta h_{k+1}}
-\frac{\delta h_{k+1}} {\delta W}
+\sum_{k=0}^{t}
+[
+\frac{\delta h_{t}} {\delta h_{t-1}}  
+\frac{\delta h_{t-1}} {\delta h_{t-2}} ...
+\frac{\delta h_{k+2}} {\delta h_{k+1}}
 \frac{\delta h_{k+1}} {\delta h_k}
-(\frac{\delta h_{k}} {\delta W} ) )
-( \frac{\delta h_{k+1}} {\delta h_k}
-(\frac{\delta h_k} {\delta W} ) ) ]</script>
+\frac{\delta h_k} {\delta W}
+]</script>
 
 <script type="math/tex; mode=display">=
 \frac{\delta L_t} {\delta \hat{y}_t}
 \frac{\delta \hat{y}_t} {\delta h_t}
-\sum_{k=0}^{t}
+[ \sum_{k=0}^{t}
 ( \prod_{i=k+1}^{t}
 \frac{\delta h_{i}} {\delta h_{i-1}} )
 \frac{\delta h_k} {\delta W} ]</script>
@@ -393,7 +400,7 @@ backwards in time to calculate this gradient.</p>
 
 
 
-  16 minute read
+  18 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">Notes on the math for RNN back propagation through time(BPTT).

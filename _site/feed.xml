@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.5">Jekyll</generator><link href="https://chuacheowhuan.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://chuacheowhuan.github.io/" rel="alternate" type="text/html" /><updated>2020-01-13T00:34:50+08:00</updated><id>https://chuacheowhuan.github.io/feed.xml</id><title type="html">Every little gist</title><subtitle></subtitle><author><name>Chua Cheow Huan</name></author><entry><title type="html">RNN backprop thru time(BPTT)</title><link href="https://chuacheowhuan.github.io/RNN_BPTT/" rel="alternate" type="text/html" title="RNN backprop thru time(BPTT)" /><published>2020-01-12T00:00:00+08:00</published><updated>2020-01-12T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/RNN_BPTT</id><content type="html" xml:base="https://chuacheowhuan.github.io/RNN_BPTT/">&lt;p&gt;Notes on the math for RNN back propagation through time(BPTT).&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.5">Jekyll</generator><link href="https://chuacheowhuan.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://chuacheowhuan.github.io/" rel="alternate" type="text/html" /><updated>2020-01-13T12:49:00+08:00</updated><id>https://chuacheowhuan.github.io/feed.xml</id><title type="html">Every little gist</title><subtitle></subtitle><author><name>Chua Cheow Huan</name></author><entry><title type="html">RNN backprop thru time(BPTT)</title><link href="https://chuacheowhuan.github.io/RNN_BPTT/" rel="alternate" type="text/html" title="RNN backprop thru time(BPTT)" /><published>2020-01-12T00:00:00+08:00</published><updated>2020-01-12T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/RNN_BPTT</id><content type="html" xml:base="https://chuacheowhuan.github.io/RNN_BPTT/">&lt;p&gt;Notes on the math for RNN back propagation through time(BPTT).&lt;/p&gt;
 
 &lt;hr /&gt;
 
@@ -41,34 +41,41 @@ step.&lt;/p&gt;
 &lt;p&gt;The terms in square brackets &lt;script type=&quot;math/tex&quot;&gt;[]&lt;/script&gt; are written in such a way the the leftmost
 term is the most recent term while the rightmost is the oldest term.&lt;/p&gt;
 
+&lt;p&gt;When k = t, the product sequence (or factor) on the left of
+$\frac{\delta h_{t}} {\delta W}$, equals 1.&lt;/p&gt;
+
 &lt;script type=&quot;math/tex; mode=display&quot;&gt;\frac{\delta L_{t}} {\delta W} =
 \frac{\delta L_{t}} {\delta \hat{y}_{t}}
 \frac{\delta \hat{y}_{t}} {\delta L_{t}}
 [
+(1)
 \frac{\delta h_{t}} {\delta W} +
-( \frac{\delta h_{t}} {\delta h_{t-1}}
-\frac{\delta h_{t-1}} {\delta W} ) +
-( \frac{\delta h_{t}} {\delta h_{t-2}}
-\frac{\delta h_{t-2}} {\delta W}
+(
 \frac{\delta h_{t}} {\delta h_{t-1}}
-\frac{\delta h_{t-1}} {\delta W} ) + ...
+\frac{\delta h_{t-1}} {\delta W} ) +
+(
+\frac{\delta h_{t}} {\delta h_{t-1}}
+\frac{\delta h_{t-1}} {\delta h_{t-2}}
+\frac{\delta h_{t-2}} {\delta W}
+) + ...
 ]&lt;/script&gt;
 
 &lt;script type=&quot;math/tex; mode=display&quot;&gt;=
 \frac{\delta L_t} {\delta \hat{y}_t}
 \frac{\delta \hat{y}_t} {\delta h_t}
-\sum_{k=0}^{t} [ \frac{\delta h_{t}} {\delta h_{t-1}} ...
-( \frac{\delta h_{k+2}} {\delta h_{k+1}}
-\frac{\delta h_{k+1}} {\delta W}
+\sum_{k=0}^{t}
+[
+\frac{\delta h_{t}} {\delta h_{t-1}}  
+\frac{\delta h_{t-1}} {\delta h_{t-2}} ...
+\frac{\delta h_{k+2}} {\delta h_{k+1}}
 \frac{\delta h_{k+1}} {\delta h_k}
-(\frac{\delta h_{k}} {\delta W} ) )
-( \frac{\delta h_{k+1}} {\delta h_k}
-(\frac{\delta h_k} {\delta W} ) ) ]&lt;/script&gt;
+\frac{\delta h_k} {\delta W}
+]&lt;/script&gt;
 
 &lt;script type=&quot;math/tex; mode=display&quot;&gt;=
 \frac{\delta L_t} {\delta \hat{y}_t}
 \frac{\delta \hat{y}_t} {\delta h_t}
-\sum_{k=0}^{t}
+[ \sum_{k=0}^{t}
 ( \prod_{i=k+1}^{t}
 \frac{\delta h_{i}} {\delta h_{i-1}} )
 \frac{\delta h_k} {\delta W} ]&lt;/script&gt;
