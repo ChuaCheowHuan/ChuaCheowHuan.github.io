@@ -1,4 +1,58 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.5">Jekyll</generator><link href="https://chuacheowhuan.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://chuacheowhuan.github.io/" rel="alternate" type="text/html" /><updated>2020-01-13T12:49:00+08:00</updated><id>https://chuacheowhuan.github.io/feed.xml</id><title type="html">Every little gist</title><subtitle></subtitle><author><name>Chua Cheow Huan</name></author><entry><title type="html">RNN backprop thru time(BPTT)</title><link href="https://chuacheowhuan.github.io/RNN_BPTT/" rel="alternate" type="text/html" title="RNN backprop thru time(BPTT)" /><published>2020-01-12T00:00:00+08:00</published><updated>2020-01-12T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/RNN_BPTT</id><content type="html" xml:base="https://chuacheowhuan.github.io/RNN_BPTT/">&lt;p&gt;Notes on the math for RNN back propagation through time(BPTT).&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.5">Jekyll</generator><link href="https://chuacheowhuan.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://chuacheowhuan.github.io/" rel="alternate" type="text/html" /><updated>2020-01-13T15:53:02+08:00</updated><id>https://chuacheowhuan.github.io/feed.xml</id><title type="html">Every little gist</title><subtitle></subtitle><author><name>Chua Cheow Huan</name></author><entry><title type="html">RNN backprop thru time(BPTT), part 2, $$\frac{\delta h_{t}} {\delta h_{t-1}}$$</title><link href="https://chuacheowhuan.github.io/RNN_BPTT_2/" rel="alternate" type="text/html" title="RNN backprop thru time(BPTT), part 2, $$\frac{\delta h_{t}} {\delta h_{t-1}}$$" /><published>2020-01-13T00:00:00+08:00</published><updated>2020-01-13T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/RNN_BPTT_2</id><content type="html" xml:base="https://chuacheowhuan.github.io/RNN_BPTT_2/">&lt;p&gt;Notes on the math for RNN back propagation through time(BPTT), part 2. The 1st
+derivative of &lt;script type=&quot;math/tex&quot;&gt;h_t&lt;/script&gt; given respect to &lt;script type=&quot;math/tex&quot;&gt;h_{t-1}&lt;/script&gt;.&lt;/p&gt;
+
+&lt;hr /&gt;
+&lt;p&gt;Given a series X:
+&lt;script type=&quot;math/tex&quot;&gt;X = \{x_1, x_2...x_n\}&lt;/script&gt;&lt;/p&gt;
+
+&lt;p&gt;Given a set of functions that takes in X:
+&lt;script type=&quot;math/tex&quot;&gt;Y = F(X)&lt;/script&gt;&lt;/p&gt;
+
+&lt;p&gt;We have a vector of functions:
+&lt;script type=&quot;math/tex&quot;&gt;Y =
+\begin{pmatrix}
+f_1(X) \\
+f_2(X) \\
+. \\
+. \\
+. \\
+f_n(X) \\
+\end{pmatrix}&lt;/script&gt;&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;A Jacobian is a matrix of 1st derivatives of the functions:&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
+\begin{pmatrix}
+\frac{\delta y_1} {\delta x_1} &amp; \frac{\delta y_1} {\delta x_2} &amp; ... &amp; \frac{\delta y_1} {\delta x_n} \\
+. &amp; . &amp; ... &amp; .\\
+. &amp; . &amp; ... &amp; .\\
+. &amp; . &amp; ... &amp; .\\
+\frac{\delta y_n} {\delta x_1} &amp; \frac{\delta y_n} {\delta x_2} &amp; ... &amp; \frac{\delta y_n} {\delta x_n}
+\end{pmatrix} %]]&gt;&lt;/script&gt;
+
+&lt;p&gt;For the calculations below, we are only interested in the diagonal derivatives
+which are terms with the same subscript in the nominator &amp;amp; denominator (i.e: derivatives with respect to the same time step).&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;Vx_t + Wh_{t-1} + b_{h} = E_t&lt;/script&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;h_{t} = f_{h} (Vx_t + Wh_{t-1} + b_{h}) = f_{h}(E_t)&lt;/script&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\frac{\delta h_t} {\delta E_t} = diag(f'(E_t))&lt;/script&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\frac{\delta E_t} {\delta h_{t-1}} = W&lt;/script&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\frac{\delta h_t} {\delta h_{t-1}} =
+\frac{\delta h_t} {\delta E_t}
+\frac{\delta E_t} {\delta h_{t-1}} =
+diag(f'(E_t)) W&lt;/script&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">Notes on the math for RNN back propagation through time(BPTT), part 2. The 1st derivative of given respect to .</summary></entry><entry><title type="html">RNN backprop thru time(BPTT)</title><link href="https://chuacheowhuan.github.io/RNN_BPTT/" rel="alternate" type="text/html" title="RNN backprop thru time(BPTT)" /><published>2020-01-12T00:00:00+08:00</published><updated>2020-01-12T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/RNN_BPTT</id><content type="html" xml:base="https://chuacheowhuan.github.io/RNN_BPTT/">&lt;p&gt;Notes on the math for RNN back propagation through time(BPTT).&lt;/p&gt;
 
 &lt;hr /&gt;
 
@@ -38,11 +92,11 @@ step.&lt;/p&gt;
 
 &lt;p&gt;The loss at time t with respect to the weights in the hidden layer.&lt;/p&gt;
 
-&lt;p&gt;The terms in square brackets &lt;script type=&quot;math/tex&quot;&gt;[]&lt;/script&gt; are written in such a way the the leftmost
+&lt;p&gt;The terms in square brackets &lt;script type=&quot;math/tex&quot;&gt;[]&lt;/script&gt; are written in such a way that the leftmost
 term is the most recent term while the rightmost is the oldest term.&lt;/p&gt;
 
 &lt;p&gt;When k = t, the product sequence (or factor) on the left of
-$\frac{\delta h_{t}} {\delta W}$, equals 1.&lt;/p&gt;
+&lt;script type=&quot;math/tex&quot;&gt;\frac{\delta h_{t}} {\delta W}&lt;/script&gt;, equals 1.&lt;/p&gt;
 
 &lt;script type=&quot;math/tex; mode=display&quot;&gt;\frac{\delta L_{t}} {\delta W} =
 \frac{\delta L_{t}} {\delta \hat{y}_{t}}
@@ -1541,44 +1595,4 @@ way.&lt;/p&gt;
 
 &lt;hr /&gt;
 
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">A custom MARL (multi-agent reinforcement learning) environment where multiple agents trade against one another in a CDA (continuous double auction).</summary></entry><entry><title type="html">Tensorflow graphs in Tensorboard</title><link href="https://chuacheowhuan.github.io/tf_graph/" rel="alternate" type="text/html" title="Tensorflow graphs in Tensorboard" /><published>2019-07-04T00:00:00+08:00</published><updated>2019-07-04T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/tf_graph</id><content type="html" xml:base="https://chuacheowhuan.github.io/tf_graph/">&lt;p&gt;This post demonstrate how setup &amp;amp; access Tensorflow graphs.&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;In order to access Tensorflow graphs, you need to use &lt;a href=&quot;https://www.tensorflow.org/tensorboard/r2/get_started&quot;&gt;Tensorboard&lt;/a&gt; which comes will Tensorflow
-installed.&lt;/p&gt;
-
-&lt;p&gt;The following snippet shows how to setup a &lt;code class=&quot;highlighter-rouge&quot;&gt;FileWriter&lt;/code&gt; with a Tensorflow
-graph.&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;tf.reset_default_graph()
-
-# Your Tensorflow graph goes here.
-# ...
-
-sess = tf.Session()
-sess.run(tf.global_variables_initializer())
-
-# Declare tf.summary.FileWriter where log is your output directory for
-# Tensorboard &amp;amp; add the graph to the writer.
-writer = tf.summary.FileWriter('log', sess.graph)
-
-# Run your training loop
-# sess.run(...)
-
-writer.close()
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Run this command in terminal to start tensorboard:&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ tensorboard --logdir log
-
-$ tensorboard --logdir ~/ray_results
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;Where log is the log folder.&lt;/p&gt;
-
-&lt;p&gt;Navigate to &lt;code class=&quot;highlighter-rouge&quot;&gt;http://127.0.0.1:6006&lt;/code&gt; in your browser to access Tensorflow.
-Your graph is in the graph tab.&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">This post demonstrate how setup &amp;amp; access Tensorflow graphs.</summary></entry></feed>
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">A custom MARL (multi-agent reinforcement learning) environment where multiple agents trade against one another in a CDA (continuous double auction).</summary></entry></feed>
