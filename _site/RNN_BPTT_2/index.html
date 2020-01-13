@@ -19,7 +19,7 @@
   <head>
     <meta charset="utf-8">
 
-<!-- begin _includes/seo.html --><title>RNN backprop thru time(BPTT), part 2,  - Every little gist</title>
+<!-- begin _includes/seo.html --><title>RNN backprop thru time(BPTT part 2)  - Every little gist</title>
 <meta name="description" content="Notes on the math for RNN back propagation through time(BPTT), part 2. The 1stderivative of  with respect to .">
 
 
@@ -27,7 +27,7 @@
 <meta property="og:type" content="article">
 <meta property="og:locale" content="en_US">
 <meta property="og:site_name" content="Every little gist">
-<meta property="og:title" content="RNN backprop thru time(BPTT), part 2, ">
+<meta property="og:title" content="RNN backprop thru time(BPTT part 2) ">
 <meta property="og:url" content="https://chuacheowhuan.github.io/RNN_BPTT_2/">
 
 
@@ -260,7 +260,7 @@
 
   <div class="archive">
     
-      <h1 id="page-title" class="page__title">RNN backprop thru time(BPTT), part 2, $$\frac{\delta h_{t}} {\delta h_{t-1}}$$</h1>
+      <h1 id="page-title" class="page__title">RNN backprop thru time(BPTT part 2) $$\frac{\delta h_{t}} {\delta h_{t-1}}$$</h1>
     
     <p>Notes on the math for RNN back propagation through time(BPTT), part 2. The 1st
 derivative of <script type="math/tex">h_t</script> with respect to <script type="math/tex">h_{t-1}</script>.</p>
@@ -304,6 +304,8 @@ which are terms with the same subscript in the nominator &amp; denominator (i.e:
 <script type="math/tex; mode=display">\frac{\delta h_t} {\delta E_t} = diag(f'(E_t))</script>
 
 <hr />
+
+<p>Deriving <script type="math/tex">\frac{\delta h_t} {\delta h_{t-1}}</script>:</p>
 
 <script type="math/tex; mode=display">Vx_t + Wh_{t-1} + b_{h} = E_t</script>
 
@@ -355,7 +357,7 @@ diag(f'(E_t)) W</script>
     
     <h2 class="archive__item-title" itemprop="headline">
       
-        <a href="/RNN_BPTT_2/" rel="permalink">RNN backprop thru time(BPTT), part 2, <script type="math/tex">\frac{\delta h_{t}} {\delta h_{t-1}}</script>
+        <a href="/RNN_BPTT_2/" rel="permalink">RNN backprop thru time(BPTT part 2) <script type="math/tex">\frac{\delta h_{t}} {\delta h_{t-1}}</script>
 </a>
       
     </h2>
