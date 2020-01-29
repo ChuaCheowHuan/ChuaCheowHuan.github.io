@@ -1,10 +1,10 @@
 ---
 layout: posts
 author: Huan
-title: Linear regression (Baysian)
+title: Linear regression (Bayesian)
 ---
 
-Notes on the probability for linear regression (Baysian)
+Notes on the probability for linear regression (Bayesian)
 
 ---
 
