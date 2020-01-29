@@ -55,13 +55,15 @@ $$P(w|x, y) = P(y, w|x) / P(y|x) ---> 7$$
 We try to maximize 7 with respect to w. Only the nominator depends on w, so we
 can ignore the denominator P(y|x) and we get:
 
-$$P(w|x, y) = P(y, w|x) ---> maximize with respect to w ---> 8$$
+Maximize with respect to w in the following equations 8, 9, 10:
+
+$$P(w|x, y) = P(y, w|x) ---> 8$$
 
 Therefore, from 6 & 8 we get:
 
-$$P(w|x, y) = P(y, w|x) = P(y|x, w) P(w) ---> maximize with respect to w ---> 9$$
+$$P(w|x, y) = P(y, w|x) = P(y|x, w) P(w) ---> 9$$
 
-$$P(w|x, y) = P(y|x, w) P(w) ---> maximize with respect to w ---> 10$$
+$$P(w|x, y) = P(y|x, w) P(w) ---> 10$$
 
 ---
 
