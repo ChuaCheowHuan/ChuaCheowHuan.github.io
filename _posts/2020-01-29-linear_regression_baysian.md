@@ -4,6 +4,10 @@ author: Huan
 title: Linear regression (Baysian)
 ---
 
+Linear regression (Baysian)
+
+---
+
 Bayes' theorem:
 
 P(a, b) = P(a|b) P(b) = P(b|a) P(a) -> P(a|b) = P(b|a) P(a) / P(b)
