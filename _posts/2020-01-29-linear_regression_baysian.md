@@ -10,7 +10,7 @@ Linear regression (Baysian)
 
 Bayes' theorem:
 
-P(a, b) = P(a|b) P(b) = P(b|a) P(a) -> P(a|b) = P(b|a) P(a) / P(b)
+$$P(a, b) = P(a|b) P(b) = P(b|a) P(a) -> P(a|b) = P(b|a) P(a) / P(b)$$
 
 So, P(y, w|x) = P(x|y, w) P(y, w) / P(x) ---> 1
 
