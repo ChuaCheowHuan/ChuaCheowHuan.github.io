@@ -4,7 +4,7 @@ author: Huan
 title: Linear regression (Baysian)
 ---
 
-Linear regression (Baysian)
+Notes on the probability for linear regression (Baysian)
 
 ---
 

@@ -1,202 +1,67 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.5">Jekyll</generator><link href="https://chuacheowhuan.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://chuacheowhuan.github.io/" rel="alternate" type="text/html" /><updated>2020-01-29T22:10:52+08:00</updated><id>https://chuacheowhuan.github.io/feed.xml</id><title type="html">Every little gist</title><subtitle></subtitle><author><name>Chua Cheow Huan</name></author><entry><title type="html">Linear regression (Baysian)</title><link href="https://chuacheowhuan.github.io/linear_regression_baysian/" rel="alternate" type="text/html" title="Linear regression (Baysian)" /><published>2020-01-29T00:00:00+08:00</published><updated>2020-01-29T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/linear_regression_baysian</id><content type="html" xml:base="https://chuacheowhuan.github.io/linear_regression_baysian/">&lt;p&gt;Bayes’ theorem:&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.5">Jekyll</generator><link href="https://chuacheowhuan.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://chuacheowhuan.github.io/" rel="alternate" type="text/html" /><updated>2020-01-29T22:34:38+08:00</updated><id>https://chuacheowhuan.github.io/feed.xml</id><title type="html">Every little gist</title><subtitle></subtitle><author><name>Chua Cheow Huan</name></author><entry><title type="html">Linear regression (Baysian)</title><link href="https://chuacheowhuan.github.io/linear_regression_baysian/" rel="alternate" type="text/html" title="Linear regression (Baysian)" /><published>2020-01-29T00:00:00+08:00</published><updated>2020-01-29T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/linear_regression_baysian</id><content type="html" xml:base="https://chuacheowhuan.github.io/linear_regression_baysian/">&lt;p&gt;Notes on the probability for linear regression (Baysian)&lt;/p&gt;
 
-&lt;table&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td&gt;P(a, b) = P(a&lt;/td&gt;
-      &lt;td&gt;b) P(b) = P(b&lt;/td&gt;
-      &lt;td&gt;a) P(a) -&amp;gt; P(a&lt;/td&gt;
-      &lt;td&gt;b) = P(b&lt;/td&gt;
-      &lt;td&gt;a) P(a) / P(b)&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
+&lt;hr /&gt;
 
-&lt;table&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td&gt;So, P(y, w&lt;/td&gt;
-      &lt;td&gt;x) = P(x&lt;/td&gt;
-      &lt;td&gt;y, w) P(y, w) / P(x) —&amp;gt; 1&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
+&lt;p&gt;Bayes’ theorem:&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;P(a, b) = P(a|b) P(b) = P(b|a) P(a) -&gt; P(a|b) = P(b|a) P(a) / P(b)&lt;/script&gt;
+
+&lt;p&gt;So,&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;P(y, w|x) = P(x|y, w) P(y, w) / P(x) ---&gt; 1&lt;/script&gt;
 
 &lt;p&gt;The 1st part of the nominator from 1 is:&lt;/p&gt;
 
-&lt;table&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td&gt;P(x&lt;/td&gt;
-      &lt;td&gt;y, w) —&amp;gt; 2&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;P(x|y, w) ---&gt; 2&lt;/script&gt;
 
 &lt;p&gt;From joint probability:&lt;/p&gt;
 
-&lt;table&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td&gt;P(a, b, c) = P(a&lt;/td&gt;
-      &lt;td&gt;b, c) P(b, c) = P(b&lt;/td&gt;
-      &lt;td&gt;a, c) P (a, c)&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;P(a, b, c) = P(a|b, c) P(b, c) = P(b|a, c) P (a, c)&lt;/script&gt;
 
-&lt;table&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td&gt;i.e. P(a&lt;/td&gt;
-      &lt;td&gt;b, c) = P(b&lt;/td&gt;
-      &lt;td&gt;a, c) P(a, c) / P(b, c) —&amp;gt; 3&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;i.e. P(a|b, c) = P(b|a, c) P(a, c) / P(b, c) ---&gt; 3&lt;/script&gt;
 
 &lt;p&gt;Apply 3 to 2:&lt;/p&gt;
 
-&lt;table&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td&gt;P(x&lt;/td&gt;
-      &lt;td&gt;y, w) = P(y&lt;/td&gt;
-      &lt;td&gt;x, w) P(x, w) / P(y, w) —&amp;gt; 4&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;P(x|y, w) = P(y|x, w) P(x, w) / P(y, w) ---&gt; 4&lt;/script&gt;
 
 &lt;p&gt;Plug 4 back to 1:&lt;/p&gt;
 
-&lt;table&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td&gt;P(y, w&lt;/td&gt;
-      &lt;td&gt;x) = [ P(y&lt;/td&gt;
-      &lt;td&gt;x, w) P(x, w) P(y, w) ] / [P(y, w) P( x)]&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;P(y, w|x) = [ P(y|x, w) P(x, w) P(y, w) ] / [P(y, w) P( x)]&lt;/script&gt;
 
-&lt;table&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td&gt;P(y, w&lt;/td&gt;
-      &lt;td&gt;x) = [P(y&lt;/td&gt;
-      &lt;td&gt;x, w) P(x, w)] / P(x)&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;P(y, w|x) = [P(y|x, w) P(x, w)] / P(x)&lt;/script&gt;
 
-&lt;table&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td&gt;P(y, w&lt;/td&gt;
-      &lt;td&gt;x) = [P(y&lt;/td&gt;
-      &lt;td&gt;x, w) P(w&lt;/td&gt;
-      &lt;td&gt;x) P(x)] / P(x)&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;P(y, w|x) = [P(y|x, w) P(w|x) P(x)] / P(x)&lt;/script&gt;
 
-&lt;table&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td&gt;P(y, w&lt;/td&gt;
-      &lt;td&gt;x) = P(y&lt;/td&gt;
-      &lt;td&gt;x, w) P(w&lt;/td&gt;
-      &lt;td&gt;x) —&amp;gt; 5&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;P(y, w|x) = P(y|x, w) P(w|x) ---&gt; 5&lt;/script&gt;
 
-&lt;p&gt;if w and x are independent:&lt;/p&gt;
+&lt;p&gt;If w and x are independent:&lt;/p&gt;
 
-&lt;table&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td&gt;P(y, w&lt;/td&gt;
-      &lt;td&gt;x) = P(y&lt;/td&gt;
-      &lt;td&gt;x, w) P(w) —&amp;gt; 6&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;P(y, w|x) = P(y|x, w) P(w) ---&gt; 6&lt;/script&gt;
 
 &lt;p&gt;Also from 5, if we switch w with y, we can obtain:&lt;/p&gt;
 
-&lt;table&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td&gt;P(w, y&lt;/td&gt;
-      &lt;td&gt;x) = P(w&lt;/td&gt;
-      &lt;td&gt;x, y) P(y&lt;/td&gt;
-      &lt;td&gt;x)&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;P(w, y|x) = P(w|x, y) P(y|x)&lt;/script&gt;
 
-&lt;table&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td&gt;P(y, w&lt;/td&gt;
-      &lt;td&gt;x) = P(w&lt;/td&gt;
-      &lt;td&gt;x, y) P(y&lt;/td&gt;
-      &lt;td&gt;x)&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;P(y, w|x) = P(w|x, y) P(y|x)&lt;/script&gt;
 
-&lt;table&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td&gt;P(w&lt;/td&gt;
-      &lt;td&gt;x, y) = P(y, w&lt;/td&gt;
-      &lt;td&gt;x) / P(y&lt;/td&gt;
-      &lt;td&gt;x) —&amp;gt; 7&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;P(w|x, y) = P(y, w|x) / P(y|x) ---&gt; 7&lt;/script&gt;
 
 &lt;p&gt;We try to maximize 7 with respect to w. Only the nominator depends on w, so we
 can ignore the denominator P(y|x) and we get:&lt;/p&gt;
 
-&lt;table&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td&gt;P(w&lt;/td&gt;
-      &lt;td&gt;x, y) = P(y, w&lt;/td&gt;
-      &lt;td&gt;x) —&amp;gt; maximize with respect to w —&amp;gt; 8&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
+&lt;p&gt;Maximize with respect to w in the following equations 8, 9, 10:&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;P(w|x, y) = P(y, w|x) ---&gt; 8&lt;/script&gt;
 
 &lt;p&gt;Therefore, from 6 &amp;amp; 8 we get:&lt;/p&gt;
 
-&lt;table&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td&gt;P(w&lt;/td&gt;
-      &lt;td&gt;x, y) = P(y, w&lt;/td&gt;
-      &lt;td&gt;x) = P(y&lt;/td&gt;
-      &lt;td&gt;x, w) P(w) —&amp;gt; maximize with respect to w —&amp;gt; 9&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;P(w|x, y) = P(y, w|x) = P(y|x, w) P(w) ---&gt; 9&lt;/script&gt;
 
-&lt;table&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td&gt;P(w&lt;/td&gt;
-      &lt;td&gt;x, y) = P(y&lt;/td&gt;
-      &lt;td&gt;x, w) P(w) —&amp;gt; maximize with respect to w —&amp;gt; 10&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;P(w|x, y) = P(y|x, w) P(w) ---&gt; 10&lt;/script&gt;
 
 &lt;hr /&gt;
 
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">Bayes’ theorem:</summary></entry><entry><title type="html">RNN backprop thru time(BPTT part 2) $$\frac{\delta h_{t}} {\delta h_{t-1}}$$</title><link href="https://chuacheowhuan.github.io/RNN_BPTT_2/" rel="alternate" type="text/html" title="RNN backprop thru time(BPTT part 2) $$\frac{\delta h_{t}} {\delta h_{t-1}}$$" /><published>2020-01-13T00:00:00+08:00</published><updated>2020-01-13T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/RNN_BPTT_2</id><content type="html" xml:base="https://chuacheowhuan.github.io/RNN_BPTT_2/">&lt;p&gt;Notes on the math for RNN back propagation through time(BPTT), part 2. The 1st
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">Notes on the probability for linear regression (Baysian)</summary></entry><entry><title type="html">RNN backprop thru time(BPTT part 2) $$\frac{\delta h_{t}} {\delta h_{t-1}}$$</title><link href="https://chuacheowhuan.github.io/RNN_BPTT_2/" rel="alternate" type="text/html" title="RNN backprop thru time(BPTT part 2) $$\frac{\delta h_{t}} {\delta h_{t-1}}$$" /><published>2020-01-13T00:00:00+08:00</published><updated>2020-01-13T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/RNN_BPTT_2</id><content type="html" xml:base="https://chuacheowhuan.github.io/RNN_BPTT_2/">&lt;p&gt;Notes on the math for RNN back propagation through time(BPTT), part 2. The 1st
 derivative of &lt;script type=&quot;math/tex&quot;&gt;h_t&lt;/script&gt; with respect to &lt;script type=&quot;math/tex&quot;&gt;h_{t-1}&lt;/script&gt;.&lt;/p&gt;
 
 &lt;hr /&gt;

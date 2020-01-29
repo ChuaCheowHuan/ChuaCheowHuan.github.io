@@ -20,7 +20,7 @@
     <meta charset="utf-8">
 
 <!-- begin _includes/seo.html --><title>Linear regression (Baysian) - Every little gist</title>
-<meta name="description" content="Bayes’ theorem:">
+<meta name="description" content="Notes on the probability for linear regression (Baysian)">
 
 
 
@@ -31,7 +31,7 @@
 <meta property="og:url" content="https://chuacheowhuan.github.io/linear_regression_baysian/">
 
 
-  <meta property="og:description" content="Bayes’ theorem:">
+  <meta property="og:description" content="Notes on the probability for linear regression (Baysian)">
 
 
 
@@ -262,201 +262,66 @@
     
       <h1 id="page-title" class="page__title">Linear regression (Baysian)</h1>
     
-    <p>Bayes’ theorem:</p>
+    <p>Notes on the probability for linear regression (Baysian)</p>
 
-<table>
-  <tbody>
-    <tr>
-      <td>P(a, b) = P(a</td>
-      <td>b) P(b) = P(b</td>
-      <td>a) P(a) -&gt; P(a</td>
-      <td>b) = P(b</td>
-      <td>a) P(a) / P(b)</td>
-    </tr>
-  </tbody>
-</table>
+<hr />
 
-<table>
-  <tbody>
-    <tr>
-      <td>So, P(y, w</td>
-      <td>x) = P(x</td>
-      <td>y, w) P(y, w) / P(x) —&gt; 1</td>
-    </tr>
-  </tbody>
-</table>
+<p>Bayes’ theorem:</p>
+
+<script type="math/tex; mode=display">P(a, b) = P(a|b) P(b) = P(b|a) P(a) -> P(a|b) = P(b|a) P(a) / P(b)</script>
+
+<p>So,</p>
+
+<script type="math/tex; mode=display">P(y, w|x) = P(x|y, w) P(y, w) / P(x) ---> 1</script>
 
 <p>The 1st part of the nominator from 1 is:</p>
 
-<table>
-  <tbody>
-    <tr>
-      <td>P(x</td>
-      <td>y, w) —&gt; 2</td>
-    </tr>
-  </tbody>
-</table>
+<script type="math/tex; mode=display">P(x|y, w) ---> 2</script>
 
 <p>From joint probability:</p>
 
-<table>
-  <tbody>
-    <tr>
-      <td>P(a, b, c) = P(a</td>
-      <td>b, c) P(b, c) = P(b</td>
-      <td>a, c) P (a, c)</td>
-    </tr>
-  </tbody>
-</table>
+<script type="math/tex; mode=display">P(a, b, c) = P(a|b, c) P(b, c) = P(b|a, c) P (a, c)</script>
 
-<table>
-  <tbody>
-    <tr>
-      <td>i.e. P(a</td>
-      <td>b, c) = P(b</td>
-      <td>a, c) P(a, c) / P(b, c) —&gt; 3</td>
-    </tr>
-  </tbody>
-</table>
+<script type="math/tex; mode=display">i.e. P(a|b, c) = P(b|a, c) P(a, c) / P(b, c) ---> 3</script>
 
 <p>Apply 3 to 2:</p>
 
-<table>
-  <tbody>
-    <tr>
-      <td>P(x</td>
-      <td>y, w) = P(y</td>
-      <td>x, w) P(x, w) / P(y, w) —&gt; 4</td>
-    </tr>
-  </tbody>
-</table>
+<script type="math/tex; mode=display">P(x|y, w) = P(y|x, w) P(x, w) / P(y, w) ---> 4</script>
 
 <p>Plug 4 back to 1:</p>
 
-<table>
-  <tbody>
-    <tr>
-      <td>P(y, w</td>
-      <td>x) = [ P(y</td>
-      <td>x, w) P(x, w) P(y, w) ] / [P(y, w) P( x)]</td>
-    </tr>
-  </tbody>
-</table>
+<script type="math/tex; mode=display">P(y, w|x) = [ P(y|x, w) P(x, w) P(y, w) ] / [P(y, w) P( x)]</script>
 
-<table>
-  <tbody>
-    <tr>
-      <td>P(y, w</td>
-      <td>x) = [P(y</td>
-      <td>x, w) P(x, w)] / P(x)</td>
-    </tr>
-  </tbody>
-</table>
+<script type="math/tex; mode=display">P(y, w|x) = [P(y|x, w) P(x, w)] / P(x)</script>
 
-<table>
-  <tbody>
-    <tr>
-      <td>P(y, w</td>
-      <td>x) = [P(y</td>
-      <td>x, w) P(w</td>
-      <td>x) P(x)] / P(x)</td>
-    </tr>
-  </tbody>
-</table>
+<script type="math/tex; mode=display">P(y, w|x) = [P(y|x, w) P(w|x) P(x)] / P(x)</script>
 
-<table>
-  <tbody>
-    <tr>
-      <td>P(y, w</td>
-      <td>x) = P(y</td>
-      <td>x, w) P(w</td>
-      <td>x) —&gt; 5</td>
-    </tr>
-  </tbody>
-</table>
+<script type="math/tex; mode=display">P(y, w|x) = P(y|x, w) P(w|x) ---> 5</script>
 
-<p>if w and x are independent:</p>
+<p>If w and x are independent:</p>
 
-<table>
-  <tbody>
-    <tr>
-      <td>P(y, w</td>
-      <td>x) = P(y</td>
-      <td>x, w) P(w) —&gt; 6</td>
-    </tr>
-  </tbody>
-</table>
+<script type="math/tex; mode=display">P(y, w|x) = P(y|x, w) P(w) ---> 6</script>
 
 <p>Also from 5, if we switch w with y, we can obtain:</p>
 
-<table>
-  <tbody>
-    <tr>
-      <td>P(w, y</td>
-      <td>x) = P(w</td>
-      <td>x, y) P(y</td>
-      <td>x)</td>
-    </tr>
-  </tbody>
-</table>
+<script type="math/tex; mode=display">P(w, y|x) = P(w|x, y) P(y|x)</script>
 
-<table>
-  <tbody>
-    <tr>
-      <td>P(y, w</td>
-      <td>x) = P(w</td>
-      <td>x, y) P(y</td>
-      <td>x)</td>
-    </tr>
-  </tbody>
-</table>
+<script type="math/tex; mode=display">P(y, w|x) = P(w|x, y) P(y|x)</script>
 
-<table>
-  <tbody>
-    <tr>
-      <td>P(w</td>
-      <td>x, y) = P(y, w</td>
-      <td>x) / P(y</td>
-      <td>x) —&gt; 7</td>
-    </tr>
-  </tbody>
-</table>
+<script type="math/tex; mode=display">P(w|x, y) = P(y, w|x) / P(y|x) ---> 7</script>
 
 <p>We try to maximize 7 with respect to w. Only the nominator depends on w, so we
 can ignore the denominator P(y|x) and we get:</p>
 
-<table>
-  <tbody>
-    <tr>
-      <td>P(w</td>
-      <td>x, y) = P(y, w</td>
-      <td>x) —&gt; maximize with respect to w —&gt; 8</td>
-    </tr>
-  </tbody>
-</table>
+<p>Maximize with respect to w in the following equations 8, 9, 10:</p>
+
+<script type="math/tex; mode=display">P(w|x, y) = P(y, w|x) ---> 8</script>
 
 <p>Therefore, from 6 &amp; 8 we get:</p>
 
-<table>
-  <tbody>
-    <tr>
-      <td>P(w</td>
-      <td>x, y) = P(y, w</td>
-      <td>x) = P(y</td>
-      <td>x, w) P(w) —&gt; maximize with respect to w —&gt; 9</td>
-    </tr>
-  </tbody>
-</table>
+<script type="math/tex; mode=display">P(w|x, y) = P(y, w|x) = P(y|x, w) P(w) ---> 9</script>
 
-<table>
-  <tbody>
-    <tr>
-      <td>P(w</td>
-      <td>x, y) = P(y</td>
-      <td>x, w) P(w) —&gt; maximize with respect to w —&gt; 10</td>
-    </tr>
-  </tbody>
-</table>
+<script type="math/tex; mode=display">P(w|x, y) = P(y|x, w) P(w) ---> 10</script>
 
 <hr />
 
@@ -505,10 +370,10 @@ can ignore the denominator P(y|x) and we get:</p>
 
 
 
-  29 minute read
+  9 minute read
 </p>
     
-    <p class="archive__item-excerpt" itemprop="description">Bayes’ theorem:
+    <p class="archive__item-excerpt" itemprop="description">Notes on the probability for linear regression (Baysian)
 
 </p>
   </article>
