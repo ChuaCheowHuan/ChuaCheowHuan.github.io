@@ -19,19 +19,19 @@
   <head>
     <meta charset="utf-8">
 
-<!-- begin _includes/seo.html --><title>Reinforcement learning custom environment in Sagemaker with Ray (RLlib) - Every little gist</title>
-<meta name="description" content="Demo setup for simple (reinforcement learning) custom environment in Sagemaker.This example uses Proximal Policy Optimization with Ray (RLlib).">
+<!-- begin _includes/seo.html --><title>Linear regression (Baysian) - Every little gist</title>
+<meta name="description" content="Bayes’ theorem:">
 
 
 
 <meta property="og:type" content="article">
 <meta property="og:locale" content="en_US">
 <meta property="og:site_name" content="Every little gist">
-<meta property="og:title" content="Reinforcement learning custom environment in Sagemaker with Ray (RLlib)">
-<meta property="og:url" content="https://chuacheowhuan.github.io/sagemaker_RL_custom_env/">
+<meta property="og:title" content="Linear regression (Baysian)">
+<meta property="og:url" content="https://chuacheowhuan.github.io/linear_regression_baysian/">
 
 
-  <meta property="og:description" content="Demo setup for simple (reinforcement learning) custom environment in Sagemaker.This example uses Proximal Policy Optimization with Ray (RLlib).">
+  <meta property="og:description" content="Bayes’ theorem:">
 
 
 
@@ -41,7 +41,7 @@
 
 
 
-  <meta property="article:published_time" content="2019-09-11T00:00:00+08:00">
+  <meta property="article:published_time" content="2020-01-29T00:00:00+08:00">
 
 
 
@@ -52,7 +52,7 @@
   
 
 
-<link rel="canonical" href="https://chuacheowhuan.github.io/sagemaker_RL_custom_env/">
+<link rel="canonical" href="https://chuacheowhuan.github.io/linear_regression_baysian/">
 
 
 
@@ -260,155 +260,203 @@
 
   <div class="archive">
     
-      <h1 id="page-title" class="page__title">Reinforcement learning custom environment in Sagemaker with Ray (RLlib)</h1>
+      <h1 id="page-title" class="page__title">Linear regression (Baysian)</h1>
     
-    <p>Demo setup for simple (reinforcement learning) custom environment in Sagemaker.
-This example uses Proximal Policy Optimization with Ray (RLlib).</p>
+    <p>Bayes’ theorem:</p>
 
-<hr />
+<table>
+  <tbody>
+    <tr>
+      <td>P(a, b) = P(a</td>
+      <td>b) P(b) = P(b</td>
+      <td>a) P(a) -&gt; P(a</td>
+      <td>b) = P(b</td>
+      <td>a) P(a) / P(b)</td>
+    </tr>
+  </tbody>
+</table>
 
-<p>Code on my <a href="https://github.com/ChuaCheowHuan/sagemaker_Ray_RLlib_custom_env">Github</a></p>
+<table>
+  <tbody>
+    <tr>
+      <td>So, P(y, w</td>
+      <td>x) = P(x</td>
+      <td>y, w) P(y, w) / P(x) —&gt; 1</td>
+    </tr>
+  </tbody>
+</table>
 
-<hr />
+<p>The 1st part of the nominator from 1 is:</p>
 
-<p><strong>The training script:</strong></p>
+<table>
+  <tbody>
+    <tr>
+      <td>P(x</td>
+      <td>y, w) —&gt; 2</td>
+    </tr>
+  </tbody>
+</table>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>import json
-import os
+<p>From joint probability:</p>
 
-import gym
-import ray
-from ray.tune import run_experiments
-import ray.rllib.agents.a3c as a3c
-import ray.rllib.agents.ppo as ppo
-from ray.tune.registry import register_env
-from mod_op_env import ArrivalSim
+<table>
+  <tbody>
+    <tr>
+      <td>P(a, b, c) = P(a</td>
+      <td>b, c) P(b, c) = P(b</td>
+      <td>a, c) P (a, c)</td>
+    </tr>
+  </tbody>
+</table>
 
-from sagemaker_rl.ray_launcher import SageMakerRayLauncher
+<table>
+  <tbody>
+    <tr>
+      <td>i.e. P(a</td>
+      <td>b, c) = P(b</td>
+      <td>a, c) P(a, c) / P(b, c) —&gt; 3</td>
+    </tr>
+  </tbody>
+</table>
 
-"""
-def create_environment(env_config):
-    import gym
-#     from gym.spaces import Space
-    from gym.envs.registration import register
-    # This import must happen inside the method so that worker processes import this code
-    register(
-        id='ArrivalSim-v0',
-        entry_point='env:ArrivalSim',
-        kwargs= {'price' : 40}
-    )
-    return gym.make('ArrivalSim-v0')
-"""
-def create_environment(env_config):
-    price = 30.0
-    # This import must happen inside the method so that worker processes import this code
-    from mod_op_env import ArrivalSim
-    return ArrivalSim(price)
+<p>Apply 3 to 2:</p>
 
+<table>
+  <tbody>
+    <tr>
+      <td>P(x</td>
+      <td>y, w) = P(y</td>
+      <td>x, w) P(x, w) / P(y, w) —&gt; 4</td>
+    </tr>
+  </tbody>
+</table>
 
-class MyLauncher(SageMakerRayLauncher):
-    def __init__(self):        
-        super(MyLauncher, self).__init__()
-        self.num_gpus = int(os.environ.get("SM_NUM_GPUS", 0))
-        self.hosts_info = json.loads(os.environ.get("SM_RESOURCE_CONFIG"))["hosts"]
-        self.num_total_gpus = self.num_gpus * len(self.hosts_info)
+<p>Plug 4 back to 1:</p>
 
-    def register_env_creator(self):
-        register_env("ArrivalSim-v0", create_environment)
+<table>
+  <tbody>
+    <tr>
+      <td>P(y, w</td>
+      <td>x) = [ P(y</td>
+      <td>x, w) P(x, w) P(y, w) ] / [P(y, w) P( x)]</td>
+    </tr>
+  </tbody>
+</table>
 
-    def get_experiment_config(self):
-        return {
-          "training": {
-            "env": "ArrivalSim-v0",
-            "run": "PPO",
-            "stop": {
-              "training_iteration": 3,
-            },
+<table>
+  <tbody>
+    <tr>
+      <td>P(y, w</td>
+      <td>x) = [P(y</td>
+      <td>x, w) P(x, w)] / P(x)</td>
+    </tr>
+  </tbody>
+</table>
 
-            "local_dir": "/opt/ml/model/",
-            "checkpoint_freq" : 3,
+<table>
+  <tbody>
+    <tr>
+      <td>P(y, w</td>
+      <td>x) = [P(y</td>
+      <td>x, w) P(w</td>
+      <td>x) P(x)] / P(x)</td>
+    </tr>
+  </tbody>
+</table>
 
-            "config": {                                
-              #"num_workers": max(self.num_total_gpus-1, 1),
-              "num_workers": max(self.num_cpus-1, 1),
-              #"use_gpu_for_workers": False,
-              "train_batch_size": 128, #5,
-              "sample_batch_size": 32, #1,
-              "gpu_fraction": 0.3,
-              "optimizer": {
-                "grads_per_step": 10
-              },
-            },
-            #"trial_resources": {"cpu": 1, "gpu": 0, "extra_gpu": max(self.num_total_gpus-1, 1), "extra_cpu": 0},
-            #"trial_resources": {"cpu": 1, "gpu": 0, "extra_gpu": max(self.num_total_gpus-1, 0),
-            #                    "extra_cpu": max(self.num_cpus-1, 1)},
-            "trial_resources": {"cpu": 1,
-                                "extra_cpu": max(self.num_cpus-1, 1)},              
-          }
-        }
+<table>
+  <tbody>
+    <tr>
+      <td>P(y, w</td>
+      <td>x) = P(y</td>
+      <td>x, w) P(w</td>
+      <td>x) —&gt; 5</td>
+    </tr>
+  </tbody>
+</table>
 
-if __name__ == "__main__":
-    os.environ["LC_ALL"] = "C.UTF-8"
-    os.environ["LANG"] = "C.UTF-8"
-    os.environ["RAY_USE_XRAY"] = "1"
-    print(ppo.DEFAULT_CONFIG)
-    MyLauncher().train_main()
-</code></pre></div></div>
+<p>if w and x are independent:</p>
 
-<hr />
+<table>
+  <tbody>
+    <tr>
+      <td>P(y, w</td>
+      <td>x) = P(y</td>
+      <td>x, w) P(w) —&gt; 6</td>
+    </tr>
+  </tbody>
+</table>
 
-<p><strong>The Jupyter notebook:</strong></p>
+<p>Also from 5, if we switch w with y, we can obtain:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>!/bin/bash ./setup.sh
+<table>
+  <tbody>
+    <tr>
+      <td>P(w, y</td>
+      <td>x) = P(w</td>
+      <td>x, y) P(y</td>
+      <td>x)</td>
+    </tr>
+  </tbody>
+</table>
 
-from time import gmtime, strftime
-import sagemaker
-role = sagemaker.get_execution_role()
+<table>
+  <tbody>
+    <tr>
+      <td>P(y, w</td>
+      <td>x) = P(w</td>
+      <td>x, y) P(y</td>
+      <td>x)</td>
+    </tr>
+  </tbody>
+</table>
 
-sage_session = sagemaker.session.Session()
-s3_bucket = sage_session.default_bucket()  
-s3_output_path = 's3://{}/'.format(s3_bucket)
-print("S3 bucket path: {}".format(s3_output_path))
+<table>
+  <tbody>
+    <tr>
+      <td>P(w</td>
+      <td>x, y) = P(y, w</td>
+      <td>x) / P(y</td>
+      <td>x) —&gt; 7</td>
+    </tr>
+  </tbody>
+</table>
 
-job_name_prefix = 'ArrivalSim'
+<p>We try to maximize 7 with respect to w. Only the nominator depends on w, so we
+can ignore the denominator P(y|x) and we get:</p>
 
-from sagemaker.rl import RLEstimator, RLToolkit, RLFramework
+<table>
+  <tbody>
+    <tr>
+      <td>P(w</td>
+      <td>x, y) = P(y, w</td>
+      <td>x) —&gt; maximize with respect to w —&gt; 8</td>
+    </tr>
+  </tbody>
+</table>
 
-estimator = RLEstimator(entry_point="mod_op_train.py", # Our launcher code
-                        source_dir='src', # Directory where the supporting files are at. All of this will be
-                                          # copied into the container.
-                        dependencies=["common/sagemaker_rl"], # some other utils files.
-                        toolkit=RLToolkit.RAY, # We want to run using the Ray toolkit against the ray container image.
-                        framework=RLFramework.TENSORFLOW, # The code is in tensorflow backend.
-                        toolkit_version='0.5.3', # Toolkit version. This will also choose an apporpriate tf version.                                               
-                        #toolkit_version='0.6.5', # Toolkit version. This will also choose an apporpriate tf version.                        
-                        role=role, # The IAM role that we created at the begining.
-                        #train_instance_type="ml.m4.xlarge", # Since we want to run fast, lets run on GPUs.
-                        train_instance_type="local", # Since we want to run fast, lets run on GPUs.
-                        train_instance_count=1, # Single instance will also work, but running distributed makes things
-                                                # fast, particularly in the case of multiple rollout training.
-                        output_path=s3_output_path, # The path where we can expect our trained model.
-                        base_job_name=job_name_prefix, # This is the name we setup above to be to track our job.
-                        hyperparameters = {      # Some hyperparameters for Ray toolkit to operate.
-                          "s3_bucket": s3_bucket,
-                          "rl.training.stop.training_iteration": 2, # Number of iterations.
-                          "rl.training.checkpoint_freq": 2,
-                        },
-                        #metric_definitions=metric_definitions, # This will bring all the logs out into the notebook.
-                    )
+<p>Therefore, from 6 &amp; 8 we get:</p>
 
-estimator.fit()
-</code></pre></div></div>
+<table>
+  <tbody>
+    <tr>
+      <td>P(w</td>
+      <td>x, y) = P(y, w</td>
+      <td>x) = P(y</td>
+      <td>x, w) P(w) —&gt; maximize with respect to w —&gt; 9</td>
+    </tr>
+  </tbody>
+</table>
 
-<hr />
-
-<p><strong>The container in Sagemaker Jupyter notebook instance:</strong></p>
-
-<p><img src="/assets/images/blog/sagemaker_container.png" alt="image" /></p>
-
-<hr />
-
-<p>See related <a href="https://stackoverflow.com/questions/57724414/how-to-make-the-inputs-and-model-have-the-same-shape-rllib-ray-sagemaker-reinfo/57762933#57762933">issue/motivation</a>.</p>
+<table>
+  <tbody>
+    <tr>
+      <td>P(w</td>
+      <td>x, y) = P(y</td>
+      <td>x, w) P(w) —&gt; maximize with respect to w —&gt; 10</td>
+    </tr>
+  </tbody>
+</table>
 
 <hr />
 
@@ -457,7 +505,7 @@ estimator.fit()
 
 
 
-  25 minute read
+  29 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">Bayes’ theorem:
@@ -486,7 +534,7 @@ estimator.fit()
 
 
 
-  22 minute read
+  8 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">Notes on the math for RNN back propagation through time(BPTT), part 2. The 1st
@@ -516,7 +564,7 @@ derivative of  with respect to .
 
 
 
-  34 minute read
+  18 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">Notes on the math for RNN back propagation through time(BPTT).
@@ -553,7 +601,7 @@ derivative of  with respect to .
 
 
 
-  10 minute read
+  9 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">Filter rows with same column values in a Pandas dataframe.
@@ -582,7 +630,7 @@ derivative of  with respect to .
 
 
 
-  61 minute read
+  57 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">Building &amp; testing custom Sagemaker RL container.
@@ -1324,8 +1372,8 @@ algorithm.
     
   <script>
     var disqus_config = function () {
-      this.page.url = "https://chuacheowhuan.github.io/sagemaker_RL_custom_env/";  // Replace PAGE_URL with your page's canonical URL variable
-      this.page.identifier = "/sagemaker_RL_custom_env"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+      this.page.url = "https://chuacheowhuan.github.io/linear_regression_baysian/";  // Replace PAGE_URL with your page's canonical URL variable
+      this.page.identifier = "/linear_regression_baysian"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
     };
     (function() { // DON'T EDIT BELOW THIS LINE
       var d = document, s = d.createElement('script');
