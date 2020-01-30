@@ -129,8 +129,8 @@ var store = [{
         "tags": [],
         "url": "https://chuacheowhuan.github.io/RNN_BPTT_2/",
         "teaser":"https://chuacheowhuan.github.io/assets/images/blog/ELG.png"},{
-        "title": "Linear regression (Baysian)",
-        "excerpt":"Notes on the probability for linear regression (Baysian)     Bayes’ theorem:     So,     The 1st part of the nominator from 1 is:     From joint probability:       Apply 3 to 2:     Plug 4 back to 1:           If w and x are independent:     Also from 5, if we switch w with y, we can obtain:         We try to maximize 7 with respect to w. Only the nominator depends on w, so we can ignore the denominator P(y|x) and we get:   Maximize with respect to w in the following equations 8, 9, 10:     Therefore, from 6 &amp; 8 we get:            ","categories": [],
+        "title": "Linear regression (Bayesian)",
+        "excerpt":"Notes on the probability for linear regression (Bayesian)     Bayes’ theorem:     So,     The 1st part of the nominator from 1 is:     From joint probability:       Apply 3 to 2:     Plug 4 back to 1:           If w and x are independent:     Also from 5, if we switch w with y, we can obtain:         We try to maximize 7 with respect to w. Only the nominator depends on w, so we can ignore the denominator P(y|x) and we get:   Maximize with respect to w in the following equations 8, 9, 10:     Therefore, from 6 &amp; 8 we get:            ","categories": [],
         "tags": [],
-        "url": "https://chuacheowhuan.github.io/linear_regression_baysian/",
+        "url": "https://chuacheowhuan.github.io/linear_regression_bayesian/",
         "teaser":"https://chuacheowhuan.github.io/assets/images/blog/ELG.png"}]
