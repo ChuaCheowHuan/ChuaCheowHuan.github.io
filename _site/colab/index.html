@@ -19,19 +19,19 @@
   <head>
     <meta charset="utf-8">
 
-<!-- begin _includes/seo.html --><title>A3C multi-threaded continuous version with N step targets - Every little gist</title>
-<meta name="description" content="This post documents my implementation of the A3C(Asynchronous Advantage Actor Critic) algorithm.(multi-threaded continuous version)">
+<!-- begin _includes/seo.html --><title>Changing G drive directory in Colab - Every little gist</title>
+<meta name="description" content="Changing Google drive directory in Colab.">
 
 
 
 <meta property="og:type" content="article">
 <meta property="og:locale" content="en_US">
 <meta property="og:site_name" content="Every little gist">
-<meta property="og:title" content="A3C multi-threaded continuous version with N step targets">
-<meta property="og:url" content="https://chuacheowhuan.github.io/A3C_cont_thread_nStep/">
+<meta property="og:title" content="Changing G drive directory in Colab">
+<meta property="og:url" content="https://chuacheowhuan.github.io/colab/">
 
 
-  <meta property="og:description" content="This post documents my implementation of the A3C(Asynchronous Advantage Actor Critic) algorithm.(multi-threaded continuous version)">
+  <meta property="og:description" content="Changing Google drive directory in Colab.">
 
 
 
@@ -41,7 +41,7 @@
 
 
 
-  <meta property="article:published_time" content="2019-06-14T00:00:00+08:00">
+  <meta property="article:published_time" content="2020-02-28T00:00:00+08:00">
 
 
 
@@ -52,7 +52,7 @@
   
 
 
-<link rel="canonical" href="https://chuacheowhuan.github.io/A3C_cont_thread_nStep/">
+<link rel="canonical" href="https://chuacheowhuan.github.io/colab/">
 
 
 
@@ -260,102 +260,19 @@
 
   <div class="archive">
     
-      <h1 id="page-title" class="page__title">A3C multi-threaded continuous version with N step targets</h1>
+      <h1 id="page-title" class="page__title">Changing G drive directory in Colab</h1>
     
-    <p>This post documents my implementation of the A3C
-(Asynchronous Advantage Actor Critic) algorithm.
-(multi-threaded <strong>continuous</strong> version)</p>
+    <p>Changing Google drive directory in Colab.</p>
 
 <hr />
 
-<p>An A3C (Asynchronous Advantage Actor Critic) implementation with
-Tensorflow. This is a multi-threaded <strong>continuous</strong> version. The code is tested
-with Gym’s continuous action space environment, Pendulum-v0 on Colab.</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>from google.colab import drive
+drive.mount('/content/gdrive')
 
-<hr />
+%cd "/content/gdrive/My Drive/Colab Notebooks/courses/deep_learning/"
 
-<p>Code on my <a href="https://github.com/ChuaCheowHuan/reinforcement_learning/blob/master/A3C/A3C_cont_max.ipynb">Github</a>: (use maximum terms possible)</p>
-
-<p>If Github is not loading the Jupyter notebook, a known Github issue, click <a href="https://nbviewer.jupyter.org/github/ChuaCheowHuan/reinforcement_learning/blob/master/A3C/A3C_cont_max.ipynb">here</a>
-to view the notebook on Jupyter’s nbviewer.</p>
-
-<hr />
-
-<p>The majority of the code is very similar to the <a href="https://chuacheowhuan.github.io/A3C_disc_thread_nStep/">discrete</a> version with the
-exceptions highlighted in the implementation details section:</p>
-
-<hr />
-
-<h2 id="key-implementation-details">Key implementation details:</h2>
-
-<p>Action selection:</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>with tf.name_scope('select_action'):
-    #mean = mean * action_bound[1]                   
-    mean = mean * ( action_bound[1] - action_bound[0] ) / 2
-    sigma += 1e-4
-    normal_dist = tf.distributions.Normal(mean, sigma)                     
-    self.choose_a = tf.clip_by_value(tf.squeeze(normal_dist.sample(1), axis=[0, 1]), action_bound[0], action_bound[1])                  
+!pwd
 </code></pre></div></div>
-
-<p>Loss function of the actor network:</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>with tf.name_scope('actor_loss'):
-    log_prob = normal_dist.log_prob(self.a)
-    #actor_component = log_prob * tf.stop_gradient(TD_err)
-    actor_component = log_prob * tf.stop_gradient(self.baselined_returns)
-    entropy = -tf.reduce_mean(normal_dist.entropy()) # Compute the differential entropy of the multivariate normal.                   
-    self.actor_loss = -tf.reduce_mean( ENTROPY_BETA * entropy + actor_component)
-</code></pre></div></div>
-
-<p>The following code segment creates a LSTM layer:</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>def _lstm(self, Inputs, cell_size):
-        # [time_step, feature] =&gt; [time_step, batch, feature]
-        s = tf.expand_dims(Inputs, axis=1, name='time_major')  
-        lstm_cell = tf.nn.rnn_cell.LSTMCell(cell_size)
-        self.init_state = lstm_cell.zero_state(batch_size=1, dtype=tf.float32)
-        outputs, self.final_state = tf.nn.dynamic_rnn(cell=lstm_cell, inputs=s, initial_state=self.init_state, time_major=True)
-        # joined state representation          
-        lstm_out = tf.reshape(outputs, [-1, cell_size], name='flatten_rnn_outputs')  
-        return lstm_out
-</code></pre></div></div>
-
-<p>The following function in the ACNet class creates the actor and critic’s neural
-networks(note that the critic’s network contains a LSTM layer):</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>def _create_net(self, scope):
-    w_init = tf.glorot_uniform_initializer()
-    #w_init = tf.random_normal_initializer(0., .1)
-    with tf.variable_scope('actor'):                        
-        hidden = tf.layers.dense(self.s, actor_hidden, tf.nn.relu6, kernel_initializer=w_init, name='hidden')            
-        #lstm_out = self._lstm(hidden, cell_size)
-        # tanh range = [-1,1]
-        mean = tf.layers.dense(hidden, num_actions, tf.nn.tanh, kernel_initializer=w_init, name='mean')
-        # softplus range = {0,inf}
-        sigma = tf.layers.dense(hidden, num_actions, tf.nn.softplus, kernel_initializer=w_init, name='sigma')
-    with tf.variable_scope('critic'):
-        hidden = tf.layers.dense(self.s, critic_hidden, tf.nn.relu6, kernel_initializer=w_init, name='hidden')
-        lstm_out = self._lstm(hidden, cell_size)
-        V = tf.layers.dense(lstm_out, 1, kernel_initializer=w_init, name='V')  
-    actor_params = tf.get_collection(tf.GraphKeys.TRAINABLE_VARIABLES, scope=scope + '/actor')
-    critic_params = tf.get_collection(tf.GraphKeys.TRAINABLE_VARIABLES, scope=scope + '/critic')
-    return mean, sigma, V, actor_params, critic_params
-</code></pre></div></div>
-
-<hr />
-
-<h2 id="tensorflow-graph">Tensorflow graph:</h2>
-
-<p><img src="/assets/images/A3C_tf_graphs_img/cont_max/main.png" alt="image" /></p>
-
-<p><img src="/assets/images/A3C_tf_graphs_img/cont_max/actor.png" alt="image" /></p>
-
-<p><img src="/assets/images/A3C_tf_graphs_img/cont_max/critic.png" alt="image" /></p>
-
-<p><img src="/assets/images/A3C_tf_graphs_img/cont_max/w0.png" alt="image" /></p>
-
-<p><img src="/assets/images/A3C_tf_graphs_img/cont_max/params.png" alt="image" /></p>
 
 <hr />
 
@@ -404,7 +321,7 @@ networks(note that the critic’s network contains a LSTM layer):</p>
 
 
 
-  2 minute read
+  1 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">Changing Google drive directory in Colab.
@@ -433,7 +350,7 @@ networks(note that the critic’s network contains a LSTM layer):</p>
 
 
 
-  26 minute read
+  9 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">Notes on the probability for linear regression (Bayesian)
@@ -462,7 +379,7 @@ networks(note that the critic’s network contains a LSTM layer):</p>
 
 
 
-  22 minute read
+  8 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">Notes on the math for RNN back propagation through time(BPTT), part 2. The 1st
@@ -492,7 +409,7 @@ derivative of  with respect to .
 
 
 
-  34 minute read
+  18 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">Notes on the math for RNN back propagation through time(BPTT).
@@ -529,7 +446,7 @@ derivative of  with respect to .
 
 
 
-  10 minute read
+  9 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">Filter rows with same column values in a Pandas dataframe.
@@ -558,7 +475,7 @@ derivative of  with respect to .
 
 
 
-  61 minute read
+  57 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">Building &amp; testing custom Sagemaker RL container.
@@ -587,7 +504,7 @@ derivative of  with respect to .
 
 
 
-  49 minute read
+  48 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">Demo setup for simple (reinforcement learning) custom environment in Sagemaker.
@@ -617,7 +534,7 @@ This example uses Proximal Policy Optimization with Ray (RLlib).
 
 
 
-  69 minute read
+  66 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">Basic workflow of testing a Django &amp; Postgres web app with Travis
@@ -647,7 +564,7 @@ This example uses Proximal Policy Optimization with Ray (RLlib).
 
 
 
-  114 minute read
+  129 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">Basic workflow of testing a dockerized Django &amp; Postgres web app with Travis
@@ -677,7 +594,7 @@ This example uses Proximal Policy Optimization with Ray (RLlib).
 
 
 
-  17 minute read
+  44 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">Introducing a delay to allow proper connection between dockerized Postgres &amp;
@@ -736,7 +653,7 @@ Django web app in Travis CI.
 
 
 
-  53 minute read
+  51 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">A custom MARL (multi-agent reinforcement learning) environment where multiple
@@ -795,7 +712,7 @@ agents trade against one another in a CDA (continuous double auction).
 
 
 
-  15 minute read
+  13 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">This post demonstrates how to create customized functions to bundle commands in
@@ -825,7 +742,7 @@ a .bash_profile file on Mac.
 
 
 
-  89 minute read
+  83 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">This post documents my implementation of the Random Network Distillation (RND)
@@ -856,7 +773,7 @@ with Proximal Policy Optimization (PPO) algorithm.
 
 
 
-  72 minute read
+  61 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">This post documents my implementation of the Distributed Proximal Policy
@@ -887,7 +804,7 @@ Optimization (Distributed PPO or DPPO) algorithm.
 
 
 
-  27 minute read
+  26 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">This post documents my implementation of the A3C
@@ -1300,8 +1217,8 @@ algorithm.
     
   <script>
     var disqus_config = function () {
-      this.page.url = "https://chuacheowhuan.github.io/A3C_cont_thread_nStep/";  // Replace PAGE_URL with your page's canonical URL variable
-      this.page.identifier = "/A3C_cont_thread_nStep"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+      this.page.url = "https://chuacheowhuan.github.io/colab/";  // Replace PAGE_URL with your page's canonical URL variable
+      this.page.identifier = "/colab"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
     };
     (function() { // DON'T EDIT BELOW THIS LINE
       var d = document, s = d.createElement('script');

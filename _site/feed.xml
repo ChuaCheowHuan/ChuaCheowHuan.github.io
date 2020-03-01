@@ -1,4 +1,18 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.5">Jekyll</generator><link href="https://chuacheowhuan.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://chuacheowhuan.github.io/" rel="alternate" type="text/html" /><updated>2020-01-30T18:36:20+08:00</updated><id>https://chuacheowhuan.github.io/feed.xml</id><title type="html">Every little gist</title><subtitle></subtitle><author><name>Chua Cheow Huan</name></author><entry><title type="html">Linear regression (Bayesian)</title><link href="https://chuacheowhuan.github.io/linear_regression_bayesian/" rel="alternate" type="text/html" title="Linear regression (Bayesian)" /><published>2020-01-29T00:00:00+08:00</published><updated>2020-01-29T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/linear_regression_bayesian</id><content type="html" xml:base="https://chuacheowhuan.github.io/linear_regression_bayesian/">&lt;p&gt;Notes on the probability for linear regression (Bayesian)&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.5">Jekyll</generator><link href="https://chuacheowhuan.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://chuacheowhuan.github.io/" rel="alternate" type="text/html" /><updated>2020-03-01T14:07:44+08:00</updated><id>https://chuacheowhuan.github.io/feed.xml</id><title type="html">Every little gist</title><subtitle></subtitle><author><name>Chua Cheow Huan</name></author><entry><title type="html">Changing G drive directory in Colab</title><link href="https://chuacheowhuan.github.io/colab/" rel="alternate" type="text/html" title="Changing G drive directory in Colab" /><published>2020-02-28T00:00:00+08:00</published><updated>2020-02-28T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/colab</id><content type="html" xml:base="https://chuacheowhuan.github.io/colab/">&lt;p&gt;Changing Google drive directory in Colab.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;from google.colab import drive
+drive.mount('/content/gdrive')
+
+%cd &quot;/content/gdrive/My Drive/Colab Notebooks/courses/deep_learning/&quot;
+
+!pwd
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">Changing Google drive directory in Colab.</summary></entry><entry><title type="html">Linear regression (Bayesian)</title><link href="https://chuacheowhuan.github.io/linear_regression_bayesian/" rel="alternate" type="text/html" title="Linear regression (Bayesian)" /><published>2020-01-29T00:00:00+08:00</published><updated>2020-01-29T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/linear_regression_bayesian</id><content type="html" xml:base="https://chuacheowhuan.github.io/linear_regression_bayesian/">&lt;p&gt;Notes on the probability for linear regression (Bayesian)&lt;/p&gt;
 
 &lt;hr /&gt;
 
@@ -1367,146 +1381,4 @@ and web security is really beyond the scope of this post.&lt;/p&gt;
     policies[&quot;policy_{}&quot;.format(args.num_policies-3)] = (make_RandomPolicy(1), obs_space, act_space, {}) # random policy stored as the last item in policies dictionary
     policies[&quot;policy_{}&quot;.format(args.num_policies-2)] = (make_RandomPolicy(2), obs_space, act_space, {}) # random policy stored as the last item in policies dictionary
     policies[&quot;policy_{}&quot;.format(args.num_policies-1)] = (make_RandomPolicy(3), obs_space, act_space, {}) # random policy stored as the last item in policies dictionary
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name>Huan</name></author><summary type="html">Creating &amp;amp; seeding a random policy class in RLlib.</summary></entry><entry><title type="html">Dockerized Postgres connection with Django web app in Travis CI</title><link href="https://chuacheowhuan.github.io/docker_travis/" rel="alternate" type="text/html" title="Dockerized Postgres connection with Django web app in Travis CI" /><published>2019-08-29T00:00:00+08:00</published><updated>2019-08-29T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/docker_travis</id><content type="html" xml:base="https://chuacheowhuan.github.io/docker_travis/">&lt;p&gt;Introducing a delay to allow proper connection between dockerized Postgres &amp;amp;
-Django web app in Travis CI.&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;EDIT: Code URL updated.&lt;/p&gt;
-
-&lt;p&gt;Code on my &lt;a href=&quot;https://github.com/ChuaCheowHuan/web_app_DPDTH&quot;&gt;Github&lt;/a&gt;&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;If you see the following error in the Travis’s job log while attempting to test
-dockerized Django apps with Travis, it means that the postgres docker container
-has started but not yet ready to accept connections.&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;psycopg2.OperationalError: could not connect to server: Connection refused
-539	Is the server running on host &quot;db&quot; (172.18.0.2) and accepting
-540	TCP/IP connections on port 5432?
-
-.
-.
-.
-
-django.db.utils.OperationalError: could not connect to server: Connection
-refused 587	Is the server running on host &quot;db&quot; (172.18.0.2) and accepting
-588	TCP/IP connections on port 5432?
-
-The command &quot;docker-compose run web python manage.py test&quot; exited with 1.
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;A solution for this issue is to introduce a delay until connection is ready
-before executing the test.&lt;/p&gt;
-
-&lt;p&gt;The delay has to be implemented in the &lt;code class=&quot;highlighter-rouge&quot;&gt;docker-compose.yml&lt;/code&gt; file before
-migration &amp;amp; running of Django’s server shown below:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;command: bash -c 'while !&amp;lt;/dev/tcp/db/5432; do sleep 1; done; python3 manage.py migrate'
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;command: bash -c 'while !&amp;lt;/dev/tcp/db/5432; do sleep 1; done; python3 manage.py runserver 0.0.0.0:8000'
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;&lt;strong&gt;Config files:&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;These are the relevant config files used in a Django project with the delay
-introduced in the &lt;code class=&quot;highlighter-rouge&quot;&gt;docker-compose.yml&lt;/code&gt; file. The actual command to run the
-test is in the &lt;code class=&quot;highlighter-rouge&quot;&gt;.travis.yml&lt;/code&gt; file.&lt;/p&gt;
-
-&lt;p&gt;The database configuration in &lt;code class=&quot;highlighter-rouge&quot;&gt;settings.py&lt;/code&gt;&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres',
-        'USER': 'postgres',
-        'HOST': 'db',
-        'PORT': 5432,
-        #'PORT': 5433,
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;The &lt;code class=&quot;highlighter-rouge&quot;&gt;Dockerfile&lt;/code&gt;:&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;FROM python:3
-WORKDIR /usr/src/app
-ADD requirements.txt /usr/src/app
-RUN pip install -r requirements.txt
-ADD . /usr/src/app
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;The &lt;code class=&quot;highlighter-rouge&quot;&gt;docker-compose.yml&lt;/code&gt; file:&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;version: '3'
-
-services:
-    db:
-        image: postgres
-    migration:
-        build: .
-#        command: python3 manage.py migrate
-        command: bash -c 'while !&amp;lt;/dev/tcp/db/5432; do sleep 1; done; python3 manage.py migrate'
-        volumes:
-            - .:/usr/src/app
-        depends_on:
-            - db
-    web:
-        build: .
-#        command: python3 manage.py runserver 0.0.0.0:8000
-        command: bash -c 'while !&amp;lt;/dev/tcp/db/5432; do sleep 1; done; python3 manage.py runserver 0.0.0.0:8000'
-        volumes:
-            - .:/usr/src/app
-        ports:
-            - &quot;8000:8000&quot;
-        depends_on:
-            - db
-            - migration
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;The &lt;code class=&quot;highlighter-rouge&quot;&gt;.travis.yml&lt;/code&gt; file:&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;language: python
-python:
-    - 3.6
-services:
-    - docker
-#    - postgres
-install:
-    - pip install -r requirements.txt
-#before_script:
-#    - psql -c 'create database testdb;' -U postgres
-#    - psql -c 'create database travisci;' -U postgres
-script:
-#    - docker-compose build
-#    - docker-compose run web python manage.py migrate
-    - docker-compose run web python manage.py test
-#    - python manage.py test
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;After introducing the delay, this is the successful test output in
-Travis’s job log.&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;.
-.
-.
-.......
-528----------------------------------------------------------------------
-529Ran 10 tests in 0.126s
-530
-531OK
-532Destroying test database for alias 'default'...
-533The command &quot;docker-compose run web python manage.py test&quot; exited with 0.
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;references&quot;&gt;References:&lt;/h2&gt;
-
-&lt;p&gt;See this &lt;a href=&quot;https://stackoverflow.com/questions/35069027/docker-wait-for-postgresql-to-be-running&quot;&gt;post&lt;/a&gt; in stackoverflow.&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">Introducing a delay to allow proper connection between dockerized Postgres &amp;amp; Django web app in Travis CI.</summary></entry></feed>
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name>Huan</name></author><summary type="html">Creating &amp;amp; seeding a random policy class in RLlib.</summary></entry></feed>
