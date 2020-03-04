@@ -23,14 +23,23 @@ Code on my [Github](https://github.com/ChuaCheowHuan/gym-continuousDoubleAuction
 
 # Contents:
 1) [Update](#update)
+
 2) [Purpose of this repository](#purpose-of-this-repository)
+
 3) [Example](#example)
+
 4) [Dependencies](#dependencies)
+
 5) [Installation](#installation)
+
 6) [TODO](#todo)
+
 7) [Acknowledgements](#acknowledgements)
+
 8) [Contributing](#contributing)
+
 9) [Disclaimer](#disclaimer)
+
 10) [Making sense of the render output](#making-sense-of-the-render-output)
 
 ---
@@ -40,8 +49,9 @@ Code on my [Github](https://github.com/ChuaCheowHuan/gym-continuousDoubleAuction
 
 1) Upgraded to use (for training script):
 
-1)tensorflow 2.10
-2)ray[RLlib] 0.8.2
+tensorflow 2.10
+
+ray[RLlib] 0.8.2
 
 2) New "mixed" (discrete and continuous) action space. (This action space could
 be changed in the future to make way for action spaces that make more sense.)
@@ -125,8 +135,8 @@ $ tensorboard --logdir ~/ray_results
 
 The figure below from Tensorboard shows the agents' performance:
 
-![](https://github.com/ChuaCheowHuan/gym-continuousDoubleAuction/blob/master/pic/agent0and1.png)
-![](https://github.com/ChuaCheowHuan/gym-continuousDoubleAuction/blob/master/pic/agent2and3.png)
+![image](/assets/images/MARL_CDA_env/agent0and1.png)
+![image](/assets/images/MARL_CDA_env/agent2and3.png)
 
 PPO agent is using policy 0 while policies 1 to 3 are used by the random agents.
 
@@ -135,9 +145,13 @@ PPO agent is using policy 0 while policies 1 to 3 are used by the random agents.
 # Dependencies:
 
 1) tensorFlow
+
 2) ray[rllib]
+
 3) pandas
+
 4) sortedcontainers
+
 5) sklearn
 
 For a full list of dependencies & versions, see `requirements.txt` in this
@@ -192,10 +206,15 @@ way.
 Actions output from the model:
 
 1) Each column represents the action from each trader(agent).
+
 2) Row 1 represents the side: none, bid, ask (0 to 2).
+
 3) Row 2 represents the type: market, limit, modify, cancel.
+
 4) Row 3 represents the mean for size selection.
+
 5) Row 4 represents the sigma for size selection.
+
 6) Row 5 represents the price: based on LOB market depth from 0 to 11.
 ```
 Model actions:
@@ -209,9 +228,13 @@ Model actions:
 ```
 
 1) Column 1 represents the ID of each trader(agent).
+
 2) Column 2 the side: none, bid, ask (0 to 2).
+
 3) Column 3 type: market, limit, modify, cancel.
+
 4) Column 4 represents the order size.
+
 5) Column 5 represents the order price.
 ```
 Formatted actions acceptable by LOB:
@@ -250,9 +273,13 @@ infos:
 
 1) The columns represents the 10 levels (1 to 10, left to right) of the market
 depth in the LOB.
+
 2) Row 1 represents the bid size.
+
 3) Row 2 represents the bid price.
+
 4) Row 3 represents the ask size.
+
 5) Row 4 represents the ask price.
 ```
 agg LOB @ t-1
