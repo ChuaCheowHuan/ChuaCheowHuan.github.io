@@ -48,7 +48,10 @@ body {
   <h1>
   </h1>
   <p>  
-  I'm interested in artificial intelligence, specifically reinforcement learning.
+  Ex-glorified storekeeper with an interest in
+  RL (reinforcement learning),
+  NLP (natural language processing) &
+  market microstructure.
   <br><br>
   </p>
 </div>
