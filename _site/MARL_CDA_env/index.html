@@ -269,7 +269,13 @@ agents trade against one another in a CDA (continuous double auction).</p>
 of the agents themselves through their interaction with the limit order book.</p>
 
 <p>At each time step, the environment emits the top k rows of the aggregated
-order book as observations to the agents.</p>
+order book as observations to the agents. Each agent then samples an action from
+the action space &amp; all actions are randomly shuffled before execution in each
+time step.</p>
+
+<p>Each time step is a snapshot of the limit order book &amp; a key assumption is that
+all traders(agents) suffer the same lag (wait for all traders to have their
+orders executed before seeing the next LOB snapshot).</p>
 
 <hr />
 
@@ -426,10 +432,13 @@ $ pip install -e .
   action space).
 3) More robust tests (add LOB test into test script).
 4) Better documentation.
-5) Logging of trading data for all steps (for visualization after simlution).
+5) Logging of trading data for all steps (for visualization after simulation).
 6) Move action consequences after each step by each agent into the respective
 info dictionary.
-7) A random starting price for better narrowing of spread (currently need many iterations for spread to narrow).</p>
+7) A random starting price for better narrowing of spread (currently need many iterations for spread to narrow).
+8) Instead of traders(agents) having the same lag, introduce zero lag
+(Each LOB snapshot in each t-step is visible to all traders) or random lag.
+9) Allow traders to have different starting capital.</p>
 
 <h1 id="acknowledgements">Acknowledgements:</h1>
 <p>The orderbook matching engine is adapted from
@@ -784,7 +793,7 @@ TERMINATED trials:
   
     <li>
       <a href="#2020">
-        <strong>2020</strong> <span class="taxonomy__count">4</span>
+        <strong>2020</strong> <span class="taxonomy__count">5</span>
       </a>
     </li>
   
@@ -801,6 +810,35 @@ TERMINATED trials:
   <section id="2020" class="taxonomy__section">
     <h2 class="archive__subtitle">2020</h2>
     <div class="entries-list">
+      
+        
+
+
+
+<div class="list__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="/conv_output/" rel="permalink">Output dimension from convolution layer
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
+
+
+
+
+  21 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">How to calculate dimension of output from a convolution layer?
+
+</p>
+  </article>
+</div>
+
       
         
 
@@ -1153,7 +1191,7 @@ Django web app in Travis CI.
 
 
 
-  196 minute read
+  205 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">A custom MARL (multi-agent reinforcement learning) environment where multiple

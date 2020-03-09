@@ -1,4 +1,54 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.5">Jekyll</generator><link href="https://chuacheowhuan.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://chuacheowhuan.github.io/" rel="alternate" type="text/html" /><updated>2020-03-05T00:39:15+08:00</updated><id>https://chuacheowhuan.github.io/feed.xml</id><title type="html">Every little gist</title><subtitle></subtitle><author><name>Chua Cheow Huan</name></author><entry><title type="html">Changing G drive directory in Colab</title><link href="https://chuacheowhuan.github.io/colab/" rel="alternate" type="text/html" title="Changing G drive directory in Colab" /><published>2020-02-28T00:00:00+08:00</published><updated>2020-02-28T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/colab</id><content type="html" xml:base="https://chuacheowhuan.github.io/colab/">&lt;p&gt;Changing Google drive directory in Colab.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.5">Jekyll</generator><link href="https://chuacheowhuan.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://chuacheowhuan.github.io/" rel="alternate" type="text/html" /><updated>2020-03-09T23:27:57+08:00</updated><id>https://chuacheowhuan.github.io/feed.xml</id><title type="html">Every little gist</title><subtitle></subtitle><author><name>Chua Cheow Huan</name></author><entry><title type="html">Output dimension from convolution layer</title><link href="https://chuacheowhuan.github.io/conv_output/" rel="alternate" type="text/html" title="Output dimension from convolution layer" /><published>2020-03-09T00:00:00+08:00</published><updated>2020-03-09T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/conv_output</id><content type="html" xml:base="https://chuacheowhuan.github.io/conv_output/">&lt;p&gt;How to calculate dimension of output from a convolution layer?&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h1 id=&quot;no-padding-aka-valid-padding&quot;&gt;No padding (aka valid padding):&lt;/h1&gt;
+
+&lt;p&gt;input  = n x n = 6 x 6&lt;/p&gt;
+
+&lt;p&gt;kernel = f x f = 3 x 3&lt;/p&gt;
+
+&lt;p&gt;output = m x m = 4 x 4&lt;/p&gt;
+
+&lt;p&gt;How do we get output = 4 x 4 ?&lt;/p&gt;
+
+&lt;p&gt;Ans: Use the formula: (n - f + 1) x (n - f + 1)&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h1 id=&quot;with-padding-of-size-1&quot;&gt;With padding of size 1:&lt;/h1&gt;
+
+&lt;p&gt;p = 1&lt;/p&gt;
+
+&lt;p&gt;input  = n x n = 6 x 6&lt;/p&gt;
+
+&lt;p&gt;kernel = f x f = 3 x 3&lt;/p&gt;
+
+&lt;p&gt;output = m x m = 6 x 6&lt;/p&gt;
+
+&lt;p&gt;How do we get output = 6 x 6 ?&lt;/p&gt;
+
+&lt;p&gt;Ans: Use the formula: (n + 2p - f + 1) x (n + 2p - f + 1)&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h1 id=&quot;meaning-of-valid-padding--same-padding&quot;&gt;Meaning of valid padding &amp;amp; same padding:&lt;/h1&gt;
+
+&lt;p&gt;1) No padding is also known as valid padding.&lt;/p&gt;
+
+&lt;p&gt;2) Same padding means pad input so that the resulting output dimension after
+convolution will be the same as input.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h1 id=&quot;size-of-padding-needed-to-achieve-same-padding&quot;&gt;Size of padding needed to achieve same padding:&lt;/h1&gt;
+
+&lt;p&gt;Size of padding needed to achieve same padding depends on the kernel size, f.&lt;/p&gt;
+
+&lt;p&gt;Using p = (f - 1) / 2 will produce output dimension = input dimension.&lt;/p&gt;
+
+&lt;hr /&gt;
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">How to calculate dimension of output from a convolution layer?</summary></entry><entry><title type="html">Changing G drive directory in Colab</title><link href="https://chuacheowhuan.github.io/colab/" rel="alternate" type="text/html" title="Changing G drive directory in Colab" /><published>2020-02-28T00:00:00+08:00</published><updated>2020-02-28T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/colab</id><content type="html" xml:base="https://chuacheowhuan.github.io/colab/">&lt;p&gt;Changing Google drive directory in Colab.&lt;/p&gt;
 
 &lt;hr /&gt;
 
@@ -1323,62 +1373,4 @@ and web security is really beyond the scope of this post.&lt;/p&gt;
 
 &lt;hr /&gt;
 
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">Basic workflow of testing a Django &amp;amp; Postgres web app with Travis (continuous integration) &amp;amp; deployment to Heroku (continuous deployment).</summary></entry><entry><title type="html">Random policy in RLlib</title><link href="https://chuacheowhuan.github.io/RLlib_rand_policy/" rel="alternate" type="text/html" title="Random policy in RLlib" /><published>2019-08-29T00:00:00+08:00</published><updated>2019-08-29T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/RLlib_rand_policy</id><content type="html" xml:base="https://chuacheowhuan.github.io/RLlib_rand_policy/">&lt;p&gt;Creating &amp;amp; seeding a random policy class in RLlib.&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;EDIT: Code URL updated below.&lt;/p&gt;
-
-&lt;p&gt;Code on my &lt;a href=&quot;https://github.com/ChuaCheowHuan/gym-continuousDoubleAuction/blob/master/gym_continuousDoubleAuction/CDA_env_disc_RLlib.py&quot;&gt;Github&lt;/a&gt;&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;&lt;strong&gt;Function:&lt;/strong&gt;&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;def make_RandomPolicy(_seed):
-
-    # a hand-coded policy that acts at random in the env (doesn't learn)
-    class RandomPolicy(Policy):
-        &quot;&quot;&quot;Hand-coded policy that returns random actions.&quot;&quot;&quot;
-        def __init__(self, observation_space, action_space, config):
-            self.observation_space = observation_space
-            self.action_space = action_space
-            self.action_space.seed(_seed)
-
-        def compute_actions(self,
-                            obs_batch,
-                            state_batches,
-                            prev_action_batch=None,
-                            prev_reward_batch=None,
-                            info_batch=None,
-                            episodes=None,
-                            **kwargs):
-            &quot;&quot;&quot;Compute actions on a batch of observations.&quot;&quot;&quot;
-            return [self.action_space.sample() for _ in obs_batch], [], {}
-
-        def learn_on_batch(self, samples):
-            &quot;&quot;&quot;No learning.&quot;&quot;&quot;
-            #return {}
-            pass
-
-        def get_weights(self):
-            pass
-
-        def set_weights(self, weights):
-            pass
-
-    return RandomPolicy
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;&lt;strong&gt;Usage example:&lt;/strong&gt;&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# Setup PPO with an ensemble of `num_policies` different policies
-    policies = {&quot;policy_{}&quot;.format(i): gen_policy(i) for i in range(args.num_policies)} # contains many &quot;policy_graphs&quot; in a policies dictionary
-
-    # override policy with random policy
-    policies[&quot;policy_{}&quot;.format(args.num_policies-3)] = (make_RandomPolicy(1), obs_space, act_space, {}) # random policy stored as the last item in policies dictionary
-    policies[&quot;policy_{}&quot;.format(args.num_policies-2)] = (make_RandomPolicy(2), obs_space, act_space, {}) # random policy stored as the last item in policies dictionary
-    policies[&quot;policy_{}&quot;.format(args.num_policies-1)] = (make_RandomPolicy(3), obs_space, act_space, {}) # random policy stored as the last item in policies dictionary
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name>Huan</name></author><summary type="html">Creating &amp;amp; seeding a random policy class in RLlib.</summary></entry></feed>
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">Basic workflow of testing a Django &amp;amp; Postgres web app with Travis (continuous integration) &amp;amp; deployment to Heroku (continuous deployment).</summary></entry></feed>

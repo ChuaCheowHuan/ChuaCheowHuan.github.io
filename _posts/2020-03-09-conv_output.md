@@ -8,7 +8,7 @@ How to calculate dimension of output from a convolution layer?
 
 ---
 
-#No padding (aka valid padding):
+# No padding (aka valid padding):
 
 input  = n x n = 6 x 6
 
@@ -22,7 +22,7 @@ Ans: Use the formula: (n - f + 1) x (n - f + 1)
 
 ---
 
-#With padding of size 1:
+# With padding of size 1:
 
 p = 1
 
@@ -38,7 +38,7 @@ Ans: Use the formula: (n + 2p - f + 1) x (n + 2p - f + 1)
 
 ---
 
-#Meaning of valid padding & same padding:
+# Meaning of valid padding & same padding:
 
 1) No padding is also known as valid padding.
 
@@ -47,7 +47,7 @@ convolution will be the same as input.
 
 ---
 
-#Size of padding needed to achieve same padding:
+# Size of padding needed to achieve same padding:
 
 Size of padding needed to achieve same padding depends on the kernel size, f.
 

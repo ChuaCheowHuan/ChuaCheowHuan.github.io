@@ -19,19 +19,19 @@
   <head>
     <meta charset="utf-8">
 
-<!-- begin _includes/seo.html --><title>Python’s multiprocessing package - Every little gist</title>
-<meta name="description" content="This post demonstrates how to use the Python’s multiprocessing package toachieve parallel data generation.">
+<!-- begin _includes/seo.html --><title>Output dimension from convolution layer - Every little gist</title>
+<meta name="description" content="How to calculate dimension of output from a convolution layer?">
 
 
 
 <meta property="og:type" content="article">
 <meta property="og:locale" content="en_US">
 <meta property="og:site_name" content="Every little gist">
-<meta property="og:title" content="Python’s multiprocessing package">
-<meta property="og:url" content="https://chuacheowhuan.github.io/py_mpp/">
+<meta property="og:title" content="Output dimension from convolution layer">
+<meta property="og:url" content="https://chuacheowhuan.github.io/conv_output/">
 
 
-  <meta property="og:description" content="This post demonstrates how to use the Python’s multiprocessing package toachieve parallel data generation.">
+  <meta property="og:description" content="How to calculate dimension of output from a convolution layer?">
 
 
 
@@ -41,7 +41,7 @@
 
 
 
-  <meta property="article:published_time" content="2019-05-30T00:00:00+08:00">
+  <meta property="article:published_time" content="2020-03-09T00:00:00+08:00">
 
 
 
@@ -52,7 +52,7 @@
   
 
 
-<link rel="canonical" href="https://chuacheowhuan.github.io/py_mpp/">
+<link rel="canonical" href="https://chuacheowhuan.github.io/conv_output/">
 
 
 
@@ -260,113 +260,58 @@
 
   <div class="archive">
     
-      <h1 id="page-title" class="page__title">Python's multiprocessing package</h1>
+      <h1 id="page-title" class="page__title">Output dimension from convolution layer</h1>
     
-    <p>This post demonstrates how to use the Python’s multiprocessing package to
-achieve parallel data generation.</p>
+    <p>How to calculate dimension of output from a convolution layer?</p>
 
 <hr />
 
-<p>The main program has a chief that spawns multiple worker processes. Each worker
- spawns a single work process. The work process generates random integer data
- [1,3].</p>
+<h1 id="no-padding-aka-valid-padding">No padding (aka valid padding):</h1>
 
-<p>Each worker has it’s own local queue. When data is generated, it is stored in
-it’s local queue. When the local queue’s size is greater than 5, the data is
-retrieved &amp; 0.1 is added to the data, this result is stored in the Chief’s
-global queue. When the Chief’s global queue’s size is greater than 3, the
-result is retrieved &amp; printed on screen.</p>
+<p>input  = n x n = 6 x 6</p>
 
-<hr />
+<p>kernel = f x f = 3 x 3</p>
 
-<p>Code on my <a href="https://github.com/ChuaCheowHuan/reinforcement_learning/tree/master/misc/py_mpp.ipynb">Github</a></p>
+<p>output = m x m = 4 x 4</p>
 
-<p>If Github is not loading the Jupyter notebook, a known Github issue, click <a href="https://nbviewer.jupyter.org/github/ChuaCheowHuan/reinforcement_learning/tree/master/misc/py_mpp.ipynb">here</a> to view the notebook on
-Jupyter’s nbviewer.</p>
+<p>How do we get output = 4 x 4 ?</p>
+
+<p>Ans: Use the formula: (n - f + 1) x (n - f + 1)</p>
 
 <hr />
 
-<p>The Worker class:</p>
+<h1 id="with-padding-of-size-1">With padding of size 1:</h1>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>class Worker(object):
-  def __init__(self, worker_id, g_queue):
-    self.g_queue = g_queue
-    self.worker_id = worker_id
-    self.queue = Queue() # local worker queue
-    self.work_process = Process(target=self.work, args=())
-    self.work_process.start()
-    info(worker_id, self.work_process, "Worker")
+<p>p = 1</p>
 
-  def work(self):
+<p>input  = n x n = 6 x 6</p>
 
-    info(self.worker_id, self.work_process, "work")
+<p>kernel = f x f = 3 x 3</p>
 
-    while True:
-      data = np.random.randint(1,4)
-      self.queue.put(data)
+<p>output = m x m = 6 x 6</p>
 
-      # process data in queue
-      if self.queue.qsize() &gt; 5:
-        data = self.queue.get()
-        result = data + 0.1
-        self.g_queue.put(result) # send result to global queue
+<p>How do we get output = 6 x 6 ?</p>
 
-      time.sleep(1) # work every x sec interval
-
-    return self.w_id  
-</code></pre></div></div>
-
-<p>The Chief class:</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>class Chief(object):
-  def __init__(self, num_workers):
-    self.g_queue = Queue() # global queue    
-    self.num_workers = num_workers
-
-  def dispatch_workers(self):   
-    worker_processes = [Process(target=Worker(w_id, self.g_queue), args=()) for w_id in range(num_workers)]
-    return worker_processes
-
-  def result(self):
-    if self.g_queue.qsize() &gt; 3:
-      result = self.g_queue.get()
-      print("result", result)
-</code></pre></div></div>
-
-<p>The main program:</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>if __name__ == '__main__':  
-  print('main parent process id:', os.getppid())
-  print('main process id:', os.getpid())
-
-  num_workers = 2
-  chief = Chief(num_workers)
-  workers_processes = chief.dispatch_workers()
-
-  i = 0
-  while True:    
-    time.sleep(2) # chk g_queue every x sec interval to get result
-    chief.result()
-    print("i=", i)
-
-    if i&gt;9:
-      break
-    i+=1    
-</code></pre></div></div>
-
-<p>A helper display function:</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>def info(worker_id, process, function_name):
-    print("worker_id=", worker_id,
-          'module name:', __name__,
-          'function name:', function_name,
-          'parent process:', os.getppid(),
-          'current process id:', os.getpid(),
-          'spawn process id:', process.pid)
-</code></pre></div></div>
+<p>Ans: Use the formula: (n + 2p - f + 1) x (n + 2p - f + 1)</p>
 
 <hr />
 
+<h1 id="meaning-of-valid-padding--same-padding">Meaning of valid padding &amp; same padding:</h1>
+
+<p>1) No padding is also known as valid padding.</p>
+
+<p>2) Same padding means pad input so that the resulting output dimension after
+convolution will be the same as input.</p>
+
+<hr />
+
+<h1 id="size-of-padding-needed-to-achieve-same-padding">Size of padding needed to achieve same padding:</h1>
+
+<p>Size of padding needed to achieve same padding depends on the kernel size, f.</p>
+
+<p>Using p = (f - 1) / 2 will produce output dimension = input dimension.</p>
+
+<hr />
 <p><br /></p>
 
 
@@ -412,7 +357,7 @@ Jupyter’s nbviewer.</p>
 
 
 
-  21 minute read
+  20 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">How to calculate dimension of output from a convolution layer?
@@ -441,7 +386,7 @@ Jupyter’s nbviewer.</p>
 
 
 
-  2 minute read
+  1 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">Changing Google drive directory in Colab.
@@ -470,7 +415,7 @@ Jupyter’s nbviewer.</p>
 
 
 
-  26 minute read
+  9 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">Notes on the probability for linear regression (Bayesian)
@@ -499,7 +444,7 @@ Jupyter’s nbviewer.</p>
 
 
 
-  22 minute read
+  8 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">Notes on the math for RNN back propagation through time(BPTT), part 2. The 1st
@@ -529,7 +474,7 @@ derivative of  with respect to .
 
 
 
-  34 minute read
+  18 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">Notes on the math for RNN back propagation through time(BPTT).
@@ -566,7 +511,7 @@ derivative of  with respect to .
 
 
 
-  10 minute read
+  9 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">Filter rows with same column values in a Pandas dataframe.
@@ -595,7 +540,7 @@ derivative of  with respect to .
 
 
 
-  61 minute read
+  57 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">Building &amp; testing custom Sagemaker RL container.
@@ -624,7 +569,7 @@ derivative of  with respect to .
 
 
 
-  49 minute read
+  48 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">Demo setup for simple (reinforcement learning) custom environment in Sagemaker.
@@ -654,7 +599,7 @@ This example uses Proximal Policy Optimization with Ray (RLlib).
 
 
 
-  69 minute read
+  66 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">Basic workflow of testing a Django &amp; Postgres web app with Travis
@@ -684,7 +629,7 @@ This example uses Proximal Policy Optimization with Ray (RLlib).
 
 
 
-  114 minute read
+  129 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">Basic workflow of testing a dockerized Django &amp; Postgres web app with Travis
@@ -714,7 +659,7 @@ This example uses Proximal Policy Optimization with Ray (RLlib).
 
 
 
-  17 minute read
+  44 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">Introducing a delay to allow proper connection between dockerized Postgres &amp;
@@ -773,7 +718,7 @@ Django web app in Travis CI.
 
 
 
-  213 minute read
+  205 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">A custom MARL (multi-agent reinforcement learning) environment where multiple
@@ -832,7 +777,7 @@ agents trade against one another in a CDA (continuous double auction).
 
 
 
-  15 minute read
+  13 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">This post demonstrates how to create customized functions to bundle commands in
@@ -862,7 +807,7 @@ a .bash_profile file on Mac.
 
 
 
-  89 minute read
+  83 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">This post documents my implementation of the Random Network Distillation (RND)
@@ -893,7 +838,7 @@ with Proximal Policy Optimization (PPO) algorithm.
 
 
 
-  72 minute read
+  61 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">This post documents my implementation of the Distributed Proximal Policy
@@ -924,7 +869,7 @@ Optimization (Distributed PPO or DPPO) algorithm.
 
 
 
-  27 minute read
+  26 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">This post documents my implementation of the A3C
@@ -955,7 +900,7 @@ Optimization (Distributed PPO or DPPO) algorithm.
 
 
 
-  35 minute read
+  33 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">This post documents my implementation of the A3C
@@ -986,7 +931,7 @@ Optimization (Distributed PPO or DPPO) algorithm.
 
 
 
-  75 minute read
+  66 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">This post documents my implementation of the A3C
@@ -1046,7 +991,7 @@ Optimization (Distributed PPO or DPPO) algorithm.
 
 
 
-  78 minute read
+  76 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">This post demonstrates a simple usage example of distributed Tensorflow with
@@ -1076,7 +1021,7 @@ Python multiprocessing package.
 
 
 
-  79 minute read
+  72 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">This post documents my implementation of the N-step Q-values estimation
@@ -1337,8 +1282,8 @@ algorithm.
     
   <script>
     var disqus_config = function () {
-      this.page.url = "https://chuacheowhuan.github.io/py_mpp/";  // Replace PAGE_URL with your page's canonical URL variable
-      this.page.identifier = "/py_mpp"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+      this.page.url = "https://chuacheowhuan.github.io/conv_output/";  // Replace PAGE_URL with your page's canonical URL variable
+      this.page.identifier = "/conv_output"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
     };
     (function() { // DON'T EDIT BELOW THIS LINE
       var d = document, s = d.createElement('script');
