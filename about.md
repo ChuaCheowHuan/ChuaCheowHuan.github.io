@@ -53,6 +53,8 @@ body {
   NLP (natural language processing) &
   market microstructure.
   <br><br>
+  Chipping away at the MATH WALL...
+  <br><br>
   </p>
 </div>
 
