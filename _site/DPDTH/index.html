@@ -628,7 +628,7 @@ the <code class="highlighter-rouge">heroku-container-release.sh</code> script.</
 Replace <code class="highlighter-rouge">webapp-dpdth</code> with your app name on Heroku.</p>
 
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/bin/bash</span>
-<span class="nv">imageId</span><span class="o">=</span><span class="k">$(</span>docker inspect registry.heroku.com/webapp-dpdth/web <span class="nt">--format</span><span class="o">={{</span>.Id<span class="o">}}</span><span class="k">)</span>
+<span class="nv">imageId</span><span class="o">=</span><span class="si">$(</span>docker inspect registry.heroku.com/webapp-dpdth/web <span class="nt">--format</span><span class="o">={{</span>.Id<span class="o">}}</span><span class="si">)</span>
 <span class="nv">payload</span><span class="o">=</span><span class="s1">'{"updates":[{"type":"web","docker_image":"'</span><span class="s2">"</span><span class="nv">$imageId</span><span class="s2">"</span><span class="s1">'"}]}'</span>
 curl <span class="nt">-n</span> <span class="nt">-X</span> PATCH https://api.heroku.com/apps/webapp-dpdth/formation <span class="se">\</span>
 <span class="nt">-d</span> <span class="s2">"</span><span class="nv">$payload</span><span class="s2">"</span> <span class="se">\</span>
@@ -696,7 +696,7 @@ and web security is really beyond the scope of this post.</p>
   
     <li>
       <a href="#2020">
-        <strong>2020</strong> <span class="taxonomy__count">5</span>
+        <strong>2020</strong> <span class="taxonomy__count">6</span>
       </a>
     </li>
   
@@ -713,6 +713,35 @@ and web security is really beyond the scope of this post.</p>
   <section id="2020" class="taxonomy__section">
     <h2 class="archive__subtitle">2020</h2>
     <div class="entries-list">
+      
+        
+
+
+
+<div class="list__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="/RLlib_trainer_config/" rel="permalink">RLlib trainer common config
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
+
+
+
+
+  232 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">Ray (0.8.2) RLlib trainer common config from:
+
+</p>
+  </article>
+</div>
+
       
         
 
@@ -1094,7 +1123,7 @@ Django web app in Travis CI.
 
 
 
-  205 minute read
+  209 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">A custom MARL (multi-agent reinforcement learning) environment where multiple

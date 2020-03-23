@@ -1,4 +1,336 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.5">Jekyll</generator><link href="https://chuacheowhuan.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://chuacheowhuan.github.io/" rel="alternate" type="text/html" /><updated>2020-03-09T23:27:57+08:00</updated><id>https://chuacheowhuan.github.io/feed.xml</id><title type="html">Every little gist</title><subtitle></subtitle><author><name>Chua Cheow Huan</name></author><entry><title type="html">Output dimension from convolution layer</title><link href="https://chuacheowhuan.github.io/conv_output/" rel="alternate" type="text/html" title="Output dimension from convolution layer" /><published>2020-03-09T00:00:00+08:00</published><updated>2020-03-09T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/conv_output</id><content type="html" xml:base="https://chuacheowhuan.github.io/conv_output/">&lt;p&gt;How to calculate dimension of output from a convolution layer?&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.6">Jekyll</generator><link href="https://chuacheowhuan.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://chuacheowhuan.github.io/" rel="alternate" type="text/html" /><updated>2020-03-23T16:27:20+08:00</updated><id>https://chuacheowhuan.github.io/feed.xml</id><title type="html">Every little gist</title><subtitle></subtitle><author><name>Chua Cheow Huan</name></author><entry><title type="html">RLlib trainer common config</title><link href="https://chuacheowhuan.github.io/RLlib_trainer_config/" rel="alternate" type="text/html" title="RLlib trainer common config" /><published>2020-03-23T00:00:00+08:00</published><updated>2020-03-23T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/RLlib_trainer_config</id><content type="html" xml:base="https://chuacheowhuan.github.io/RLlib_trainer_config/">&lt;p&gt;Ray (0.8.2) RLlib trainer common config from:&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/ray-project/ray/blob/master/rllib/agents/trainer.py&quot;&gt;source&lt;/a&gt;&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# yapf: disable
+# __sphinx_doc_begin__
+COMMON_CONFIG = {
+    # === Settings for Rollout Worker processes ===
+    # Number of rollout worker actors to create for parallel sampling. Setting
+    # this to 0 will force rollouts to be done in the trainer actor.
+    &quot;num_workers&quot;: 2,
+    # Number of environments to evaluate vectorwise per worker. This enables
+    # model inference batching, which can improve performance for inference
+    # bottlenecked workloads.
+    &quot;num_envs_per_worker&quot;: 1,
+    # Divide episodes into fragments of this many steps each during rollouts.
+    # Sample batches of this size are collected from rollout workers and
+    # combined into a larger batch of `train_batch_size` for learning.
+    #
+    # For example, given rollout_fragment_length=100 and train_batch_size=1000:
+    #   1. RLlib collects 10 fragments of 100 steps each from rollout workers.
+    #   2. These fragments are concatenated and we perform an epoch of SGD.
+    #
+    # When using multiple envs per worker, the fragment size is multiplied by
+    # `num_envs_per_worker`. This is since we are collecting steps from
+    # multiple envs in parallel. For example, if num_envs_per_worker=5, then
+    # rollout workers will return experiences in chunks of 5*100 = 500 steps.
+    #
+    # The dataflow here can vary per algorithm. For example, PPO further
+    # divides the train batch into minibatches for multi-epoch SGD.
+    &quot;rollout_fragment_length&quot;: 200,
+    # Deprecated; renamed to `rollout_fragment_length` in 0.8.4.
+    &quot;sample_batch_size&quot;: DEPRECATED_VALUE,
+    # Whether to rollout &quot;complete_episodes&quot; or &quot;truncate_episodes&quot; to
+    # `rollout_fragment_length` length unrolls. Episode truncation guarantees
+    # evenly sized batches, but increases variance as the reward-to-go will
+    # need to be estimated at truncation boundaries.
+    &quot;batch_mode&quot;: &quot;truncate_episodes&quot;,
+
+    # === Settings for the Trainer process ===
+    # Number of GPUs to allocate to the trainer process. Note that not all
+    # algorithms can take advantage of trainer GPUs. This can be fractional
+    # (e.g., 0.3 GPUs).
+    &quot;num_gpus&quot;: 0,
+    # Training batch size, if applicable. Should be &amp;gt;= rollout_fragment_length.
+    # Samples batches will be concatenated together to a batch of this size,
+    # which is then passed to SGD.
+    &quot;train_batch_size&quot;: 200,
+    # Arguments to pass to the policy model. See models/catalog.py for a full
+    # list of the available model options.
+    &quot;model&quot;: MODEL_DEFAULTS,
+    # Arguments to pass to the policy optimizer. These vary by optimizer.
+    &quot;optimizer&quot;: {},
+
+    # === Environment Settings ===
+    # Discount factor of the MDP.
+    &quot;gamma&quot;: 0.99,
+    # Number of steps after which the episode is forced to terminate. Defaults
+    # to `env.spec.max_episode_steps` (if present) for Gym envs.
+    &quot;horizon&quot;: None,
+    # Calculate rewards but don't reset the environment when the horizon is
+    # hit. This allows value estimation and RNN state to span across logical
+    # episodes denoted by horizon. This only has an effect if horizon != inf.
+    &quot;soft_horizon&quot;: False,
+    # Don't set 'done' at the end of the episode. Note that you still need to
+    # set this if soft_horizon=True, unless your env is actually running
+    # forever without returning done=True.
+    &quot;no_done_at_end&quot;: False,
+    # Arguments to pass to the env creator.
+    &quot;env_config&quot;: {},
+    # Environment name can also be passed via config.
+    &quot;env&quot;: None,
+    # Unsquash actions to the upper and lower bounds of env's action space
+    &quot;normalize_actions&quot;: False,
+    # Whether to clip rewards prior to experience postprocessing. Setting to
+    # None means clip for Atari only.
+    &quot;clip_rewards&quot;: None,
+    # Whether to np.clip() actions to the action space low/high range spec.
+    &quot;clip_actions&quot;: True,
+    # Whether to use rllib or deepmind preprocessors by default
+    &quot;preprocessor_pref&quot;: &quot;deepmind&quot;,
+    # The default learning rate.
+    &quot;lr&quot;: 0.0001,
+
+    # === Debug Settings ===
+    # Whether to write episode stats and videos to the agent log dir. This is
+    # typically located in ~/ray_results.
+    &quot;monitor&quot;: False,
+    # Set the ray.rllib.* log level for the agent process and its workers.
+    # Should be one of DEBUG, INFO, WARN, or ERROR. The DEBUG level will also
+    # periodically print out summaries of relevant internal dataflow (this is
+    # also printed out once at startup at the INFO level). When using the
+    # `rllib train` command, you can also use the `-v` and `-vv` flags as
+    # shorthand for INFO and DEBUG.
+    &quot;log_level&quot;: &quot;WARN&quot;,
+    # Callbacks that will be run during various phases of training. These all
+    # take a single &quot;info&quot; dict as an argument. For episode callbacks, custom
+    # metrics can be attached to the episode by updating the episode object's
+    # custom metrics dict (see examples/custom_metrics_and_callbacks.py). You
+    # may also mutate the passed in batch data in your callback.
+    &quot;callbacks&quot;: {
+        &quot;on_episode_start&quot;: None,     # arg: {&quot;env&quot;: .., &quot;episode&quot;: ...}
+        &quot;on_episode_step&quot;: None,      # arg: {&quot;env&quot;: .., &quot;episode&quot;: ...}
+        &quot;on_episode_end&quot;: None,       # arg: {&quot;env&quot;: .., &quot;episode&quot;: ...}
+        &quot;on_sample_end&quot;: None,        # arg: {&quot;samples&quot;: .., &quot;worker&quot;: ...}
+        &quot;on_train_result&quot;: None,      # arg: {&quot;trainer&quot;: ..., &quot;result&quot;: ...}
+        &quot;on_postprocess_traj&quot;: None,  # arg: {
+                                      #   &quot;agent_id&quot;: ..., &quot;episode&quot;: ...,
+                                      #   &quot;pre_batch&quot;: (before processing),
+                                      #   &quot;post_batch&quot;: (after processing),
+                                      #   &quot;all_pre_batches&quot;: (other agent ids),
+                                      # }
+    },
+    # Whether to attempt to continue training if a worker crashes. The number
+    # of currently healthy workers is reported as the &quot;num_healthy_workers&quot;
+    # metric.
+    &quot;ignore_worker_failures&quot;: False,
+    # Log system resource metrics to results. This requires `psutil` to be
+    # installed for sys stats, and `gputil` for GPU metrics.
+    &quot;log_sys_usage&quot;: True,
+
+    # === Framework Settings ===
+    # Use PyTorch (instead of tf). If using `rllib train`, this can also be
+    # enabled with the `--torch` flag.
+    # NOTE: Some agents may not support `torch` yet and throw an error.
+    &quot;use_pytorch&quot;: False,
+
+    # Enable TF eager execution (TF policies only). If using `rllib train`,
+    # this can also be enabled with the `--eager` flag.
+    &quot;eager&quot;: False,
+    # Enable tracing in eager mode. This greatly improves performance, but
+    # makes it slightly harder to debug since Python code won't be evaluated
+    # after the initial eager pass.
+    &quot;eager_tracing&quot;: False,
+    # Disable eager execution on workers (but allow it on the driver). This
+    # only has an effect if eager is enabled.
+    &quot;no_eager_on_workers&quot;: False,
+
+    # === Exploration Settings ===
+    # Default exploration behavior, iff `explore`=None is passed into
+    # compute_action(s).
+    # Set to False for no exploration behavior (e.g., for evaluation).
+    &quot;explore&quot;: True,
+    # Provide a dict specifying the Exploration object's config.
+    &quot;exploration_config&quot;: {
+        # The Exploration class to use. In the simplest case, this is the name
+        # (str) of any class present in the `rllib.utils.exploration` package.
+        # You can also provide the python class directly or the full location
+        # of your class (e.g. &quot;ray.rllib.utils.exploration.epsilon_greedy.
+        # EpsilonGreedy&quot;).
+        &quot;type&quot;: &quot;StochasticSampling&quot;,
+        # Add constructor kwargs here (if any).
+    },
+    # === Evaluation Settings ===
+    # Evaluate with every `evaluation_interval` training iterations.
+    # The evaluation stats will be reported under the &quot;evaluation&quot; metric key.
+    # Note that evaluation is currently not parallelized, and that for Ape-X
+    # metrics are already only reported for the lowest epsilon workers.
+    &quot;evaluation_interval&quot;: None,
+    # Number of episodes to run per evaluation period. If using multiple
+    # evaluation workers, we will run at least this many episodes total.
+    &quot;evaluation_num_episodes&quot;: 10,
+    # Internal flag that is set to True for evaluation workers.
+    &quot;in_evaluation&quot;: False,
+    # Typical usage is to pass extra args to evaluation env creator
+    # and to disable exploration by computing deterministic actions.
+    # IMPORTANT NOTE: Policy gradient algorithms are able to find the optimal
+    # policy, even if this is a stochastic one. Setting &quot;explore=False&quot; here
+    # will result in the evaluation workers not using this optimal policy!
+    &quot;evaluation_config&quot;: {
+        # Example: overriding env_config, exploration, etc:
+        # &quot;env_config&quot;: {...},
+        # &quot;explore&quot;: False
+    },
+    # Number of parallel workers to use for evaluation. Note that this is set
+    # to zero by default, which means evaluation will be run in the trainer
+    # process. If you increase this, it will increase the Ray resource usage
+    # of the trainer since evaluation workers are created separately from
+    # rollout workers.
+    &quot;evaluation_num_workers&quot;: 0,
+    # Customize the evaluation method. This must be a function of signature
+    # (trainer: Trainer, eval_workers: WorkerSet) -&amp;gt; metrics: dict. See the
+    # Trainer._evaluate() method to see the default implementation. The
+    # trainer guarantees all eval workers have the latest policy state before
+    # this function is called.
+    &quot;custom_eval_function&quot;: None,
+    # EXPERIMENTAL: use the execution plan based API impl of the algo. Can also
+    # be enabled by setting RLLIB_EXEC_API=1.
+    &quot;use_exec_api&quot;: False,
+
+    # === Advanced Rollout Settings ===
+    # Use a background thread for sampling (slightly off-policy, usually not
+    # advisable to turn on unless your env specifically requires it).
+    &quot;sample_async&quot;: False,
+    # Element-wise observation filter, either &quot;NoFilter&quot; or &quot;MeanStdFilter&quot;.
+    &quot;observation_filter&quot;: &quot;NoFilter&quot;,
+    # Whether to synchronize the statistics of remote filters.
+    &quot;synchronize_filters&quot;: True,
+    # Configures TF for single-process operation by default.
+    &quot;tf_session_args&quot;: {
+        # note: overriden by `local_tf_session_args`
+        &quot;intra_op_parallelism_threads&quot;: 2,
+        &quot;inter_op_parallelism_threads&quot;: 2,
+        &quot;gpu_options&quot;: {
+            &quot;allow_growth&quot;: True,
+        },
+        &quot;log_device_placement&quot;: False,
+        &quot;device_count&quot;: {
+            &quot;CPU&quot;: 1
+        },
+        &quot;allow_soft_placement&quot;: True,  # required by PPO multi-gpu
+    },
+    # Override the following tf session args on the local worker
+    &quot;local_tf_session_args&quot;: {
+        # Allow a higher level of parallelism by default, but not unlimited
+        # since that can cause crashes with many concurrent drivers.
+        &quot;intra_op_parallelism_threads&quot;: 8,
+        &quot;inter_op_parallelism_threads&quot;: 8,
+    },
+    # Whether to LZ4 compress individual observations
+    &quot;compress_observations&quot;: False,
+    # Wait for metric batches for at most this many seconds. Those that
+    # have not returned in time will be collected in the next train iteration.
+    &quot;collect_metrics_timeout&quot;: 180,
+    # Smooth metrics over this many episodes.
+    &quot;metrics_smoothing_episodes&quot;: 100,
+    # If using num_envs_per_worker &amp;gt; 1, whether to create those new envs in
+    # remote processes instead of in the same worker. This adds overheads, but
+    # can make sense if your envs can take much time to step / reset
+    # (e.g., for StarCraft). Use this cautiously; overheads are significant.
+    &quot;remote_worker_envs&quot;: False,
+    # Timeout that remote workers are waiting when polling environments.
+    # 0 (continue when at least one env is ready) is a reasonable default,
+    # but optimal value could be obtained by measuring your environment
+    # step / reset and model inference perf.
+    &quot;remote_env_batch_wait_ms&quot;: 0,
+    # Minimum time per train iteration (frequency of metrics reporting).
+    &quot;min_iter_time_s&quot;: 0,
+    # Minimum env steps to optimize for per train call. This value does
+    # not affect learning, only the length of train iterations.
+    &quot;timesteps_per_iteration&quot;: 0,  # TODO(ekl) deprecate this
+    # This argument, in conjunction with worker_index, sets the random seed of
+    # each worker, so that identically configured trials will have identical
+    # results. This makes experiments reproducible.
+    &quot;seed&quot;: None,
+
+    # === Advanced Resource Settings ===
+    # Number of CPUs to allocate per worker.
+    &quot;num_cpus_per_worker&quot;: 1,
+    # Number of GPUs to allocate per worker. This can be fractional. This is
+    # usually needed only if your env itself requires a GPU (i.e., it is a
+    # GPU-intensive video game), or model inference is unusually expensive.
+    &quot;num_gpus_per_worker&quot;: 0,
+    # Any custom Ray resources to allocate per worker.
+    &quot;custom_resources_per_worker&quot;: {},
+    # Number of CPUs to allocate for the trainer. Note: this only takes effect
+    # when running in Tune. Otherwise, the trainer runs in the main program.
+    &quot;num_cpus_for_driver&quot;: 1,
+    # You can set these memory quotas to tell Ray to reserve memory for your
+    # training run. This guarantees predictable execution, but the tradeoff is
+    # if your workload exceeeds the memory quota it will fail.
+    # Heap memory to reserve for the trainer process (0 for unlimited). This
+    # can be large if your are using large train batches, replay buffers, etc.
+    &quot;memory&quot;: 0,
+    # Object store memory to reserve for the trainer process. Being large
+    # enough to fit a few copies of the model weights should be sufficient.
+    # This is enabled by default since models are typically quite small.
+    &quot;object_store_memory&quot;: 0,
+    # Heap memory to reserve for each worker. Should generally be small unless
+    # your environment is very heavyweight.
+    &quot;memory_per_worker&quot;: 0,
+    # Object store memory to reserve for each worker. This only needs to be
+    # large enough to fit a few sample batches at a time. This is enabled
+    # by default since it almost never needs to be larger than ~200MB.
+    &quot;object_store_memory_per_worker&quot;: 0,
+
+    # === Offline Datasets ===
+    # Specify how to generate experiences:
+    #  - &quot;sampler&quot;: generate experiences via online simulation (default)
+    #  - a local directory or file glob expression (e.g., &quot;/tmp/*.json&quot;)
+    #  - a list of individual file paths/URIs (e.g., [&quot;/tmp/1.json&quot;,
+    #    &quot;s3://bucket/2.json&quot;])
+    #  - a dict with string keys and sampling probabilities as values (e.g.,
+    #    {&quot;sampler&quot;: 0.4, &quot;/tmp/*.json&quot;: 0.4, &quot;s3://bucket/expert.json&quot;: 0.2}).
+    #  - a function that returns a rllib.offline.InputReader
+    &quot;input&quot;: &quot;sampler&quot;,
+    # Specify how to evaluate the current policy. This only has an effect when
+    # reading offline experiences. Available options:
+    #  - &quot;wis&quot;: the weighted step-wise importance sampling estimator.
+    #  - &quot;is&quot;: the step-wise importance sampling estimator.
+    #  - &quot;simulation&quot;: run the environment in the background, but use
+    #    this data for evaluation only and not for learning.
+    &quot;input_evaluation&quot;: [&quot;is&quot;, &quot;wis&quot;],
+    # Whether to run postprocess_trajectory() on the trajectory fragments from
+    # offline inputs. Note that postprocessing will be done using the *current*
+    # policy, not the *behavior* policy, which is typically undesirable for
+    # on-policy algorithms.
+    &quot;postprocess_inputs&quot;: False,
+    # If positive, input batches will be shuffled via a sliding window buffer
+    # of this number of batches. Use this if the input data is not in random
+    # enough order. Input is delayed until the shuffle buffer is filled.
+    &quot;shuffle_buffer_size&quot;: 0,
+    # Specify where experiences should be saved:
+    #  - None: don't save any experiences
+    #  - &quot;logdir&quot; to save to the agent log dir
+    #  - a path/URI to save to a custom output directory (e.g., &quot;s3://bucket/&quot;)
+    #  - a function that returns a rllib.offline.OutputWriter
+    &quot;output&quot;: None,
+    # What sample batch columns to LZ4 compress in the output data.
+    &quot;output_compress_columns&quot;: [&quot;obs&quot;, &quot;new_obs&quot;],
+    # Max output file size before rolling over to a new file.
+    &quot;output_max_file_size&quot;: 64 * 1024 * 1024,
+
+    # === Settings for Multi-Agent Environments ===
+    &quot;multiagent&quot;: {
+        # Map from policy ids to tuples of (policy_cls, obs_space,
+        # act_space, config). See rollout_worker.py for more info.
+        &quot;policies&quot;: {},
+        # Function mapping agent ids to policy ids.
+        &quot;policy_mapping_fn&quot;: None,
+        # Optional whitelist of policies to train, or None for all policies.
+        &quot;policies_to_train&quot;: None,
+    },
+}
+# __sphinx_doc_end__
+# yapf: enable
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">Ray (0.8.2) RLlib trainer common config from:</summary></entry><entry><title type="html">Output dimension from convolution layer</title><link href="https://chuacheowhuan.github.io/conv_output/" rel="alternate" type="text/html" title="Output dimension from convolution layer" /><published>2020-03-09T00:00:00+08:00</published><updated>2020-03-09T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/conv_output</id><content type="html" xml:base="https://chuacheowhuan.github.io/conv_output/">&lt;p&gt;How to calculate dimension of output from a convolution layer?&lt;/p&gt;
 
 &lt;hr /&gt;
 
@@ -1066,7 +1398,7 @@ the &lt;code class=&quot;highlighter-rouge&quot;&gt;heroku-container-release.sh&
 Replace &lt;code class=&quot;highlighter-rouge&quot;&gt;webapp-dpdth&lt;/code&gt; with your app name on Heroku.&lt;/p&gt;
 
 &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;#!/bin/bash&lt;/span&gt;
-&lt;span class=&quot;nv&quot;&gt;imageId&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;$(&lt;/span&gt;docker inspect registry.heroku.com/webapp-dpdth/web &lt;span class=&quot;nt&quot;&gt;--format&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;={{&lt;/span&gt;.Id&lt;span class=&quot;o&quot;&gt;}}&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;imageId&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;$(&lt;/span&gt;docker inspect registry.heroku.com/webapp-dpdth/web &lt;span class=&quot;nt&quot;&gt;--format&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;={{&lt;/span&gt;.Id&lt;span class=&quot;o&quot;&gt;}}&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;)&lt;/span&gt;
 &lt;span class=&quot;nv&quot;&gt;payload&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'{&quot;updates&quot;:[{&quot;type&quot;:&quot;web&quot;,&quot;docker_image&quot;:&quot;'&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$imageId&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'&quot;}]}'&lt;/span&gt;
 curl &lt;span class=&quot;nt&quot;&gt;-n&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-X&lt;/span&gt; PATCH https://api.heroku.com/apps/webapp-dpdth/formation &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
 &lt;span class=&quot;nt&quot;&gt;-d&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$payload&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
@@ -1126,251 +1458,4 @@ and web security is really beyond the scope of this post.&lt;/p&gt;
 
 &lt;hr /&gt;
 
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">Basic workflow of testing a dockerized Django &amp;amp; Postgres web app with Travis (continuous integration) &amp;amp; deployment to Heroku (continuous deployment).</summary></entry><entry><title type="html">Django + Postgres + Travis CI + Heroku CD</title><link href="https://chuacheowhuan.github.io/DPTH/" rel="alternate" type="text/html" title="Django + Postgres + Travis CI + Heroku CD" /><published>2019-09-02T00:00:00+08:00</published><updated>2019-09-02T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/DPTH</id><content type="html" xml:base="https://chuacheowhuan.github.io/DPTH/">&lt;p&gt;Basic workflow of testing a Django &amp;amp; Postgres web app with Travis
-(continuous integration) &amp;amp; deployment to Heroku (continuous deployment).&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;&lt;strong&gt;Prerequisite:&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;This post assumes that the reader has accounts with Github, Travis &amp;amp; Heroku &amp;amp;
-already has the accounts configured. For example, linking Travis with Github,
-setting up Postgres server in Heroku &amp;amp; setting OS environment variables in
-Travis &amp;amp; Heroku websites.&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;Code on my &lt;a href=&quot;https://github.com/ChuaCheowHuan/web_app_DPTH&quot;&gt;Github&lt;/a&gt;&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;See &lt;a href=&quot;https://chuacheowhuan.github.io/DPDTH&quot;&gt;here&lt;/a&gt; for a Dockerized
-version.&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;&lt;strong&gt;Which copy of Postgres to use during the different stages in the workflow?&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;During development, the local Postgres database server is used. When testing in
-Travis, we’ll used Travis’s copy of Postgres &amp;amp; when deploying, we’ll have to
-use Heroku’s copy.&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;&lt;strong&gt;makemigrations&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;Always run &lt;code class=&quot;highlighter-rouge&quot;&gt;python manage.py makemigrations&lt;/code&gt; before deployment to Heroku
-or in our case, before pushing to Github.&lt;/p&gt;
-
-&lt;p&gt;The actual &lt;code class=&quot;highlighter-rouge&quot;&gt;python manage.py migrate&lt;/code&gt; for the Postgres server addon from
-Heroku will be run by the deploy section in the &lt;code class=&quot;highlighter-rouge&quot;&gt;.travis.yml&lt;/code&gt; file.&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;&lt;strong&gt;Listing files &amp;amp; directories in a tree:&lt;/strong&gt;&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;cd web_app_DPTH
-
-$ tree -a -I &quot;CS50_web_dev|staticfiles|static|templates|LICENSE|README.md|__init__.py|settings_DPTH_.py|urls.py|wsgi.py|db.sqlite3|airline4_tests_.py|apps.py|migrations|views.py|models.py|flights.csv|manage.py|wait-for-it.sh|admin.py|.git|.travis_DPTH_.yml|Dockerfile|docker-compose.yml&quot;  
-
-.
-├── .travis.yml
-├── Procfile
-├── airline
-│   └── settings.py
-├── flights
-│   └── tests.py
-└── requirements.txt
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;As shown in the tree above, the 5 files that matter in the workflow:&lt;/p&gt;
-
-&lt;p&gt;1) tests.py&lt;/p&gt;
-
-&lt;p&gt;2) settings.py&lt;/p&gt;
-
-&lt;p&gt;3) requirements.txt&lt;/p&gt;
-
-&lt;p&gt;4) .travis.yml&lt;/p&gt;
-
-&lt;p&gt;5) Procfile&lt;/p&gt;
-
-&lt;p&gt;We will look at the contents of each of the 5 files in the sections below.&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;&lt;strong&gt;tests.py&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;This is the test file that Travis will use for testing the app.
-You write whatever test you want for Travis to run with.&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;from django.db.models import Max
-from django.test import Client, TestCase
-
-from .models import Airport, Flight, Passenger
-
-# Create your tests here.
-class FlightsTestCase(TestCase):
-
-    def setUp(self):
-
-        # Create airports.
-        a1 = Airport.objects.create(code=&quot;AAA&quot;, city=&quot;City A&quot;)
-        a2 = Airport.objects.create(code=&quot;BBB&quot;, city=&quot;City B&quot;)
-
-        # Create flights.
-        Flight.objects.create(origin=a1, destination=a2, duration=100)
-        Flight.objects.create(origin=a1, destination=a1, duration=200)
-        Flight.objects.create(origin=a2, destination=a1, duration=300)
-
-    # 1
-    def test_departures_count(self):
-        a = Airport.objects.get(code=&quot;AAA&quot;)
-        self.assertEqual(a.departures.count(), 2)
-
-    # 2
-    def test_arrivals_count(self):
-        a = Airport.objects.get(code=&quot;AAA&quot;)
-        self.assertEqual(a.arrivals.count(), 2)
-
-    # 3
-    def test_valid_flight(self):
-        a1 = Airport.objects.get(code=&quot;AAA&quot;)
-        a2 = Airport.objects.get(code=&quot;BBB&quot;)
-        f = Flight.objects.get(origin=a1, destination=a2)
-        self.assertTrue(f.is_valid_flight())
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;&lt;strong&gt;settings.py&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;Under the database section, the database credentials, as OS environment
-variables, has to be made available to Travis &amp;amp; Heroku. They can be set in
-their respective websites.&lt;/p&gt;
-
-&lt;p&gt;Add and/or edit the following to the &lt;code class=&quot;highlighter-rouge&quot;&gt;settings.py&lt;/code&gt; file:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;import django_heroku
-import dj_database_url
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',
-
-    'whitenoise.middleware.WhiteNoiseMiddleware',  # new
-
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
-]
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ['DATABASE_NAME'],
-        'USER': os.environ['DATABASE_USER'],
-        'PASSWORD': os.environ['DATABASE_PASSWORD'],
-        'HOST': os.environ['DATABASE_HOST'],
-        'PORT': os.environ['DATABASE_PORT'],
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;django_heroku.settings(locals())
-
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;&lt;strong&gt;requirements.txt&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;This file lets Travis know what packages are needed for the app.&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;django&amp;gt;=2.0.11
-psycopg2
-psycopg2-binary
-dj-database-url==0.5.0
-gunicorn
-whitenoise
-django-heroku
-pytz
-sqlparse
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;&lt;strong&gt;.travis.yml&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;This file contains instructions for Travis &amp;amp; is needed when Travis starts
-running. &lt;code class=&quot;highlighter-rouge&quot;&gt;$HEROKU_API_KEY&lt;/code&gt; can be generated from the Heroku website &amp;amp;
-stored as an OS environment variable in the Travis website.
-The test is done with the &lt;strong&gt;Travis’s copy&lt;/strong&gt; of Postgres.&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;language: python
-python:
-    - 3.6
-services:
-    - postgresql
-install:
-    - pip install -r requirements.txt
-script:
-    - python manage.py test
-deploy:
-    provider: heroku
-    api_key: $HEROKU_API_KEY
-    app: webapp-dpth
-    run: python manage.py migrate
-    on: master
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;&lt;strong&gt;Procfile&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;This file is for Heroku. It tells Heroku to deploy the web app using Gunicorn
-as the production server.&lt;/p&gt;
-
-&lt;p&gt;Note that &lt;code class=&quot;highlighter-rouge&quot;&gt;airline&lt;/code&gt; is the Django project name.&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;web: gunicorn airline.wsgi
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;&lt;strong&gt;The deployed web app&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;With the above files in place, push to Github &amp;amp; Travis will start testing.
-After all tests passed, deployment starts. If there isn’t any failures, the
-web app will be running on:&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://webapp-dpth.herokuapp.com&quot;&gt;https://webapp-dpth.herokuapp.com&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;This &lt;a href=&quot;https://webapp-dpth.herokuapp.com/admin&quot;&gt;link&lt;/a&gt; brings you to the admin
-page. It is using the &lt;strong&gt;Heroku’s copy&lt;/strong&gt; of Postgres.&lt;/p&gt;
-
-&lt;p&gt;This &lt;a href=&quot;https://travis-ci.com/ChuaCheowHuan/web_app_DPTH/builds/125456399&quot;&gt;link&lt;/a&gt;
-brings you to my built log in Travis.com which shows how a successful
-test/deploy built looks like.&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;&lt;strong&gt;Web security:&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;Please note that web security has not been throughly consider in this basic
-workflow describe above. &lt;strong&gt;Do NOT&lt;/strong&gt; simply use the above workflow for
-production.&lt;/p&gt;
-
-&lt;p&gt;For example the &lt;code class=&quot;highlighter-rouge&quot;&gt;SECRET_KEY&lt;/code&gt; in the &lt;code class=&quot;highlighter-rouge&quot;&gt;settings.py&lt;/code&gt; isn’t dealt with at all
-and web security is really beyond the scope of this post.&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">Basic workflow of testing a Django &amp;amp; Postgres web app with Travis (continuous integration) &amp;amp; deployment to Heroku (continuous deployment).</summary></entry></feed>
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">Basic workflow of testing a dockerized Django &amp;amp; Postgres web app with Travis (continuous integration) &amp;amp; deployment to Heroku (continuous deployment).</summary></entry></feed>
