@@ -206,12 +206,33 @@ way.
 ---
 
 # Generated LOB:
-![image](/assets/images/MARL_CDA_env/ten_k/bid_size.png)
-![image](/assets/images/MARL_CDA_env/ten_k/ask_size.png)
+
+Bid price:
+
 ![image](/assets/images/MARL_CDA_env/ten_k/bid_price.png)
+
+Ask price:
+
 ![image](/assets/images/MARL_CDA_env/ten_k/ask_price.png)
+
+Midpoint price:
+
 ![image](/assets/images/MARL_CDA_env/ten_k/midpt_price.png)
+
+Bid size:
+
+![image](/assets/images/MARL_CDA_env/ten_k/bid_size.png)
+
+Ask size:
+
+![image](/assets/images/MARL_CDA_env/ten_k/ask_size.png)
+
+Order imbalance:
+
 ![image](/assets/images/MARL_CDA_env/ten_k/ord_imb.png)
+
+Sum of order imbalance:
+
 ![image](/assets/images/MARL_CDA_env/ten_k/sum_imb.png)
 
 ---
