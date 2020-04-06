@@ -32,7 +32,13 @@ This is **WIP**.
 
 9) [Disclaimer](#disclaimer)
 
-10) [Making sense of the render output](#making-sense-of-the-render-output)
+10) [Generated LOB](#generated-lob)
+
+11) [Observation space](#observation-space)
+
+12) [Action space](#action-space)
+
+13) [Making sense of the render output](#making-sense-of-the-render-output)
 
 ---
 
@@ -196,6 +202,17 @@ used in any form of trading. Past performance is no guarantee of future results.
 If you suffer losses from using this repository, you are the sole person
 responsible for the losses. The author will **NOT** be held responsible in any
 way.
+
+---
+
+# Generated LOB:
+![image](/assets/images/MARL_CDA_env/ten_k/bid_size.png)
+![image](/assets/images/MARL_CDA_env/ten_k/ask_size.png)
+![image](/assets/images/MARL_CDA_env/ten_k/bid_price.png)
+![image](/assets/images/MARL_CDA_env/ten_k/ask_price.png)
+![image](/assets/images/MARL_CDA_env/ten_k/midpt_price.png)
+![image](/assets/images/MARL_CDA_env/ten_k/ord_imb.png)
+![image](/assets/images/MARL_CDA_env/ten_k/sum_imb.png)
 
 ---
 
