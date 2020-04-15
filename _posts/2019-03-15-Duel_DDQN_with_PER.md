@@ -109,26 +109,26 @@ $$^{-\beta}$$
 Assume an example of a sum tree with 7 nodes (with 4 leaves which corresponds to the replay memory size):
 
 At initialization:
-![image](https://github.com/ChuaCheowHuan/reinforcement_learning/blob/master/DQN_variants/duel_DDQN_PER/img/Screen%20Shot%202019-03-24%20at%2012.46.02%20PM.png)
+![image](https://github.com/ChuaCheowHuan/reinforcement_learning/blob/master/DQN_variants/duel_DDQN_PER/img/pic_1.png)
 
 When item 1 is added:
-- ![alt text](https://github.com/ChuaCheowHuan/reinforcement_learning/blob/master/DQN_variants/duel_DDQN_PER/img/Screen%20Shot%202019-03-24%20at%2012.47.04%20PM.png)
+- ![alt text](https://github.com/ChuaCheowHuan/reinforcement_learning/blob/master/DQN_variants/duel_DDQN_PER/img/pic_2.png)
 
 When item 2 is added:
-- ![alt text](https://github.com/ChuaCheowHuan/reinforcement_learning/blob/master/DQN_variants/duel_DDQN_PER/img/Screen%20Shot%202019-03-24%20at%2012.55.09%20PM.png)
+- ![alt text](https://github.com/ChuaCheowHuan/reinforcement_learning/blob/master/DQN_variants/duel_DDQN_PER/img/pic_3.png)
 
 When item 3 is added:
-- ![alt text](https://github.com/ChuaCheowHuan/reinforcement_learning/blob/master/DQN_variants/duel_DDQN_PER/img/Screen%20Shot%202019-03-24%20at%2012.55.36%20PM.png)
+- ![alt text](https://github.com/ChuaCheowHuan/reinforcement_learning/blob/master/DQN_variants/duel_DDQN_PER/img/pic_4.png)
 
 When item 4 is added:
-- ![alt text](https://github.com/ChuaCheowHuan/reinforcement_learning/blob/master/DQN_variants/duel_DDQN_PER/img/Screen%20Shot%202019-03-24%20at%2012.56.09%20PM.png)
+- ![alt text](https://github.com/ChuaCheowHuan/reinforcement_learning/blob/master/DQN_variants/duel_DDQN_PER/img/pic_5.png)
 
 When item 5 is added:
-- ![alt text](https://github.com/ChuaCheowHuan/reinforcement_learning/blob/master/DQN_variants/duel_DDQN_PER/img/Screen%20Shot%202019-03-24%20at%2012.56.31%20PM.png)
+- ![alt text](https://github.com/ChuaCheowHuan/reinforcement_learning/blob/master/DQN_variants/duel_DDQN_PER/img/pic_6.png)
 
 Figure below shows the corresponding code & array contents. The tree represents the entire sum tree while data represents the leaves.
 
-![alt text](https://github.com/ChuaCheowHuan/reinforcement_learning/blob/master/DQN_variants/duel_DDQN_PER/img/Screen%20Shot%202019-03-24%20at%2012.56.55%20PM.png)
+![alt text](https://github.com/ChuaCheowHuan/reinforcement_learning/blob/master/DQN_variants/duel_DDQN_PER/img/pic_7.png)
 
 In the implementation, only one sumTree object is needed to store the collected experiences, this sumTree object resides in the Replay_memory class. The sumTree object has number of leaves = replay memory size = capacity.
 The data array in sumTree object stores an Exp object, which is a sample of experience.
