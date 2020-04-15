@@ -109,7 +109,7 @@ $$^{-\beta}$$
 Assume an example of a sum tree with 7 nodes (with 4 leaves which corresponds to the replay memory size):
 
 At initialization:
-- ![alt text](https://github.com/ChuaCheowHuan/reinforcement_learning/blob/master/DQN_variants/duel_DDQN_PER/img/Screen%20Shot%202019-03-24%20at%2012.46.02%20PM.png)
+![image](https://github.com/ChuaCheowHuan/reinforcement_learning/blob/master/DQN_variants/duel_DDQN_PER/img/Screen%20Shot%202019-03-24%20at%2012.46.02%20PM.png)
 
 When item 1 is added:
 - ![alt text](https://github.com/ChuaCheowHuan/reinforcement_learning/blob/master/DQN_variants/duel_DDQN_PER/img/Screen%20Shot%202019-03-24%20at%2012.47.04%20PM.png)
