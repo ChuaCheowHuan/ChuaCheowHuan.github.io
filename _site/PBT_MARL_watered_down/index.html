@@ -19,40 +19,40 @@
   <head>
     <meta charset="utf-8">
 
-<!-- begin _includes/seo.html --><title>.bash_profile for Mac - Every little gist</title>
-<meta name="description" content="This post demonstrates how to create customized functions to bundle commands ina .bash_profile file on Mac.">
+<!-- begin _includes/seo.html --><title>PBT for MARL - Every little gist</title>
+<meta name="description" content="My attempt to implement a water down version of PBT (Population based training) for MARL (Multi-agent reinforcement learning).">
 
 
 
 <meta property="og:type" content="article">
 <meta property="og:locale" content="en_US">
 <meta property="og:site_name" content="Every little gist">
-<meta property="og:title" content=".bash_profile for Mac">
-<meta property="og:url" content="https://chuacheowhuan.github.io/bash_script/">
+<meta property="og:title" content="PBT for MARL">
+<meta property="og:url" content="http://localhost:4000/PBT_MARL_watered_down/">
 
 
-  <meta property="og:description" content="This post demonstrates how to create customized functions to bundle commands ina .bash_profile file on Mac.">
-
-
-
-  <meta property="og:image" content="https://chuacheowhuan.github.io/assets/images/bio-photo.jpg">
+  <meta property="og:description" content="My attempt to implement a water down version of PBT (Population based training) for MARL (Multi-agent reinforcement learning).">
 
 
 
-
-
-  <meta property="article:published_time" content="2019-07-03T00:00:00+08:00">
+  <meta property="og:image" content="http://localhost:4000/assets/images/bio-photo.jpg">
 
 
 
 
 
-  
+  <meta property="article:published_time" content="2020-06-12T00:00:00+08:00">
+
+
+
+
 
   
 
+  
 
-<link rel="canonical" href="https://chuacheowhuan.github.io/bash_script/">
+
+<link rel="canonical" href="http://localhost:4000/PBT_MARL_watered_down/">
 
 
 
@@ -62,8 +62,8 @@
     {
       "@context": "https://schema.org",
       "@type": "Organization",
-      "url": "https://chuacheowhuan.github.io",
-      "logo": "https://chuacheowhuan.github.io/assets/images/bio-photo.jpg"
+      "url": "http://localhost:4000",
+      "logo": "http://localhost:4000/assets/images/bio-photo.jpg"
     }
   </script>
 
@@ -74,7 +74,7 @@
       "@context": "https://schema.org",
       "@type": "Person",
       "name": "Chua Cheow Huan",
-      "url": "https://chuacheowhuan.github.io",
+      "url": "http://localhost:4000",
       "sameAs": null
     }
   </script>
@@ -260,60 +260,91 @@
 
   <div class="archive">
     
-      <h1 id="page-title" class="page__title">.bash_profile for Mac</h1>
+      <h1 id="page-title" class="page__title">PBT for MARL</h1>
     
-    <p>This post demonstrates how to create customized functions to bundle commands in
-a .bash_profile file on Mac.</p>
+    <p>My attempt to implement a water down version of PBT (Population based training) for MARL (Multi-agent reinforcement learning).</p>
+
+<p><a href="https://github.com/ChuaCheowHuan/PBT_MARL_watered_down">source</a></p>
 
 <hr />
 
-<p>Edit .bash_profile for Mac.</p>
+<h1 id="pbt_marl_watered_down">PBT_MARL_watered_down</h1>
 
-<ol>
-  <li>Start Terminal</li>
-  <li>Enter “cd ~/” to go to home folder</li>
-  <li>Edit .bash_profile with “open -e .bash_profile” to open in TextEdit.</li>
-  <li>Enter “. .bash_profile” to reload .bash_profile.</li>
-</ol>
+<h1 id="whats-in-this-repo">What’s in this repo?</h1>
 
-<hr />
+<p>My attempt to implement a water down version of PBT (Population based training) for MARL (Multi-agent reinforcement learning) inspired by Algorithm 1 (PBT-MARL) on page 3 of this <a href="https://arxiv.org/pdf/1902.07151.pdf">paper</a>[1].</p>
 
-<h2 id="examples">Examples</h2>
+<h1 id="main-differences-from-the-paper">MAIN differences from the paper:</h1>
 
-<p>To bundle common git operations, add the following to .bash_profile file:</p>
+<p>(1) A simple 1 VS 1 <a href="https://github.com/ray-project/ray/blob/57544b1ff9f97d4da9f64d25c8ea5a3d8d247ffc/rllib/examples/env/rock_paper_scissors.py">RockPaperScissorsEnv</a> environment (adapted &amp; modified from a toy example from ray) is used instead of the 2 VS 2 <a href="https://git.io/dm_soccer">dm_soccer</a>.</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>function lazy_git() {
-    git checkout test_ver
-    git add .
-    git commit -a -m "$1"
-    git checkout master
-    git merge test_ver
-    git push
-    git checkout test_ver
+<p>(2) PPO is used instead of SVG0.</p>
+
+<p>(3) No reward shaping.</p>
+
+<p>(4) The evolution eligibility documented in B2 on page 16 in the <a href="https://arxiv.org/pdf/1902.07151.pdf">paper</a>[1] is not implemented.</p>
+
+<p>(5) Probably many more…</p>
+
+<h1 id="what-works">What works?</h1>
+
+<p>(1) Policies weights can be inherited between different agents in the population.</p>
+
+<p>(2) Learning rate &amp; gamma are the only 2 hyperparameters involved for now. Both can be inherited/mutated. Learning rate can be resampled/perturbed while gamma can only be resampled.</p>
+
+<h1 id="simple-walkthru">Simple walkthru:</h1>
+
+<p>Before each training iteration, the driver (in this context, the main process, this is also where the RLlib trainer resides) randomly selects a pair of agents (agt_i, agt_j, where i != j) from a population of agents. This i, j pair will take up the role of player_A &amp; player_B respectively.</p>
+
+<p>The IDs of i,j will be transmitted down to the worker processes. Each worker has 1 or more environments (<a href="https://rllib.readthedocs.io/en/latest/rllib-env.html#vectorized">vectorized</a>) &amp; does it’s own rollout. When an episode is sampled (that’s when a match ends), the <code class="highlighter-rouge">on_episode_end</code> callback will be called. That’s when the ratings of a match are computed &amp; updated to a global storage.</p>
+
+<p>When enough samples are collected, training starts. Training is done using <a href="https://docs.ray.io/en/master/rllib-algorithms.html#decentralized-distributed-proximal-policy-optimization-dd-ppo">RLlib’s DDPPO</a> (a variant of PPO). In DDPPO, learning does not happened in the trainer. Each worker does it’s own learning. However, the trainer is still involved in the weight sync.</p>
+
+<p>When a training iteration completes, <code class="highlighter-rouge">on_train_results</code> callback will be called. That’s where inheritance &amp; mutation happens (if conditions are fulfilled).</p>
+
+<p>All of the above happens during 1 single main training loop of the driver. Rinse &amp; repeat.</p>
+
+<p>Note: Global coordination between different processes is done using <a href="https://docs.ray.io/en/master/advanced.html#detached-actors">detached actors</a> from ray.</p>
+
+<h1 id="example-of-whats-stored-in-the-global-storage">Example of what’s stored in the global storage:</h1>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>"""
+{'agt_0':
+    {'hyperparameters':
+        {'lr': [0.0027558, 0.0022046, ...]},
+         'gamma': [0.9516804908336309, 0.9516804908336309, ...]
+     'opponent': ['NA', 'agt_5', 'agt_5', ...],
+     'score': [0, -4.0, -2.0, ...],
+     'rating': [0.0, 0.05, 0.05, ...],
+     'step': [0]},
+ 'agt_1': ...
+    .
+    .
+    .
+ 'agt_n': ...    
 }
-</code></pre></div></div>
-<hr />
-
-<p>To bundle common jekyll operations, add the following to .bash_profile file:</p>
-
-<p>The command <code class="highlighter-rouge">serve</code> runs localhost.</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>function lazy_jekyll_serve() {
-    cd /Users/tester/gitHubRepo/ChuaCheowHuan.github.io
-    pwd
-    bundle exec jekyll serve
-}
+"""
 </code></pre></div></div>
 
-<p>The command <code class="highlighter-rouge">build</code> build the site. This command is neccessary for
-generating sitemap.xml &amp; robot.txt.</p>
+<h1 id="how-to-run-the-contents-in-this-repo">How to run the contents in this repo?</h1>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>function lazy_jekyll_build() {
-    cd /Users/tester/gitHubRepo/ChuaCheowHuan.github.io
-    pwd
-    bundle exec jekyll build
-}
-</code></pre></div></div>
+<p>The easiest way is to run the <code class="highlighter-rouge">PBT_MARL_watered_down.ipynb</code> Jupyter notebook in Colab.</p>
+
+<h1 id="dependencies">Dependencies:</h1>
+
+<p>This is developed &amp; tested on Colab &amp; the following are the only packages that I explicitly <code class="highlighter-rouge">pip install</code>:</p>
+
+<p>ray[rllib]==0.8.5</p>
+
+<p>tensorflow==2.2.0</p>
+
+<h1 id="disclaimer">Disclaimer:</h1>
+
+<p>(1) I’m not affiliated with any of the authors of the <a href="https://arxiv.org/pdf/1902.07151.pdf">paper</a>[1].</p>
+
+<h1 id="references">References:</h1>
+
+<p>[1] <a href="https://arxiv.org/pdf/1902.07151.pdf">EMERGENT COORDINATION THROUGH COMPETITION (Liu et al., 2019)</a></p>
 
 <hr />
 
@@ -325,7 +356,7 @@ generating sitemap.xml &amp; robot.txt.</p>
   
     <li>
       <a href="#2020">
-        <strong>2020</strong> <span class="taxonomy__count">6</span>
+        <strong>2020</strong> <span class="taxonomy__count">7</span>
       </a>
     </li>
   
@@ -342,6 +373,35 @@ generating sitemap.xml &amp; robot.txt.</p>
   <section id="2020" class="taxonomy__section">
     <h2 class="archive__subtitle">2020</h2>
     <div class="entries-list">
+      
+        
+
+
+
+<div class="list__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="/PBT_MARL_watered_down/" rel="permalink">PBT for MARL
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
+
+
+
+
+  46 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">My attempt to implement a water down version of PBT (Population based training) for MARL (Multi-agent reinforcement learning).
+
+</p>
+  </article>
+</div>
+
       
         
 
@@ -811,7 +871,7 @@ agents trade against one another in a CDA (continuous double auction).
 
 
 
-  13 minute read
+  15 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">This post demonstrates how to create customized functions to bundle commands in
@@ -841,7 +901,7 @@ a .bash_profile file on Mac.
 
 
 
-  83 minute read
+  89 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">This post documents my implementation of the Random Network Distillation (RND)
@@ -872,7 +932,7 @@ with Proximal Policy Optimization (PPO) algorithm.
 
 
 
-  61 minute read
+  72 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">This post documents my implementation of the Distributed Proximal Policy
@@ -903,7 +963,7 @@ Optimization (Distributed PPO or DPPO) algorithm.
 
 
 
-  26 minute read
+  27 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">This post documents my implementation of the A3C
@@ -934,7 +994,7 @@ Optimization (Distributed PPO or DPPO) algorithm.
 
 
 
-  33 minute read
+  35 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">This post documents my implementation of the A3C
@@ -965,7 +1025,7 @@ Optimization (Distributed PPO or DPPO) algorithm.
 
 
 
-  66 minute read
+  75 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">This post documents my implementation of the A3C
@@ -1025,7 +1085,7 @@ Optimization (Distributed PPO or DPPO) algorithm.
 
 
 
-  76 minute read
+  78 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">This post demonstrates a simple usage example of distributed Tensorflow with
@@ -1055,7 +1115,7 @@ Python multiprocessing package.
 
 
 
-  72 minute read
+  79 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">This post documents my implementation of the N-step Q-values estimation
@@ -1085,7 +1145,7 @@ algorithm.
 
 
 
-  32 minute read
+  33 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">This post demonstrates how to use the Python’s multiprocessing package to
@@ -1115,7 +1175,7 @@ achieve parallel data generation.
 
 
 
-  32 minute read
+  33 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">This post provides a simple usage examples for common Numpy array manipulation.
@@ -1144,7 +1204,7 @@ achieve parallel data generation.
 
 
 
-  46 minute read
+  53 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">This post documents my implementation of the Dueling Double Deep Q Network with Priority Experience Replay (Duel DDQN with PER) algorithm.
@@ -1173,7 +1233,7 @@ achieve parallel data generation.
 
 
 
-  23 minute read
+  25 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">This post documents my implementation of the Dueling Double Deep Q Network
@@ -1203,7 +1263,7 @@ achieve parallel data generation.
 
 
 
-  27 minute read
+  31 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">This post documents my implementation of the Double Deep Q Network (DDQN)
@@ -1233,7 +1293,7 @@ algorithm.
 
 
 
-  22 minute read
+  26 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">This post documents my implementation of the Deep Q Network (DQN) algorithm.
@@ -1316,8 +1376,8 @@ algorithm.
     
   <script>
     var disqus_config = function () {
-      this.page.url = "https://chuacheowhuan.github.io/bash_script/";  // Replace PAGE_URL with your page's canonical URL variable
-      this.page.identifier = "/bash_script"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+      this.page.url = "http://localhost:4000/PBT_MARL_watered_down/";  // Replace PAGE_URL with your page's canonical URL variable
+      this.page.identifier = "/PBT_MARL_watered_down"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
     };
     (function() { // DON'T EDIT BELOW THIS LINE
       var d = document, s = d.createElement('script');

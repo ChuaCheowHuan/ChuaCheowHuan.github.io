@@ -1,10 +1,98 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.6">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-06-12T15:36:10+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Every little gist</title><subtitle></subtitle><author><name>Chua Cheow Huan</name></author><entry><title type="html">RLlib trainer common config</title><link href="http://localhost:4000/RLlib_trainer_config/" rel="alternate" type="text/html" title="RLlib trainer common config" /><published>2020-03-23T00:00:00+08:00</published><updated>2020-03-23T00:00:00+08:00</updated><id>http://localhost:4000/RLlib_trainer_config</id><content type="html" xml:base="http://localhost:4000/RLlib_trainer_config/">&lt;p&gt;Ray (0.8.2) RLlib trainer common config from:&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.7">Jekyll</generator><link href="https://chuacheowhuan.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://chuacheowhuan.github.io/" rel="alternate" type="text/html" /><updated>2020-06-12T18:05:23+08:00</updated><id>https://chuacheowhuan.github.io/feed.xml</id><title type="html">Every little gist</title><subtitle></subtitle><author><name>Chua Cheow Huan</name></author><entry><title type="html">PBT for MARL</title><link href="https://chuacheowhuan.github.io/PBT_MARL_watered_down/" rel="alternate" type="text/html" title="PBT for MARL" /><published>2020-06-12T00:00:00+08:00</published><updated>2020-06-12T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/PBT_MARL_watered_down</id><content type="html" xml:base="https://chuacheowhuan.github.io/PBT_MARL_watered_down/">My attempt to implement a water down version of PBT (Population based training) for MARL (Multi-agent reinforcement learning).
 
-&lt;p&gt;&lt;a href=&quot;https://github.com/ray-project/ray/blob/master/rllib/agents/trainer.py&quot;&gt;source&lt;/a&gt;&lt;/p&gt;
+[source](https://github.com/ChuaCheowHuan/PBT_MARL_watered_down)
 
-&lt;hr /&gt;
+---
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# yapf: disable
+# PBT_MARL_watered_down
+
+# What's in this repo?
+
+My attempt to implement a water down version of PBT (Population based training) for MARL (Multi-agent reinforcement learning) inspired by Algorithm 1 (PBT-MARL) on page 3 of this [paper](https://arxiv.org/pdf/1902.07151.pdf)[1].
+
+# MAIN differences from the paper:
+
+(1) A simple 1 VS 1 [RockPaperScissorsEnv](https://github.com/ray-project/ray/blob/57544b1ff9f97d4da9f64d25c8ea5a3d8d247ffc/rllib/examples/env/rock_paper_scissors.py) environment (adapted &amp; modified from a toy example from ray) is used instead of the 2 VS 2 [dm_soccer](https://git.io/dm_soccer).
+
+(2) PPO is used instead of SVG0.
+
+(3) No reward shaping.
+
+(4) The evolution eligibility documented in B2 on page 16 in the [paper](https://arxiv.org/pdf/1902.07151.pdf)[1] is not implemented.
+
+(5) Probably many more...
+
+# What works?
+
+(1) Policies weights can be inherited between different agents in the population.
+
+(2) Learning rate &amp; gamma are the only 2 hyperparameters involved for now. Both can be inherited/mutated. Learning rate can be resampled/perturbed while gamma can only be resampled.
+
+# Simple walkthru:
+
+Before each training iteration, the driver (in this context, the main process, this is also where the RLlib trainer resides) randomly selects a pair of agents (agt_i, agt_j, where i != j) from a population of agents. This i, j pair will take up the role of player_A &amp; player_B respectively.
+
+The IDs of i,j will be transmitted down to the worker processes. Each worker has 1 or more environments ([vectorized](https://rllib.readthedocs.io/en/latest/rllib-env.html#vectorized)) &amp; does it's own rollout. When an episode is sampled (that's when a match ends), the `on_episode_end` callback will be called. That's when the ratings of a match are computed &amp; updated to a global storage.
+
+When enough samples are collected, training starts. Training is done using [RLlib's DDPPO](https://docs.ray.io/en/master/rllib-algorithms.html#decentralized-distributed-proximal-policy-optimization-dd-ppo) (a variant of PPO). In DDPPO, learning does not happened in the trainer. Each worker does it's own learning. However, the trainer is still involved in the weight sync.
+
+When a training iteration completes, `on_train_results` callback will be called. That's where inheritance &amp; mutation happens (if conditions are fulfilled).
+
+All of the above happens during 1 single main training loop of the driver. Rinse &amp; repeat.
+
+Note: Global coordination between different processes is done using [detached actors](https://docs.ray.io/en/master/advanced.html#detached-actors) from ray.
+
+# Example of what's stored in the global storage:
+
+```
+&quot;&quot;&quot;
+{'agt_0':
+    {'hyperparameters':
+        {'lr': [0.0027558, 0.0022046, ...]},
+         'gamma': [0.9516804908336309, 0.9516804908336309, ...]
+     'opponent': ['NA', 'agt_5', 'agt_5', ...],
+     'score': [0, -4.0, -2.0, ...],
+     'rating': [0.0, 0.05, 0.05, ...],
+     'step': [0]},
+ 'agt_1': ...
+    .
+    .
+    .
+ 'agt_n': ...    
+}
+&quot;&quot;&quot;
+```
+
+# How to run the contents in this repo?
+
+The easiest way is to run the `PBT_MARL_watered_down.ipynb` Jupyter notebook in Colab.
+
+# Dependencies:
+
+This is developed &amp; tested on Colab &amp; the following are the only packages that I explicitly `pip install`:
+
+ray[rllib]==0.8.5
+
+tensorflow==2.2.0
+
+# Disclaimer:
+
+(1) I'm not affiliated with any of the authors of the [paper](https://arxiv.org/pdf/1902.07151.pdf)[1].
+
+# References:
+
+[1] [EMERGENT COORDINATION THROUGH COMPETITION (Liu et al., 2019)](https://arxiv.org/pdf/1902.07151.pdf)
+
+---
+
+&lt;br&gt;</content><author><name>Huan</name></author><summary type="html">My attempt to implement a water down version of PBT (Population based training) for MARL (Multi-agent reinforcement learning).</summary></entry><entry><title type="html">RLlib trainer common config</title><link href="https://chuacheowhuan.github.io/RLlib_trainer_config/" rel="alternate" type="text/html" title="RLlib trainer common config" /><published>2020-03-23T00:00:00+08:00</published><updated>2020-03-23T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/RLlib_trainer_config</id><content type="html" xml:base="https://chuacheowhuan.github.io/RLlib_trainer_config/">Ray (0.8.2) RLlib trainer common config from:
+
+[source](https://github.com/ray-project/ray/blob/master/rllib/agents/trainer.py)
+
+---
+
+```
+# yapf: disable
 # __sphinx_doc_begin__
 COMMON_CONFIG = {
     # === Settings for Rollout Worker processes ===
@@ -44,7 +132,7 @@ COMMON_CONFIG = {
     # algorithms can take advantage of trainer GPUs. This can be fractional
     # (e.g., 0.3 GPUs).
     &quot;num_gpus&quot;: 0,
-    # Training batch size, if applicable. Should be &amp;gt;= rollout_fragment_length.
+    # Training batch size, if applicable. Should be &gt;= rollout_fragment_length.
     # Samples batches will be concatenated together to a batch of this size,
     # which is then passed to SGD.
     &quot;train_batch_size&quot;: 200,
@@ -181,7 +269,7 @@ COMMON_CONFIG = {
     # rollout workers.
     &quot;evaluation_num_workers&quot;: 0,
     # Customize the evaluation method. This must be a function of signature
-    # (trainer: Trainer, eval_workers: WorkerSet) -&amp;gt; metrics: dict. See the
+    # (trainer: Trainer, eval_workers: WorkerSet) -&gt; metrics: dict. See the
     # Trainer._evaluate() method to see the default implementation. The
     # trainer guarantees all eval workers have the latest policy state before
     # this function is called.
@@ -226,7 +314,7 @@ COMMON_CONFIG = {
     &quot;collect_metrics_timeout&quot;: 180,
     # Smooth metrics over this many episodes.
     &quot;metrics_smoothing_episodes&quot;: 100,
-    # If using num_envs_per_worker &amp;gt; 1, whether to create those new envs in
+    # If using num_envs_per_worker &gt; 1, whether to create those new envs in
     # remote processes instead of in the same worker. This adds overheads, but
     # can make sense if your envs can take much time to step / reset
     # (e.g., for StarCraft). Use this cautiously; overheads are significant.
@@ -326,151 +414,152 @@ COMMON_CONFIG = {
 }
 # __sphinx_doc_end__
 # yapf: enable
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+```
 
-&lt;hr /&gt;
+---
 
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">Ray (0.8.2) RLlib trainer common config from:</summary></entry><entry><title type="html">Output dimension from convolution layer</title><link href="http://localhost:4000/conv_output/" rel="alternate" type="text/html" title="Output dimension from convolution layer" /><published>2020-03-09T00:00:00+08:00</published><updated>2020-03-09T00:00:00+08:00</updated><id>http://localhost:4000/conv_output</id><content type="html" xml:base="http://localhost:4000/conv_output/">&lt;p&gt;How to calculate dimension of output from a convolution layer?&lt;/p&gt;
+&lt;br&gt;</content><author><name>Huan</name></author><summary type="html">Ray (0.8.2) RLlib trainer common config from:</summary></entry><entry><title type="html">Output dimension from convolution layer</title><link href="https://chuacheowhuan.github.io/conv_output/" rel="alternate" type="text/html" title="Output dimension from convolution layer" /><published>2020-03-09T00:00:00+08:00</published><updated>2020-03-09T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/conv_output</id><content type="html" xml:base="https://chuacheowhuan.github.io/conv_output/">How to calculate dimension of output from a convolution layer?
 
-&lt;hr /&gt;
+---
 
-&lt;h1 id=&quot;no-padding-aka-valid-padding&quot;&gt;No padding (aka valid padding):&lt;/h1&gt;
+# No padding (aka valid padding):
 
-&lt;p&gt;input  = n x n = 6 x 6&lt;/p&gt;
+input  = n x n = 6 x 6
 
-&lt;p&gt;kernel = f x f = 3 x 3&lt;/p&gt;
+kernel = f x f = 3 x 3
 
-&lt;p&gt;output = m x m = 4 x 4&lt;/p&gt;
+output = m x m = 4 x 4
 
-&lt;p&gt;How do we get output = 4 x 4 ?&lt;/p&gt;
+How do we get output = 4 x 4 ?
 
-&lt;p&gt;Ans: Use the formula: (n - f + 1) x (n - f + 1)&lt;/p&gt;
+Ans: Use the formula: (n - f + 1) x (n - f + 1)
 
-&lt;hr /&gt;
+---
 
-&lt;h1 id=&quot;with-padding-of-size-1&quot;&gt;With padding of size 1:&lt;/h1&gt;
+# With padding of size 1:
 
-&lt;p&gt;p = 1&lt;/p&gt;
+p = 1
 
-&lt;p&gt;input  = n x n = 6 x 6&lt;/p&gt;
+input  = n x n = 6 x 6
 
-&lt;p&gt;kernel = f x f = 3 x 3&lt;/p&gt;
+kernel = f x f = 3 x 3
 
-&lt;p&gt;output = m x m = 6 x 6&lt;/p&gt;
+output = m x m = 6 x 6
 
-&lt;p&gt;How do we get output = 6 x 6 ?&lt;/p&gt;
+How do we get output = 6 x 6 ?
 
-&lt;p&gt;Ans: Use the formula: (n + 2p - f + 1) x (n + 2p - f + 1)&lt;/p&gt;
+Ans: Use the formula: (n + 2p - f + 1) x (n + 2p - f + 1)
 
-&lt;hr /&gt;
+---
 
-&lt;h1 id=&quot;meaning-of-valid-padding--same-padding&quot;&gt;Meaning of valid padding &amp;amp; same padding:&lt;/h1&gt;
+# Meaning of valid padding &amp; same padding:
 
-&lt;p&gt;1) No padding is also known as valid padding.&lt;/p&gt;
+1) No padding is also known as valid padding.
 
-&lt;p&gt;2) Same padding means pad input so that the resulting output dimension after
-convolution will be the same as input.&lt;/p&gt;
+2) Same padding means pad input so that the resulting output dimension after
+convolution will be the same as input.
 
-&lt;hr /&gt;
+---
 
-&lt;h1 id=&quot;size-of-padding-needed-to-achieve-same-padding&quot;&gt;Size of padding needed to achieve same padding:&lt;/h1&gt;
+# Size of padding needed to achieve same padding:
 
-&lt;p&gt;Size of padding needed to achieve same padding depends on the kernel size, f.&lt;/p&gt;
+Size of padding needed to achieve same padding depends on the kernel size, f.
 
-&lt;p&gt;Using p = (f - 1) / 2 will produce output dimension = input dimension.&lt;/p&gt;
+Using p = (f - 1) / 2 will produce output dimension = input dimension.
 
-&lt;hr /&gt;
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">How to calculate dimension of output from a convolution layer?</summary></entry><entry><title type="html">Changing G drive directory in Colab</title><link href="http://localhost:4000/colab/" rel="alternate" type="text/html" title="Changing G drive directory in Colab" /><published>2020-02-28T00:00:00+08:00</published><updated>2020-02-28T00:00:00+08:00</updated><id>http://localhost:4000/colab</id><content type="html" xml:base="http://localhost:4000/colab/">&lt;p&gt;Changing Google drive directory in Colab.&lt;/p&gt;
+---
+&lt;br&gt;</content><author><name>Huan</name></author><summary type="html">How to calculate dimension of output from a convolution layer?</summary></entry><entry><title type="html">Changing G drive directory in Colab</title><link href="https://chuacheowhuan.github.io/colab/" rel="alternate" type="text/html" title="Changing G drive directory in Colab" /><published>2020-02-28T00:00:00+08:00</published><updated>2020-02-28T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/colab</id><content type="html" xml:base="https://chuacheowhuan.github.io/colab/">Changing Google drive directory in Colab.
 
-&lt;hr /&gt;
+---
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;from google.colab import drive
+```
+from google.colab import drive
 drive.mount('/content/gdrive')
 
 %cd &quot;/content/gdrive/My Drive/Colab Notebooks/courses/deep_learning/&quot;
 
 !pwd
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+```
 
-&lt;hr /&gt;
+---
 
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">Changing Google drive directory in Colab.</summary></entry><entry><title type="html">Linear regression (Bayesian)</title><link href="http://localhost:4000/linear_regression_bayesian/" rel="alternate" type="text/html" title="Linear regression (Bayesian)" /><published>2020-01-29T00:00:00+08:00</published><updated>2020-01-29T00:00:00+08:00</updated><id>http://localhost:4000/linear_regression_bayesian</id><content type="html" xml:base="http://localhost:4000/linear_regression_bayesian/">&lt;p&gt;Notes on the probability for linear regression (Bayesian)&lt;/p&gt;
+&lt;br&gt;</content><author><name>Huan</name></author><summary type="html">Changing Google drive directory in Colab.</summary></entry><entry><title type="html">Linear regression (Bayesian)</title><link href="https://chuacheowhuan.github.io/linear_regression_bayesian/" rel="alternate" type="text/html" title="Linear regression (Bayesian)" /><published>2020-01-29T00:00:00+08:00</published><updated>2020-01-29T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/linear_regression_bayesian</id><content type="html" xml:base="https://chuacheowhuan.github.io/linear_regression_bayesian/">Notes on the probability for linear regression (Bayesian)
 
-&lt;hr /&gt;
+---
 
-&lt;p&gt;Bayes’ theorem:&lt;/p&gt;
+Bayes' theorem:
 
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;P(a, b) = P(a|b) P(b) = P(b|a) P(a) -&gt; P(a|b) = P(b|a) P(a) / P(b)&lt;/script&gt;
+$$P(a, b) = P(a|b) P(b) = P(b|a) P(a) -&gt; P(a|b) = P(b|a) P(a) / P(b)$$
 
-&lt;p&gt;So,&lt;/p&gt;
+So,
 
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;P(y, w|x) = P(x|y, w) P(y, w) / P(x) ---&gt; 1&lt;/script&gt;
+$$P(y, w|x) = P(x|y, w) P(y, w) / P(x) ---&gt; 1$$
 
-&lt;p&gt;The 1st part of the nominator from 1 is:&lt;/p&gt;
+The 1st part of the nominator from 1 is:
 
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;P(x|y, w) ---&gt; 2&lt;/script&gt;
+$$P(x|y, w) ---&gt; 2$$
 
-&lt;p&gt;From joint probability:&lt;/p&gt;
+From joint probability:
 
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;P(a, b, c) = P(a|b, c) P(b, c) = P(b|a, c) P (a, c)&lt;/script&gt;
+$$P(a, b, c) = P(a|b, c) P(b, c) = P(b|a, c) P (a, c)$$
 
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;i.e. P(a|b, c) = P(b|a, c) P(a, c) / P(b, c) ---&gt; 3&lt;/script&gt;
+$$i.e. P(a|b, c) = P(b|a, c) P(a, c) / P(b, c) ---&gt; 3$$
 
-&lt;p&gt;Apply 3 to 2:&lt;/p&gt;
+Apply 3 to 2:
 
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;P(x|y, w) = P(y|x, w) P(x, w) / P(y, w) ---&gt; 4&lt;/script&gt;
+$$P(x|y, w) = P(y|x, w) P(x, w) / P(y, w) ---&gt; 4$$
 
-&lt;p&gt;Plug 4 back to 1:&lt;/p&gt;
+Plug 4 back to 1:
 
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;P(y, w|x) = [ P(y|x, w) P(x, w) P(y, w) ] / [P(y, w) P( x)]&lt;/script&gt;
+$$P(y, w|x) = [ P(y|x, w) P(x, w) P(y, w) ] / [P(y, w) P( x)]$$
 
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;P(y, w|x) = [P(y|x, w) P(x, w)] / P(x)&lt;/script&gt;
+$$P(y, w|x) = [P(y|x, w) P(x, w)] / P(x)$$
 
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;P(y, w|x) = [P(y|x, w) P(w|x) P(x)] / P(x)&lt;/script&gt;
+$$P(y, w|x) = [P(y|x, w) P(w|x) P(x)] / P(x)$$
 
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;P(y, w|x) = P(y|x, w) P(w|x) ---&gt; 5&lt;/script&gt;
+$$P(y, w|x) = P(y|x, w) P(w|x) ---&gt; 5$$
 
-&lt;p&gt;If w and x are independent:&lt;/p&gt;
+If w and x are independent:
 
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;P(y, w|x) = P(y|x, w) P(w) ---&gt; 6&lt;/script&gt;
+$$P(y, w|x) = P(y|x, w) P(w) ---&gt; 6$$
 
-&lt;p&gt;Also from 5, if we switch w with y, we can obtain:&lt;/p&gt;
+Also from 5, if we switch w with y, we can obtain:
 
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;P(w, y|x) = P(w|x, y) P(y|x)&lt;/script&gt;
+$$P(w, y|x) = P(w|x, y) P(y|x)$$
 
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;P(y, w|x) = P(w|x, y) P(y|x)&lt;/script&gt;
+$$P(y, w|x) = P(w|x, y) P(y|x)$$
 
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;P(w|x, y) = P(y, w|x) / P(y|x) ---&gt; 7&lt;/script&gt;
+$$P(w|x, y) = P(y, w|x) / P(y|x) ---&gt; 7$$
 
-&lt;p&gt;We try to maximize 7 with respect to w. Only the nominator depends on w, so we
-can ignore the denominator P(y|x) and we get:&lt;/p&gt;
+We try to maximize 7 with respect to w. Only the nominator depends on w, so we
+can ignore the denominator P(y|x) and we get:
 
-&lt;p&gt;Maximize with respect to w in the following equations 8, 9, 10:&lt;/p&gt;
+Maximize with respect to w in the following equations 8, 9, 10:
 
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;P(w|x, y) = P(y, w|x) ---&gt; 8&lt;/script&gt;
+$$P(w|x, y) = P(y, w|x) ---&gt; 8$$
 
-&lt;p&gt;Therefore, from 6 &amp;amp; 8 we get:&lt;/p&gt;
+Therefore, from 6 &amp; 8 we get:
 
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;P(w|x, y) = P(y, w|x) = P(y|x, w) P(w) ---&gt; 9&lt;/script&gt;
+$$P(w|x, y) = P(y, w|x) = P(y|x, w) P(w) ---&gt; 9$$
 
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;P(w|x, y) = P(y|x, w) P(w) ---&gt; 10&lt;/script&gt;
+$$P(w|x, y) = P(y|x, w) P(w) ---&gt; 10$$
 
-&lt;hr /&gt;
+---
 
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">Notes on the probability for linear regression (Bayesian)</summary></entry><entry><title type="html">RNN backprop thru time(BPTT part 2) $$\frac{\delta h_{t}} {\delta h_{t-1}}$$</title><link href="http://localhost:4000/RNN_BPTT_2/" rel="alternate" type="text/html" title="RNN backprop thru time(BPTT part 2) $$\frac{\delta h_{t}} {\delta h_{t-1}}$$" /><published>2020-01-13T00:00:00+08:00</published><updated>2020-01-13T00:00:00+08:00</updated><id>http://localhost:4000/RNN_BPTT_2</id><content type="html" xml:base="http://localhost:4000/RNN_BPTT_2/">&lt;p&gt;Notes on the math for RNN back propagation through time(BPTT), part 2. The 1st
-derivative of &lt;script type=&quot;math/tex&quot;&gt;h_t&lt;/script&gt; with respect to &lt;script type=&quot;math/tex&quot;&gt;h_{t-1}&lt;/script&gt;.&lt;/p&gt;
+&lt;br&gt;</content><author><name>Huan</name></author><summary type="html">Notes on the probability for linear regression (Bayesian)</summary></entry><entry><title type="html">RNN backprop thru time(BPTT part 2) $$\frac{\delta h_{t}} {\delta h_{t-1}}$$</title><link href="https://chuacheowhuan.github.io/RNN_BPTT_2/" rel="alternate" type="text/html" title="RNN backprop thru time(BPTT part 2) $$\frac{\delta h_{t}} {\delta h_{t-1}}$$" /><published>2020-01-13T00:00:00+08:00</published><updated>2020-01-13T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/RNN_BPTT_2</id><content type="html" xml:base="https://chuacheowhuan.github.io/RNN_BPTT_2/">Notes on the math for RNN back propagation through time(BPTT), part 2. The 1st
+derivative of $$h_t$$ with respect to $$h_{t-1}$$.
 
-&lt;hr /&gt;
-&lt;p&gt;Given a series:
-&lt;script type=&quot;math/tex&quot;&gt;X = \{x_1, x_2...x_n\}&lt;/script&gt;&lt;/p&gt;
+---
+Given a series:
+$$X = \{x_1, x_2...x_n\}$$
 
-&lt;p&gt;Given a set of functions that takes in &lt;script type=&quot;math/tex&quot;&gt;X&lt;/script&gt;:&lt;/p&gt;
+Given a set of functions that takes in $$X$$:
 
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;Y = F(X)&lt;/script&gt;
+$$Y = F(X)$$
 
-&lt;p&gt;We have a vector of functions:&lt;/p&gt;
+We have a vector of functions:
 
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;Y =
+$$Y =
 \begin{pmatrix}
 f_1(X) \\
 f_2(X) \\
@@ -478,92 +567,91 @@ f_2(X) \\
 . \\
 . \\
 f_n(X) \\
-\end{pmatrix}&lt;/script&gt;
+\end{pmatrix}$$
 
-&lt;hr /&gt;
+---
 
-&lt;p&gt;A Jacobian is a matrix of 1st derivatives of the functions:&lt;/p&gt;
+A Jacobian is a matrix of 1st derivatives of the functions:
 
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
-\begin{pmatrix}
+$$\begin{pmatrix}
 \frac{\delta y_1} {\delta x_1} &amp; \frac{\delta y_1} {\delta x_2} &amp; ... &amp; \frac{\delta y_1} {\delta x_n} \\
 . &amp; . &amp; ... &amp; .\\
 . &amp; . &amp; ... &amp; .\\
 . &amp; . &amp; ... &amp; .\\
 \frac{\delta y_n} {\delta x_1} &amp; \frac{\delta y_n} {\delta x_2} &amp; ... &amp; \frac{\delta y_n} {\delta x_n}
-\end{pmatrix} %]]&gt;&lt;/script&gt;
+\end{pmatrix}$$
 
-&lt;p&gt;For the calculations below, we are only interested in the diagonal derivatives
-which are terms with the same subscript in the nominator &amp;amp; denominator (i.e: derivatives with respect to the same time step).&lt;/p&gt;
+For the calculations below, we are only interested in the diagonal derivatives
+which are terms with the same subscript in the nominator &amp; denominator (i.e: derivatives with respect to the same time step).
 
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;\frac{\delta h_t} {\delta E_t} = diag(f'(E_t))&lt;/script&gt;
+$$\frac{\delta h_t} {\delta E_t} = diag(f'(E_t))$$
 
-&lt;hr /&gt;
+---
 
-&lt;p&gt;Deriving &lt;script type=&quot;math/tex&quot;&gt;\frac{\delta h_t} {\delta h_{t-1}}&lt;/script&gt;:&lt;/p&gt;
+Deriving $$\frac{\delta h_t} {\delta h_{t-1}}$$:
 
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;Vx_t + Wh_{t-1} + b_{h} = E_t&lt;/script&gt;
+$$Vx_t + Wh_{t-1} + b_{h} = E_t$$
 
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;h_{t} = f_{h} (Vx_t + Wh_{t-1} + b_{h}) = f_{h}(E_t)&lt;/script&gt;
+$$h_{t} = f_{h} (Vx_t + Wh_{t-1} + b_{h}) = f_{h}(E_t)$$
 
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;\frac{\delta h_t} {\delta E_t} = diag(f'(E_t))&lt;/script&gt;
+$$\frac{\delta h_t} {\delta E_t} = diag(f'(E_t))$$
 
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;\frac{\delta E_t} {\delta h_{t-1}} = W&lt;/script&gt;
+$$\frac{\delta E_t} {\delta h_{t-1}} = W$$
 
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;\frac{\delta h_t} {\delta h_{t-1}} =
+$$\frac{\delta h_t} {\delta h_{t-1}} =
 \frac{\delta h_t} {\delta E_t}
 \frac{\delta E_t} {\delta h_{t-1}} =
-diag(f'(E_t)) W&lt;/script&gt;
+diag(f'(E_t)) W$$
 
-&lt;hr /&gt;
+---
 
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">Notes on the math for RNN back propagation through time(BPTT), part 2. The 1st derivative of with respect to .</summary></entry><entry><title type="html">RNN backprop thru time(BPTT)</title><link href="http://localhost:4000/RNN_BPTT/" rel="alternate" type="text/html" title="RNN backprop thru time(BPTT)" /><published>2020-01-12T00:00:00+08:00</published><updated>2020-01-12T00:00:00+08:00</updated><id>http://localhost:4000/RNN_BPTT</id><content type="html" xml:base="http://localhost:4000/RNN_BPTT/">&lt;p&gt;Notes on the math for RNN back propagation through time(BPTT).&lt;/p&gt;
+&lt;br&gt;</content><author><name>Huan</name></author><summary type="html">Notes on the math for RNN back propagation through time(BPTT), part 2. The 1st derivative of with respect to .</summary></entry><entry><title type="html">RNN backprop thru time(BPTT)</title><link href="https://chuacheowhuan.github.io/RNN_BPTT/" rel="alternate" type="text/html" title="RNN backprop thru time(BPTT)" /><published>2020-01-12T00:00:00+08:00</published><updated>2020-01-12T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/RNN_BPTT</id><content type="html" xml:base="https://chuacheowhuan.github.io/RNN_BPTT/">Notes on the math for RNN back propagation through time(BPTT).
 
-&lt;hr /&gt;
+---
 
-&lt;p&gt;&lt;script type=&quot;math/tex&quot;&gt;\hat{y}&lt;/script&gt;  is the prediction.&lt;/p&gt;
+$$\hat{y}$$  is the prediction.
 
-&lt;p&gt;&lt;script type=&quot;math/tex&quot;&gt;U&lt;/script&gt; is the weight matrix after the hidden layer.&lt;/p&gt;
+$$U$$ is the weight matrix after the hidden layer.
 
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;\hat{y} = f_y (U h_t + b_y)&lt;/script&gt;
+$$\hat{y} = f_y (U h_t + b_y)$$
 
-&lt;hr /&gt;
+---
 
-&lt;p&gt;&lt;script type=&quot;math/tex&quot;&gt;h_{t}&lt;/script&gt; is the hidden layer at time t.&lt;/p&gt;
+$$h_{t}$$ is the hidden layer at time t.
 
-&lt;p&gt;&lt;script type=&quot;math/tex&quot;&gt;f_{h}&lt;/script&gt; is the non linear function in the hidden layer.&lt;/p&gt;
+$$f_{h}$$ is the non linear function in the hidden layer.
 
-&lt;p&gt;&lt;script type=&quot;math/tex&quot;&gt;V&lt;/script&gt; is the weight matrix before the hidden layer.&lt;/p&gt;
+$$V$$ is the weight matrix before the hidden layer.
 
-&lt;p&gt;&lt;script type=&quot;math/tex&quot;&gt;W_{h_{t-1}}&lt;/script&gt; is the weight matrix in the hidden layer at the previous time
-step.&lt;/p&gt;
+$$W_{h_{t-1}}$$ is the weight matrix in the hidden layer at the previous time
+step.
 
-&lt;p&gt;&lt;script type=&quot;math/tex&quot;&gt;b_{h}&lt;/script&gt; is the bias at the hidden layer.&lt;/p&gt;
+$$b_{h}$$ is the bias at the hidden layer.
 
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;h_{t} = f_{h} (Vx_t + Wh_{t-1} + b_{h})&lt;/script&gt;
+$$h_{t} = f_{h} (Vx_t + Wh_{t-1} + b_{h})$$
 
-&lt;hr /&gt;
+---
 
-&lt;p&gt;No need to BPTT for this:&lt;/p&gt;
+No need to BPTT for this:
 
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;\frac{\delta L_{t}} {\delta U} =
+$$\frac{\delta L_{t}} {\delta U} =
 \sum_{i=0}^{T} \frac{\delta L_i} {\delta U} =
 \frac{\delta L_t} {\delta \hat{y}_t}
-\frac{\delta \hat{y}_t} {\delta U}&lt;/script&gt;
+\frac{\delta \hat{y}_t} {\delta U}$$
 
-&lt;hr /&gt;
+---
 
-&lt;p&gt;&lt;strong&gt;BPTT&lt;/strong&gt;&lt;/p&gt;
+**BPTT**
 
-&lt;p&gt;The loss at time t with respect to the weights in the hidden layer.&lt;/p&gt;
+The loss at time t with respect to the weights in the hidden layer.
 
-&lt;p&gt;The terms in square brackets &lt;script type=&quot;math/tex&quot;&gt;[]&lt;/script&gt; are written in such a way that the leftmost
-term is the most recent term while the rightmost is the oldest term.&lt;/p&gt;
+The terms in square brackets $$[]$$ are written in such a way that the leftmost
+term is the most recent term while the rightmost is the oldest term.
 
-&lt;p&gt;When k = t, the product sequence (or factor) on the left of
-&lt;script type=&quot;math/tex&quot;&gt;\frac{\delta h_{t}} {\delta W}&lt;/script&gt;, equals 1.&lt;/p&gt;
+When k = t, the product sequence (or factor) on the left of
+$$\frac{\delta h_{t}} {\delta W}$$, equals 1.
 
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;\frac{\delta L_{t}} {\delta W} =
+$$\frac{\delta L_{t}} {\delta W} =
 \frac{\delta L_{t}} {\delta \hat{y}_{t}}
 \frac{\delta \hat{y}_{t}} {\delta L_{t}}
 [
@@ -577,9 +665,9 @@ term is the most recent term while the rightmost is the oldest term.&lt;/p&gt;
 \frac{\delta h_{t-1}} {\delta h_{t-2}}
 \frac{\delta h_{t-2}} {\delta W}
 ) + ...
-]&lt;/script&gt;
+]$$
 
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;=
+$$=
 \frac{\delta L_t} {\delta \hat{y}_t}
 \frac{\delta \hat{y}_t} {\delta h_t}
 \sum_{k=0}^{t}
@@ -589,72 +677,75 @@ term is the most recent term while the rightmost is the oldest term.&lt;/p&gt;
 \frac{\delta h_{k+2}} {\delta h_{k+1}}
 \frac{\delta h_{k+1}} {\delta h_k}
 \frac{\delta h_k} {\delta W}
-]&lt;/script&gt;
+]$$
 
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;=
+$$=
 \frac{\delta L_t} {\delta \hat{y}_t}
 \frac{\delta \hat{y}_t} {\delta h_t}
 [ \sum_{k=0}^{t}
 ( \prod_{i=k+1}^{t}
 \frac{\delta h_{i}} {\delta h_{i-1}} )
-\frac{\delta h_k} {\delta W} ]&lt;/script&gt;
+\frac{\delta h_k} {\delta W} ]$$
 
-&lt;hr /&gt;
+---
 
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;\frac{\delta L_{t}} {\delta V}&lt;/script&gt;
+$$\frac{\delta L_{t}} {\delta V}$$
 
-&lt;p&gt;BPTT also needs to be done for calculating the loss with respect to weight matrix V.
+BPTT also needs to be done for calculating the loss with respect to weight matrix V.
 The dependence between hidden units and weight matrix V is  not only in one place.
 Hidden units from all the previous time steps also depend on V so we need to go
-backwards in time to calculate this gradient.&lt;/p&gt;
+backwards in time to calculate this gradient.
 
-&lt;hr /&gt;
+---
 
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">Notes on the math for RNN back propagation through time(BPTT).</summary></entry><entry><title type="html">Filter rows with same column values in Pandas dataframe</title><link href="http://localhost:4000/pandas_df_rm_row_with_same_col_val/" rel="alternate" type="text/html" title="Filter rows with same column values in Pandas dataframe" /><published>2019-12-25T00:00:00+08:00</published><updated>2019-12-25T00:00:00+08:00</updated><id>http://localhost:4000/pandas_df_rm_row_with_same_col_val</id><content type="html" xml:base="http://localhost:4000/pandas_df_rm_row_with_same_col_val/">&lt;p&gt;Filter rows with same column values in a Pandas dataframe.&lt;/p&gt;
+&lt;br&gt;</content><author><name>Huan</name></author><summary type="html">Notes on the math for RNN back propagation through time(BPTT).</summary></entry><entry><title type="html">Filter rows with same column values in Pandas dataframe</title><link href="https://chuacheowhuan.github.io/pandas_df_rm_row_with_same_col_val/" rel="alternate" type="text/html" title="Filter rows with same column values in Pandas dataframe" /><published>2019-12-25T00:00:00+08:00</published><updated>2019-12-25T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/pandas_df_rm_row_with_same_col_val</id><content type="html" xml:base="https://chuacheowhuan.github.io/pandas_df_rm_row_with_same_col_val/">Filter rows with same column values in a Pandas dataframe.
 
-&lt;hr /&gt;
+---
 
-&lt;p&gt;Assume the following Pandas dataframe where Q1 &amp;amp; Q2 are charges. A charge can
-either be +1 or -1.&lt;/p&gt;
+Assume the following Pandas dataframe where Q1 &amp; Q2 are charges. A charge can
+either be +1 or -1.
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;df = pd.DataFrame([[1,1],[-1,-1],[1,-1],[-1,1]], columns=['Q1', 'Q2'])
+```
+df = pd.DataFrame([[1,1],[-1,-1],[1,-1],[-1,1]], columns=['Q1', 'Q2'])
 
    Q1  Q2
 0   1   1
 1  -1  -1
 2   1  -1
 3  -1   1
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+```
 
-&lt;p&gt;The following code produces a dataframe where each row only contains
-opposite charges, i.e if Q1 is 1, Q2 is -1 &amp;amp; vice versa.&lt;/p&gt;
+The following code produces a dataframe where each row only contains
+opposite charges, i.e if Q1 is 1, Q2 is -1 &amp; vice versa.
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;df = df[ (df.Q1 == 1) &amp;amp; (df.Q2 == -1) | (df.Q1 == -1) &amp;amp; (df.Q2 == 1) ]
+```
+df = df[ (df.Q1 == 1) &amp; (df.Q2 == -1) | (df.Q1 == -1) &amp; (df.Q2 == 1) ]
 
    Q1  Q2
 2   1  -1
 3  -1   1
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+```
 
-&lt;hr /&gt;
+---
 
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">Filter rows with same column values in a Pandas dataframe.</summary></entry><entry><title type="html">Custom Sagemaker reinforcement learning container</title><link href="http://localhost:4000/custom_sagemaker_RL_container/" rel="alternate" type="text/html" title="Custom Sagemaker reinforcement learning container" /><published>2019-09-15T00:00:00+08:00</published><updated>2019-09-15T00:00:00+08:00</updated><id>http://localhost:4000/custom_sagemaker_RL_container</id><content type="html" xml:base="http://localhost:4000/custom_sagemaker_RL_container/">&lt;p&gt;Building &amp;amp; testing custom Sagemaker RL container.&lt;/p&gt;
+&lt;br&gt;</content><author><name>Huan</name></author><summary type="html">Filter rows with same column values in a Pandas dataframe.</summary></entry><entry><title type="html">Custom Sagemaker reinforcement learning container</title><link href="https://chuacheowhuan.github.io/custom_sagemaker_RL_container/" rel="alternate" type="text/html" title="Custom Sagemaker reinforcement learning container" /><published>2019-09-15T00:00:00+08:00</published><updated>2019-09-15T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/custom_sagemaker_RL_container</id><content type="html" xml:base="https://chuacheowhuan.github.io/custom_sagemaker_RL_container/">Building &amp; testing custom Sagemaker RL container.
 
-&lt;p&gt;Instead of using the official SageMaker supported version of Ray RLlib
-(version 0.5.3 &amp;amp; 0.6.5), I want to use version 0.7.3. In order to do so, I have
-to build &amp;amp; test my custom Sagemaker RL container.&lt;/p&gt;
+Instead of using the official SageMaker supported version of Ray RLlib
+(version 0.5.3 &amp; 0.6.5), I want to use version 0.7.3. In order to do so, I have
+to build &amp; test my custom Sagemaker RL container.
 
-&lt;hr /&gt;
+---
 
-&lt;p&gt;&lt;strong&gt;The Dockerfile:&lt;/strong&gt;&lt;/p&gt;
+**The Dockerfile:**
 
-&lt;p&gt;Add the Dockerfile below to &lt;code class=&quot;highlighter-rouge&quot;&gt;sagemaker-rl-container/ray/docker/0.7.3/&lt;/code&gt;:&lt;/p&gt;
+Add the Dockerfile below to ```sagemaker-rl-container/ray/docker/0.7.3/```:
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;ARG processor
+```
+ARG processor
 #FROM 520713654638.dkr.ecr.us-west-2.amazonaws.com/sagemaker-tensorflow-scriptmode:1.14.0-$processor-py3
 FROM 520713654638.dkr.ecr.us-west-2.amazonaws.com/sagemaker-tensorflow-scriptmode:1.12.0-$processor-py3
 
-RUN apt-get update &amp;amp;&amp;amp; apt-get install -y --no-install-recommends \
+RUN apt-get update &amp;&amp; apt-get install -y --no-install-recommends \
         build-essential \
         jq \
         libav-tools \
@@ -663,8 +754,8 @@ RUN apt-get update &amp;amp;&amp;amp; apt-get install -y --no-install-recommends
         python3.6-dev \
         python3-opengl \
         wget \
-        xvfb &amp;amp;&amp;amp; \
-    apt-get clean &amp;amp;&amp;amp; \
+        xvfb &amp;&amp; \
+    apt-get clean &amp;&amp; \
     rm -rf /var/lib/apt/lists/*
 
 RUN pip install --no-cache-dir \
@@ -674,7 +765,7 @@ RUN pip install --no-cache-dir \
     opencv-python-headless==4.1.0.25 \
     PyOpenGL==3.1.0 \
     pyyaml==5.1.1 \
-    redis&amp;gt;=3.2.2 \
+    redis&gt;=3.2.2 \
     ray==0.7.3 \
     ray[rllib]==0.7.3 \
     scipy==1.3.0 \
@@ -692,138 +783,151 @@ RUN chmod +x /usr/local/bin/start.sh
 
 # Starts framework
 ENTRYPOINT [&quot;bash&quot;, &quot;-m&quot;, &quot;start.sh&quot;]
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+```
 
-&lt;hr /&gt;
+---
 
-&lt;p&gt;&lt;strong&gt;Remove unneeded test files:&lt;/strong&gt;&lt;/p&gt;
+**Remove unneeded test files:**
 
-&lt;p&gt;Backup the &lt;code class=&quot;highlighter-rouge&quot;&gt;test&lt;/code&gt; folder as &lt;code class=&quot;highlighter-rouge&quot;&gt;test_bkup&lt;/code&gt;
-in &lt;code class=&quot;highlighter-rouge&quot;&gt;sagemaker-rl-container/&lt;/code&gt;.&lt;/p&gt;
+Backup the ```test``` folder as ```test_bkup```
+in ```sagemaker-rl-container/```.
 
-&lt;p&gt;Remove the following files not used in testing
-in &lt;code class=&quot;highlighter-rouge&quot;&gt;sagemaker-rl-container/test/integration/local/&lt;/code&gt;:&lt;/p&gt;
+Remove the following files not used in testing
+in ```sagemaker-rl-container/test/integration/local/```:
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;test_coach.py
+```
+test_coach.py
 test_vw_cb_explore.py
 test_vw_cbify.py
 test_vw_serving.py
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+```
 
-&lt;hr /&gt;
+---
 
-&lt;p&gt;&lt;strong&gt;Add/replace codes in test files to get role:&lt;/strong&gt;&lt;/p&gt;
+**Add/replace codes in test files to get role:**
 
-&lt;p&gt;In the &lt;code class=&quot;highlighter-rouge&quot;&gt;sagemaker-rl-container/test/conftest.py&lt;/code&gt;file, add/replace the
-following:&lt;/p&gt;
+In the ```sagemaker-rl-container/test/conftest.py```file, add/replace the
+following:
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;from sagemaker import get_execution_role
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+```
+from sagemaker import get_execution_role
+```
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;#parser.addoption('--role', default='SageMakerContainerBuildIntegrationTests')
+```
+#parser.addoption('--role', default='SageMakerContainerBuildIntegrationTests')
 parser.addoption('--role', default=get_execution_role()),
 
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+```
 
-&lt;p&gt;In the following files:&lt;/p&gt;
+In the following files:
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sagemaker-rl-container/test/integration/local/test_gym.py
+```
+sagemaker-rl-container/test/integration/local/test_gym.py
 sagemaker-rl-container/test/integration/local/test_ray.py
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+```
 
-&lt;p&gt;Add/replace the following:&lt;/p&gt;
+Add/replace the following:
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;from sagemaker import get_execution_role
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+```
+from sagemaker import get_execution_role
+```
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;#role='SageMakerRole',
+```
+#role='SageMakerRole',
 role = get_execution_role(),
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+```
 
-&lt;hr /&gt;
+---
 
-&lt;p&gt;&lt;strong&gt;Build the image:&lt;/strong&gt;&lt;/p&gt;
+**Build the image:**
 
-&lt;p&gt;In SageMaker, start a Jupyter notebook instance &amp;amp; open a terminal.&lt;/p&gt;
+In SageMaker, start a Jupyter notebook instance &amp; open a terminal.
 
-&lt;p&gt;Login into SageMaker ECR account:&lt;/p&gt;
+Login into SageMaker ECR account:
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ (aws ecr get-login --no-include-email --region &amp;lt;region&amp;gt; --registry-ids &amp;lt;AWS_ACC_ID&amp;gt;)
+```
+$ (aws ecr get-login --no-include-email --region &lt;region&gt; --registry-ids &lt;AWS_ACC_ID&gt;)
 $ (aws ecr get-login --no-include-email --region us-west-2 --registry-ids 520713654638)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+```
 
-&lt;p&gt;Copy &amp;amp; paste the output from the above command into the terminal &amp;amp; press Enter.&lt;/p&gt;
+Copy &amp; paste the output from the above command into the terminal &amp; press Enter.
 
-&lt;hr /&gt;
+---
 
-&lt;p&gt;Pull the base Tensorflow image from the aws ecr:&lt;/p&gt;
+Pull the base Tensorflow image from the aws ecr:
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ docker pull 520713654638.dkr.ecr.us-west-2.amazonaws.com/sagemaker-tensorflow-scriptmode:1.12.0-cpu-py3
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+```
+$ docker pull 520713654638.dkr.ecr.us-west-2.amazonaws.com/sagemaker-tensorflow-scriptmode:1.12.0-cpu-py3
+```
 
-&lt;p&gt;Build the Ray image using the &lt;code class=&quot;highlighter-rouge&quot;&gt;Dockerfile.tf&lt;/code&gt; from above:&lt;/p&gt;
+Build the Ray image using the ```Dockerfile.tf``` from above:
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ docker build -t custom-smk-rl-ctn:tf-1.12.0-ray-0.7.3-cpu-py3 -f ray/docker/0.7.3/Dockerfile.tf --build-arg processor=cpu .
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+```
+$ docker build -t custom-smk-rl-ctn:tf-1.12.0-ray-0.7.3-cpu-py3 -f ray/docker/0.7.3/Dockerfile.tf --build-arg processor=cpu .
+```
 
-&lt;hr /&gt;
+---
 
-&lt;p&gt;&lt;strong&gt;Local testing:&lt;/strong&gt;&lt;/p&gt;
+**Local testing:**
 
-&lt;p&gt;Install dependencies for testing:&lt;/p&gt;
+Install dependencies for testing:
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ cd sagemaker-rl-container
+```
+$ cd sagemaker-rl-container
 $ pip install .
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+```
 
-&lt;p&gt;Run the command below for local testing:&lt;/p&gt;
+Run the command below for local testing:
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;clear &amp;amp;&amp;amp; \
-docker images &amp;amp;&amp;amp; \
+```
+clear &amp;&amp; \
+docker images &amp;&amp; \
 pytest test/integration/local --framework tensorflow \
                               --toolkit ray \
                               --toolkit-version 0.7.3 \
                               --docker-base-name custom-smk-rl-ctn \
                               --tag tf-1.12.0-ray-0.7.3-cpu-py3 \
                               --processor cpu | tee local_test_output.txt
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+```
 
-&lt;p&gt;The output from the test will be saved in local_test_output.txt.&lt;/p&gt;
+The output from the test will be saved in local_test_output.txt.
 
-&lt;hr /&gt;
+---
 
-&lt;p&gt;&lt;strong&gt;Pushing to registry on AWS ECR:&lt;/strong&gt;&lt;/p&gt;
+**Pushing to registry on AWS ECR:**
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ (aws ecr get-login --no-include-email --region &amp;lt;region&amp;gt; --registry-ids &amp;lt;AWS_ACC_ID&amp;gt;)
+```
+$ (aws ecr get-login --no-include-email --region &lt;region&gt; --registry-ids &lt;AWS_ACC_ID&gt;)
 $ (aws ecr get-login --no-include-email --region us-west-2  --registry-ids 123456789012)
-# Copy &amp;amp; paste output to terminal &amp;amp; press enter.
+# Copy &amp; paste output to terminal &amp; press enter.
 
-$ aws ecr create-repository --repository-name &amp;lt;repo_name&amp;gt;
+$ aws ecr create-repository --repository-name &lt;repo_name&gt;
 $ aws ecr create-repository --repository-name custom-smk-rl-ctn
 
-$ docker tag &amp;lt;image_ID&amp;gt; &amp;lt;AWS_ACC_ID&amp;gt;.dkr.ecr.us-west-2.amazonaws.com/&amp;lt;repo_name&amp;gt;:&amp;lt;tag&amp;gt;
-$ docker tag ba542f0b9706 &amp;lt;123456789012&amp;gt;.dkr.ecr.us-west-2.amazonaws.com/custom-smk-rl-ctn:tf-1.12.0-cpu-py3
-$ docker tag ba542f0b9706 &amp;lt;123456789012&amp;gt;.dkr.ecr.us-west-2.amazonaws.com/custom-smk-rl-ctn:tf-1.12.0-ray-0.7.3-cpu-py3
+$ docker tag &lt;image_ID&gt; &lt;AWS_ACC_ID&gt;.dkr.ecr.us-west-2.amazonaws.com/&lt;repo_name&gt;:&lt;tag&gt;
+$ docker tag ba542f0b9706 &lt;123456789012&gt;.dkr.ecr.us-west-2.amazonaws.com/custom-smk-rl-ctn:tf-1.12.0-cpu-py3
+$ docker tag ba542f0b9706 &lt;123456789012&gt;.dkr.ecr.us-west-2.amazonaws.com/custom-smk-rl-ctn:tf-1.12.0-ray-0.7.3-cpu-py3
 
-$ docker push &amp;lt;AWS_ACC_ID&amp;gt;.dkr.ecr.us-west-2.amazonaws.com/&amp;lt;repo_name&amp;gt;:&amp;lt;tag&amp;gt;
-$ docker push &amp;lt;123456789012&amp;gt;.dkr.ecr.us-west-2.amazonaws.com/custom-smk-rl-ctn:tf-1.12.0-cpu-py3
-$ docker push &amp;lt;123456789012&amp;gt;.dkr.ecr.us-west-2.amazonaws.com/custom-smk-rl-ctn:tf-1.12.0-ray-0.7.3-cpu-py3
+$ docker push &lt;AWS_ACC_ID&gt;.dkr.ecr.us-west-2.amazonaws.com/&lt;repo_name&gt;:&lt;tag&gt;
+$ docker push &lt;123456789012&gt;.dkr.ecr.us-west-2.amazonaws.com/custom-smk-rl-ctn:tf-1.12.0-cpu-py3
+$ docker push &lt;123456789012&gt;.dkr.ecr.us-west-2.amazonaws.com/custom-smk-rl-ctn:tf-1.12.0-ray-0.7.3-cpu-py3
 
 
 $ aws ecr describe-repositories
 
-$ aws ecr list-images --repository-name &amp;lt;repo_name&amp;gt;
+$ aws ecr list-images --repository-name &lt;repo_name&gt;
 $ aws ecr list-images --repository-name custom-smk-rl-ctn
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+```
 
-&lt;hr /&gt;
+---
 
-&lt;p&gt;&lt;strong&gt;Testing with AWS SageMaker ML instance:&lt;/strong&gt;&lt;/p&gt;
+**Testing with AWS SageMaker ML instance:**
 
-&lt;p&gt;Run the command below for testing with SageMaker:&lt;/p&gt;
+Run the command below for testing with SageMaker:
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;clear &amp;amp;&amp;amp; \
-docker images &amp;amp;&amp;amp; \
+```
+clear &amp;&amp; \
+docker images &amp;&amp; \
 pytest test/integration/sagemaker --aws-id 123456789012 \
                                   --instance-type ml.m4.xlarge \
                                   --framework tensorflow \
@@ -831,69 +935,75 @@ pytest test/integration/sagemaker --aws-id 123456789012 \
                                   --toolkit-version 0.7.3 \
                                   --docker-base-name custom-smk-rl-ctn \
                                   --tag tf-1.12.0-ray-0.7.3-cpu-py3 | tee SageMaker_test_output.txt
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+```
 
-&lt;p&gt;The output from the test will be saved in SageMaker_test_output.txt.&lt;/p&gt;
+The output from the test will be saved in SageMaker_test_output.txt.
 
-&lt;hr /&gt;
+---
 
-&lt;p&gt;&lt;strong&gt;Pushing to registry on Docker hub:&lt;/strong&gt;&lt;/p&gt;
+**Pushing to registry on Docker hub:**
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ docker login
+```
+$ docker login
 
-$ docker tag &amp;lt;image_ID&amp;gt; &amp;lt;DockerHubUserName&amp;gt;/&amp;lt;repo_name&amp;gt;:&amp;lt;tag&amp;gt;
-$ docker tag ba542f0b9706 &amp;lt;DockerHubUserName&amp;gt;/custom-smk-rl-ctn:tf-1.12.0-cpu-py3
-$ docker tag ba542f0b9706 &amp;lt;DockerHubUserName&amp;gt;/custom-smk-rl-ctn:tf-1.12.0-ray-0.7.3-cpu-py3
+$ docker tag &lt;image_ID&gt; &lt;DockerHubUserName&gt;/&lt;repo_name&gt;:&lt;tag&gt;
+$ docker tag ba542f0b9706 &lt;DockerHubUserName&gt;/custom-smk-rl-ctn:tf-1.12.0-cpu-py3
+$ docker tag ba542f0b9706 &lt;DockerHubUserName&gt;/custom-smk-rl-ctn:tf-1.12.0-ray-0.7.3-cpu-py3
 
-$ docker push &amp;lt;DockerHubUserName&amp;gt;/&amp;lt;repo_name&amp;gt;:&amp;lt;tag&amp;gt;
-$ docker push &amp;lt;DockerHubUserName&amp;gt;/custom-smk-rl-ctn:tf-1.12.0-cpu-py3
-$ docker push &amp;lt;DockerHubUserName&amp;gt;/custom-smk-rl-ctn:tf-1.12.0-ray-0.7.3-cpu-py3
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+$ docker push &lt;DockerHubUserName&gt;/&lt;repo_name&gt;:&lt;tag&gt;
+$ docker push &lt;DockerHubUserName&gt;/custom-smk-rl-ctn:tf-1.12.0-cpu-py3
+$ docker push &lt;DockerHubUserName&gt;/custom-smk-rl-ctn:tf-1.12.0-ray-0.7.3-cpu-py3
+```
 
-&lt;hr /&gt;
+---
 
-&lt;p&gt;&lt;strong&gt;Training with custom SageMaker RL container:&lt;/strong&gt;&lt;/p&gt;
+**Training with custom SageMaker RL container:**
 
-&lt;hr /&gt;
 
-&lt;p&gt;&lt;strong&gt;Useful Docker commands:&lt;/strong&gt;&lt;/p&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ docker ps -a
+---
+
+**Useful Docker commands:**
+
+```
+$ docker ps -a
 
 $ docker images
 
-$ docker rm &amp;lt;container&amp;gt;
+$ docker rm &lt;container&gt;
 
-$ docker rmi &amp;lt;image&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+$ docker rmi &lt;image&gt;
+```
 
-&lt;hr /&gt;
+---
 
-&lt;p&gt;&lt;strong&gt;Useful AWS commands:&lt;/strong&gt;&lt;/p&gt;
+**Useful AWS commands:**
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ aws ecr delete-repository --force --repository-name &amp;lt;repo_name&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+```
+$ aws ecr delete-repository --force --repository-name &lt;repo_name&gt;
+```
 
-&lt;hr /&gt;
+---
 
-&lt;p&gt;&lt;strong&gt;References:&lt;/strong&gt;&lt;/p&gt;
+**References:**
 
-&lt;p&gt;&lt;a href=&quot;https://github.com/aws/sagemaker-rl-container&quot;&gt;https://github.com/aws/sagemaker-rl-container&lt;/a&gt;&lt;/p&gt;
+[https://github.com/aws/sagemaker-rl-container](https://github.com/aws/sagemaker-rl-container)
 
-&lt;hr /&gt;
+---
 
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">Building &amp;amp; testing custom Sagemaker RL container.</summary></entry><entry><title type="html">Reinforcement learning custom environment in Sagemaker with Ray (RLlib)</title><link href="http://localhost:4000/sagemaker_RL_custom_env/" rel="alternate" type="text/html" title="Reinforcement learning custom environment in Sagemaker with Ray (RLlib)" /><published>2019-09-11T00:00:00+08:00</published><updated>2019-09-11T00:00:00+08:00</updated><id>http://localhost:4000/sagemaker_RL_custom_env</id><content type="html" xml:base="http://localhost:4000/sagemaker_RL_custom_env/">&lt;p&gt;Demo setup for simple (reinforcement learning) custom environment in Sagemaker.
-This example uses Proximal Policy Optimization with Ray (RLlib).&lt;/p&gt;
+&lt;br&gt;</content><author><name>Huan</name></author><summary type="html">Building &amp;amp; testing custom Sagemaker RL container.</summary></entry><entry><title type="html">Reinforcement learning custom environment in Sagemaker with Ray (RLlib)</title><link href="https://chuacheowhuan.github.io/sagemaker_RL_custom_env/" rel="alternate" type="text/html" title="Reinforcement learning custom environment in Sagemaker with Ray (RLlib)" /><published>2019-09-11T00:00:00+08:00</published><updated>2019-09-11T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/sagemaker_RL_custom_env</id><content type="html" xml:base="https://chuacheowhuan.github.io/sagemaker_RL_custom_env/">Demo setup for simple (reinforcement learning) custom environment in Sagemaker.
+This example uses Proximal Policy Optimization with Ray (RLlib).
 
-&lt;hr /&gt;
+---
 
-&lt;p&gt;Code on my &lt;a href=&quot;https://github.com/ChuaCheowHuan/sagemaker_Ray_RLlib_custom_env&quot;&gt;Github&lt;/a&gt;&lt;/p&gt;
+Code on my [Github](https://github.com/ChuaCheowHuan/sagemaker_Ray_RLlib_custom_env)
 
-&lt;hr /&gt;
+---
 
-&lt;p&gt;&lt;strong&gt;The training script:&lt;/strong&gt;&lt;/p&gt;
+**The training script:**
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;import json
+```
+import json
 import os
 
 import gym
@@ -973,13 +1083,14 @@ if __name__ == &quot;__main__&quot;:
     os.environ[&quot;RAY_USE_XRAY&quot;] = &quot;1&quot;
     print(ppo.DEFAULT_CONFIG)
     MyLauncher().train_main()
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+```
 
-&lt;hr /&gt;
+---
 
-&lt;p&gt;&lt;strong&gt;The Jupyter notebook:&lt;/strong&gt;&lt;/p&gt;
+**The Jupyter notebook:**
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;!/bin/bash ./setup.sh
+```
+!/bin/bash ./setup.sh
 
 from time import gmtime, strftime
 import sagemaker
@@ -1018,444 +1129,18 @@ estimator = RLEstimator(entry_point=&quot;mod_op_train.py&quot;, # Our launcher 
                     )
 
 estimator.fit()
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+```
 
-&lt;hr /&gt;
+---
 
-&lt;p&gt;&lt;strong&gt;The container in Sagemaker Jupyter notebook instance:&lt;/strong&gt;&lt;/p&gt;
+**The container in Sagemaker Jupyter notebook instance:**
 
-&lt;p&gt;&lt;img src=&quot;/assets/images/blog/sagemaker_container.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+![image](/assets/images/blog/sagemaker_container.png)
 
-&lt;hr /&gt;
+---
 
-&lt;p&gt;See related &lt;a href=&quot;https://stackoverflow.com/questions/57724414/how-to-make-the-inputs-and-model-have-the-same-shape-rllib-ray-sagemaker-reinfo/57762933#57762933&quot;&gt;issue/motivation&lt;/a&gt;.&lt;/p&gt;
+See related [issue/motivation](https://stackoverflow.com/questions/57724414/how-to-make-the-inputs-and-model-have-the-same-shape-rllib-ray-sagemaker-reinfo/57762933#57762933).
 
-&lt;hr /&gt;
+---
 
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">Demo setup for simple (reinforcement learning) custom environment in Sagemaker. This example uses Proximal Policy Optimization with Ray (RLlib).</summary></entry><entry><title type="html">Django + Postgres + Docker + Travis CI + Heroku CD</title><link href="http://localhost:4000/DPDTH/" rel="alternate" type="text/html" title="Django + Postgres + Docker + Travis CI + Heroku CD" /><published>2019-09-02T00:00:00+08:00</published><updated>2019-09-02T00:00:00+08:00</updated><id>http://localhost:4000/DPDTH</id><content type="html" xml:base="http://localhost:4000/DPDTH/">&lt;p&gt;Basic workflow of testing a dockerized Django &amp;amp; Postgres web app with Travis
-(continuous integration) &amp;amp; deployment to Heroku (continuous deployment).&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;&lt;strong&gt;Prerequisite:&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;1) This post assumes that the reader has accounts with Github, Travis &amp;amp; Heroku
-&amp;amp; already has the accounts configured. For example, linking Travis with Github,
-adding a Postgres server in Heroku &amp;amp; setting OS environment variables in
-Travis &amp;amp; Heroku websites.&lt;/p&gt;
-
-&lt;p&gt;2) Basic working knowledge of Django &amp;amp; Docker.&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;Code on my &lt;a href=&quot;https://github.com/ChuaCheowHuan/web_app_DPDTH&quot;&gt;Github&lt;/a&gt;&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;&lt;strong&gt;Which copy of Postgres to use during the different stages in the workflow?&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;During development, we won’t be using a local copy of Postgres database
-server. The Docker’s copy of Postgres is used.&lt;/p&gt;
-
-&lt;p&gt;When testing in Travis, we don’t have to ask Travis for a copy of Postgres, we
-won’t be using Travis’s copy, we’ll be using the Docker’s copy.&lt;/p&gt;
-
-&lt;p&gt;During deployment, we have to use Heroku’s copy.&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;&lt;strong&gt;makemigrations&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;Always run &lt;code class=&quot;highlighter-rouge&quot;&gt;docker-compose web run python manage.py makemigrations&lt;/code&gt; before
-deployment to Heroku or in our case, before pushing to Github.&lt;/p&gt;
-
-&lt;p&gt;The actual &lt;code class=&quot;highlighter-rouge&quot;&gt;python manage.py migrate&lt;/code&gt; for the Postgres server addon from
-Heroku will be run in the &lt;code class=&quot;highlighter-rouge&quot;&gt;Procfile&lt;/code&gt; file.&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;&lt;strong&gt;Listing files &amp;amp; directories in a tree:&lt;/strong&gt;&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;cd web_app_DPDTH
-
-$ tree -a -I &quot;CS50_web_dev|staticfiles|static|templates|LICENSE|README.md|__init__.py|settings_DPTH_.py|urls.py|wsgi.py|db.sqlite3|airline4_tests_.py|apps.py|migrations|views.py|models.py|flights.csv|manage.py|wait-for-it.sh|admin.py|.git|.travis_DPTH_.yml|__pycache__&quot;
-
-.
-├── .travis.yml
-├── .travis_DPDTH_.yml
-├── .travis_old.yml
-├── Dockerfile
-├── Procfile
-├── airline
-│   └── settings.py
-├── docker-compose.yml
-├── docker_push.sh
-├── flights
-│   └── tests.py
-├── heroku-container-release.sh
-└── requirements.txt
-
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;As shown in the tree above, the 9 files that matter in the workflow:&lt;/p&gt;
-
-&lt;p&gt;1) tests.py&lt;/p&gt;
-
-&lt;p&gt;2) settings.py&lt;/p&gt;
-
-&lt;p&gt;3) requirements.txt&lt;/p&gt;
-
-&lt;p&gt;4) Dockerfile&lt;/p&gt;
-
-&lt;p&gt;5) docker-compose.yml&lt;/p&gt;
-
-&lt;p&gt;6) .travis.yml&lt;/p&gt;
-
-&lt;p&gt;7) docker_push.sh&lt;/p&gt;
-
-&lt;p&gt;8) heroku-container-release.sh&lt;/p&gt;
-
-&lt;p&gt;9) Procfile&lt;/p&gt;
-
-&lt;p&gt;We will look at the contents of each of the 9 files in the sections below.&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;&lt;strong&gt;tests.py&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;This is the test file that Travis will use for testing the app.
-You write whatever test you want for Travis to run with.&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;from django.db.models import Max
-from django.test import Client, TestCase
-
-from .models import Airport, Flight, Passenger
-
-# Create your tests here.
-class FlightsTestCase(TestCase):
-
-    def setUp(self):
-
-        # Create airports.
-        a1 = Airport.objects.create(code=&quot;AAA&quot;, city=&quot;City A&quot;)
-        a2 = Airport.objects.create(code=&quot;BBB&quot;, city=&quot;City B&quot;)
-
-        # Create flights.
-        Flight.objects.create(origin=a1, destination=a2, duration=100)
-        Flight.objects.create(origin=a1, destination=a1, duration=200)
-        Flight.objects.create(origin=a2, destination=a1, duration=300)
-
-    # 1
-    def test_departures_count(self):
-        a = Airport.objects.get(code=&quot;AAA&quot;)
-        self.assertEqual(a.departures.count(), 2)
-
-    # 2
-    def test_arrivals_count(self):
-        a = Airport.objects.get(code=&quot;AAA&quot;)
-        self.assertEqual(a.arrivals.count(), 2)
-
-    # 3
-    def test_valid_flight(self):
-        a1 = Airport.objects.get(code=&quot;AAA&quot;)
-        a2 = Airport.objects.get(code=&quot;BBB&quot;)
-        f = Flight.objects.get(origin=a1, destination=a2)
-        self.assertTrue(f.is_valid_flight())
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;&lt;strong&gt;settings.py&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;Under the database section, the &lt;code class=&quot;highlighter-rouge&quot;&gt;DATABASES['default']&lt;/code&gt; sets the default
-database so the default database is the one connected by the OS environment
-variable &lt;code class=&quot;highlighter-rouge&quot;&gt;DATABASE_URL&lt;/code&gt;, however if this is unavailable, we’ll use the one
-defined with &lt;code class=&quot;highlighter-rouge&quot;&gt;'HOST': 'db'&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;This setup allows us to use &lt;code class=&quot;highlighter-rouge&quot;&gt;'HOST': 'db'&lt;/code&gt; which is the Docker’s copy of
-postgres during development phase &amp;amp; also during tesing phase with Travis
-while using the Heroku’s copy during deployment which is provided by
-connecting to the &lt;code class=&quot;highlighter-rouge&quot;&gt;DATABASE_URL&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;The &lt;code class=&quot;highlighter-rouge&quot;&gt;DATABASE_URL&lt;/code&gt;, as an OS environment variable which is generated by
-Heroku after a Database is added to the web app in the Heroku website.&lt;/p&gt;
-
-&lt;p&gt;Add and/or edit the following to the &lt;code class=&quot;highlighter-rouge&quot;&gt;settings.py&lt;/code&gt; file:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;import django_heroku
-import dj_database_url
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',
-
-    'whitenoise.middleware.WhiteNoiseMiddleware',  # new
-
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
-]
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres',
-        'USER': 'postgres',
-        'PASSWORD': 'postgres',
-        'HOST': 'db', # Docker's copy of postgres
-        'PORT': 5432,
-        #'PORT': 5433,
-    }
-}
-
-DATABASE_URL = os.environ.get('DATABASE_URL')
-db_from_env = dj_database_url.config(default=DATABASE_URL, conn_max_age=500, ssl_require=True)
-DATABASES['default'].update(db_from_env)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;django_heroku.settings(locals())
-
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;&lt;strong&gt;requirements.txt&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;This file lets Docker &amp;amp; Travis know what packages are needed for the app.
-This is needed in &lt;code class=&quot;highlighter-rouge&quot;&gt;Dockerfile&lt;/code&gt; &amp;amp; &lt;code class=&quot;highlighter-rouge&quot;&gt;.travis.yml&lt;/code&gt; files.&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;django&amp;gt;=2.0.11
-psycopg2
-psycopg2-binary
-dj-database-url==0.5.0
-gunicorn
-whitenoise
-django-heroku
-pytz
-sqlparse
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;&lt;strong&gt;Dockerfile&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;This contains the instructions for building a Docker image.&lt;/p&gt;
-
-&lt;p&gt;The &lt;code class=&quot;highlighter-rouge&quot;&gt;CMD gunicorn airline.wsgi:application --bind 0.0.0.0:$PORT&lt;/code&gt; tells
-Docker to use gunicorn as the web server.
-See &lt;a href=&quot;https://devcenter.heroku.com/articles/container-registry-and-runtime#testing-an-image-locally&quot;&gt;here&lt;/a&gt;
-for details.&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;FROM python:3
-
-WORKDIR /usr/src/app
-
-ADD requirements.txt /usr/src/app
-
-RUN pip install -r requirements.txt
-
-ADD . /usr/src/app
-
-# collect static files
-RUN python manage.py collectstatic --noinput
-
-CMD gunicorn airline.wsgi:application --bind 0.0.0.0:$PORT
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;&lt;strong&gt;docker-compose.yml&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;This contains the instructions on how to run a Docker containers which is an
-instance of a Docker image.&lt;/p&gt;
-
-&lt;p&gt;Notice the &lt;code class=&quot;highlighter-rouge&quot;&gt;sleep&lt;/code&gt; delay introduced in the 2 &lt;code class=&quot;highlighter-rouge&quot;&gt;command:&lt;/code&gt; sections.
-See &lt;a href=&quot;https://chuacheowhuan.github.io/docker_travis/&quot;&gt;here&lt;/a&gt; for details.&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;version: '3'
-
-services:
-    db:
-        image: postgres
-    migration:
-        build: .
-        command: bash -c 'while !&amp;lt;/dev/tcp/db/5432; do sleep 1; done; python3 manage.py migrate'
-        volumes:
-            - .:/usr/src/app
-        depends_on:
-            - db
-    web:
-        build: .
-#        container_name: webapp-dpdth
-        image: webapp-dpdth
-        command: bash -c 'while !&amp;lt;/dev/tcp/db/5432; do sleep 1; done; python3 manage.py runserver 0.0.0.0:8000'
-        volumes:
-            - .:/usr/src/app
-        ports:
-            - &quot;8000:8000&quot;
-        depends_on:
-            - db
-            - migration
-
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;&lt;strong&gt;.travis.yml&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;This file contains instructions for Travis. Notice that we’re not using the
-Postgres from Travis because we’re using Postgres from Docker directly.
-The &lt;code class=&quot;highlighter-rouge&quot;&gt;postgresql&lt;/code&gt; is therefore commented out under the &lt;code class=&quot;highlighter-rouge&quot;&gt;services:&lt;/code&gt;
-section.&lt;/p&gt;
-
-&lt;p&gt;Under &lt;code class=&quot;highlighter-rouge&quot;&gt;script:&lt;/code&gt;, we ask Travis to run the test using Docker with
-the &lt;code class=&quot;highlighter-rouge&quot;&gt;docker-compose&lt;/code&gt; command.&lt;/p&gt;
-
-&lt;p&gt;Under &lt;code class=&quot;highlighter-rouge&quot;&gt;deploy:&lt;/code&gt;, we execute a &lt;code class=&quot;highlighter-rouge&quot;&gt;docker_push.sh&lt;/code&gt; script, more details in
-the sections below.&lt;/p&gt;
-
-&lt;p&gt;The &lt;code class=&quot;highlighter-rouge&quot;&gt;skip_cleanup: true&lt;/code&gt; tells Travis not to remove any files that it
-deems unnecessary after deployment. Travis does not have permission to do that
-on Heroku anyway.&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;language: python
-python:
-    - 3.6
-services:
-    - docker
-#    - postgresql
-install:
-    - pip install -r requirements.txt
-script:
-    - docker-compose run web python manage.py test
-deploy:
-    provider: script
-    script: bash docker_push.sh
-    skip_cleanup: true
-    on:
-        branch: master
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;&lt;strong&gt;Workflow for after testing with Travis to deployment to Heroku&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;The main workflow after testing to deployment is as such:&lt;/p&gt;
-
-&lt;p&gt;tag image -&amp;gt; push image to registry -&amp;gt; release image&lt;/p&gt;
-
-&lt;p&gt;We’ll see how to do that in the following script files:&lt;/p&gt;
-
-&lt;p&gt;1) docker_push.sh&lt;/p&gt;
-
-&lt;p&gt;2) heroku-container-release.sh&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;&lt;strong&gt;docker_push.sh&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;This file does several things listed as follows:&lt;/p&gt;
-
-&lt;p&gt;1) Login to the Heroku’s image registry.&lt;/p&gt;
-
-&lt;p&gt;2) &lt;code class=&quot;highlighter-rouge&quot;&gt;tag&lt;/code&gt; the source image &lt;code class=&quot;highlighter-rouge&quot;&gt;webapp-dpdth:latest&lt;/code&gt; to the target
-image &lt;code class=&quot;highlighter-rouge&quot;&gt;registry.heroku.com/webapp-dpdth/web&lt;/code&gt;.
-Replace &lt;code class=&quot;highlighter-rouge&quot;&gt;webapp-dpdth&lt;/code&gt; with your app name on Heroku.&lt;/p&gt;
-
-&lt;p&gt;3) Push the target image to Heroku’s registry if the branch tested on Travis
-is a master branch &amp;amp; that it’s not a PR.&lt;/p&gt;
-
-&lt;p&gt;4) Change ownership &amp;amp; permission of files to allow Travis to execute
-the &lt;code class=&quot;highlighter-rouge&quot;&gt;heroku-container-release.sh&lt;/code&gt; script.&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;#!/bin/bash&lt;/span&gt;
-
-&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;docker login &lt;span class=&quot;nt&quot;&gt;--username&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$HEROKU_DOCKER_USERNAME&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;--password&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$HEROKU_AUTH_TOKEN&lt;/span&gt; registry.heroku.com
-&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;docker tag webapp-dpdth:latest registry.heroku.com/webapp-dpdth/web
-&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$TRAVIS_BRANCH&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;master&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$TRAVIS_PULL_REQUEST&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;false&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;then &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;docker push registry.heroku.com/webapp-dpdth/web&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;fi
-
-&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;chmod&lt;/span&gt; +x heroku-container-release.sh
-&lt;span class=&quot;nb&quot;&gt;sudo chown&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$USER&lt;/span&gt;:docker ~/.docker
-&lt;span class=&quot;nb&quot;&gt;sudo chown&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$USER&lt;/span&gt;:docker ~/.docker/config.json
-&lt;span class=&quot;nb&quot;&gt;sudo chmod &lt;/span&gt;g+rw ~/.docker/config.json
-
-./heroku-container-release.sh
-
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;&lt;strong&gt;heroku-container-release.sh&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;This file is for releasing a Docker image via Heroku’s API.
-Replace &lt;code class=&quot;highlighter-rouge&quot;&gt;webapp-dpdth&lt;/code&gt; with your app name on Heroku.&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;#!/bin/bash&lt;/span&gt;
-&lt;span class=&quot;nv&quot;&gt;imageId&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;$(&lt;/span&gt;docker inspect registry.heroku.com/webapp-dpdth/web &lt;span class=&quot;nt&quot;&gt;--format&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;={{&lt;/span&gt;.Id&lt;span class=&quot;o&quot;&gt;}}&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;nv&quot;&gt;payload&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'{&quot;updates&quot;:[{&quot;type&quot;:&quot;web&quot;,&quot;docker_image&quot;:&quot;'&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$imageId&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'&quot;}]}'&lt;/span&gt;
-curl &lt;span class=&quot;nt&quot;&gt;-n&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-X&lt;/span&gt; PATCH https://api.heroku.com/apps/webapp-dpdth/formation &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;-d&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$payload&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;-H&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;Content-Type: application/json&quot;&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;-H&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;Accept: application/vnd.heroku+json; version=3.docker-releases&quot;&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;-H&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;Authorization: Bearer &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$HEROKU_AUTH_TOKEN&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;See &lt;a href=&quot;https://devcenter.heroku.com/articles/container-registry-and-runtime#releasing-an-image&quot;&gt;here&lt;/a&gt;
-for details.&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;&lt;strong&gt;Procfile&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;This file is for Heroku. The command in the &lt;code class=&quot;highlighter-rouge&quot;&gt;release:&lt;/code&gt; section will run
-after a Docker image is released. It will run the &lt;code class=&quot;highlighter-rouge&quot;&gt;migrate&lt;/code&gt; command
-with &lt;code class=&quot;highlighter-rouge&quot;&gt;--noinput&lt;/code&gt; option. Without running &lt;code class=&quot;highlighter-rouge&quot;&gt;migrate&lt;/code&gt;, the database on
-Heroku may not function correctly.&lt;/p&gt;
-
-&lt;p&gt;It also tells Heroku to deploy the web app using Gunicorn as the production
-server.&lt;/p&gt;
-
-&lt;p&gt;Note that &lt;code class=&quot;highlighter-rouge&quot;&gt;airline&lt;/code&gt; is the Django project name. It’s not the web app name
-in the Django project &amp;amp; is also not the web app name in Heroku.&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;release: python manage.py migrate --noinput
-web: gunicorn airline.wsgi
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;&lt;strong&gt;The deployed web app&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;With the above files in place, push to Github &amp;amp; Travis will start testing.
-After all tests passed, deployment starts. If there isn’t any failures,
-the web app will be running on:&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://webapp-dpdth.herokuapp.com&quot;&gt;https://webapp-dpdth.herokuapp.com&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;This &lt;a href=&quot;https://webapp-dpdth.herokuapp.com/admin&quot;&gt;link&lt;/a&gt; brings you to the admin
-page. It is using the &lt;strong&gt;Heroku’s copy&lt;/strong&gt; of Postgres.&lt;/p&gt;
-
-&lt;p&gt;This &lt;a href=&quot;https://travis-ci.com/ChuaCheowHuan/web_app_DPDTH/builds/125458792&quot;&gt;link&lt;/a&gt; brings you to my built log in Travis.com which shows how a successful
-test/deploy built looks like.&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;&lt;strong&gt;Web security:&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;Please note that web security has not been throughly consider in this basic
-workflow describe above. &lt;strong&gt;Do NOT&lt;/strong&gt; simply use the above workflow for
-production.&lt;/p&gt;
-
-&lt;p&gt;For example the &lt;code class=&quot;highlighter-rouge&quot;&gt;SECRET_KEY&lt;/code&gt; in the &lt;code class=&quot;highlighter-rouge&quot;&gt;settings.py&lt;/code&gt; isn’t dealt with at all
-and web security is really beyond the scope of this post.&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">Basic workflow of testing a dockerized Django &amp;amp; Postgres web app with Travis (continuous integration) &amp;amp; deployment to Heroku (continuous deployment).</summary></entry></feed>
+&lt;br&gt;</content><author><name>Huan</name></author><summary type="html">Demo setup for simple (reinforcement learning) custom environment in Sagemaker. This example uses Proximal Policy Optimization with Ray (RLlib).</summary></entry></feed>

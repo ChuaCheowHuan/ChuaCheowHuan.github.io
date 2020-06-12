@@ -2,7 +2,6 @@
 layout: posts
 author: Huan
 title: PBT for MARL
-#published: true
 ---
 
 My attempt to implement a water down version of PBT (Population based training) for MARL (Multi-agent reinforcement learning).
