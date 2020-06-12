@@ -13,7 +13,12 @@ This is **WIP**.
 
 ---
 
+Code on my [Github](https://github.com/ChuaCheowHuan/gym-continuousDoubleAuction)
+
+---
+
 # Contents:
+
 1) [Update](#update)
 
 2) [Purpose of this repository](#purpose-of-this-repository)
@@ -32,27 +37,31 @@ This is **WIP**.
 
 9) [Disclaimer](#disclaimer)
 
-10) [Generated LOB](#generated-lob)
+# Appendix:
 
-11) [Observation space](#observation-space)
+10) [Observation space](#observation-space)
 
-12) [Action space](#action-space)
+11) [Action space](#action-space)
 
-13) [Making sense of the render output](#making-sense-of-the-render-output)
+12) [Making sense of the render output](#making-sense-of-the-render-output)
+
+13) [Generated LOB](#generated-lob)
 
 ---
 
 # Update:
-20200327:
 
-1) Include training script with n agents & k trained agents.
+20200612
 
-2) New reward function which requires the agents to maximize profit while
-minimizing number of trades made in an episode (trading session).
+1) Breakup training script into smaller parts under train folder.
 
-3) Improve storage for callback functions & plot functionality to allow
-plotting of more than 100 episodes.
+2) Some info from trader's account such as NAV are added to the environment's step info dictionary.
 
+3) Added logging/loading of step & episodic data to json files with gzip.
+
+4) Added subplot functionalities for self-play generated LOB data.
+
+[20200327](https://github.com/ChuaCheowHuan/gym-continuousDoubleAuction/pull/11)
 
 [20200322](https://github.com/ChuaCheowHuan/gym-continuousDoubleAuction/pull/10)
 
@@ -63,6 +72,7 @@ plotting of more than 100 episodes.
 ---
 
 # Purpose of this repository:
+
 The purpose of this repository is to create a custom MARL
 (multi-agent reinforcement learning) environment where multiple agents trade
 against one another in a CDA (continuous double auction).
@@ -79,16 +89,12 @@ Each time step is a snapshot of the limit order book & a key assumption is that
 all traders(agents) suffer the same lag (wait for all traders to have their orders
 executed before seeing the next LOB snapshot).
 
-Note:
-
-Each agent is a trader, both terms will be used interchangeably in this
-environment.
-
 ---
 
 # Example:
+
 The example is available in this Jupyter notebook implemented with
-RLlib: `CDA_env_RLlib.ipynb`. This notebook is tested in Colab.
+RLlib: `CDA_env_RLlib_NSF.ipynb`. This notebook is tested in Colab.
 
 This example uses two trained agents & N random agents. All agents compete with
 one another in this zero-sum environment, irregardless of whether they're
@@ -118,6 +124,7 @@ The results with 10 agents are shown in the figures below:
 
 If you're running locally, you can run the following command & navigate
 to ```localhost:6006``` in your browser to access the **tensorboard graphs**:
+
 ```
 $ tensorboard --logdir ~/ray_results
 ```
@@ -134,9 +141,13 @@ CDA simulator with dummy (non-learning) random agents.
 # Dependencies:
 
 1) tensorFlow
+
 2) ray[rllib]
+
 3) pandas
+
 4) sortedcontainers
+
 5) sklearn
 
 For a full list of dependencies & versions, see `requirements.txt` in this
@@ -145,7 +156,9 @@ repository.
 ---
 
 # Installation:
+
 The environment is installable via pip.
+
 ```
 $ cd gym-continuousDoubleAuction
 
@@ -155,48 +168,50 @@ $ pip install -e .
 ---
 
 # TODO:
-1) Custom RLlib workflow to include custom RND + PPO policies.
-(for training script).
 
-2) Parametric or hybrid action space (or experiment with different types of
-  action space).
+1) Better documentation.
 
-3) More robust tests (add LOB test into test script).
+2) More robust tests (add LOB test into test script).
 
-4) Better documentation.
+3) Generalize the environment to use more than 1 LOB.
 
-5) Display data for all steps (for visualization after simulation).
+4) Parametric or hybrid action space (or experiment with different types of
+action space).
 
-6) Move action consequences after each step by each agent into the respective
-info dictionary.
+5) Expose the limit orders (that are currently in the LOB or aggregated LOB)
+which belongs to a particular trader as observation to that trader.  
+
+6) Allow traders to have random starting capital.
 
 7) Instead of traders(agents) having the same lag, introduce zero lag
 (Each LOB snapshot in each t-step is visible to all traders) or random lag.
 
-8) Allow traders to have different starting capital.
+8) Allows a distribution of previous winning policies to be selected for
+trained agents (for training script).
 
-9) Expose the limit orders (that are currently in the LOB or aggregated LOB)
-which belongs to a particular trader as observation to that trader.  
+9) Custom RLlib workflow to include custom RND + PPO policies (for training script).
 
-10) Allows a distribution of previous winning policies to be selected for
-trained agents.
+10) Update current sample model (deprecated) (for training script).
 
 11) Move TODO to issues.
 
 ---
 
 # Acknowledgements:
+
 The orderbook matching engine is adapted from
 https://github.com/dyn4mik3/OrderBook
 
 ---
 
 # Contributing:
+
 Please see [CONTRIBUTING.md](https://github.com/ChuaCheowHuan/gym-continuousDoubleAuction/blob/master/CONTRIBUTING.md).
 
 ---
 
 # Disclaimer:
+
 This repository is only meant for research purposes & is **never** meant to be
 used in any form of trading. Past performance is no guarantee of future results.
 If you suffer losses from using this repository, you are the sole person
@@ -205,41 +220,33 @@ way.
 
 ---
 
-# Generated LOB:
+# Appendix:
 
-Bid price:
+---
 
-![image](/assets/images/MARL_CDA_env/ten_k/bid_price.png)
+# Observation space:
 
-Ask price:
+Each obs is a snapshot in each environment step.
 
-![image](/assets/images/MARL_CDA_env/ten_k/ask_price.png)
+```
+obs = [array([1026., 2883., 1258., 1263., 3392., 1300., 1950., 1894., 2401., 4241.],          # bid size list
+       array([64., 63., 62., 61., 60., 59., 58., 57., 56., 55.]),                             # bid price list
+       array([ -519., -2108.,  -215., -1094., -1687., -2667., -3440., -2902., -1440 -3078.]), # ask size list
+       array([-65., -66., -67., -68., -69., -70., -71., -72., -73., -74.])]                   # ask price list
+```
 
-Midpoint price:
+---
 
-![image](/assets/images/MARL_CDA_env/ten_k/midpt_price.png)
+# Action space:
 
-Bid size:
-
-![image](/assets/images/MARL_CDA_env/ten_k/bid_size.png)
-
-Ask size:
-
-![image](/assets/images/MARL_CDA_env/ten_k/ask_size.png)
-
-Order imbalance:
-
-![image](/assets/images/MARL_CDA_env/ten_k/ord_imb.png)
-
-Sum of order imbalance:
-
-![image](/assets/images/MARL_CDA_env/ten_k/sum_imb.png)
+See [PR 9](https://github.com/ChuaCheowHuan/gym-continuousDoubleAuction/pull/9) for the current action space.
 
 ---
 
 # Making sense of the render output:
 
 **The step separator:**
+
 ```
 ************************************************** t_step = 306 **************************************************
 ```
@@ -250,11 +257,17 @@ Sum of order imbalance:
 Actions output from the model:
 
 1) Each column represents the action from each trader(agent).
+
 2) Row 1 represents the side: none, bid, ask (0 to 2).
+
 3) Row 2 represents the type: market, limit, modify, cancel.
+
 4) Row 3 represents the mean for size selection.
+
 5) Row 4 represents the sigma for size selection.
+
 6) Row 5 represents the price: based on LOB market depth from 0 to 11.
+
 ```
 Model actions:
  --  --  --  --
@@ -267,10 +280,15 @@ Model actions:
 ```
 
 1) Column 1 represents the ID of each trader(agent).
+
 2) Column 2 the side: none, bid, ask (0 to 2).
+
 3) Column 3 type: market, limit, modify, cancel.
+
 4) Column 4 represents the order size.
+
 5) Column 5 represents the order price.
+
 ```
 Formatted actions acceptable by LOB:
  -  ---  ------  -----  --
@@ -291,6 +309,7 @@ Shuffled action queue sequence for LOB executions:
 ---
 
 **Rewards, dones, & infos:**
+
 ```
 rewards:
  {0: 0.0, 1: 0.0, 2: 0.0, 3: 0.0}
@@ -308,10 +327,15 @@ infos:
 
 1) The columns represents the 10 levels (1 to 10, left to right) of the market
 depth in the LOB.
+
 2) Row 1 represents the bid size.
+
 3) Row 2 represents the bid price.
+
 4) Row 3 represents the ask size.
+
 5) Row 4 represents the ask price.
+
 ```
 agg LOB @ t-1
  ------  -----  ------  ------  ------  ------  ------  ------  ------  ------
@@ -337,6 +361,7 @@ agg LOB @ t
 **LOB bids:**
 
 The current limit bid orders in the LOB.
+
 ```
 LOB:
  ***Bids***
@@ -413,6 +438,7 @@ Trades that took place when executing the action of a trader(agent) at t-step.
 
 act_seq_num represents the sequence of the action. In this case, it's the
 2nd action executed at t-step.
+
 ```
 TRADES (act_seq_num): 2
    seq_Trade_ID  timestamp price    size  time  counter_ID counter_side  counter_order_ID counter_new_book_size  init_ID init_side init_order_ID init_new_LOB_size
@@ -425,6 +451,7 @@ TRADES (act_seq_num): 2
 
 The new limit orders inserted into LOB
 (includes unfilled leftover quantity from previous order).
+
 ```
 order_in_book (act_seq_num): 0
 type    side      quantity    price    trade_id    timestamp    order_id
@@ -469,6 +496,7 @@ equal to 0 (zero-sum game).
 sum of beginning NAV of all traders(agents).
 
 Note: Small random rounding errors are present.
+
 ```
 total_sys_profit = -9E-21; total_sys_nav = 3999999.999999999999999999991
 ```
@@ -478,6 +506,7 @@ total_sys_profit = -9E-21; total_sys_nav = 3999999.999999999999999999991
 **Sample output results** for final training iteration:
 
 1) The episode_reward is zero (zero sum game) for each episode.
+
 ```
 episode_reward_max: 0.0
 episode_reward_mean: 0.0
@@ -485,6 +514,7 @@ episode_reward_min: 0.0
 ```
 
 2) The mean reward of each policy is shown under `policy_reward_mean`.
+
 ```
 .
 .
@@ -566,6 +596,38 @@ Number of trials: 1 ({'TERMINATED': 1})
 TERMINATED trials:
  - PPO_continuousDoubleAuction-v0_0:	TERMINATED, [3 CPUs, 0 GPUs], [pid=10220], 649 s, 10 iter, 40000 ts, 0 rew
 ```
+
+---
+
+# Generated LOB:
+
+Bid price:
+
+![image](/assets/images/MARL_CDA_env/ten_k/bid_price.png)
+
+Ask price:
+
+![image](/assets/images/MARL_CDA_env/ten_k/ask_price.png)
+
+Midpoint price:
+
+![image](/assets/images/MARL_CDA_env/ten_k/midpt_price.png)
+
+Bid size:
+
+![image](/assets/images/MARL_CDA_env/ten_k/bid_size.png)
+
+Ask size:
+
+![image](/assets/images/MARL_CDA_env/ten_k/ask_size.png)
+
+Order imbalance:
+
+![image](/assets/images/MARL_CDA_env/ten_k/ord_imb.png)
+
+Sum of order imbalance:
+
+![image](/assets/images/MARL_CDA_env/ten_k/sum_imb.png)
 
 ---
 

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.6">Jekyll</generator><link href="https://chuacheowhuan.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://chuacheowhuan.github.io/" rel="alternate" type="text/html" /><updated>2020-04-15T20:56:17+08:00</updated><id>https://chuacheowhuan.github.io/feed.xml</id><title type="html">Every little gist</title><subtitle></subtitle><author><name>Chua Cheow Huan</name></author><entry><title type="html">RLlib trainer common config</title><link href="https://chuacheowhuan.github.io/RLlib_trainer_config/" rel="alternate" type="text/html" title="RLlib trainer common config" /><published>2020-03-23T00:00:00+08:00</published><updated>2020-03-23T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/RLlib_trainer_config</id><content type="html" xml:base="https://chuacheowhuan.github.io/RLlib_trainer_config/">&lt;p&gt;Ray (0.8.2) RLlib trainer common config from:&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.6">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-06-12T10:57:56+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Every little gist</title><subtitle></subtitle><author><name>Chua Cheow Huan</name></author><entry><title type="html">RLlib trainer common config</title><link href="http://localhost:4000/RLlib_trainer_config/" rel="alternate" type="text/html" title="RLlib trainer common config" /><published>2020-03-23T00:00:00+08:00</published><updated>2020-03-23T00:00:00+08:00</updated><id>http://localhost:4000/RLlib_trainer_config</id><content type="html" xml:base="http://localhost:4000/RLlib_trainer_config/">&lt;p&gt;Ray (0.8.2) RLlib trainer common config from:&lt;/p&gt;
 
 &lt;p&gt;&lt;a href=&quot;https://github.com/ray-project/ray/blob/master/rllib/agents/trainer.py&quot;&gt;source&lt;/a&gt;&lt;/p&gt;
 
@@ -330,7 +330,7 @@ COMMON_CONFIG = {
 
 &lt;hr /&gt;
 
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">Ray (0.8.2) RLlib trainer common config from:</summary></entry><entry><title type="html">Output dimension from convolution layer</title><link href="https://chuacheowhuan.github.io/conv_output/" rel="alternate" type="text/html" title="Output dimension from convolution layer" /><published>2020-03-09T00:00:00+08:00</published><updated>2020-03-09T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/conv_output</id><content type="html" xml:base="https://chuacheowhuan.github.io/conv_output/">&lt;p&gt;How to calculate dimension of output from a convolution layer?&lt;/p&gt;
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">Ray (0.8.2) RLlib trainer common config from:</summary></entry><entry><title type="html">Output dimension from convolution layer</title><link href="http://localhost:4000/conv_output/" rel="alternate" type="text/html" title="Output dimension from convolution layer" /><published>2020-03-09T00:00:00+08:00</published><updated>2020-03-09T00:00:00+08:00</updated><id>http://localhost:4000/conv_output</id><content type="html" xml:base="http://localhost:4000/conv_output/">&lt;p&gt;How to calculate dimension of output from a convolution layer?&lt;/p&gt;
 
 &lt;hr /&gt;
 
@@ -380,7 +380,7 @@ convolution will be the same as input.&lt;/p&gt;
 &lt;p&gt;Using p = (f - 1) / 2 will produce output dimension = input dimension.&lt;/p&gt;
 
 &lt;hr /&gt;
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">How to calculate dimension of output from a convolution layer?</summary></entry><entry><title type="html">Changing G drive directory in Colab</title><link href="https://chuacheowhuan.github.io/colab/" rel="alternate" type="text/html" title="Changing G drive directory in Colab" /><published>2020-02-28T00:00:00+08:00</published><updated>2020-02-28T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/colab</id><content type="html" xml:base="https://chuacheowhuan.github.io/colab/">&lt;p&gt;Changing Google drive directory in Colab.&lt;/p&gt;
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">How to calculate dimension of output from a convolution layer?</summary></entry><entry><title type="html">Changing G drive directory in Colab</title><link href="http://localhost:4000/colab/" rel="alternate" type="text/html" title="Changing G drive directory in Colab" /><published>2020-02-28T00:00:00+08:00</published><updated>2020-02-28T00:00:00+08:00</updated><id>http://localhost:4000/colab</id><content type="html" xml:base="http://localhost:4000/colab/">&lt;p&gt;Changing Google drive directory in Colab.&lt;/p&gt;
 
 &lt;hr /&gt;
 
@@ -394,7 +394,7 @@ drive.mount('/content/gdrive')
 
 &lt;hr /&gt;
 
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">Changing Google drive directory in Colab.</summary></entry><entry><title type="html">Linear regression (Bayesian)</title><link href="https://chuacheowhuan.github.io/linear_regression_bayesian/" rel="alternate" type="text/html" title="Linear regression (Bayesian)" /><published>2020-01-29T00:00:00+08:00</published><updated>2020-01-29T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/linear_regression_bayesian</id><content type="html" xml:base="https://chuacheowhuan.github.io/linear_regression_bayesian/">&lt;p&gt;Notes on the probability for linear regression (Bayesian)&lt;/p&gt;
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">Changing Google drive directory in Colab.</summary></entry><entry><title type="html">Linear regression (Bayesian)</title><link href="http://localhost:4000/linear_regression_bayesian/" rel="alternate" type="text/html" title="Linear regression (Bayesian)" /><published>2020-01-29T00:00:00+08:00</published><updated>2020-01-29T00:00:00+08:00</updated><id>http://localhost:4000/linear_regression_bayesian</id><content type="html" xml:base="http://localhost:4000/linear_regression_bayesian/">&lt;p&gt;Notes on the probability for linear regression (Bayesian)&lt;/p&gt;
 
 &lt;hr /&gt;
 
@@ -457,7 +457,7 @@ can ignore the denominator P(y|x) and we get:&lt;/p&gt;
 
 &lt;hr /&gt;
 
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">Notes on the probability for linear regression (Bayesian)</summary></entry><entry><title type="html">RNN backprop thru time(BPTT part 2) $$\frac{\delta h_{t}} {\delta h_{t-1}}$$</title><link href="https://chuacheowhuan.github.io/RNN_BPTT_2/" rel="alternate" type="text/html" title="RNN backprop thru time(BPTT part 2) $$\frac{\delta h_{t}} {\delta h_{t-1}}$$" /><published>2020-01-13T00:00:00+08:00</published><updated>2020-01-13T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/RNN_BPTT_2</id><content type="html" xml:base="https://chuacheowhuan.github.io/RNN_BPTT_2/">&lt;p&gt;Notes on the math for RNN back propagation through time(BPTT), part 2. The 1st
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">Notes on the probability for linear regression (Bayesian)</summary></entry><entry><title type="html">RNN backprop thru time(BPTT part 2) $$\frac{\delta h_{t}} {\delta h_{t-1}}$$</title><link href="http://localhost:4000/RNN_BPTT_2/" rel="alternate" type="text/html" title="RNN backprop thru time(BPTT part 2) $$\frac{\delta h_{t}} {\delta h_{t-1}}$$" /><published>2020-01-13T00:00:00+08:00</published><updated>2020-01-13T00:00:00+08:00</updated><id>http://localhost:4000/RNN_BPTT_2</id><content type="html" xml:base="http://localhost:4000/RNN_BPTT_2/">&lt;p&gt;Notes on the math for RNN back propagation through time(BPTT), part 2. The 1st
 derivative of &lt;script type=&quot;math/tex&quot;&gt;h_t&lt;/script&gt; with respect to &lt;script type=&quot;math/tex&quot;&gt;h_{t-1}&lt;/script&gt;.&lt;/p&gt;
 
 &lt;hr /&gt;
@@ -517,7 +517,7 @@ diag(f'(E_t)) W&lt;/script&gt;
 
 &lt;hr /&gt;
 
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">Notes on the math for RNN back propagation through time(BPTT), part 2. The 1st derivative of with respect to .</summary></entry><entry><title type="html">RNN backprop thru time(BPTT)</title><link href="https://chuacheowhuan.github.io/RNN_BPTT/" rel="alternate" type="text/html" title="RNN backprop thru time(BPTT)" /><published>2020-01-12T00:00:00+08:00</published><updated>2020-01-12T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/RNN_BPTT</id><content type="html" xml:base="https://chuacheowhuan.github.io/RNN_BPTT/">&lt;p&gt;Notes on the math for RNN back propagation through time(BPTT).&lt;/p&gt;
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">Notes on the math for RNN back propagation through time(BPTT), part 2. The 1st derivative of with respect to .</summary></entry><entry><title type="html">RNN backprop thru time(BPTT)</title><link href="http://localhost:4000/RNN_BPTT/" rel="alternate" type="text/html" title="RNN backprop thru time(BPTT)" /><published>2020-01-12T00:00:00+08:00</published><updated>2020-01-12T00:00:00+08:00</updated><id>http://localhost:4000/RNN_BPTT</id><content type="html" xml:base="http://localhost:4000/RNN_BPTT/">&lt;p&gt;Notes on the math for RNN back propagation through time(BPTT).&lt;/p&gt;
 
 &lt;hr /&gt;
 
@@ -610,7 +610,7 @@ backwards in time to calculate this gradient.&lt;/p&gt;
 
 &lt;hr /&gt;
 
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">Notes on the math for RNN back propagation through time(BPTT).</summary></entry><entry><title type="html">Filter rows with same column values in Pandas dataframe</title><link href="https://chuacheowhuan.github.io/pandas_df_rm_row_with_same_col_val/" rel="alternate" type="text/html" title="Filter rows with same column values in Pandas dataframe" /><published>2019-12-25T00:00:00+08:00</published><updated>2019-12-25T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/pandas_df_rm_row_with_same_col_val</id><content type="html" xml:base="https://chuacheowhuan.github.io/pandas_df_rm_row_with_same_col_val/">&lt;p&gt;Filter rows with same column values in a Pandas dataframe.&lt;/p&gt;
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">Notes on the math for RNN back propagation through time(BPTT).</summary></entry><entry><title type="html">Filter rows with same column values in Pandas dataframe</title><link href="http://localhost:4000/pandas_df_rm_row_with_same_col_val/" rel="alternate" type="text/html" title="Filter rows with same column values in Pandas dataframe" /><published>2019-12-25T00:00:00+08:00</published><updated>2019-12-25T00:00:00+08:00</updated><id>http://localhost:4000/pandas_df_rm_row_with_same_col_val</id><content type="html" xml:base="http://localhost:4000/pandas_df_rm_row_with_same_col_val/">&lt;p&gt;Filter rows with same column values in a Pandas dataframe.&lt;/p&gt;
 
 &lt;hr /&gt;
 
@@ -638,7 +638,7 @@ opposite charges, i.e if Q1 is 1, Q2 is -1 &amp;amp; vice versa.&lt;/p&gt;
 
 &lt;hr /&gt;
 
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">Filter rows with same column values in a Pandas dataframe.</summary></entry><entry><title type="html">Custom Sagemaker reinforcement learning container</title><link href="https://chuacheowhuan.github.io/custom_sagemaker_RL_container/" rel="alternate" type="text/html" title="Custom Sagemaker reinforcement learning container" /><published>2019-09-15T00:00:00+08:00</published><updated>2019-09-15T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/custom_sagemaker_RL_container</id><content type="html" xml:base="https://chuacheowhuan.github.io/custom_sagemaker_RL_container/">&lt;p&gt;Building &amp;amp; testing custom Sagemaker RL container.&lt;/p&gt;
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">Filter rows with same column values in a Pandas dataframe.</summary></entry><entry><title type="html">Custom Sagemaker reinforcement learning container</title><link href="http://localhost:4000/custom_sagemaker_RL_container/" rel="alternate" type="text/html" title="Custom Sagemaker reinforcement learning container" /><published>2019-09-15T00:00:00+08:00</published><updated>2019-09-15T00:00:00+08:00</updated><id>http://localhost:4000/custom_sagemaker_RL_container</id><content type="html" xml:base="http://localhost:4000/custom_sagemaker_RL_container/">&lt;p&gt;Building &amp;amp; testing custom Sagemaker RL container.&lt;/p&gt;
 
 &lt;p&gt;Instead of using the official SageMaker supported version of Ray RLlib
 (version 0.5.3 &amp;amp; 0.6.5), I want to use version 0.7.3. In order to do so, I have
@@ -882,7 +882,7 @@ $ docker rmi &amp;lt;image&amp;gt;
 
 &lt;hr /&gt;
 
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">Building &amp;amp; testing custom Sagemaker RL container.</summary></entry><entry><title type="html">Reinforcement learning custom environment in Sagemaker with Ray (RLlib)</title><link href="https://chuacheowhuan.github.io/sagemaker_RL_custom_env/" rel="alternate" type="text/html" title="Reinforcement learning custom environment in Sagemaker with Ray (RLlib)" /><published>2019-09-11T00:00:00+08:00</published><updated>2019-09-11T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/sagemaker_RL_custom_env</id><content type="html" xml:base="https://chuacheowhuan.github.io/sagemaker_RL_custom_env/">&lt;p&gt;Demo setup for simple (reinforcement learning) custom environment in Sagemaker.
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">Building &amp;amp; testing custom Sagemaker RL container.</summary></entry><entry><title type="html">Reinforcement learning custom environment in Sagemaker with Ray (RLlib)</title><link href="http://localhost:4000/sagemaker_RL_custom_env/" rel="alternate" type="text/html" title="Reinforcement learning custom environment in Sagemaker with Ray (RLlib)" /><published>2019-09-11T00:00:00+08:00</published><updated>2019-09-11T00:00:00+08:00</updated><id>http://localhost:4000/sagemaker_RL_custom_env</id><content type="html" xml:base="http://localhost:4000/sagemaker_RL_custom_env/">&lt;p&gt;Demo setup for simple (reinforcement learning) custom environment in Sagemaker.
 This example uses Proximal Policy Optimization with Ray (RLlib).&lt;/p&gt;
 
 &lt;hr /&gt;
@@ -1032,7 +1032,7 @@ estimator.fit()
 
 &lt;hr /&gt;
 
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">Demo setup for simple (reinforcement learning) custom environment in Sagemaker. This example uses Proximal Policy Optimization with Ray (RLlib).</summary></entry><entry><title type="html">Django + Postgres + Docker + Travis CI + Heroku CD</title><link href="https://chuacheowhuan.github.io/DPDTH/" rel="alternate" type="text/html" title="Django + Postgres + Docker + Travis CI + Heroku CD" /><published>2019-09-02T00:00:00+08:00</published><updated>2019-09-02T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/DPDTH</id><content type="html" xml:base="https://chuacheowhuan.github.io/DPDTH/">&lt;p&gt;Basic workflow of testing a dockerized Django &amp;amp; Postgres web app with Travis
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">Demo setup for simple (reinforcement learning) custom environment in Sagemaker. This example uses Proximal Policy Optimization with Ray (RLlib).</summary></entry><entry><title type="html">Django + Postgres + Docker + Travis CI + Heroku CD</title><link href="http://localhost:4000/DPDTH/" rel="alternate" type="text/html" title="Django + Postgres + Docker + Travis CI + Heroku CD" /><published>2019-09-02T00:00:00+08:00</published><updated>2019-09-02T00:00:00+08:00</updated><id>http://localhost:4000/DPDTH</id><content type="html" xml:base="http://localhost:4000/DPDTH/">&lt;p&gt;Basic workflow of testing a dockerized Django &amp;amp; Postgres web app with Travis
 (continuous integration) &amp;amp; deployment to Heroku (continuous deployment).&lt;/p&gt;
 
 &lt;hr /&gt;
