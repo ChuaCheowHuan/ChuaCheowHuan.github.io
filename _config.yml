@@ -161,6 +161,13 @@ include:
   - .htaccess
   - _pages
 exclude:
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - vendor/bundle/
+  - vendor/cache/
+  - vendor/gems/
+  - vendor/ruby/
   - "*.sublime-project"
   - "*.sublime-workspace"
   - vendor
@@ -174,12 +181,10 @@ exclude:
   - Capfile
   - CHANGELOG
   - config
-  - Gemfile
   - Gruntfile.js
   - gulpfile.js
   - LICENSE
   - log
-  - node_modules
   - package.json
   - Rakefile
   - README
