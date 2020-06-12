@@ -6,7 +6,7 @@ title: PBT for MARL
 
 My attempt to implement a water down version of PBT (Population based training) for MARL (Multi-agent reinforcement learning).
 
-[source](https://github.com/ChuaCheowHuan/PBT_MARL_watered_down)
+Code on my [Github](https://github.com/ChuaCheowHuan/PBT_MARL_watered_down)
 
 ---
 
