@@ -1,51 +1,74 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.7">Jekyll</generator><link href="https://chuacheowhuan.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://chuacheowhuan.github.io/" rel="alternate" type="text/html" /><updated>2020-06-12T18:36:27+08:00</updated><id>https://chuacheowhuan.github.io/feed.xml</id><title type="html">Every little gist</title><subtitle></subtitle><author><name>Chua Cheow Huan</name></author><entry><title type="html">PBT for MARL</title><link href="https://chuacheowhuan.github.io/PBT_MARL_watered_down/" rel="alternate" type="text/html" title="PBT for MARL" /><published>2020-06-12T00:00:00+08:00</published><updated>2020-06-12T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/PBT_MARL_watered_down</id><content type="html" xml:base="https://chuacheowhuan.github.io/PBT_MARL_watered_down/">My attempt to implement a water down version of PBT (Population based training) for MARL (Multi-agent reinforcement learning).
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.7">Jekyll</generator><link href="https://chuacheowhuan.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://chuacheowhuan.github.io/" rel="alternate" type="text/html" /><updated>2020-06-17T15:23:31+08:00</updated><id>https://chuacheowhuan.github.io/feed.xml</id><title type="html">Every little gist</title><subtitle></subtitle><author><name>Chua Cheow Huan</name></author><entry><title type="html">Finding the `ray_results` folder in colab</title><link href="https://chuacheowhuan.github.io/ray_results_folder_in_colab/" rel="alternate" type="text/html" title="Finding the `ray_results` folder in colab" /><published>2020-06-17T00:00:00+08:00</published><updated>2020-06-17T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/ray_results_folder_in_colab</id><content type="html" xml:base="https://chuacheowhuan.github.io/ray_results_folder_in_colab/">&lt;p&gt;The location of &lt;code class=&quot;highlighter-rouge&quot;&gt;ray_results&lt;/code&gt; folder in colab when using RLlib &amp;amp;/or tune.&lt;/p&gt;
 
-Code on my [Github](https://github.com/ChuaCheowHuan/PBT_MARL_watered_down)
+&lt;hr /&gt;
 
----
+&lt;p&gt;If you’re NOT using &lt;code class=&quot;highlighter-rouge&quot;&gt;tune.run()&lt;/code&gt; but using only RLlib’s python API &amp;amp; if
+you set the &lt;code class=&quot;highlighter-rouge&quot;&gt;local_dir&lt;/code&gt; in RLlib’s &lt;code class=&quot;highlighter-rouge&quot;&gt;config&lt;/code&gt; to a non-default directory,
+(The default is &lt;code class=&quot;highlighter-rouge&quot;&gt;~/ray_results&lt;/code&gt;.) you will only find the &lt;code class=&quot;highlighter-rouge&quot;&gt;results.json&lt;/code&gt; file
+(&amp;amp; your checkpoint folders if you also specify them) in your specified
+directory. The other files such as the tensorboard event files, the params.pkl
+&amp;amp; params.json will still be saved in the default directory.&lt;/p&gt;
 
-# PBT_MARL_watered_down
+&lt;p&gt;However, if you use &lt;code class=&quot;highlighter-rouge&quot;&gt;tune.run()&lt;/code&gt; &amp;amp; set the &lt;code class=&quot;highlighter-rouge&quot;&gt;local_dir&lt;/code&gt; argument to your
+specified directory, all the files will be saved there.&lt;/p&gt;
 
-# What's in this repo?
+&lt;p&gt;If you’re using colab, the way to access &lt;code class=&quot;highlighter-rouge&quot;&gt;~/ray_results&lt;/code&gt; is to click on a small
+folder icon on the left of the panel, it will open up a side panel, simply go to
+&lt;code class=&quot;highlighter-rouge&quot;&gt;root/ray_results&lt;/code&gt;. All those files will be saved in there.&lt;/p&gt;
 
-My attempt to implement a water down version of PBT (Population based training) for MARL (Multi-agent reinforcement learning) inspired by Algorithm 1 (PBT-MARL) on page 3 of this [paper](https://arxiv.org/pdf/1902.07151.pdf)[1].
+&lt;p&gt;Note: It seems like setting the (1)&lt;code class=&quot;highlighter-rouge&quot;&gt;local_dir&lt;/code&gt; in RLlib’s &lt;code class=&quot;highlighter-rouge&quot;&gt;config&lt;/code&gt; will not
+automatically set the (2)&lt;code class=&quot;highlighter-rouge&quot;&gt;local_dir&lt;/code&gt; in the &lt;code class=&quot;highlighter-rouge&quot;&gt;Experiment&lt;/code&gt; class in &lt;code class=&quot;highlighter-rouge&quot;&gt;experiment.py&lt;/code&gt;
+if you’re not using &lt;code class=&quot;highlighter-rouge&quot;&gt;tune.run()&lt;/code&gt;.&lt;/p&gt;
 
-# MAIN differences from the paper:
+&lt;hr /&gt;
 
-(1) A simple 1 VS 1 [RockPaperScissorsEnv](https://github.com/ray-project/ray/blob/57544b1ff9f97d4da9f64d25c8ea5a3d8d247ffc/rllib/examples/env/rock_paper_scissors.py) environment (adapted &amp; modified from a toy example from ray) is used instead of the 2 VS 2 [dm_soccer](https://git.io/dm_soccer).
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">The location of ray_results folder in colab when using RLlib &amp;amp;/or tune.</summary></entry><entry><title type="html">PBT for MARL</title><link href="https://chuacheowhuan.github.io/PBT_MARL_watered_down/" rel="alternate" type="text/html" title="PBT for MARL" /><published>2020-06-12T00:00:00+08:00</published><updated>2020-06-12T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/PBT_MARL_watered_down</id><content type="html" xml:base="https://chuacheowhuan.github.io/PBT_MARL_watered_down/">&lt;p&gt;My attempt to implement a water down version of PBT (Population based training) for MARL (Multi-agent reinforcement learning).&lt;/p&gt;
 
-(2) PPO is used instead of SVG0.
+&lt;p&gt;Code on my &lt;a href=&quot;https://github.com/ChuaCheowHuan/PBT_MARL_watered_down&quot;&gt;Github&lt;/a&gt;&lt;/p&gt;
 
-(3) No reward shaping.
+&lt;hr /&gt;
 
-(4) The evolution eligibility documented in B2 on page 16 in the [paper](https://arxiv.org/pdf/1902.07151.pdf)[1] is not implemented.
+&lt;h1 id=&quot;pbt_marl_watered_down&quot;&gt;PBT_MARL_watered_down&lt;/h1&gt;
 
-(5) Probably many more...
+&lt;h1 id=&quot;whats-in-this-repo&quot;&gt;What’s in this repo?&lt;/h1&gt;
 
-# What works?
+&lt;p&gt;My attempt to implement a water down version of PBT (Population based training) for MARL (Multi-agent reinforcement learning) inspired by Algorithm 1 (PBT-MARL) on page 3 of this &lt;a href=&quot;https://arxiv.org/pdf/1902.07151.pdf&quot;&gt;paper&lt;/a&gt;[1].&lt;/p&gt;
 
-(1) Policies weights can be inherited between different agents in the population.
+&lt;h1 id=&quot;main-differences-from-the-paper&quot;&gt;MAIN differences from the paper:&lt;/h1&gt;
 
-(2) Learning rate &amp; gamma are the only 2 hyperparameters involved for now. Both can be inherited/mutated. Learning rate can be resampled/perturbed while gamma can only be resampled.
+&lt;p&gt;(1) A simple 1 VS 1 &lt;a href=&quot;https://github.com/ray-project/ray/blob/57544b1ff9f97d4da9f64d25c8ea5a3d8d247ffc/rllib/examples/env/rock_paper_scissors.py&quot;&gt;RockPaperScissorsEnv&lt;/a&gt; environment (adapted &amp;amp; modified from a toy example from ray) is used instead of the 2 VS 2 &lt;a href=&quot;https://git.io/dm_soccer&quot;&gt;dm_soccer&lt;/a&gt;.&lt;/p&gt;
 
-# Simple walkthru:
+&lt;p&gt;(2) PPO is used instead of SVG0.&lt;/p&gt;
 
-Before each training iteration, the driver (in this context, the main process, this is also where the RLlib trainer resides) randomly selects a pair of agents (agt_i, agt_j, where i != j) from a population of agents. This i, j pair will take up the role of player_A &amp; player_B respectively.
+&lt;p&gt;(3) No reward shaping.&lt;/p&gt;
 
-The IDs of i,j will be transmitted down to the worker processes. Each worker has 1 or more environments ([vectorized](https://rllib.readthedocs.io/en/latest/rllib-env.html#vectorized)) &amp; does it's own rollout. When an episode is sampled (that's when a match ends), the `on_episode_end` callback will be called. That's when the ratings of a match are computed &amp; updated to a global storage.
+&lt;p&gt;(4) The evolution eligibility documented in B2 on page 16 in the &lt;a href=&quot;https://arxiv.org/pdf/1902.07151.pdf&quot;&gt;paper&lt;/a&gt;[1] is not implemented.&lt;/p&gt;
 
-When enough samples are collected, training starts. Training is done using [RLlib's DDPPO](https://docs.ray.io/en/master/rllib-algorithms.html#decentralized-distributed-proximal-policy-optimization-dd-ppo) (a variant of PPO). In DDPPO, learning does not happened in the trainer. Each worker does it's own learning. However, the trainer is still involved in the weight sync.
+&lt;p&gt;(5) Probably many more…&lt;/p&gt;
 
-When a training iteration completes, `on_train_results` callback will be called. That's where inheritance &amp; mutation happens (if conditions are fulfilled).
+&lt;h1 id=&quot;what-works&quot;&gt;What works?&lt;/h1&gt;
 
-All of the above happens during 1 single main training loop of the driver. Rinse &amp; repeat.
+&lt;p&gt;(1) Policies weights can be inherited between different agents in the population.&lt;/p&gt;
 
-Note: Global coordination between different processes is done using [detached actors](https://docs.ray.io/en/master/advanced.html#detached-actors) from ray.
+&lt;p&gt;(2) Learning rate &amp;amp; gamma are the only 2 hyperparameters involved for now. Both can be inherited/mutated. Learning rate can be resampled/perturbed while gamma can only be resampled.&lt;/p&gt;
 
-# Example of what's stored in the global storage:
+&lt;h1 id=&quot;simple-walkthru&quot;&gt;Simple walkthru:&lt;/h1&gt;
 
-```
-&quot;&quot;&quot;
+&lt;p&gt;Before each training iteration, the driver (in this context, the main process, this is also where the RLlib trainer resides) randomly selects a pair of agents (agt_i, agt_j, where i != j) from a population of agents. This i, j pair will take up the role of player_A &amp;amp; player_B respectively.&lt;/p&gt;
+
+&lt;p&gt;The IDs of i,j will be transmitted down to the worker processes. Each worker has 1 or more environments (&lt;a href=&quot;https://rllib.readthedocs.io/en/latest/rllib-env.html#vectorized&quot;&gt;vectorized&lt;/a&gt;) &amp;amp; does it’s own rollout. When an episode is sampled (that’s when a match ends), the &lt;code class=&quot;highlighter-rouge&quot;&gt;on_episode_end&lt;/code&gt; callback will be called. That’s when the ratings of a match are computed &amp;amp; updated to a global storage.&lt;/p&gt;
+
+&lt;p&gt;When enough samples are collected, training starts. Training is done using &lt;a href=&quot;https://docs.ray.io/en/master/rllib-algorithms.html#decentralized-distributed-proximal-policy-optimization-dd-ppo&quot;&gt;RLlib’s DDPPO&lt;/a&gt; (a variant of PPO). In DDPPO, learning does not happened in the trainer. Each worker does it’s own learning. However, the trainer is still involved in the weight sync.&lt;/p&gt;
+
+&lt;p&gt;When a training iteration completes, &lt;code class=&quot;highlighter-rouge&quot;&gt;on_train_results&lt;/code&gt; callback will be called. That’s where inheritance &amp;amp; mutation happens (if conditions are fulfilled).&lt;/p&gt;
+
+&lt;p&gt;All of the above happens during 1 single main training loop of the driver. Rinse &amp;amp; repeat.&lt;/p&gt;
+
+&lt;p&gt;Note: Global coordination between different processes is done using &lt;a href=&quot;https://docs.ray.io/en/master/advanced.html#detached-actors&quot;&gt;detached actors&lt;/a&gt; from ray.&lt;/p&gt;
+
+&lt;h1 id=&quot;example-of-whats-stored-in-the-global-storage&quot;&gt;Example of what’s stored in the global storage:&lt;/h1&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&quot;&quot;&quot;
 {'agt_0':
     {'hyperparameters':
         {'lr': [0.0027558, 0.0022046, ...]},
@@ -61,31 +84,31 @@ Note: Global coordination between different processes is done using [detached ac
  'agt_n': ...    
 }
 &quot;&quot;&quot;
-```
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-# How to run the contents in this repo?
+&lt;h1 id=&quot;how-to-run-the-contents-in-this-repo&quot;&gt;How to run the contents in this repo?&lt;/h1&gt;
 
-The easiest way is to run the `PBT_MARL_watered_down.ipynb` Jupyter notebook in Colab.
+&lt;p&gt;The easiest way is to run the &lt;code class=&quot;highlighter-rouge&quot;&gt;PBT_MARL_watered_down.ipynb&lt;/code&gt; Jupyter notebook in Colab.&lt;/p&gt;
 
-# Dependencies:
+&lt;h1 id=&quot;dependencies&quot;&gt;Dependencies:&lt;/h1&gt;
 
-This is developed &amp; tested on Colab &amp; the following are the only packages that I explicitly `pip install`:
+&lt;p&gt;This is developed &amp;amp; tested on Colab &amp;amp; the following are the only packages that I explicitly &lt;code class=&quot;highlighter-rouge&quot;&gt;pip install&lt;/code&gt;:&lt;/p&gt;
 
-ray[rllib]==0.8.5
+&lt;p&gt;ray[rllib]==0.8.5&lt;/p&gt;
 
-tensorflow==2.2.0
+&lt;p&gt;tensorflow==2.2.0&lt;/p&gt;
 
-# Disclaimer:
+&lt;h1 id=&quot;disclaimer&quot;&gt;Disclaimer:&lt;/h1&gt;
 
-(1) I'm not affiliated with any of the authors of the [paper](https://arxiv.org/pdf/1902.07151.pdf)[1].
+&lt;p&gt;(1) I’m not affiliated with any of the authors of the &lt;a href=&quot;https://arxiv.org/pdf/1902.07151.pdf&quot;&gt;paper&lt;/a&gt;[1].&lt;/p&gt;
 
-# References:
+&lt;h1 id=&quot;references&quot;&gt;References:&lt;/h1&gt;
 
-[1] [EMERGENT COORDINATION THROUGH COMPETITION (Liu et al., 2019)](https://arxiv.org/pdf/1902.07151.pdf)
+&lt;p&gt;[1] &lt;a href=&quot;https://arxiv.org/pdf/1902.07151.pdf&quot;&gt;EMERGENT COORDINATION THROUGH COMPETITION (Liu et al., 2019)&lt;/a&gt;&lt;/p&gt;
 
----
+&lt;hr /&gt;
 
-&lt;br&gt;</content><author><name>Huan</name></author><summary type="html">My attempt to implement a water down version of PBT (Population based training) for MARL (Multi-agent reinforcement learning).</summary></entry><entry><title type="html">RLlib trainer common config</title><link href="https://chuacheowhuan.github.io/RLlib_trainer_config/" rel="alternate" type="text/html" title="RLlib trainer common config" /><published>2020-03-23T00:00:00+08:00</published><updated>2020-03-23T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/RLlib_trainer_config</id><content type="html" xml:base="https://chuacheowhuan.github.io/RLlib_trainer_config/">Ray (0.8.2) RLlib trainer common config from:
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">My attempt to implement a water down version of PBT (Population based training) for MARL (Multi-agent reinforcement learning).</summary></entry><entry><title type="html">RLlib trainer common config</title><link href="https://chuacheowhuan.github.io/RLlib_trainer_config/" rel="alternate" type="text/html" title="RLlib trainer common config" /><published>2020-03-23T00:00:00+08:00</published><updated>2020-03-23T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/RLlib_trainer_config</id><content type="html" xml:base="https://chuacheowhuan.github.io/RLlib_trainer_config/">Ray (0.8.2) RLlib trainer common config from:
 
 [source](https://github.com/ray-project/ray/blob/master/rllib/agents/trainer.py)
 
@@ -991,156 +1014,4 @@ $ aws ecr delete-repository --force --repository-name &lt;repo_name&gt;
 
 ---
 
-&lt;br&gt;</content><author><name>Huan</name></author><summary type="html">Building &amp;amp; testing custom Sagemaker RL container.</summary></entry><entry><title type="html">Reinforcement learning custom environment in Sagemaker with Ray (RLlib)</title><link href="https://chuacheowhuan.github.io/sagemaker_RL_custom_env/" rel="alternate" type="text/html" title="Reinforcement learning custom environment in Sagemaker with Ray (RLlib)" /><published>2019-09-11T00:00:00+08:00</published><updated>2019-09-11T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/sagemaker_RL_custom_env</id><content type="html" xml:base="https://chuacheowhuan.github.io/sagemaker_RL_custom_env/">Demo setup for simple (reinforcement learning) custom environment in Sagemaker.
-This example uses Proximal Policy Optimization with Ray (RLlib).
-
----
-
-Code on my [Github](https://github.com/ChuaCheowHuan/sagemaker_Ray_RLlib_custom_env)
-
----
-
-**The training script:**
-
-```
-import json
-import os
-
-import gym
-import ray
-from ray.tune import run_experiments
-import ray.rllib.agents.a3c as a3c
-import ray.rllib.agents.ppo as ppo
-from ray.tune.registry import register_env
-from mod_op_env import ArrivalSim
-
-from sagemaker_rl.ray_launcher import SageMakerRayLauncher
-
-&quot;&quot;&quot;
-def create_environment(env_config):
-    import gym
-#     from gym.spaces import Space
-    from gym.envs.registration import register
-    # This import must happen inside the method so that worker processes import this code
-    register(
-        id='ArrivalSim-v0',
-        entry_point='env:ArrivalSim',
-        kwargs= {'price' : 40}
-    )
-    return gym.make('ArrivalSim-v0')
-&quot;&quot;&quot;
-def create_environment(env_config):
-    price = 30.0
-    # This import must happen inside the method so that worker processes import this code
-    from mod_op_env import ArrivalSim
-    return ArrivalSim(price)
-
-
-class MyLauncher(SageMakerRayLauncher):
-    def __init__(self):        
-        super(MyLauncher, self).__init__()
-        self.num_gpus = int(os.environ.get(&quot;SM_NUM_GPUS&quot;, 0))
-        self.hosts_info = json.loads(os.environ.get(&quot;SM_RESOURCE_CONFIG&quot;))[&quot;hosts&quot;]
-        self.num_total_gpus = self.num_gpus * len(self.hosts_info)
-
-    def register_env_creator(self):
-        register_env(&quot;ArrivalSim-v0&quot;, create_environment)
-
-    def get_experiment_config(self):
-        return {
-          &quot;training&quot;: {
-            &quot;env&quot;: &quot;ArrivalSim-v0&quot;,
-            &quot;run&quot;: &quot;PPO&quot;,
-            &quot;stop&quot;: {
-              &quot;training_iteration&quot;: 3,
-            },
-
-            &quot;local_dir&quot;: &quot;/opt/ml/model/&quot;,
-            &quot;checkpoint_freq&quot; : 3,
-
-            &quot;config&quot;: {                                
-              #&quot;num_workers&quot;: max(self.num_total_gpus-1, 1),
-              &quot;num_workers&quot;: max(self.num_cpus-1, 1),
-              #&quot;use_gpu_for_workers&quot;: False,
-              &quot;train_batch_size&quot;: 128, #5,
-              &quot;sample_batch_size&quot;: 32, #1,
-              &quot;gpu_fraction&quot;: 0.3,
-              &quot;optimizer&quot;: {
-                &quot;grads_per_step&quot;: 10
-              },
-            },
-            #&quot;trial_resources&quot;: {&quot;cpu&quot;: 1, &quot;gpu&quot;: 0, &quot;extra_gpu&quot;: max(self.num_total_gpus-1, 1), &quot;extra_cpu&quot;: 0},
-            #&quot;trial_resources&quot;: {&quot;cpu&quot;: 1, &quot;gpu&quot;: 0, &quot;extra_gpu&quot;: max(self.num_total_gpus-1, 0),
-            #                    &quot;extra_cpu&quot;: max(self.num_cpus-1, 1)},
-            &quot;trial_resources&quot;: {&quot;cpu&quot;: 1,
-                                &quot;extra_cpu&quot;: max(self.num_cpus-1, 1)},              
-          }
-        }
-
-if __name__ == &quot;__main__&quot;:
-    os.environ[&quot;LC_ALL&quot;] = &quot;C.UTF-8&quot;
-    os.environ[&quot;LANG&quot;] = &quot;C.UTF-8&quot;
-    os.environ[&quot;RAY_USE_XRAY&quot;] = &quot;1&quot;
-    print(ppo.DEFAULT_CONFIG)
-    MyLauncher().train_main()
-```
-
----
-
-**The Jupyter notebook:**
-
-```
-!/bin/bash ./setup.sh
-
-from time import gmtime, strftime
-import sagemaker
-role = sagemaker.get_execution_role()
-
-sage_session = sagemaker.session.Session()
-s3_bucket = sage_session.default_bucket()  
-s3_output_path = 's3://{}/'.format(s3_bucket)
-print(&quot;S3 bucket path: {}&quot;.format(s3_output_path))
-
-job_name_prefix = 'ArrivalSim'
-
-from sagemaker.rl import RLEstimator, RLToolkit, RLFramework
-
-estimator = RLEstimator(entry_point=&quot;mod_op_train.py&quot;, # Our launcher code
-                        source_dir='src', # Directory where the supporting files are at. All of this will be
-                                          # copied into the container.
-                        dependencies=[&quot;common/sagemaker_rl&quot;], # some other utils files.
-                        toolkit=RLToolkit.RAY, # We want to run using the Ray toolkit against the ray container image.
-                        framework=RLFramework.TENSORFLOW, # The code is in tensorflow backend.
-                        toolkit_version='0.5.3', # Toolkit version. This will also choose an apporpriate tf version.                                               
-                        #toolkit_version='0.6.5', # Toolkit version. This will also choose an apporpriate tf version.                        
-                        role=role, # The IAM role that we created at the begining.
-                        #train_instance_type=&quot;ml.m4.xlarge&quot;, # Since we want to run fast, lets run on GPUs.
-                        train_instance_type=&quot;local&quot;, # Since we want to run fast, lets run on GPUs.
-                        train_instance_count=1, # Single instance will also work, but running distributed makes things
-                                                # fast, particularly in the case of multiple rollout training.
-                        output_path=s3_output_path, # The path where we can expect our trained model.
-                        base_job_name=job_name_prefix, # This is the name we setup above to be to track our job.
-                        hyperparameters = {      # Some hyperparameters for Ray toolkit to operate.
-                          &quot;s3_bucket&quot;: s3_bucket,
-                          &quot;rl.training.stop.training_iteration&quot;: 2, # Number of iterations.
-                          &quot;rl.training.checkpoint_freq&quot;: 2,
-                        },
-                        #metric_definitions=metric_definitions, # This will bring all the logs out into the notebook.
-                    )
-
-estimator.fit()
-```
-
----
-
-**The container in Sagemaker Jupyter notebook instance:**
-
-![image](/assets/images/blog/sagemaker_container.png)
-
----
-
-See related [issue/motivation](https://stackoverflow.com/questions/57724414/how-to-make-the-inputs-and-model-have-the-same-shape-rllib-ray-sagemaker-reinfo/57762933#57762933).
-
----
-
-&lt;br&gt;</content><author><name>Huan</name></author><summary type="html">Demo setup for simple (reinforcement learning) custom environment in Sagemaker. This example uses Proximal Policy Optimization with Ray (RLlib).</summary></entry></feed>
+&lt;br&gt;</content><author><name>Huan</name></author><summary type="html">Building &amp;amp; testing custom Sagemaker RL container.</summary></entry></feed>
