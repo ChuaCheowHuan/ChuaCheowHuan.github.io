@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.7">Jekyll</generator><link href="https://chuacheowhuan.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://chuacheowhuan.github.io/" rel="alternate" type="text/html" /><updated>2020-06-17T15:23:31+08:00</updated><id>https://chuacheowhuan.github.io/feed.xml</id><title type="html">Every little gist</title><subtitle></subtitle><author><name>Chua Cheow Huan</name></author><entry><title type="html">Finding the `ray_results` folder in colab</title><link href="https://chuacheowhuan.github.io/ray_results_folder_in_colab/" rel="alternate" type="text/html" title="Finding the `ray_results` folder in colab" /><published>2020-06-17T00:00:00+08:00</published><updated>2020-06-17T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/ray_results_folder_in_colab</id><content type="html" xml:base="https://chuacheowhuan.github.io/ray_results_folder_in_colab/">&lt;p&gt;The location of &lt;code class=&quot;highlighter-rouge&quot;&gt;ray_results&lt;/code&gt; folder in colab when using RLlib &amp;amp;/or tune.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.7">Jekyll</generator><link href="https://chuacheowhuan.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://chuacheowhuan.github.io/" rel="alternate" type="text/html" /><updated>2020-06-17T15:30:29+08:00</updated><id>https://chuacheowhuan.github.io/feed.xml</id><title type="html">Every little gist</title><subtitle></subtitle><author><name>Chua Cheow Huan</name></author><entry><title type="html">Finding the ray_results folder in colab</title><link href="https://chuacheowhuan.github.io/ray_results_folder_in_colab/" rel="alternate" type="text/html" title="Finding the ray_results folder in colab" /><published>2020-06-17T00:00:00+08:00</published><updated>2020-06-17T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/ray_results_folder_in_colab</id><content type="html" xml:base="https://chuacheowhuan.github.io/ray_results_folder_in_colab/">&lt;p&gt;The location of &lt;code class=&quot;highlighter-rouge&quot;&gt;ray_results&lt;/code&gt; folder in colab when using RLlib &amp;amp;/or tune.&lt;/p&gt;
 
 &lt;hr /&gt;
 
@@ -6,8 +6,8 @@
 you set the &lt;code class=&quot;highlighter-rouge&quot;&gt;local_dir&lt;/code&gt; in RLlib’s &lt;code class=&quot;highlighter-rouge&quot;&gt;config&lt;/code&gt; to a non-default directory,
 (The default is &lt;code class=&quot;highlighter-rouge&quot;&gt;~/ray_results&lt;/code&gt;.) you will only find the &lt;code class=&quot;highlighter-rouge&quot;&gt;results.json&lt;/code&gt; file
 (&amp;amp; your checkpoint folders if you also specify them) in your specified
-directory. The other files such as the tensorboard event files, the params.pkl
-&amp;amp; params.json will still be saved in the default directory.&lt;/p&gt;
+directory. The other files such as the tensorboard event files, the &lt;code class=&quot;highlighter-rouge&quot;&gt;params.pkl&lt;/code&gt;
+&amp;amp; &lt;code class=&quot;highlighter-rouge&quot;&gt;params.json&lt;/code&gt; will still be saved in the default directory.&lt;/p&gt;
 
 &lt;p&gt;However, if you use &lt;code class=&quot;highlighter-rouge&quot;&gt;tune.run()&lt;/code&gt; &amp;amp; set the &lt;code class=&quot;highlighter-rouge&quot;&gt;local_dir&lt;/code&gt; argument to your
 specified directory, all the files will be saved there.&lt;/p&gt;
@@ -22,53 +22,54 @@ if you’re not using &lt;code class=&quot;highlighter-rouge&quot;&gt;tune.run()
 
 &lt;hr /&gt;
 
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">The location of ray_results folder in colab when using RLlib &amp;amp;/or tune.</summary></entry><entry><title type="html">PBT for MARL</title><link href="https://chuacheowhuan.github.io/PBT_MARL_watered_down/" rel="alternate" type="text/html" title="PBT for MARL" /><published>2020-06-12T00:00:00+08:00</published><updated>2020-06-12T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/PBT_MARL_watered_down</id><content type="html" xml:base="https://chuacheowhuan.github.io/PBT_MARL_watered_down/">&lt;p&gt;My attempt to implement a water down version of PBT (Population based training) for MARL (Multi-agent reinforcement learning).&lt;/p&gt;
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">The location of ray_results folder in colab when using RLlib &amp;amp;/or tune.</summary></entry><entry><title type="html">PBT for MARL</title><link href="https://chuacheowhuan.github.io/PBT_MARL_watered_down/" rel="alternate" type="text/html" title="PBT for MARL" /><published>2020-06-12T00:00:00+08:00</published><updated>2020-06-12T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/PBT_MARL_watered_down</id><content type="html" xml:base="https://chuacheowhuan.github.io/PBT_MARL_watered_down/">My attempt to implement a water down version of PBT (Population based training) for MARL (Multi-agent reinforcement learning).
 
-&lt;p&gt;Code on my &lt;a href=&quot;https://github.com/ChuaCheowHuan/PBT_MARL_watered_down&quot;&gt;Github&lt;/a&gt;&lt;/p&gt;
+Code on my [Github](https://github.com/ChuaCheowHuan/PBT_MARL_watered_down)
 
-&lt;hr /&gt;
+---
 
-&lt;h1 id=&quot;pbt_marl_watered_down&quot;&gt;PBT_MARL_watered_down&lt;/h1&gt;
+# PBT_MARL_watered_down
 
-&lt;h1 id=&quot;whats-in-this-repo&quot;&gt;What’s in this repo?&lt;/h1&gt;
+# What's in this repo?
 
-&lt;p&gt;My attempt to implement a water down version of PBT (Population based training) for MARL (Multi-agent reinforcement learning) inspired by Algorithm 1 (PBT-MARL) on page 3 of this &lt;a href=&quot;https://arxiv.org/pdf/1902.07151.pdf&quot;&gt;paper&lt;/a&gt;[1].&lt;/p&gt;
+My attempt to implement a water down version of PBT (Population based training) for MARL (Multi-agent reinforcement learning) inspired by Algorithm 1 (PBT-MARL) on page 3 of this [paper](https://arxiv.org/pdf/1902.07151.pdf)[1].
 
-&lt;h1 id=&quot;main-differences-from-the-paper&quot;&gt;MAIN differences from the paper:&lt;/h1&gt;
+# MAIN differences from the paper:
 
-&lt;p&gt;(1) A simple 1 VS 1 &lt;a href=&quot;https://github.com/ray-project/ray/blob/57544b1ff9f97d4da9f64d25c8ea5a3d8d247ffc/rllib/examples/env/rock_paper_scissors.py&quot;&gt;RockPaperScissorsEnv&lt;/a&gt; environment (adapted &amp;amp; modified from a toy example from ray) is used instead of the 2 VS 2 &lt;a href=&quot;https://git.io/dm_soccer&quot;&gt;dm_soccer&lt;/a&gt;.&lt;/p&gt;
+(1) A simple 1 VS 1 [RockPaperScissorsEnv](https://github.com/ray-project/ray/blob/57544b1ff9f97d4da9f64d25c8ea5a3d8d247ffc/rllib/examples/env/rock_paper_scissors.py) environment (adapted &amp; modified from a toy example from ray) is used instead of the 2 VS 2 [dm_soccer](https://git.io/dm_soccer).
 
-&lt;p&gt;(2) PPO is used instead of SVG0.&lt;/p&gt;
+(2) PPO is used instead of SVG0.
 
-&lt;p&gt;(3) No reward shaping.&lt;/p&gt;
+(3) No reward shaping.
 
-&lt;p&gt;(4) The evolution eligibility documented in B2 on page 16 in the &lt;a href=&quot;https://arxiv.org/pdf/1902.07151.pdf&quot;&gt;paper&lt;/a&gt;[1] is not implemented.&lt;/p&gt;
+(4) The evolution eligibility documented in B2 on page 16 in the [paper](https://arxiv.org/pdf/1902.07151.pdf)[1] is not implemented.
 
-&lt;p&gt;(5) Probably many more…&lt;/p&gt;
+(5) Probably many more...
 
-&lt;h1 id=&quot;what-works&quot;&gt;What works?&lt;/h1&gt;
+# What works?
 
-&lt;p&gt;(1) Policies weights can be inherited between different agents in the population.&lt;/p&gt;
+(1) Policies weights can be inherited between different agents in the population.
 
-&lt;p&gt;(2) Learning rate &amp;amp; gamma are the only 2 hyperparameters involved for now. Both can be inherited/mutated. Learning rate can be resampled/perturbed while gamma can only be resampled.&lt;/p&gt;
+(2) Learning rate &amp; gamma are the only 2 hyperparameters involved for now. Both can be inherited/mutated. Learning rate can be resampled/perturbed while gamma can only be resampled.
 
-&lt;h1 id=&quot;simple-walkthru&quot;&gt;Simple walkthru:&lt;/h1&gt;
+# Simple walkthru:
 
-&lt;p&gt;Before each training iteration, the driver (in this context, the main process, this is also where the RLlib trainer resides) randomly selects a pair of agents (agt_i, agt_j, where i != j) from a population of agents. This i, j pair will take up the role of player_A &amp;amp; player_B respectively.&lt;/p&gt;
+Before each training iteration, the driver (in this context, the main process, this is also where the RLlib trainer resides) randomly selects a pair of agents (agt_i, agt_j, where i != j) from a population of agents. This i, j pair will take up the role of player_A &amp; player_B respectively.
 
-&lt;p&gt;The IDs of i,j will be transmitted down to the worker processes. Each worker has 1 or more environments (&lt;a href=&quot;https://rllib.readthedocs.io/en/latest/rllib-env.html#vectorized&quot;&gt;vectorized&lt;/a&gt;) &amp;amp; does it’s own rollout. When an episode is sampled (that’s when a match ends), the &lt;code class=&quot;highlighter-rouge&quot;&gt;on_episode_end&lt;/code&gt; callback will be called. That’s when the ratings of a match are computed &amp;amp; updated to a global storage.&lt;/p&gt;
+The IDs of i,j will be transmitted down to the worker processes. Each worker has 1 or more environments ([vectorized](https://rllib.readthedocs.io/en/latest/rllib-env.html#vectorized)) &amp; does it's own rollout. When an episode is sampled (that's when a match ends), the `on_episode_end` callback will be called. That's when the ratings of a match are computed &amp; updated to a global storage.
 
-&lt;p&gt;When enough samples are collected, training starts. Training is done using &lt;a href=&quot;https://docs.ray.io/en/master/rllib-algorithms.html#decentralized-distributed-proximal-policy-optimization-dd-ppo&quot;&gt;RLlib’s DDPPO&lt;/a&gt; (a variant of PPO). In DDPPO, learning does not happened in the trainer. Each worker does it’s own learning. However, the trainer is still involved in the weight sync.&lt;/p&gt;
+When enough samples are collected, training starts. Training is done using [RLlib's DDPPO](https://docs.ray.io/en/master/rllib-algorithms.html#decentralized-distributed-proximal-policy-optimization-dd-ppo) (a variant of PPO). In DDPPO, learning does not happened in the trainer. Each worker does it's own learning. However, the trainer is still involved in the weight sync.
 
-&lt;p&gt;When a training iteration completes, &lt;code class=&quot;highlighter-rouge&quot;&gt;on_train_results&lt;/code&gt; callback will be called. That’s where inheritance &amp;amp; mutation happens (if conditions are fulfilled).&lt;/p&gt;
+When a training iteration completes, `on_train_results` callback will be called. That's where inheritance &amp; mutation happens (if conditions are fulfilled).
 
-&lt;p&gt;All of the above happens during 1 single main training loop of the driver. Rinse &amp;amp; repeat.&lt;/p&gt;
+All of the above happens during 1 single main training loop of the driver. Rinse &amp; repeat.
 
-&lt;p&gt;Note: Global coordination between different processes is done using &lt;a href=&quot;https://docs.ray.io/en/master/advanced.html#detached-actors&quot;&gt;detached actors&lt;/a&gt; from ray.&lt;/p&gt;
+Note: Global coordination between different processes is done using [detached actors](https://docs.ray.io/en/master/advanced.html#detached-actors) from ray.
 
-&lt;h1 id=&quot;example-of-whats-stored-in-the-global-storage&quot;&gt;Example of what’s stored in the global storage:&lt;/h1&gt;
+# Example of what's stored in the global storage:
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&quot;&quot;&quot;
+```
+&quot;&quot;&quot;
 {'agt_0':
     {'hyperparameters':
         {'lr': [0.0027558, 0.0022046, ...]},
@@ -84,31 +85,31 @@ if you’re not using &lt;code class=&quot;highlighter-rouge&quot;&gt;tune.run()
  'agt_n': ...    
 }
 &quot;&quot;&quot;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+```
 
-&lt;h1 id=&quot;how-to-run-the-contents-in-this-repo&quot;&gt;How to run the contents in this repo?&lt;/h1&gt;
+# How to run the contents in this repo?
 
-&lt;p&gt;The easiest way is to run the &lt;code class=&quot;highlighter-rouge&quot;&gt;PBT_MARL_watered_down.ipynb&lt;/code&gt; Jupyter notebook in Colab.&lt;/p&gt;
+The easiest way is to run the `PBT_MARL_watered_down.ipynb` Jupyter notebook in Colab.
 
-&lt;h1 id=&quot;dependencies&quot;&gt;Dependencies:&lt;/h1&gt;
+# Dependencies:
 
-&lt;p&gt;This is developed &amp;amp; tested on Colab &amp;amp; the following are the only packages that I explicitly &lt;code class=&quot;highlighter-rouge&quot;&gt;pip install&lt;/code&gt;:&lt;/p&gt;
+This is developed &amp; tested on Colab &amp; the following are the only packages that I explicitly `pip install`:
 
-&lt;p&gt;ray[rllib]==0.8.5&lt;/p&gt;
+ray[rllib]==0.8.5
 
-&lt;p&gt;tensorflow==2.2.0&lt;/p&gt;
+tensorflow==2.2.0
 
-&lt;h1 id=&quot;disclaimer&quot;&gt;Disclaimer:&lt;/h1&gt;
+# Disclaimer:
 
-&lt;p&gt;(1) I’m not affiliated with any of the authors of the &lt;a href=&quot;https://arxiv.org/pdf/1902.07151.pdf&quot;&gt;paper&lt;/a&gt;[1].&lt;/p&gt;
+(1) I'm not affiliated with any of the authors of the [paper](https://arxiv.org/pdf/1902.07151.pdf)[1].
 
-&lt;h1 id=&quot;references&quot;&gt;References:&lt;/h1&gt;
+# References:
 
-&lt;p&gt;[1] &lt;a href=&quot;https://arxiv.org/pdf/1902.07151.pdf&quot;&gt;EMERGENT COORDINATION THROUGH COMPETITION (Liu et al., 2019)&lt;/a&gt;&lt;/p&gt;
+[1] [EMERGENT COORDINATION THROUGH COMPETITION (Liu et al., 2019)](https://arxiv.org/pdf/1902.07151.pdf)
 
-&lt;hr /&gt;
+---
 
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">My attempt to implement a water down version of PBT (Population based training) for MARL (Multi-agent reinforcement learning).</summary></entry><entry><title type="html">RLlib trainer common config</title><link href="https://chuacheowhuan.github.io/RLlib_trainer_config/" rel="alternate" type="text/html" title="RLlib trainer common config" /><published>2020-03-23T00:00:00+08:00</published><updated>2020-03-23T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/RLlib_trainer_config</id><content type="html" xml:base="https://chuacheowhuan.github.io/RLlib_trainer_config/">Ray (0.8.2) RLlib trainer common config from:
+&lt;br&gt;</content><author><name>Huan</name></author><summary type="html">My attempt to implement a water down version of PBT (Population based training) for MARL (Multi-agent reinforcement learning).</summary></entry><entry><title type="html">RLlib trainer common config</title><link href="https://chuacheowhuan.github.io/RLlib_trainer_config/" rel="alternate" type="text/html" title="RLlib trainer common config" /><published>2020-03-23T00:00:00+08:00</published><updated>2020-03-23T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/RLlib_trainer_config</id><content type="html" xml:base="https://chuacheowhuan.github.io/RLlib_trainer_config/">Ray (0.8.2) RLlib trainer common config from:
 
 [source](https://github.com/ray-project/ray/blob/master/rllib/agents/trainer.py)
 

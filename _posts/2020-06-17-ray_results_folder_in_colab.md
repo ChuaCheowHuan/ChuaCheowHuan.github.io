@@ -1,7 +1,7 @@
 ---
 layout: posts
 author: Huan
-title: Finding the `ray_results` folder in colab
+title: Finding the ray_results folder in colab
 ---
 
 The location of `ray_results` folder in colab when using RLlib &/or tune.
@@ -12,8 +12,8 @@ If you're NOT using `tune.run()` but using only RLlib's python API & if
 you set the `local_dir` in RLlib's `config` to a non-default directory,
 (The default is `~/ray_results`.) you will only find the `results.json` file
 (& your checkpoint folders if you also specify them) in your specified
-directory. The other files such as the tensorboard event files, the params.pkl
-& params.json will still be saved in the default directory.
+directory. The other files such as the tensorboard event files, the `params.pkl`
+& `params.json` will still be saved in the default directory.
 
 However, if you use `tune.run()` & set the `local_dir` argument to your
 specified directory, all the files will be saved there.
