@@ -19,19 +19,19 @@
   <head>
     <meta charset="utf-8">
 
-<!-- begin _includes/seo.html --><title>Finding the ray_results folder in colab - Every little gist</title>
-<meta name="description" content="The location of ray_results folder in colab when using RLlib &amp;/or tune.">
+<!-- begin _includes/seo.html --><title>Quantum States as a generalization of classical probabilities. - Every little gist</title>
+<meta name="description" content="Notes on quantum states as a generalization of classical probabilities.">
 
 
 
 <meta property="og:type" content="article">
 <meta property="og:locale" content="en_US">
 <meta property="og:site_name" content="Every little gist">
-<meta property="og:title" content="Finding the ray_results folder in colab">
-<meta property="og:url" content="https://chuacheowhuan.github.io/ray_results_folder_in_colab/">
+<meta property="og:title" content="Quantum States as a generalization of classical probabilities.">
+<meta property="og:url" content="https://chuacheowhuan.github.io/quantum_states_as_classical_probs/">
 
 
-  <meta property="og:description" content="The location of ray_results folder in colab when using RLlib &amp;/or tune.">
+  <meta property="og:description" content="Notes on quantum states as a generalization of classical probabilities.">
 
 
 
@@ -41,7 +41,7 @@
 
 
 
-  <meta property="article:published_time" content="2020-06-17T00:00:00+08:00">
+  <meta property="article:published_time" content="2020-06-24T00:00:00+08:00">
 
 
 
@@ -52,7 +52,7 @@
   
 
 
-<link rel="canonical" href="https://chuacheowhuan.github.io/ray_results_folder_in_colab/">
+<link rel="canonical" href="https://chuacheowhuan.github.io/quantum_states_as_classical_probs/">
 
 
 
@@ -260,30 +260,220 @@
 
   <div class="archive">
     
-      <h1 id="page-title" class="page__title">Finding the ray_results folder in colab</h1>
+      <h1 id="page-title" class="page__title">Quantum States as a generalization of classical probabilities.</h1>
     
-    <p>The location of <code class="highlighter-rouge">ray_results</code> folder in colab when using RLlib &amp;/or tune.</p>
+    <p>Notes on quantum states as a generalization of classical probabilities.</p>
 
 <hr />
 
-<p>If you’re NOT using <code class="highlighter-rouge">tune.run()</code> but using only RLlib’s python API &amp; if
-you set the <code class="highlighter-rouge">local_dir</code> in RLlib’s <code class="highlighter-rouge">config</code> to a non-default directory,
-(The default is <code class="highlighter-rouge">~/ray_results</code>.) you will only find the <code class="highlighter-rouge">results.json</code> file
-(&amp; your checkpoint folders if you also specify them) in your specified
-directory. The other files such as the tensorboard event files, the <code class="highlighter-rouge">params.pkl</code>
-&amp; <code class="highlighter-rouge">params.json</code> will still be saved in the default directory.</p>
+<h1 id="assumption">Assumption:</h1>
 
-<p>However, if you use <code class="highlighter-rouge">tune.run()</code> &amp; set the <code class="highlighter-rouge">local_dir</code> argument to your
-specified directory, all the files will be saved there.</p>
+<p>Assume (1 / sqrt(2)) is factored out (not considered in the below examples).</p>
 
-<p>If you’re using colab, the way to access <code class="highlighter-rouge">~/ray_results</code> is to click on a small
-folder icon on the left of the panel, it will open up a side panel, simply go to
-<code class="highlighter-rouge">root/ray_results</code>. All those files will be saved in there.</p>
+<hr />
 
-<p>Note: It seems like setting the (1)<code class="highlighter-rouge">local_dir</code> in RLlib’s <code class="highlighter-rouge">config</code> will not
-automatically set the (2)<code class="highlighter-rouge">local_dir</code> in the <code class="highlighter-rouge">Experiment</code> class in <code class="highlighter-rouge">experiment.py</code>
-if you’re not using <code class="highlighter-rouge">tune.run()</code>.</p>
+<h1 id="0--1">|0&gt; + |1&gt;</h1>
 
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ket_0 = np.array([[1],
+                  [0]])
+
+ket_1 = np.array([[0],
+                  [1]])
+
+hadamard = np.array([[1, 1],
+                     [1, -1]])
+
+print("ket_0 + ket_1 =", ket_0 + ket_1)
+print("hadamard @ ket_0 =", hadamard @ ket_0)
+
+print("ket_0 - ket_1 =", ket_0 - ket_1)
+print("hadamard @ ket_1 =", hadamard @ ket_1)
+</code></pre></div></div>
+
+<h2 id="output">Output:</h2>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ket_0 + ket_1 = [[1]
+                 [1]]
+
+hadamard @ ket_0 = [[1]
+                    [1]]
+
+ket_0 - ket_1 = [[ 1]
+                 [-1]]
+
+hadamard @ ket_1 = [[ 1]
+                    [-1]]
+</code></pre></div></div>
+
+<hr />
+
+<h1 id="kronecker-product-for-composite-states">Kronecker product for composite states.</h1>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ket_00 = np.kron(ket_0, ket_0)
+ket_01 = np.kron(ket_0, ket_1)
+ket_10 = np.kron(ket_1, ket_0)
+ket_11 = np.kron(ket_1, ket_1)
+
+print("|00⟩ : ", ket_00)
+print("|01⟩ : ", ket_01)
+print("|10⟩ : ", ket_10)
+print("|11⟩ : ", ket_11)
+
+print("|00⟩ + |11⟩ =", ket_00 + ket_11)
+print("|00⟩ - |11⟩ =", ket_00 - ket_11)
+</code></pre></div></div>
+
+<h2 id="output-1">Output:</h2>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>|00⟩ :  [[1]
+         [0]
+         [0]
+         [0]]
+
+|01⟩ :  [[0]
+         [1]
+         [0]
+         [0]]
+
+|10⟩ :  [[0]
+         [0]
+         [1]
+         [0]]
+
+|11⟩ :  [[0]
+         [0]
+         [0]
+         [1]]
+
+|00⟩ + |11⟩ = [[1]
+               [0]
+               [0]
+               [1]]
+
+|00⟩ - |11⟩ = [[ 1]
+               [ 0]
+               [ 0]
+               [-1]]
+</code></pre></div></div>
+
+<hr />
+
+<h1 id="00--11">|00&gt; + |11&gt;</h1>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># Hadamard gate
+hadamard = np.array([[1, 1],
+                     [1, -1]])
+
+# CNOT gate
+CNOT_mat = np.array([[1, 0, 0, 0],
+                     [0, 1, 0, 0],
+                     [0, 0, 0, 1],
+                     [0, 0, 1, 0]])
+
+# Initialize 2 qubits, q_0, q_1 as |0&gt;.
+q_0 = np.array([[1],
+                [0]])
+q_1 = np.array([[1],
+                [0]])
+
+# Apply hadamard to q_0.
+H_q_0 = hadamard @ q_0
+print("H_q_0: {}".format(H_q_0))
+
+# Composite state of q_0 (after applying hadamard to q_0) &amp; q_1.
+composite = np.kron(H_q_0, q_1)
+print("composite: {}".format(composite))
+
+# Apply CNOT to composite state.
+res = CNOT_mat @ composite
+print("res: {}".format(res))
+</code></pre></div></div>
+
+<h2 id="output-2">Output:</h2>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>H_q_0: [[1]
+        [1]]
+
+composite: [[1]
+            [0]
+            [1]
+            [0]]
+
+res: [[1]
+      [0]
+      [0]
+      [1]]
+</code></pre></div></div>
+
+<hr />
+
+<h1 id="00---11">|00&gt; - |11&gt;</h1>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># NOT gate
+def Not_gate(v):
+    if v[0] == 0:
+        v[0] = 1
+    else:
+        v[0] = 0
+
+    if v[1] == 0:
+        v[1] = 1
+    else:
+        v[1] = 0
+
+    return v
+
+# Hadamard gate
+hadamard = np.array([[1, 1],
+                     [1, -1]])
+
+# CNOT gate
+CNOT_mat = np.array([[1, 0, 0, 0],
+                     [0, 1, 0, 0],
+                     [0, 0, 0, 1],
+                     [0, 0, 1, 0]])
+
+# Initialize 2 qubits, q_0, q_1 as |0&gt;.
+q_0 = np.array([[1],
+                [0]])
+q_1 = np.array([[1],
+                [0]])
+
+# Apply NOT to q_1.
+X_q_1 = Not_gate(q_1)
+print("X_q_1: {}".format(X_q_1))
+
+# Apply hadamard to q_1.
+H_q_1 = hadamard @ X_q_1
+print("H_q_1: {}".format(H_q_1))
+
+# Composite state of q_1 (after applying hadamard to q_1) &amp; q_0.
+composite = np.kron(H_q_1, q_0)   # Need to CNOT(1,0) instead of CNOT(0,1) so q_1 is 1st term in composite.
+print("composite: {}".format(composite))
+
+# Apply CNOT to composite state.
+res = CNOT_mat @ composite
+print("res: {}".format(res))
+</code></pre></div></div>
+
+<h2 id="output-3">Output:</h2>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>X_q_1: [[0]
+        [1]]
+
+H_q_1: [[ 1]
+        [-1]]
+
+composite: [[ 1]
+            [ 0]
+            [-1]
+            [ 0]]
+
+res: [[ 1]
+      [ 0]
+      [ 0]
+      [-1]]
+</code></pre></div></div>
 <hr />
 
 <p><br /></p>
@@ -331,7 +521,7 @@ if you’re not using <code class="highlighter-rouge">tune.run()</code>.</p>
 
 
 
-  49 minute read
+  46 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">Notes on quantum states as a generalization of classical probabilities.
@@ -1372,8 +1562,8 @@ algorithm.
     
   <script>
     var disqus_config = function () {
-      this.page.url = "https://chuacheowhuan.github.io/ray_results_folder_in_colab/";  // Replace PAGE_URL with your page's canonical URL variable
-      this.page.identifier = "/ray_results_folder_in_colab"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+      this.page.url = "https://chuacheowhuan.github.io/quantum_states_as_classical_probs/";  // Replace PAGE_URL with your page's canonical URL variable
+      this.page.identifier = "/quantum_states_as_classical_probs"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
     };
     (function() { // DON'T EDIT BELOW THIS LINE
       var d = document, s = d.createElement('script');

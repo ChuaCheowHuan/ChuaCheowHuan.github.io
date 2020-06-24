@@ -1,4 +1,218 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.7">Jekyll</generator><link href="https://chuacheowhuan.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://chuacheowhuan.github.io/" rel="alternate" type="text/html" /><updated>2020-06-17T15:30:29+08:00</updated><id>https://chuacheowhuan.github.io/feed.xml</id><title type="html">Every little gist</title><subtitle></subtitle><author><name>Chua Cheow Huan</name></author><entry><title type="html">Finding the ray_results folder in colab</title><link href="https://chuacheowhuan.github.io/ray_results_folder_in_colab/" rel="alternate" type="text/html" title="Finding the ray_results folder in colab" /><published>2020-06-17T00:00:00+08:00</published><updated>2020-06-17T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/ray_results_folder_in_colab</id><content type="html" xml:base="https://chuacheowhuan.github.io/ray_results_folder_in_colab/">&lt;p&gt;The location of &lt;code class=&quot;highlighter-rouge&quot;&gt;ray_results&lt;/code&gt; folder in colab when using RLlib &amp;amp;/or tune.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.7">Jekyll</generator><link href="https://chuacheowhuan.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://chuacheowhuan.github.io/" rel="alternate" type="text/html" /><updated>2020-06-24T12:27:47+08:00</updated><id>https://chuacheowhuan.github.io/feed.xml</id><title type="html">Every little gist</title><subtitle></subtitle><author><name>Chua Cheow Huan</name></author><entry><title type="html">Quantum States as a generalization of classical probabilities.</title><link href="https://chuacheowhuan.github.io/quantum_states_as_classical_probs/" rel="alternate" type="text/html" title="Quantum States as a generalization of classical probabilities." /><published>2020-06-24T00:00:00+08:00</published><updated>2020-06-24T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/quantum_states_as_classical_probs</id><content type="html" xml:base="https://chuacheowhuan.github.io/quantum_states_as_classical_probs/">&lt;p&gt;Notes on quantum states as a generalization of classical probabilities.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h1 id=&quot;assumption&quot;&gt;Assumption:&lt;/h1&gt;
+
+&lt;p&gt;Assume (1 / sqrt(2)) is factored out (not considered in the below examples).&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h1 id=&quot;0--1&quot;&gt;|0&amp;gt; + |1&amp;gt;&lt;/h1&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;ket_0 = np.array([[1],
+                  [0]])
+
+ket_1 = np.array([[0],
+                  [1]])
+
+hadamard = np.array([[1, 1],
+                     [1, -1]])
+
+print(&quot;ket_0 + ket_1 =&quot;, ket_0 + ket_1)
+print(&quot;hadamard @ ket_0 =&quot;, hadamard @ ket_0)
+
+print(&quot;ket_0 - ket_1 =&quot;, ket_0 - ket_1)
+print(&quot;hadamard @ ket_1 =&quot;, hadamard @ ket_1)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;output&quot;&gt;Output:&lt;/h2&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;ket_0 + ket_1 = [[1]
+                 [1]]
+
+hadamard @ ket_0 = [[1]
+                    [1]]
+
+ket_0 - ket_1 = [[ 1]
+                 [-1]]
+
+hadamard @ ket_1 = [[ 1]
+                    [-1]]
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;hr /&gt;
+
+&lt;h1 id=&quot;kronecker-product-for-composite-states&quot;&gt;Kronecker product for composite states.&lt;/h1&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;ket_00 = np.kron(ket_0, ket_0)
+ket_01 = np.kron(ket_0, ket_1)
+ket_10 = np.kron(ket_1, ket_0)
+ket_11 = np.kron(ket_1, ket_1)
+
+print(&quot;|00⟩ : &quot;, ket_00)
+print(&quot;|01⟩ : &quot;, ket_01)
+print(&quot;|10⟩ : &quot;, ket_10)
+print(&quot;|11⟩ : &quot;, ket_11)
+
+print(&quot;|00⟩ + |11⟩ =&quot;, ket_00 + ket_11)
+print(&quot;|00⟩ - |11⟩ =&quot;, ket_00 - ket_11)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;output-1&quot;&gt;Output:&lt;/h2&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;|00⟩ :  [[1]
+         [0]
+         [0]
+         [0]]
+
+|01⟩ :  [[0]
+         [1]
+         [0]
+         [0]]
+
+|10⟩ :  [[0]
+         [0]
+         [1]
+         [0]]
+
+|11⟩ :  [[0]
+         [0]
+         [0]
+         [1]]
+
+|00⟩ + |11⟩ = [[1]
+               [0]
+               [0]
+               [1]]
+
+|00⟩ - |11⟩ = [[ 1]
+               [ 0]
+               [ 0]
+               [-1]]
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;hr /&gt;
+
+&lt;h1 id=&quot;00--11&quot;&gt;|00&amp;gt; + |11&amp;gt;&lt;/h1&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# Hadamard gate
+hadamard = np.array([[1, 1],
+                     [1, -1]])
+
+# CNOT gate
+CNOT_mat = np.array([[1, 0, 0, 0],
+                     [0, 1, 0, 0],
+                     [0, 0, 0, 1],
+                     [0, 0, 1, 0]])
+
+# Initialize 2 qubits, q_0, q_1 as |0&amp;gt;.
+q_0 = np.array([[1],
+                [0]])
+q_1 = np.array([[1],
+                [0]])
+
+# Apply hadamard to q_0.
+H_q_0 = hadamard @ q_0
+print(&quot;H_q_0: {}&quot;.format(H_q_0))
+
+# Composite state of q_0 (after applying hadamard to q_0) &amp;amp; q_1.
+composite = np.kron(H_q_0, q_1)
+print(&quot;composite: {}&quot;.format(composite))
+
+# Apply CNOT to composite state.
+res = CNOT_mat @ composite
+print(&quot;res: {}&quot;.format(res))
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;output-2&quot;&gt;Output:&lt;/h2&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;H_q_0: [[1]
+        [1]]
+
+composite: [[1]
+            [0]
+            [1]
+            [0]]
+
+res: [[1]
+      [0]
+      [0]
+      [1]]
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;hr /&gt;
+
+&lt;h1 id=&quot;00---11&quot;&gt;|00&amp;gt; - |11&amp;gt;&lt;/h1&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# NOT gate
+def Not_gate(v):
+    if v[0] == 0:
+        v[0] = 1
+    else:
+        v[0] = 0
+
+    if v[1] == 0:
+        v[1] = 1
+    else:
+        v[1] = 0
+
+    return v
+
+# Hadamard gate
+hadamard = np.array([[1, 1],
+                     [1, -1]])
+
+# CNOT gate
+CNOT_mat = np.array([[1, 0, 0, 0],
+                     [0, 1, 0, 0],
+                     [0, 0, 0, 1],
+                     [0, 0, 1, 0]])
+
+# Initialize 2 qubits, q_0, q_1 as |0&amp;gt;.
+q_0 = np.array([[1],
+                [0]])
+q_1 = np.array([[1],
+                [0]])
+
+# Apply NOT to q_1.
+X_q_1 = Not_gate(q_1)
+print(&quot;X_q_1: {}&quot;.format(X_q_1))
+
+# Apply hadamard to q_1.
+H_q_1 = hadamard @ X_q_1
+print(&quot;H_q_1: {}&quot;.format(H_q_1))
+
+# Composite state of q_1 (after applying hadamard to q_1) &amp;amp; q_0.
+composite = np.kron(H_q_1, q_0)   # Need to CNOT(1,0) instead of CNOT(0,1) so q_1 is 1st term in composite.
+print(&quot;composite: {}&quot;.format(composite))
+
+# Apply CNOT to composite state.
+res = CNOT_mat @ composite
+print(&quot;res: {}&quot;.format(res))
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;output-3&quot;&gt;Output:&lt;/h2&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;X_q_1: [[0]
+        [1]]
+
+H_q_1: [[ 1]
+        [-1]]
+
+composite: [[ 1]
+            [ 0]
+            [-1]
+            [ 0]]
+
+res: [[ 1]
+      [ 0]
+      [ 0]
+      [-1]]
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">Notes on quantum states as a generalization of classical probabilities.</summary></entry><entry><title type="html">Finding the ray_results folder in colab</title><link href="https://chuacheowhuan.github.io/ray_results_folder_in_colab/" rel="alternate" type="text/html" title="Finding the ray_results folder in colab" /><published>2020-06-17T00:00:00+08:00</published><updated>2020-06-17T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/ray_results_folder_in_colab</id><content type="html" xml:base="https://chuacheowhuan.github.io/ray_results_folder_in_colab/">&lt;p&gt;The location of &lt;code class=&quot;highlighter-rouge&quot;&gt;ray_results&lt;/code&gt; folder in colab when using RLlib &amp;amp;/or tune.&lt;/p&gt;
 
 &lt;hr /&gt;
 
@@ -752,267 +966,4 @@ df = df[ (df.Q1 == 1) &amp; (df.Q2 == -1) | (df.Q1 == -1) &amp; (df.Q2 == 1) ]
 
 ---
 
-&lt;br&gt;</content><author><name>Huan</name></author><summary type="html">Filter rows with same column values in a Pandas dataframe.</summary></entry><entry><title type="html">Custom Sagemaker reinforcement learning container</title><link href="https://chuacheowhuan.github.io/custom_sagemaker_RL_container/" rel="alternate" type="text/html" title="Custom Sagemaker reinforcement learning container" /><published>2019-09-15T00:00:00+08:00</published><updated>2019-09-15T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/custom_sagemaker_RL_container</id><content type="html" xml:base="https://chuacheowhuan.github.io/custom_sagemaker_RL_container/">Building &amp; testing custom Sagemaker RL container.
-
-Instead of using the official SageMaker supported version of Ray RLlib
-(version 0.5.3 &amp; 0.6.5), I want to use version 0.7.3. In order to do so, I have
-to build &amp; test my custom Sagemaker RL container.
-
----
-
-**The Dockerfile:**
-
-Add the Dockerfile below to ```sagemaker-rl-container/ray/docker/0.7.3/```:
-
-```
-ARG processor
-#FROM 520713654638.dkr.ecr.us-west-2.amazonaws.com/sagemaker-tensorflow-scriptmode:1.14.0-$processor-py3
-FROM 520713654638.dkr.ecr.us-west-2.amazonaws.com/sagemaker-tensorflow-scriptmode:1.12.0-$processor-py3
-
-RUN apt-get update &amp;&amp; apt-get install -y --no-install-recommends \
-        build-essential \
-        jq \
-        libav-tools \
-        libjpeg-dev \
-        libxrender1 \
-        python3.6-dev \
-        python3-opengl \
-        wget \
-        xvfb &amp;&amp; \
-    apt-get clean &amp;&amp; \
-    rm -rf /var/lib/apt/lists/*
-
-RUN pip install --no-cache-dir \
-    Cython==0.29.7 \
-    gym==0.14.0 \
-    lz4==2.1.10 \
-    opencv-python-headless==4.1.0.25 \
-    PyOpenGL==3.1.0 \
-    pyyaml==5.1.1 \
-    redis&gt;=3.2.2 \
-    ray==0.7.3 \
-    ray[rllib]==0.7.3 \
-    scipy==1.3.0 \
-    requests
-
-# https://click.palletsprojects.com/en/7.x/python3/
-ENV LC_ALL=C.UTF-8
-ENV LANG=C.UTF-8
-
-# Copy workaround script for incorrect hostname
-COPY lib/changehostname.c /
-
-COPY lib/start.sh /usr/local/bin/start.sh
-RUN chmod +x /usr/local/bin/start.sh
-
-# Starts framework
-ENTRYPOINT [&quot;bash&quot;, &quot;-m&quot;, &quot;start.sh&quot;]
-```
-
----
-
-**Remove unneeded test files:**
-
-Backup the ```test``` folder as ```test_bkup```
-in ```sagemaker-rl-container/```.
-
-Remove the following files not used in testing
-in ```sagemaker-rl-container/test/integration/local/```:
-
-```
-test_coach.py
-test_vw_cb_explore.py
-test_vw_cbify.py
-test_vw_serving.py
-```
-
----
-
-**Add/replace codes in test files to get role:**
-
-In the ```sagemaker-rl-container/test/conftest.py```file, add/replace the
-following:
-
-```
-from sagemaker import get_execution_role
-```
-
-```
-#parser.addoption('--role', default='SageMakerContainerBuildIntegrationTests')
-parser.addoption('--role', default=get_execution_role()),
-
-```
-
-In the following files:
-
-```
-sagemaker-rl-container/test/integration/local/test_gym.py
-sagemaker-rl-container/test/integration/local/test_ray.py
-```
-
-Add/replace the following:
-
-```
-from sagemaker import get_execution_role
-```
-
-```
-#role='SageMakerRole',
-role = get_execution_role(),
-```
-
----
-
-**Build the image:**
-
-In SageMaker, start a Jupyter notebook instance &amp; open a terminal.
-
-Login into SageMaker ECR account:
-
-```
-$ (aws ecr get-login --no-include-email --region &lt;region&gt; --registry-ids &lt;AWS_ACC_ID&gt;)
-$ (aws ecr get-login --no-include-email --region us-west-2 --registry-ids 520713654638)
-```
-
-Copy &amp; paste the output from the above command into the terminal &amp; press Enter.
-
----
-
-Pull the base Tensorflow image from the aws ecr:
-
-```
-$ docker pull 520713654638.dkr.ecr.us-west-2.amazonaws.com/sagemaker-tensorflow-scriptmode:1.12.0-cpu-py3
-```
-
-Build the Ray image using the ```Dockerfile.tf``` from above:
-
-```
-$ docker build -t custom-smk-rl-ctn:tf-1.12.0-ray-0.7.3-cpu-py3 -f ray/docker/0.7.3/Dockerfile.tf --build-arg processor=cpu .
-```
-
----
-
-**Local testing:**
-
-Install dependencies for testing:
-
-```
-$ cd sagemaker-rl-container
-$ pip install .
-```
-
-Run the command below for local testing:
-
-```
-clear &amp;&amp; \
-docker images &amp;&amp; \
-pytest test/integration/local --framework tensorflow \
-                              --toolkit ray \
-                              --toolkit-version 0.7.3 \
-                              --docker-base-name custom-smk-rl-ctn \
-                              --tag tf-1.12.0-ray-0.7.3-cpu-py3 \
-                              --processor cpu | tee local_test_output.txt
-```
-
-The output from the test will be saved in local_test_output.txt.
-
----
-
-**Pushing to registry on AWS ECR:**
-
-```
-$ (aws ecr get-login --no-include-email --region &lt;region&gt; --registry-ids &lt;AWS_ACC_ID&gt;)
-$ (aws ecr get-login --no-include-email --region us-west-2  --registry-ids 123456789012)
-# Copy &amp; paste output to terminal &amp; press enter.
-
-$ aws ecr create-repository --repository-name &lt;repo_name&gt;
-$ aws ecr create-repository --repository-name custom-smk-rl-ctn
-
-$ docker tag &lt;image_ID&gt; &lt;AWS_ACC_ID&gt;.dkr.ecr.us-west-2.amazonaws.com/&lt;repo_name&gt;:&lt;tag&gt;
-$ docker tag ba542f0b9706 &lt;123456789012&gt;.dkr.ecr.us-west-2.amazonaws.com/custom-smk-rl-ctn:tf-1.12.0-cpu-py3
-$ docker tag ba542f0b9706 &lt;123456789012&gt;.dkr.ecr.us-west-2.amazonaws.com/custom-smk-rl-ctn:tf-1.12.0-ray-0.7.3-cpu-py3
-
-$ docker push &lt;AWS_ACC_ID&gt;.dkr.ecr.us-west-2.amazonaws.com/&lt;repo_name&gt;:&lt;tag&gt;
-$ docker push &lt;123456789012&gt;.dkr.ecr.us-west-2.amazonaws.com/custom-smk-rl-ctn:tf-1.12.0-cpu-py3
-$ docker push &lt;123456789012&gt;.dkr.ecr.us-west-2.amazonaws.com/custom-smk-rl-ctn:tf-1.12.0-ray-0.7.3-cpu-py3
-
-
-$ aws ecr describe-repositories
-
-$ aws ecr list-images --repository-name &lt;repo_name&gt;
-$ aws ecr list-images --repository-name custom-smk-rl-ctn
-```
-
----
-
-**Testing with AWS SageMaker ML instance:**
-
-Run the command below for testing with SageMaker:
-
-```
-clear &amp;&amp; \
-docker images &amp;&amp; \
-pytest test/integration/sagemaker --aws-id 123456789012 \
-                                  --instance-type ml.m4.xlarge \
-                                  --framework tensorflow \
-                                  --toolkit ray \
-                                  --toolkit-version 0.7.3 \
-                                  --docker-base-name custom-smk-rl-ctn \
-                                  --tag tf-1.12.0-ray-0.7.3-cpu-py3 | tee SageMaker_test_output.txt
-```
-
-The output from the test will be saved in SageMaker_test_output.txt.
-
----
-
-**Pushing to registry on Docker hub:**
-
-```
-$ docker login
-
-$ docker tag &lt;image_ID&gt; &lt;DockerHubUserName&gt;/&lt;repo_name&gt;:&lt;tag&gt;
-$ docker tag ba542f0b9706 &lt;DockerHubUserName&gt;/custom-smk-rl-ctn:tf-1.12.0-cpu-py3
-$ docker tag ba542f0b9706 &lt;DockerHubUserName&gt;/custom-smk-rl-ctn:tf-1.12.0-ray-0.7.3-cpu-py3
-
-$ docker push &lt;DockerHubUserName&gt;/&lt;repo_name&gt;:&lt;tag&gt;
-$ docker push &lt;DockerHubUserName&gt;/custom-smk-rl-ctn:tf-1.12.0-cpu-py3
-$ docker push &lt;DockerHubUserName&gt;/custom-smk-rl-ctn:tf-1.12.0-ray-0.7.3-cpu-py3
-```
-
----
-
-**Training with custom SageMaker RL container:**
-
-
-
----
-
-**Useful Docker commands:**
-
-```
-$ docker ps -a
-
-$ docker images
-
-$ docker rm &lt;container&gt;
-
-$ docker rmi &lt;image&gt;
-```
-
----
-
-**Useful AWS commands:**
-
-```
-$ aws ecr delete-repository --force --repository-name &lt;repo_name&gt;
-```
-
----
-
-**References:**
-
-[https://github.com/aws/sagemaker-rl-container](https://github.com/aws/sagemaker-rl-container)
-
----
-
-&lt;br&gt;</content><author><name>Huan</name></author><summary type="html">Building &amp;amp; testing custom Sagemaker RL container.</summary></entry></feed>
+&lt;br&gt;</content><author><name>Huan</name></author><summary type="html">Filter rows with same column values in a Pandas dataframe.</summary></entry></feed>
