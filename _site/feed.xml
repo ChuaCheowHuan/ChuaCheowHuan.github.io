@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.7">Jekyll</generator><link href="https://chuacheowhuan.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://chuacheowhuan.github.io/" rel="alternate" type="text/html" /><updated>2020-06-25T18:22:58+08:00</updated><id>https://chuacheowhuan.github.io/feed.xml</id><title type="html">Every little gist</title><subtitle></subtitle><author><name>Chua Cheow Huan</name></author><entry><title type="html">Measurement &amp;amp; mixed states for quantum systems.</title><link href="https://chuacheowhuan.github.io/quantum_sys_measurement_mixed_states/" rel="alternate" type="text/html" title="Measurement &amp; mixed states for quantum systems." /><published>2020-06-25T00:00:00+08:00</published><updated>2020-06-25T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/quantum_sys_measurement_mixed_states</id><content type="html" xml:base="https://chuacheowhuan.github.io/quantum_sys_measurement_mixed_states/">&lt;p&gt;Notes on measurement for quantum systems.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.7">Jekyll</generator><link href="https://chuacheowhuan.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://chuacheowhuan.github.io/" rel="alternate" type="text/html" /><updated>2020-06-25T18:28:00+08:00</updated><id>https://chuacheowhuan.github.io/feed.xml</id><title type="html">Every little gist</title><subtitle></subtitle><author><name>Chua Cheow Huan</name></author><entry><title type="html">Measurement &amp;amp; mixed states for quantum systems.</title><link href="https://chuacheowhuan.github.io/quantum_sys_measurement_mixed_states/" rel="alternate" type="text/html" title="Measurement &amp; mixed states for quantum systems." /><published>2020-06-25T00:00:00+08:00</published><updated>2020-06-25T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/quantum_sys_measurement_mixed_states</id><content type="html" xml:base="https://chuacheowhuan.github.io/quantum_sys_measurement_mixed_states/">&lt;p&gt;Notes on measurement for quantum systems.&lt;/p&gt;
 
 &lt;hr /&gt;
 
@@ -49,22 +49,21 @@ density matrix example: |ψ&amp;gt;&amp;lt;ψ|
 
 &lt;hr /&gt;
 
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">Notes on measurement for quantum systems.</summary></entry><entry><title type="html">Quantum States as a generalization of classical probabilities.</title><link href="https://chuacheowhuan.github.io/quantum_states_as_classical_probs/" rel="alternate" type="text/html" title="Quantum States as a generalization of classical probabilities." /><published>2020-06-24T00:00:00+08:00</published><updated>2020-06-24T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/quantum_states_as_classical_probs</id><content type="html" xml:base="https://chuacheowhuan.github.io/quantum_states_as_classical_probs/">Notes on quantum states as a generalization of classical probabilities.
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">Notes on measurement for quantum systems.</summary></entry><entry><title type="html">Quantum States as a generalization of classical probabilities.</title><link href="https://chuacheowhuan.github.io/quantum_states_as_classical_probs/" rel="alternate" type="text/html" title="Quantum States as a generalization of classical probabilities." /><published>2020-06-24T00:00:00+08:00</published><updated>2020-06-24T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/quantum_states_as_classical_probs</id><content type="html" xml:base="https://chuacheowhuan.github.io/quantum_states_as_classical_probs/">&lt;p&gt;Notes on quantum states as a generalization of classical probabilities.&lt;/p&gt;
 
----
+&lt;hr /&gt;
 
-# Assumption:
+&lt;h1 id=&quot;assumption&quot;&gt;Assumption:&lt;/h1&gt;
 
-Assume (1 / sqrt(2)) is factored out (not considered in the below examples).
+&lt;p&gt;Assume (1 / sqrt(2)) is factored out (not considered in the below examples).&lt;/p&gt;
 
-ket_0 means 0 ket or |0&gt; &amp; ket_1 means 1 ket or |1&gt;. 
+&lt;p&gt;ket_0 means 0 ket or &lt;code class=&quot;highlighter-rouge&quot;&gt;|0&amp;gt;&lt;/code&gt; &amp;amp; ket_1 means 1 ket or &lt;code class=&quot;highlighter-rouge&quot;&gt;|1&amp;gt;&lt;/code&gt;.&lt;/p&gt;
 
----
+&lt;hr /&gt;
 
-# |0&gt; + |1&gt;
+&lt;h1 id=&quot;0--1&quot;&gt;|0&amp;gt; + |1&amp;gt;&lt;/h1&gt;
 
-```
-ket_0 = np.array([[1],
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;ket_0 = np.array([[1],
                   [0]])
 
 ket_1 = np.array([[0],
@@ -78,12 +77,11 @@ print(&quot;hadamard @ ket_0 =&quot;, hadamard @ ket_0)
 
 print(&quot;ket_0 - ket_1 =&quot;, ket_0 - ket_1)
 print(&quot;hadamard @ ket_1 =&quot;, hadamard @ ket_1)
-```
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-## Output:
+&lt;h2 id=&quot;output&quot;&gt;Output:&lt;/h2&gt;
 
-```
-ket_0 + ket_1 = [[1]
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;ket_0 + ket_1 = [[1]
                  [1]]
 
 hadamard @ ket_0 = [[1]
@@ -94,14 +92,13 @@ ket_0 - ket_1 = [[ 1]
 
 hadamard @ ket_1 = [[ 1]
                     [-1]]
-```
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
----
+&lt;hr /&gt;
 
-# Kronecker product for composite states.
+&lt;h1 id=&quot;kronecker-product-for-composite-states&quot;&gt;Kronecker product for composite states.&lt;/h1&gt;
 
-```
-ket_00 = np.kron(ket_0, ket_0)
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;ket_00 = np.kron(ket_0, ket_0)
 ket_01 = np.kron(ket_0, ket_1)
 ket_10 = np.kron(ket_1, ket_0)
 ket_11 = np.kron(ket_1, ket_1)
@@ -113,12 +110,11 @@ print(&quot;|11⟩ : &quot;, ket_11)
 
 print(&quot;|00⟩ + |11⟩ =&quot;, ket_00 + ket_11)
 print(&quot;|00⟩ - |11⟩ =&quot;, ket_00 - ket_11)
-```
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-## Output:
+&lt;h2 id=&quot;output-1&quot;&gt;Output:&lt;/h2&gt;
 
-```
-|00⟩ :  [[1]
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;|00⟩ :  [[1]
          [0]
          [0]
          [0]]
@@ -147,14 +143,13 @@ print(&quot;|00⟩ - |11⟩ =&quot;, ket_00 - ket_11)
                [ 0]
                [ 0]
                [-1]]
-```
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
----
+&lt;hr /&gt;
 
-# |00&gt; + |11&gt;
+&lt;h1 id=&quot;00--11&quot;&gt;|00&amp;gt; + |11&amp;gt;&lt;/h1&gt;
 
-```
-# Hadamard gate
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# Hadamard gate
 hadamard = np.array([[1, 1],
                      [1, -1]])
 
@@ -164,7 +159,7 @@ CNOT_mat = np.array([[1, 0, 0, 0],
                      [0, 0, 0, 1],
                      [0, 0, 1, 0]])
 
-# Initialize 2 qubits, q_0, q_1 as |0&gt;.
+# Initialize 2 qubits, q_0, q_1 as |0&amp;gt;.
 q_0 = np.array([[1],
                 [0]])
 q_1 = np.array([[1],
@@ -174,19 +169,18 @@ q_1 = np.array([[1],
 H_q_0 = hadamard @ q_0
 print(&quot;H_q_0: {}&quot;.format(H_q_0))
 
-# Composite state of q_0 (after applying hadamard to q_0) &amp; q_1.
+# Composite state of q_0 (after applying hadamard to q_0) &amp;amp; q_1.
 composite = np.kron(H_q_0, q_1)
 print(&quot;composite: {}&quot;.format(composite))
 
 # Apply CNOT to composite state.
 res = CNOT_mat @ composite
 print(&quot;res: {}&quot;.format(res))
-```
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-## Output:
+&lt;h2 id=&quot;output-2&quot;&gt;Output:&lt;/h2&gt;
 
-```
-H_q_0: [[1]
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;H_q_0: [[1]
         [1]]
 
 composite: [[1]
@@ -198,14 +192,13 @@ res: [[1]
       [0]
       [0]
       [1]]
-```
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
----
+&lt;hr /&gt;
 
-# |00&gt; - |11&gt;
+&lt;h1 id=&quot;00---11&quot;&gt;|00&amp;gt; - |11&amp;gt;&lt;/h1&gt;
 
-```
-# NOT gate
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# NOT gate
 def Not_gate(v):
     if v[0] == 0:
         v[0] = 1
@@ -229,7 +222,7 @@ CNOT_mat = np.array([[1, 0, 0, 0],
                      [0, 0, 0, 1],
                      [0, 0, 1, 0]])
 
-# Initialize 2 qubits, q_0, q_1 as |0&gt;.
+# Initialize 2 qubits, q_0, q_1 as |0&amp;gt;.
 q_0 = np.array([[1],
                 [0]])
 q_1 = np.array([[1],
@@ -243,19 +236,18 @@ print(&quot;X_q_1: {}&quot;.format(X_q_1))
 H_q_1 = hadamard @ X_q_1
 print(&quot;H_q_1: {}&quot;.format(H_q_1))
 
-# Composite state of q_1 (after applying hadamard to q_1) &amp; q_0.
+# Composite state of q_1 (after applying hadamard to q_1) &amp;amp; q_0.
 composite = np.kron(H_q_1, q_0)   # Need to CNOT(1,0) instead of CNOT(0,1) so q_1 is 1st term in composite.
 print(&quot;composite: {}&quot;.format(composite))
 
 # Apply CNOT to composite state.
 res = CNOT_mat @ composite
 print(&quot;res: {}&quot;.format(res))
-```
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-## Output:
+&lt;h2 id=&quot;output-3&quot;&gt;Output:&lt;/h2&gt;
 
-```
-X_q_1: [[0]
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;X_q_1: [[0]
         [1]]
 
 H_q_1: [[ 1]
@@ -270,10 +262,10 @@ res: [[ 1]
       [ 0]
       [ 0]
       [-1]]
-```
----
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;hr /&gt;
 
-&lt;br&gt;</content><author><name>Huan</name></author><summary type="html">Notes on quantum states as a generalization of classical probabilities.</summary></entry><entry><title type="html">Finding the ray_results folder in colab</title><link href="https://chuacheowhuan.github.io/ray_results_folder_in_colab/" rel="alternate" type="text/html" title="Finding the ray_results folder in colab" /><published>2020-06-17T00:00:00+08:00</published><updated>2020-06-17T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/ray_results_folder_in_colab</id><content type="html" xml:base="https://chuacheowhuan.github.io/ray_results_folder_in_colab/">The location of `ray_results` folder in colab when using RLlib &amp;/or tune.
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">Notes on quantum states as a generalization of classical probabilities.</summary></entry><entry><title type="html">Finding the ray_results folder in colab</title><link href="https://chuacheowhuan.github.io/ray_results_folder_in_colab/" rel="alternate" type="text/html" title="Finding the ray_results folder in colab" /><published>2020-06-17T00:00:00+08:00</published><updated>2020-06-17T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/ray_results_folder_in_colab</id><content type="html" xml:base="https://chuacheowhuan.github.io/ray_results_folder_in_colab/">The location of `ray_results` folder in colab when using RLlib &amp;/or tune.
 
 ---
 
