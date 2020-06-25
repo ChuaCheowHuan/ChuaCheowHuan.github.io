@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.7">Jekyll</generator><link href="https://chuacheowhuan.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://chuacheowhuan.github.io/" rel="alternate" type="text/html" /><updated>2020-06-25T17:19:00+08:00</updated><id>https://chuacheowhuan.github.io/feed.xml</id><title type="html">Every little gist</title><subtitle></subtitle><author><name>Chua Cheow Huan</name></author><entry><title type="html">Measurement &amp;amp; mixed states for quantum systems.</title><link href="https://chuacheowhuan.github.io/quantum_sys_measurement_mixed_states/" rel="alternate" type="text/html" title="Measurement &amp; mixed states for quantum systems." /><published>2020-06-25T00:00:00+08:00</published><updated>2020-06-25T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/quantum_sys_measurement_mixed_states</id><content type="html" xml:base="https://chuacheowhuan.github.io/quantum_sys_measurement_mixed_states/">&lt;p&gt;Notes on measurement for quantum systems.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.7">Jekyll</generator><link href="https://chuacheowhuan.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://chuacheowhuan.github.io/" rel="alternate" type="text/html" /><updated>2020-06-25T18:13:44+08:00</updated><id>https://chuacheowhuan.github.io/feed.xml</id><title type="html">Every little gist</title><subtitle></subtitle><author><name>Chua Cheow Huan</name></author><entry><title type="html">Measurement &amp;amp; mixed states for quantum systems.</title><link href="https://chuacheowhuan.github.io/quantum_sys_measurement_mixed_states/" rel="alternate" type="text/html" title="Measurement &amp; mixed states for quantum systems." /><published>2020-06-25T00:00:00+08:00</published><updated>2020-06-25T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/quantum_sys_measurement_mixed_states</id><content type="html" xml:base="https://chuacheowhuan.github.io/quantum_sys_measurement_mixed_states/">&lt;p&gt;Notes on measurement for quantum systems.&lt;/p&gt;
 
 &lt;hr /&gt;
 
@@ -91,12 +91,14 @@
 &lt;table&gt;
   &lt;tbody&gt;
     &lt;tr&gt;
-      &lt;td&gt;$\sum_i p_i&lt;/td&gt;
-      &lt;td&gt;\psi_i\rangle\langle\psi_i&lt;/td&gt;
-      &lt;td&gt;$, where $\sum_i p_i=1$, $p_i\geq 0$&lt;/td&gt;
+      &lt;td&gt;&lt;script type=&quot;math/tex&quot;&gt;\sum_{i}p_{i}&lt;/script&gt; $$&lt;/td&gt;
+      &lt;td&gt;\psi_{i}\rangle\langle\psi_{i}&lt;/td&gt;
+      &lt;td&gt;$$,&lt;/td&gt;
     &lt;/tr&gt;
   &lt;/tbody&gt;
 &lt;/table&gt;
+
+&lt;p&gt;where &lt;script type=&quot;math/tex&quot;&gt;\sum_{i} p_{i}=1&lt;/script&gt;, &lt;script type=&quot;math/tex&quot;&gt;p_{i}\geq 0&lt;/script&gt;&lt;/p&gt;
 
 &lt;table&gt;
   &lt;tbody&gt;
