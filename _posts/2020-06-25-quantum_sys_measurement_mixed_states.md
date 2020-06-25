@@ -44,7 +44,7 @@ density matrix example: |ψ><ψ|
 
 Mixed states are classical probability distributions over pure states.
 
-$\sum_i p_i |\psi_i\rangle\langle\psi_i|$, where $\sum_i p_i=1$, $p_i\geq 0$
+$$\sum_i p_i |\psi_i\rangle\langle\psi_i|$$, where $$\sum_i p_i=1$$, $$p_i\geq 0$$
 
 mixed state example: 0.5 (|0><0|) + 0.5 (|1><1|)
 
