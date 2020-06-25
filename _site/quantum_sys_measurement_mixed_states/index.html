@@ -19,19 +19,19 @@
   <head>
     <meta charset="utf-8">
 
-<!-- begin _includes/seo.html --><title>Quantum States as a generalization of classical probabilities. - Every little gist</title>
-<meta name="description" content="Notes on quantum states as a generalization of classical probabilities.">
+<!-- begin _includes/seo.html --><title>Measurement &amp; mixed states for quantum systems. - Every little gist</title>
+<meta name="description" content="Notes on measurement for quantum systems.">
 
 
 
 <meta property="og:type" content="article">
 <meta property="og:locale" content="en_US">
 <meta property="og:site_name" content="Every little gist">
-<meta property="og:title" content="Quantum States as a generalization of classical probabilities.">
-<meta property="og:url" content="https://chuacheowhuan.github.io/quantum_states_as_classical_probs/">
+<meta property="og:title" content="Measurement &amp; mixed states for quantum systems.">
+<meta property="og:url" content="https://chuacheowhuan.github.io/quantum_sys_measurement_mixed_states/">
 
 
-  <meta property="og:description" content="Notes on quantum states as a generalization of classical probabilities.">
+  <meta property="og:description" content="Notes on measurement for quantum systems.">
 
 
 
@@ -41,7 +41,7 @@
 
 
 
-  <meta property="article:published_time" content="2020-06-24T00:00:00+08:00">
+  <meta property="article:published_time" content="2020-06-25T00:00:00+08:00">
 
 
 
@@ -52,7 +52,7 @@
   
 
 
-<link rel="canonical" href="https://chuacheowhuan.github.io/quantum_states_as_classical_probs/">
+<link rel="canonical" href="https://chuacheowhuan.github.io/quantum_sys_measurement_mixed_states/">
 
 
 
@@ -260,230 +260,120 @@
 
   <div class="archive">
     
-      <h1 id="page-title" class="page__title">Quantum States as a generalization of classical probabilities.</h1>
+      <h1 id="page-title" class="page__title">Measurement & mixed states for quantum systems.</h1>
     
-    <p>Notes on quantum states as a generalization of classical probabilities.</p>
+    <p>Notes on measurement for quantum systems.</p>
 
 <hr />
 
-<h1 id="assumption">Assumption:</h1>
+<h1 id="notation">Notation:</h1>
 
-<p>Assume (1 / sqrt(2)) is factored out (not considered in the below examples).</p>
+<p>The complement is represented by: ‘</p>
+
+<p>The dot product is represented by: .</p>
 
 <table>
   <tbody>
     <tr>
-      <td>ket_0 means 0 ket or</td>
-      <td>0&gt; &amp; ket_1 means 1 ket or</td>
-      <td>1&gt;.</td>
+      <td>The squared of the L2 norm of ψ is represented by:</td>
+      <td> </td>
+      <td>ψ</td>
+      <td> </td>
     </tr>
   </tbody>
 </table>
 
 <hr />
 
-<h1 id="0--1">|0&gt; + |1&gt;</h1>
+<h1 id="why-ψ00ψ--a00-">Why &lt;ψ|0&gt;&lt;0|ψ&gt; = ||a0|0&gt;|| ?</h1>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ket_0 = np.array([[1],
-                  [0]])
+<p>Ans:</p>
 
-ket_1 = np.array([[0],
-                  [1]])
+<table>
+  <tbody>
+    <tr>
+      <td>&lt;ψ</td>
+      <td>0&gt;&lt;0</td>
+      <td>ψ&gt; = a0’ . a0</td>
+    </tr>
+  </tbody>
+</table>
 
-hadamard = np.array([[1, 1],
-                     [1, -1]])
+<table>
+  <tbody>
+    <tr>
+      <td> </td>
+      <td>a0</td>
+      <td>0&gt;</td>
+      <td> </td>
+      <td>= ( a0</td>
+      <td>0&gt; )’ . ( a0</td>
+      <td>0&gt; )</td>
+    </tr>
+  </tbody>
+</table>
 
-print("ket_0 + ket_1 =", ket_0 + ket_1)
-print("hadamard @ ket_0 =", hadamard @ ket_0)
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>         = ( a0' &lt;0| ) . ( a0 |0&gt; )
 
-print("ket_0 - ket_1 =", ket_0 - ket_1)
-print("hadamard @ ket_1 =", hadamard @ ket_1)
-</code></pre></div></div>
-
-<h2 id="output">Output:</h2>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ket_0 + ket_1 = [[1]
-                 [1]]
-
-hadamard @ ket_0 = [[1]
-                    [1]]
-
-ket_0 - ket_1 = [[ 1]
-                 [-1]]
-
-hadamard @ ket_1 = [[ 1]
-                    [-1]]
-</code></pre></div></div>
-
-<hr />
-
-<h1 id="kronecker-product-for-composite-states">Kronecker product for composite states.</h1>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ket_00 = np.kron(ket_0, ket_0)
-ket_01 = np.kron(ket_0, ket_1)
-ket_10 = np.kron(ket_1, ket_0)
-ket_11 = np.kron(ket_1, ket_1)
-
-print("|00⟩ : ", ket_00)
-print("|01⟩ : ", ket_01)
-print("|10⟩ : ", ket_10)
-print("|11⟩ : ", ket_11)
-
-print("|00⟩ + |11⟩ =", ket_00 + ket_11)
-print("|00⟩ - |11⟩ =", ket_00 - ket_11)
-</code></pre></div></div>
-
-<h2 id="output-1">Output:</h2>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>|00⟩ :  [[1]
-         [0]
-         [0]
-         [0]]
-
-|01⟩ :  [[0]
-         [1]
-         [0]
-         [0]]
-
-|10⟩ :  [[0]
-         [0]
-         [1]
-         [0]]
-
-|11⟩ :  [[0]
-         [0]
-         [0]
-         [1]]
-
-|00⟩ + |11⟩ = [[1]
-               [0]
-               [0]
-               [1]]
-
-|00⟩ - |11⟩ = [[ 1]
-               [ 0]
-               [ 0]
-               [-1]]
+         = a0' . a0
 </code></pre></div></div>
 
 <hr />
 
-<h1 id="00--11">|00&gt; + |11&gt;</h1>
+<p>Notes on mixed states for quantum systems.</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># Hadamard gate
-hadamard = np.array([[1, 1],
-                     [1, -1]])
+<p>Pure states are kets, bras &amp; density matrices.</p>
 
-# CNOT gate
-CNOT_mat = np.array([[1, 0, 0, 0],
-                     [0, 1, 0, 0],
-                     [0, 0, 0, 1],
-                     [0, 0, 1, 0]])
+<table>
+  <tbody>
+    <tr>
+      <td>ket example:</td>
+      <td>ψ&gt;</td>
+    </tr>
+  </tbody>
+</table>
 
-# Initialize 2 qubits, q_0, q_1 as |0&gt;.
-q_0 = np.array([[1],
-                [0]])
-q_1 = np.array([[1],
-                [0]])
+<table>
+  <tbody>
+    <tr>
+      <td>bra example: &lt;ψ</td>
+    </tr>
+  </tbody>
+</table>
 
-# Apply hadamard to q_0.
-H_q_0 = hadamard @ q_0
-print("H_q_0: {}".format(H_q_0))
+<table>
+  <tbody>
+    <tr>
+      <td>density matrix example:</td>
+      <td>ψ&gt;&lt;ψ</td>
+    </tr>
+  </tbody>
+</table>
 
-# Composite state of q_0 (after applying hadamard to q_0) &amp; q_1.
-composite = np.kron(H_q_0, q_1)
-print("composite: {}".format(composite))
+<p>Mixed states are classical probability distributions over pure states.</p>
 
-# Apply CNOT to composite state.
-res = CNOT_mat @ composite
-print("res: {}".format(res))
-</code></pre></div></div>
+<table>
+  <tbody>
+    <tr>
+      <td>$\sum_i p_i</td>
+      <td>\psi_i\rangle\langle\psi_i</td>
+      <td>$, where $\sum_i p_i=1$, $p_i\geq 0$</td>
+    </tr>
+  </tbody>
+</table>
 
-<h2 id="output-2">Output:</h2>
+<table>
+  <tbody>
+    <tr>
+      <td>mixed state example: 0.5 (</td>
+      <td>0&gt;&lt;0</td>
+      <td>) + 0.5 (</td>
+      <td>1&gt;&lt;1</td>
+      <td>)</td>
+    </tr>
+  </tbody>
+</table>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>H_q_0: [[1]
-        [1]]
-
-composite: [[1]
-            [0]
-            [1]
-            [0]]
-
-res: [[1]
-      [0]
-      [0]
-      [1]]
-</code></pre></div></div>
-
-<hr />
-
-<h1 id="00---11">|00&gt; - |11&gt;</h1>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># NOT gate
-def Not_gate(v):
-    if v[0] == 0:
-        v[0] = 1
-    else:
-        v[0] = 0
-
-    if v[1] == 0:
-        v[1] = 1
-    else:
-        v[1] = 0
-
-    return v
-
-# Hadamard gate
-hadamard = np.array([[1, 1],
-                     [1, -1]])
-
-# CNOT gate
-CNOT_mat = np.array([[1, 0, 0, 0],
-                     [0, 1, 0, 0],
-                     [0, 0, 0, 1],
-                     [0, 0, 1, 0]])
-
-# Initialize 2 qubits, q_0, q_1 as |0&gt;.
-q_0 = np.array([[1],
-                [0]])
-q_1 = np.array([[1],
-                [0]])
-
-# Apply NOT to q_1.
-X_q_1 = Not_gate(q_1)
-print("X_q_1: {}".format(X_q_1))
-
-# Apply hadamard to q_1.
-H_q_1 = hadamard @ X_q_1
-print("H_q_1: {}".format(H_q_1))
-
-# Composite state of q_1 (after applying hadamard to q_1) &amp; q_0.
-composite = np.kron(H_q_1, q_0)   # Need to CNOT(1,0) instead of CNOT(0,1) so q_1 is 1st term in composite.
-print("composite: {}".format(composite))
-
-# Apply CNOT to composite state.
-res = CNOT_mat @ composite
-print("res: {}".format(res))
-</code></pre></div></div>
-
-<h2 id="output-3">Output:</h2>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>X_q_1: [[0]
-        [1]]
-
-H_q_1: [[ 1]
-        [-1]]
-
-composite: [[ 1]
-            [ 0]
-            [-1]
-            [ 0]]
-
-res: [[ 1]
-      [ 0]
-      [ 0]
-      [-1]]
-</code></pre></div></div>
 <hr />
 
 <p><br /></p>
@@ -531,7 +421,7 @@ res: [[ 1]
 
 
 
-  8 minute read
+  13 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">Notes on measurement for quantum systems.
@@ -1601,8 +1491,8 @@ algorithm.
     
   <script>
     var disqus_config = function () {
-      this.page.url = "https://chuacheowhuan.github.io/quantum_states_as_classical_probs/";  // Replace PAGE_URL with your page's canonical URL variable
-      this.page.identifier = "/quantum_states_as_classical_probs"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+      this.page.url = "https://chuacheowhuan.github.io/quantum_sys_measurement_mixed_states/";  // Replace PAGE_URL with your page's canonical URL variable
+      this.page.identifier = "/quantum_sys_measurement_mixed_states"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
     };
     (function() { // DON'T EDIT BELOW THIS LINE
       var d = document, s = d.createElement('script');

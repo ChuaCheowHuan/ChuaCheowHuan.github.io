@@ -1,10 +1,134 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.7">Jekyll</generator><link href="https://chuacheowhuan.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://chuacheowhuan.github.io/" rel="alternate" type="text/html" /><updated>2020-06-24T12:27:47+08:00</updated><id>https://chuacheowhuan.github.io/feed.xml</id><title type="html">Every little gist</title><subtitle></subtitle><author><name>Chua Cheow Huan</name></author><entry><title type="html">Quantum States as a generalization of classical probabilities.</title><link href="https://chuacheowhuan.github.io/quantum_states_as_classical_probs/" rel="alternate" type="text/html" title="Quantum States as a generalization of classical probabilities." /><published>2020-06-24T00:00:00+08:00</published><updated>2020-06-24T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/quantum_states_as_classical_probs</id><content type="html" xml:base="https://chuacheowhuan.github.io/quantum_states_as_classical_probs/">&lt;p&gt;Notes on quantum states as a generalization of classical probabilities.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.7">Jekyll</generator><link href="https://chuacheowhuan.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://chuacheowhuan.github.io/" rel="alternate" type="text/html" /><updated>2020-06-25T17:19:00+08:00</updated><id>https://chuacheowhuan.github.io/feed.xml</id><title type="html">Every little gist</title><subtitle></subtitle><author><name>Chua Cheow Huan</name></author><entry><title type="html">Measurement &amp;amp; mixed states for quantum systems.</title><link href="https://chuacheowhuan.github.io/quantum_sys_measurement_mixed_states/" rel="alternate" type="text/html" title="Measurement &amp; mixed states for quantum systems." /><published>2020-06-25T00:00:00+08:00</published><updated>2020-06-25T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/quantum_sys_measurement_mixed_states</id><content type="html" xml:base="https://chuacheowhuan.github.io/quantum_sys_measurement_mixed_states/">&lt;p&gt;Notes on measurement for quantum systems.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h1 id=&quot;notation&quot;&gt;Notation:&lt;/h1&gt;
+
+&lt;p&gt;The complement is represented by: ‘&lt;/p&gt;
+
+&lt;p&gt;The dot product is represented by: .&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;The squared of the L2 norm of ψ is represented by:&lt;/td&gt;
+      &lt;td&gt; &lt;/td&gt;
+      &lt;td&gt;ψ&lt;/td&gt;
+      &lt;td&gt; &lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;hr /&gt;
+
+&lt;h1 id=&quot;why-ψ00ψ--a00-&quot;&gt;Why &amp;lt;ψ|0&amp;gt;&amp;lt;0|ψ&amp;gt; = ||a0|0&amp;gt;|| ?&lt;/h1&gt;
+
+&lt;p&gt;Ans:&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&amp;lt;ψ&lt;/td&gt;
+      &lt;td&gt;0&amp;gt;&amp;lt;0&lt;/td&gt;
+      &lt;td&gt;ψ&amp;gt; = a0’ . a0&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;table&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt; &lt;/td&gt;
+      &lt;td&gt;a0&lt;/td&gt;
+      &lt;td&gt;0&amp;gt;&lt;/td&gt;
+      &lt;td&gt; &lt;/td&gt;
+      &lt;td&gt;= ( a0&lt;/td&gt;
+      &lt;td&gt;0&amp;gt; )’ . ( a0&lt;/td&gt;
+      &lt;td&gt;0&amp;gt; )&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;         = ( a0' &amp;lt;0| ) . ( a0 |0&amp;gt; )
+
+         = a0' . a0
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;Notes on mixed states for quantum systems.&lt;/p&gt;
+
+&lt;p&gt;Pure states are kets, bras &amp;amp; density matrices.&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;ket example:&lt;/td&gt;
+      &lt;td&gt;ψ&amp;gt;&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;table&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;bra example: &amp;lt;ψ&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;table&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;density matrix example:&lt;/td&gt;
+      &lt;td&gt;ψ&amp;gt;&amp;lt;ψ&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;Mixed states are classical probability distributions over pure states.&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;$\sum_i p_i&lt;/td&gt;
+      &lt;td&gt;\psi_i\rangle\langle\psi_i&lt;/td&gt;
+      &lt;td&gt;$, where $\sum_i p_i=1$, $p_i\geq 0$&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;table&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;mixed state example: 0.5 (&lt;/td&gt;
+      &lt;td&gt;0&amp;gt;&amp;lt;0&lt;/td&gt;
+      &lt;td&gt;) + 0.5 (&lt;/td&gt;
+      &lt;td&gt;1&amp;gt;&amp;lt;1&lt;/td&gt;
+      &lt;td&gt;)&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">Notes on measurement for quantum systems.</summary></entry><entry><title type="html">Quantum States as a generalization of classical probabilities.</title><link href="https://chuacheowhuan.github.io/quantum_states_as_classical_probs/" rel="alternate" type="text/html" title="Quantum States as a generalization of classical probabilities." /><published>2020-06-24T00:00:00+08:00</published><updated>2020-06-24T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/quantum_states_as_classical_probs</id><content type="html" xml:base="https://chuacheowhuan.github.io/quantum_states_as_classical_probs/">&lt;p&gt;Notes on quantum states as a generalization of classical probabilities.&lt;/p&gt;
 
 &lt;hr /&gt;
 
 &lt;h1 id=&quot;assumption&quot;&gt;Assumption:&lt;/h1&gt;
 
 &lt;p&gt;Assume (1 / sqrt(2)) is factored out (not considered in the below examples).&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;ket_0 means 0 ket or&lt;/td&gt;
+      &lt;td&gt;0&amp;gt; &amp;amp; ket_1 means 1 ket or&lt;/td&gt;
+      &lt;td&gt;1&amp;gt;.&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
 
 &lt;hr /&gt;
 
@@ -212,31 +336,31 @@ res: [[ 1]
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 &lt;hr /&gt;
 
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">Notes on quantum states as a generalization of classical probabilities.</summary></entry><entry><title type="html">Finding the ray_results folder in colab</title><link href="https://chuacheowhuan.github.io/ray_results_folder_in_colab/" rel="alternate" type="text/html" title="Finding the ray_results folder in colab" /><published>2020-06-17T00:00:00+08:00</published><updated>2020-06-17T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/ray_results_folder_in_colab</id><content type="html" xml:base="https://chuacheowhuan.github.io/ray_results_folder_in_colab/">&lt;p&gt;The location of &lt;code class=&quot;highlighter-rouge&quot;&gt;ray_results&lt;/code&gt; folder in colab when using RLlib &amp;amp;/or tune.&lt;/p&gt;
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">Notes on quantum states as a generalization of classical probabilities.</summary></entry><entry><title type="html">Finding the ray_results folder in colab</title><link href="https://chuacheowhuan.github.io/ray_results_folder_in_colab/" rel="alternate" type="text/html" title="Finding the ray_results folder in colab" /><published>2020-06-17T00:00:00+08:00</published><updated>2020-06-17T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/ray_results_folder_in_colab</id><content type="html" xml:base="https://chuacheowhuan.github.io/ray_results_folder_in_colab/">The location of `ray_results` folder in colab when using RLlib &amp;/or tune.
 
-&lt;hr /&gt;
+---
 
-&lt;p&gt;If you’re NOT using &lt;code class=&quot;highlighter-rouge&quot;&gt;tune.run()&lt;/code&gt; but using only RLlib’s python API &amp;amp; if
-you set the &lt;code class=&quot;highlighter-rouge&quot;&gt;local_dir&lt;/code&gt; in RLlib’s &lt;code class=&quot;highlighter-rouge&quot;&gt;config&lt;/code&gt; to a non-default directory,
-(The default is &lt;code class=&quot;highlighter-rouge&quot;&gt;~/ray_results&lt;/code&gt;.) you will only find the &lt;code class=&quot;highlighter-rouge&quot;&gt;results.json&lt;/code&gt; file
-(&amp;amp; your checkpoint folders if you also specify them) in your specified
-directory. The other files such as the tensorboard event files, the &lt;code class=&quot;highlighter-rouge&quot;&gt;params.pkl&lt;/code&gt;
-&amp;amp; &lt;code class=&quot;highlighter-rouge&quot;&gt;params.json&lt;/code&gt; will still be saved in the default directory.&lt;/p&gt;
+If you're NOT using `tune.run()` but using only RLlib's python API &amp; if
+you set the `local_dir` in RLlib's `config` to a non-default directory,
+(The default is `~/ray_results`.) you will only find the `results.json` file
+(&amp; your checkpoint folders if you also specify them) in your specified
+directory. The other files such as the tensorboard event files, the `params.pkl`
+&amp; `params.json` will still be saved in the default directory.
 
-&lt;p&gt;However, if you use &lt;code class=&quot;highlighter-rouge&quot;&gt;tune.run()&lt;/code&gt; &amp;amp; set the &lt;code class=&quot;highlighter-rouge&quot;&gt;local_dir&lt;/code&gt; argument to your
-specified directory, all the files will be saved there.&lt;/p&gt;
+However, if you use `tune.run()` &amp; set the `local_dir` argument to your
+specified directory, all the files will be saved there.
 
-&lt;p&gt;If you’re using colab, the way to access &lt;code class=&quot;highlighter-rouge&quot;&gt;~/ray_results&lt;/code&gt; is to click on a small
+If you're using colab, the way to access `~/ray_results` is to click on a small
 folder icon on the left of the panel, it will open up a side panel, simply go to
-&lt;code class=&quot;highlighter-rouge&quot;&gt;root/ray_results&lt;/code&gt;. All those files will be saved in there.&lt;/p&gt;
+`root/ray_results`. All those files will be saved in there.
 
-&lt;p&gt;Note: It seems like setting the (1)&lt;code class=&quot;highlighter-rouge&quot;&gt;local_dir&lt;/code&gt; in RLlib’s &lt;code class=&quot;highlighter-rouge&quot;&gt;config&lt;/code&gt; will not
-automatically set the (2)&lt;code class=&quot;highlighter-rouge&quot;&gt;local_dir&lt;/code&gt; in the &lt;code class=&quot;highlighter-rouge&quot;&gt;Experiment&lt;/code&gt; class in &lt;code class=&quot;highlighter-rouge&quot;&gt;experiment.py&lt;/code&gt;
-if you’re not using &lt;code class=&quot;highlighter-rouge&quot;&gt;tune.run()&lt;/code&gt;.&lt;/p&gt;
+Note: It seems like setting the (1)`local_dir` in RLlib's `config` will not
+automatically set the (2)`local_dir` in the `Experiment` class in `experiment.py`
+if you're not using `tune.run()`.
 
-&lt;hr /&gt;
+---
 
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">The location of ray_results folder in colab when using RLlib &amp;amp;/or tune.</summary></entry><entry><title type="html">PBT for MARL</title><link href="https://chuacheowhuan.github.io/PBT_MARL_watered_down/" rel="alternate" type="text/html" title="PBT for MARL" /><published>2020-06-12T00:00:00+08:00</published><updated>2020-06-12T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/PBT_MARL_watered_down</id><content type="html" xml:base="https://chuacheowhuan.github.io/PBT_MARL_watered_down/">My attempt to implement a water down version of PBT (Population based training) for MARL (Multi-agent reinforcement learning).
+&lt;br&gt;</content><author><name>Huan</name></author><summary type="html">The location of ray_results folder in colab when using RLlib &amp;amp;/or tune.</summary></entry><entry><title type="html">PBT for MARL</title><link href="https://chuacheowhuan.github.io/PBT_MARL_watered_down/" rel="alternate" type="text/html" title="PBT for MARL" /><published>2020-06-12T00:00:00+08:00</published><updated>2020-06-12T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/PBT_MARL_watered_down</id><content type="html" xml:base="https://chuacheowhuan.github.io/PBT_MARL_watered_down/">My attempt to implement a water down version of PBT (Population based training) for MARL (Multi-agent reinforcement learning).
 
 Code on my [Github](https://github.com/ChuaCheowHuan/PBT_MARL_watered_down)
 
@@ -936,34 +1060,4 @@ backwards in time to calculate this gradient.
 
 ---
 
-&lt;br&gt;</content><author><name>Huan</name></author><summary type="html">Notes on the math for RNN back propagation through time(BPTT).</summary></entry><entry><title type="html">Filter rows with same column values in Pandas dataframe</title><link href="https://chuacheowhuan.github.io/pandas_df_rm_row_with_same_col_val/" rel="alternate" type="text/html" title="Filter rows with same column values in Pandas dataframe" /><published>2019-12-25T00:00:00+08:00</published><updated>2019-12-25T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/pandas_df_rm_row_with_same_col_val</id><content type="html" xml:base="https://chuacheowhuan.github.io/pandas_df_rm_row_with_same_col_val/">Filter rows with same column values in a Pandas dataframe.
-
----
-
-Assume the following Pandas dataframe where Q1 &amp; Q2 are charges. A charge can
-either be +1 or -1.
-
-```
-df = pd.DataFrame([[1,1],[-1,-1],[1,-1],[-1,1]], columns=['Q1', 'Q2'])
-
-   Q1  Q2
-0   1   1
-1  -1  -1
-2   1  -1
-3  -1   1
-```
-
-The following code produces a dataframe where each row only contains
-opposite charges, i.e if Q1 is 1, Q2 is -1 &amp; vice versa.
-
-```
-df = df[ (df.Q1 == 1) &amp; (df.Q2 == -1) | (df.Q1 == -1) &amp; (df.Q2 == 1) ]
-
-   Q1  Q2
-2   1  -1
-3  -1   1
-```
-
----
-
-&lt;br&gt;</content><author><name>Huan</name></author><summary type="html">Filter rows with same column values in a Pandas dataframe.</summary></entry></feed>
+&lt;br&gt;</content><author><name>Huan</name></author><summary type="html">Notes on the math for RNN back propagation through time(BPTT).</summary></entry></feed>

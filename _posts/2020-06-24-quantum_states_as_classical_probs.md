@@ -12,6 +12,8 @@ Notes on quantum states as a generalization of classical probabilities.
 
 Assume (1 / sqrt(2)) is factored out (not considered in the below examples).
 
+ket_0 means 0 ket or |0> & ket_1 means 1 ket or |1>. 
+
 ---
 
 # |0> + |1>
