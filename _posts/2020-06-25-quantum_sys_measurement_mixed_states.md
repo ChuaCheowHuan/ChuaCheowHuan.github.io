@@ -3,6 +3,7 @@ layout: posts
 author: Huan
 title: Measurement & mixed states for quantum systems.
 ---
+{%- include mathjax.html -%}
 
 Notes on measurement for quantum systems.
 
@@ -44,7 +45,15 @@ density matrix example: |ψ><ψ|
 
 Mixed states are classical probability distributions over pure states.
 
-$$\sum_{i} p_{i}|\psi_{i}\rangle\langle\psi_{i}|$$, where $$\sum_{i} p_{i}=1$$, $$p_{i}\geq 0$$
+$$Q_{\theta}$$
+
+$$\sum_{i}$$
+
+$$p_{i}|\psi_{i}\rangle\langle\psi_{i}|$$,
+
+where $$\sum_{i} p_{i}=1$$,
+
+$$p_{i}\geq 0$$
 
 mixed state example: 0.5 (|0><0|) + 0.5 (|1><1|)
 
