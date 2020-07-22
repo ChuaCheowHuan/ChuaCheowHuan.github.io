@@ -1,55 +1,59 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.7">Jekyll</generator><link href="https://chuacheowhuan.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://chuacheowhuan.github.io/" rel="alternate" type="text/html" /><updated>2020-06-25T18:28:00+08:00</updated><id>https://chuacheowhuan.github.io/feed.xml</id><title type="html">Every little gist</title><subtitle></subtitle><author><name>Chua Cheow Huan</name></author><entry><title type="html">Measurement &amp;amp; mixed states for quantum systems.</title><link href="https://chuacheowhuan.github.io/quantum_sys_measurement_mixed_states/" rel="alternate" type="text/html" title="Measurement &amp; mixed states for quantum systems." /><published>2020-06-25T00:00:00+08:00</published><updated>2020-06-25T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/quantum_sys_measurement_mixed_states</id><content type="html" xml:base="https://chuacheowhuan.github.io/quantum_sys_measurement_mixed_states/">&lt;p&gt;Notes on measurement for quantum systems.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.7">Jekyll</generator><link href="https://chuacheowhuan.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://chuacheowhuan.github.io/" rel="alternate" type="text/html" /><updated>2020-07-22T12:05:52+08:00</updated><id>https://chuacheowhuan.github.io/feed.xml</id><title type="html">Every little gist</title><subtitle></subtitle><author><name>Chua Cheow Huan</name></author><entry><title type="html">Measurement &amp;amp; mixed states for quantum systems.</title><link href="https://chuacheowhuan.github.io/quantum_sys_measurement_mixed_states/" rel="alternate" type="text/html" title="Measurement &amp; mixed states for quantum systems." /><published>2020-06-25T00:00:00+08:00</published><updated>2020-06-25T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/quantum_sys_measurement_mixed_states</id><content type="html" xml:base="https://chuacheowhuan.github.io/quantum_sys_measurement_mixed_states/">Notes on measurement for quantum systems.
 
-&lt;hr /&gt;
+---
 
-&lt;h1 id=&quot;notation&quot;&gt;Notation:&lt;/h1&gt;
+# Notation:
 
-&lt;p&gt;The complement is represented by: &lt;code class=&quot;highlighter-rouge&quot;&gt;'&lt;/code&gt;&lt;/p&gt;
+The complement is represented by: `'`
 
-&lt;p&gt;The dot product is represented by: &lt;code class=&quot;highlighter-rouge&quot;&gt;.&lt;/code&gt;&lt;/p&gt;
+The dot product is represented by: `.`
 
-&lt;p&gt;The squared of the L2 norm of ψ is represented by: &lt;code class=&quot;highlighter-rouge&quot;&gt;||ψ||&lt;/code&gt;&lt;/p&gt;
+The squared of the L2 norm of ψ is represented by: `||ψ||`
 
-&lt;hr /&gt;
+---
 
-&lt;h1 id=&quot;why-ψ00ψ--a00-&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Why &amp;lt;ψ|0&amp;gt;&amp;lt;0|ψ&amp;gt; = ||a0|0&amp;gt;|| ?&lt;/code&gt;&lt;/h1&gt;
+# `Why &lt;ψ|0&gt;&lt;0|ψ&gt; = ||a0|0&gt;|| ?`
 
-&lt;p&gt;Ans:&lt;/p&gt;
+Ans:
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;lt;ψ|0&amp;gt;&amp;lt;0|ψ&amp;gt; = a0' . a0
+```
+&lt;ψ|0&gt;&lt;0|ψ&gt; = a0' . a0
 
-|| a0 |0&amp;gt; || = ( a0 |0&amp;gt; )' . ( a0 |0&amp;gt; )
+|| a0 |0&gt; || = ( a0 |0&gt; )' . ( a0 |0&gt; )
 
-             = ( a0' &amp;lt;0| ) . ( a0 |0&amp;gt; )
+             = ( a0' &lt;0| ) . ( a0 |0&gt; )
 
              = a0' . a0
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+```
 
-&lt;hr /&gt;
+---
 
-&lt;p&gt;Notes on mixed states for quantum systems.&lt;/p&gt;
+Notes on mixed states for quantum systems.
 
-&lt;p&gt;Pure states are kets, bras &amp;amp; density matrices.&lt;/p&gt;
+Pure states are kets, bras &amp; density matrices.
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;ket example: |ψ&amp;gt;
+```
+ket example: |ψ&gt;
 
-bra example: &amp;lt;ψ|
+bra example: &lt;ψ|
 
-density matrix example: |ψ&amp;gt;&amp;lt;ψ|
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+density matrix example: |ψ&gt;&lt;ψ|
+```
 
-&lt;p&gt;Mixed states are classical probability distributions over pure states.&lt;/p&gt;
+Mixed states are classical probability distributions over pure states.
 
-&lt;p&gt;&lt;script type=&quot;math/tex&quot;&gt;\sum_{i}p_{i}&lt;/script&gt; &lt;code class=&quot;highlighter-rouge&quot;&gt;|&lt;/code&gt;&lt;script type=&quot;math/tex&quot;&gt;\psi_{i}\rangle\langle\psi_{i}&lt;/script&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;|&lt;/code&gt;,&lt;/p&gt;
 
-&lt;p&gt;where &lt;script type=&quot;math/tex&quot;&gt;\sum_{i} p_{i}=1&lt;/script&gt;, &lt;script type=&quot;math/tex&quot;&gt;p_{i}\geq 0&lt;/script&gt;&lt;/p&gt;
+$$\sum_{i}p_{i}$$ `|`$$\psi_{i}\rangle\langle\psi_{i}$$`|`,
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;mixed state example: 0.5 (|0&amp;gt;&amp;lt;0|) + 0.5 (|1&amp;gt;&amp;lt;1|)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+where $$\sum_{i} p_{i}=1$$, $$p_{i}\geq 0$$
 
-&lt;hr /&gt;
+```
+mixed state example: 0.5 (|0&gt;&lt;0|) + 0.5 (|1&gt;&lt;1|)
+```
 
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">Notes on measurement for quantum systems.</summary></entry><entry><title type="html">Quantum States as a generalization of classical probabilities.</title><link href="https://chuacheowhuan.github.io/quantum_states_as_classical_probs/" rel="alternate" type="text/html" title="Quantum States as a generalization of classical probabilities." /><published>2020-06-24T00:00:00+08:00</published><updated>2020-06-24T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/quantum_states_as_classical_probs</id><content type="html" xml:base="https://chuacheowhuan.github.io/quantum_states_as_classical_probs/">&lt;p&gt;Notes on quantum states as a generalization of classical probabilities.&lt;/p&gt;
+---
+
+&lt;br&gt;</content><author><name>Huan</name></author><summary type="html">Notes on measurement for quantum systems.</summary></entry><entry><title type="html">Quantum States as a generalization of classical probabilities.</title><link href="https://chuacheowhuan.github.io/quantum_states_as_classical_probs/" rel="alternate" type="text/html" title="Quantum States as a generalization of classical probabilities." /><published>2020-06-24T00:00:00+08:00</published><updated>2020-06-24T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/quantum_states_as_classical_probs</id><content type="html" xml:base="https://chuacheowhuan.github.io/quantum_states_as_classical_probs/">&lt;p&gt;Notes on quantum states as a generalization of classical probabilities.&lt;/p&gt;
 
 &lt;hr /&gt;
 
