@@ -32,7 +32,13 @@ My attempt to implement a water down version of PBT (Population based training) 
 
 (1) Policies weights can be inherited between different agents in the population.
 
-(2) Learning rate & gamma are the only 2 hyperparameters involved for now. Both can be inherited/mutated. Learning rate can be resampled/perturbed while gamma can only be resampled.
+(2) Learning rate & gamma are the only 2 hyperparameters involved for now.
+Both can be inherited/mutated. Learning rate can be resampled/perturbed while
+gamma can only be resampled.
+
+**EDIT**: Point (2) doesn't work as the configuration dict is replicated in the
+ray cluster so it's not something I can just change in my code. I'll be working
+on a workaround.
 
 # Simple walkthru:
 
