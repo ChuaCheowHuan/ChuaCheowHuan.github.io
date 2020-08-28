@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.7">Jekyll</generator><link href="https://chuacheowhuan.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://chuacheowhuan.github.io/" rel="alternate" type="text/html" /><updated>2020-07-22T12:05:52+08:00</updated><id>https://chuacheowhuan.github.io/feed.xml</id><title type="html">Every little gist</title><subtitle></subtitle><author><name>Chua Cheow Huan</name></author><entry><title type="html">Measurement &amp;amp; mixed states for quantum systems.</title><link href="https://chuacheowhuan.github.io/quantum_sys_measurement_mixed_states/" rel="alternate" type="text/html" title="Measurement &amp; mixed states for quantum systems." /><published>2020-06-25T00:00:00+08:00</published><updated>2020-06-25T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/quantum_sys_measurement_mixed_states</id><content type="html" xml:base="https://chuacheowhuan.github.io/quantum_sys_measurement_mixed_states/">Notes on measurement for quantum systems.
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.7">Jekyll</generator><link href="https://chuacheowhuan.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://chuacheowhuan.github.io/" rel="alternate" type="text/html" /><updated>2020-08-28T11:46:05+08:00</updated><id>https://chuacheowhuan.github.io/feed.xml</id><title type="html">Every little gist</title><subtitle></subtitle><author><name>Chua Cheow Huan</name></author><entry><title type="html">Measurement &amp;amp; mixed states for quantum systems.</title><link href="https://chuacheowhuan.github.io/quantum_sys_measurement_mixed_states/" rel="alternate" type="text/html" title="Measurement &amp; mixed states for quantum systems." /><published>2020-06-25T00:00:00+08:00</published><updated>2020-06-25T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/quantum_sys_measurement_mixed_states</id><content type="html" xml:base="https://chuacheowhuan.github.io/quantum_sys_measurement_mixed_states/">Notes on measurement for quantum systems.
 
 ---
 
@@ -53,21 +53,22 @@ mixed state example: 0.5 (|0&gt;&lt;0|) + 0.5 (|1&gt;&lt;1|)
 
 ---
 
-&lt;br&gt;</content><author><name>Huan</name></author><summary type="html">Notes on measurement for quantum systems.</summary></entry><entry><title type="html">Quantum States as a generalization of classical probabilities.</title><link href="https://chuacheowhuan.github.io/quantum_states_as_classical_probs/" rel="alternate" type="text/html" title="Quantum States as a generalization of classical probabilities." /><published>2020-06-24T00:00:00+08:00</published><updated>2020-06-24T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/quantum_states_as_classical_probs</id><content type="html" xml:base="https://chuacheowhuan.github.io/quantum_states_as_classical_probs/">&lt;p&gt;Notes on quantum states as a generalization of classical probabilities.&lt;/p&gt;
+&lt;br&gt;</content><author><name>Huan</name></author><summary type="html">Notes on measurement for quantum systems.</summary></entry><entry><title type="html">Quantum States as a generalization of classical probabilities.</title><link href="https://chuacheowhuan.github.io/quantum_states_as_classical_probs/" rel="alternate" type="text/html" title="Quantum States as a generalization of classical probabilities." /><published>2020-06-24T00:00:00+08:00</published><updated>2020-06-24T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/quantum_states_as_classical_probs</id><content type="html" xml:base="https://chuacheowhuan.github.io/quantum_states_as_classical_probs/">Notes on quantum states as a generalization of classical probabilities.
 
-&lt;hr /&gt;
+---
 
-&lt;h1 id=&quot;assumption&quot;&gt;Assumption:&lt;/h1&gt;
+# Assumption:
 
-&lt;p&gt;Assume (1 / sqrt(2)) is factored out (not considered in the below examples).&lt;/p&gt;
+Assume (1 / sqrt(2)) is factored out (not considered in the below examples).
 
-&lt;p&gt;ket_0 means 0 ket or &lt;code class=&quot;highlighter-rouge&quot;&gt;|0&amp;gt;&lt;/code&gt; &amp;amp; ket_1 means 1 ket or &lt;code class=&quot;highlighter-rouge&quot;&gt;|1&amp;gt;&lt;/code&gt;.&lt;/p&gt;
+ket_0 means 0 ket or `|0&gt;` &amp; ket_1 means 1 ket or `|1&gt;`. 
 
-&lt;hr /&gt;
+---
 
-&lt;h1 id=&quot;0--1&quot;&gt;|0&amp;gt; + |1&amp;gt;&lt;/h1&gt;
+# |0&gt; + |1&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;ket_0 = np.array([[1],
+```
+ket_0 = np.array([[1],
                   [0]])
 
 ket_1 = np.array([[0],
@@ -81,11 +82,12 @@ print(&quot;hadamard @ ket_0 =&quot;, hadamard @ ket_0)
 
 print(&quot;ket_0 - ket_1 =&quot;, ket_0 - ket_1)
 print(&quot;hadamard @ ket_1 =&quot;, hadamard @ ket_1)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+```
 
-&lt;h2 id=&quot;output&quot;&gt;Output:&lt;/h2&gt;
+## Output:
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;ket_0 + ket_1 = [[1]
+```
+ket_0 + ket_1 = [[1]
                  [1]]
 
 hadamard @ ket_0 = [[1]
@@ -96,13 +98,14 @@ ket_0 - ket_1 = [[ 1]
 
 hadamard @ ket_1 = [[ 1]
                     [-1]]
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+```
 
-&lt;hr /&gt;
+---
 
-&lt;h1 id=&quot;kronecker-product-for-composite-states&quot;&gt;Kronecker product for composite states.&lt;/h1&gt;
+# Kronecker product for composite states.
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;ket_00 = np.kron(ket_0, ket_0)
+```
+ket_00 = np.kron(ket_0, ket_0)
 ket_01 = np.kron(ket_0, ket_1)
 ket_10 = np.kron(ket_1, ket_0)
 ket_11 = np.kron(ket_1, ket_1)
@@ -114,11 +117,12 @@ print(&quot;|11⟩ : &quot;, ket_11)
 
 print(&quot;|00⟩ + |11⟩ =&quot;, ket_00 + ket_11)
 print(&quot;|00⟩ - |11⟩ =&quot;, ket_00 - ket_11)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+```
 
-&lt;h2 id=&quot;output-1&quot;&gt;Output:&lt;/h2&gt;
+## Output:
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;|00⟩ :  [[1]
+```
+|00⟩ :  [[1]
          [0]
          [0]
          [0]]
@@ -147,13 +151,14 @@ print(&quot;|00⟩ - |11⟩ =&quot;, ket_00 - ket_11)
                [ 0]
                [ 0]
                [-1]]
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+```
 
-&lt;hr /&gt;
+---
 
-&lt;h1 id=&quot;00--11&quot;&gt;|00&amp;gt; + |11&amp;gt;&lt;/h1&gt;
+# |00&gt; + |11&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# Hadamard gate
+```
+# Hadamard gate
 hadamard = np.array([[1, 1],
                      [1, -1]])
 
@@ -163,7 +168,7 @@ CNOT_mat = np.array([[1, 0, 0, 0],
                      [0, 0, 0, 1],
                      [0, 0, 1, 0]])
 
-# Initialize 2 qubits, q_0, q_1 as |0&amp;gt;.
+# Initialize 2 qubits, q_0, q_1 as |0&gt;.
 q_0 = np.array([[1],
                 [0]])
 q_1 = np.array([[1],
@@ -173,18 +178,19 @@ q_1 = np.array([[1],
 H_q_0 = hadamard @ q_0
 print(&quot;H_q_0: {}&quot;.format(H_q_0))
 
-# Composite state of q_0 (after applying hadamard to q_0) &amp;amp; q_1.
+# Composite state of q_0 (after applying hadamard to q_0) &amp; q_1.
 composite = np.kron(H_q_0, q_1)
 print(&quot;composite: {}&quot;.format(composite))
 
 # Apply CNOT to composite state.
 res = CNOT_mat @ composite
 print(&quot;res: {}&quot;.format(res))
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+```
 
-&lt;h2 id=&quot;output-2&quot;&gt;Output:&lt;/h2&gt;
+## Output:
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;H_q_0: [[1]
+```
+H_q_0: [[1]
         [1]]
 
 composite: [[1]
@@ -196,13 +202,14 @@ res: [[1]
       [0]
       [0]
       [1]]
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+```
 
-&lt;hr /&gt;
+---
 
-&lt;h1 id=&quot;00---11&quot;&gt;|00&amp;gt; - |11&amp;gt;&lt;/h1&gt;
+# |00&gt; - |11&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# NOT gate
+```
+# NOT gate
 def Not_gate(v):
     if v[0] == 0:
         v[0] = 1
@@ -226,7 +233,7 @@ CNOT_mat = np.array([[1, 0, 0, 0],
                      [0, 0, 0, 1],
                      [0, 0, 1, 0]])
 
-# Initialize 2 qubits, q_0, q_1 as |0&amp;gt;.
+# Initialize 2 qubits, q_0, q_1 as |0&gt;.
 q_0 = np.array([[1],
                 [0]])
 q_1 = np.array([[1],
@@ -240,18 +247,19 @@ print(&quot;X_q_1: {}&quot;.format(X_q_1))
 H_q_1 = hadamard @ X_q_1
 print(&quot;H_q_1: {}&quot;.format(H_q_1))
 
-# Composite state of q_1 (after applying hadamard to q_1) &amp;amp; q_0.
+# Composite state of q_1 (after applying hadamard to q_1) &amp; q_0.
 composite = np.kron(H_q_1, q_0)   # Need to CNOT(1,0) instead of CNOT(0,1) so q_1 is 1st term in composite.
 print(&quot;composite: {}&quot;.format(composite))
 
 # Apply CNOT to composite state.
 res = CNOT_mat @ composite
 print(&quot;res: {}&quot;.format(res))
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+```
 
-&lt;h2 id=&quot;output-3&quot;&gt;Output:&lt;/h2&gt;
+## Output:
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;X_q_1: [[0]
+```
+X_q_1: [[0]
         [1]]
 
 H_q_1: [[ 1]
@@ -266,10 +274,10 @@ res: [[ 1]
       [ 0]
       [ 0]
       [-1]]
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;hr /&gt;
+```
+---
 
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">Notes on quantum states as a generalization of classical probabilities.</summary></entry><entry><title type="html">Finding the ray_results folder in colab</title><link href="https://chuacheowhuan.github.io/ray_results_folder_in_colab/" rel="alternate" type="text/html" title="Finding the ray_results folder in colab" /><published>2020-06-17T00:00:00+08:00</published><updated>2020-06-17T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/ray_results_folder_in_colab</id><content type="html" xml:base="https://chuacheowhuan.github.io/ray_results_folder_in_colab/">The location of `ray_results` folder in colab when using RLlib &amp;/or tune.
+&lt;br&gt;</content><author><name>Huan</name></author><summary type="html">Notes on quantum states as a generalization of classical probabilities.</summary></entry><entry><title type="html">Finding the ray_results folder in colab</title><link href="https://chuacheowhuan.github.io/ray_results_folder_in_colab/" rel="alternate" type="text/html" title="Finding the ray_results folder in colab" /><published>2020-06-17T00:00:00+08:00</published><updated>2020-06-17T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/ray_results_folder_in_colab</id><content type="html" xml:base="https://chuacheowhuan.github.io/ray_results_folder_in_colab/">The location of `ray_results` folder in colab when using RLlib &amp;/or tune.
 
 ---
 
@@ -293,54 +301,56 @@ if you're not using `tune.run()`.
 
 ---
 
-&lt;br&gt;</content><author><name>Huan</name></author><summary type="html">The location of ray_results folder in colab when using RLlib &amp;amp;/or tune.</summary></entry><entry><title type="html">PBT for MARL</title><link href="https://chuacheowhuan.github.io/PBT_MARL_watered_down/" rel="alternate" type="text/html" title="PBT for MARL" /><published>2020-06-12T00:00:00+08:00</published><updated>2020-06-12T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/PBT_MARL_watered_down</id><content type="html" xml:base="https://chuacheowhuan.github.io/PBT_MARL_watered_down/">My attempt to implement a water down version of PBT (Population based training) for MARL (Multi-agent reinforcement learning).
+&lt;br&gt;</content><author><name>Huan</name></author><summary type="html">The location of ray_results folder in colab when using RLlib &amp;amp;/or tune.</summary></entry><entry><title type="html">PBT for MARL</title><link href="https://chuacheowhuan.github.io/PBT_MARL_watered_down/" rel="alternate" type="text/html" title="PBT for MARL" /><published>2020-06-12T00:00:00+08:00</published><updated>2020-06-12T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/PBT_MARL_watered_down</id><content type="html" xml:base="https://chuacheowhuan.github.io/PBT_MARL_watered_down/">&lt;p&gt;My attempt to implement a water down version of PBT (Population based training) for MARL (Multi-agent reinforcement learning).&lt;/p&gt;
 
-Code on my [Github](https://github.com/ChuaCheowHuan/PBT_MARL_watered_down)
+&lt;p&gt;Code on my &lt;a href=&quot;https://github.com/ChuaCheowHuan/PBT_MARL_watered_down&quot;&gt;Github&lt;/a&gt;&lt;/p&gt;
 
----
+&lt;hr /&gt;
 
-# PBT_MARL_watered_down
+&lt;h1 id=&quot;pbt_marl_watered_down&quot;&gt;PBT_MARL_watered_down&lt;/h1&gt;
 
-# What's in this repo?
+&lt;h1 id=&quot;whats-in-this-repo&quot;&gt;What’s in this repo?&lt;/h1&gt;
 
-My attempt to implement a water down version of PBT (Population based training) for MARL (Multi-agent reinforcement learning) inspired by Algorithm 1 (PBT-MARL) on page 3 of this [paper](https://arxiv.org/pdf/1902.07151.pdf)[1].
+&lt;p&gt;My attempt to implement a water down version of PBT (Population based training) for MARL (Multi-agent reinforcement learning) inspired by Algorithm 1 (PBT-MARL) on page 3 of this &lt;a href=&quot;https://arxiv.org/pdf/1902.07151.pdf&quot;&gt;paper&lt;/a&gt;[1].&lt;/p&gt;
 
-# MAIN differences from the paper:
+&lt;h1 id=&quot;main-differences-from-the-paper&quot;&gt;MAIN differences from the paper:&lt;/h1&gt;
 
-(1) A simple 1 VS 1 [RockPaperScissorsEnv](https://github.com/ray-project/ray/blob/57544b1ff9f97d4da9f64d25c8ea5a3d8d247ffc/rllib/examples/env/rock_paper_scissors.py) environment (adapted &amp; modified from a toy example from ray) is used instead of the 2 VS 2 [dm_soccer](https://git.io/dm_soccer).
+&lt;p&gt;(1) A simple 1 VS 1 &lt;a href=&quot;https://github.com/ray-project/ray/blob/57544b1ff9f97d4da9f64d25c8ea5a3d8d247ffc/rllib/examples/env/rock_paper_scissors.py&quot;&gt;RockPaperScissorsEnv&lt;/a&gt; environment (adapted &amp;amp; modified from a toy example from ray) is used instead of the 2 VS 2 &lt;a href=&quot;https://git.io/dm_soccer&quot;&gt;dm_soccer&lt;/a&gt;.&lt;/p&gt;
 
-(2) PPO is used instead of SVG0.
+&lt;p&gt;(2) PPO is used instead of SVG0.&lt;/p&gt;
 
-(3) No reward shaping.
+&lt;p&gt;(3) No reward shaping.&lt;/p&gt;
 
-(4) The evolution eligibility documented in B2 on page 16 in the [paper](https://arxiv.org/pdf/1902.07151.pdf)[1] is not implemented.
+&lt;p&gt;(4) The evolution eligibility documented in B2 on page 16 in the &lt;a href=&quot;https://arxiv.org/pdf/1902.07151.pdf&quot;&gt;paper&lt;/a&gt;[1] is not implemented.&lt;/p&gt;
 
-(5) Probably many more...
+&lt;p&gt;(5) Probably many more…&lt;/p&gt;
 
-# What works?
+&lt;h1 id=&quot;what-works&quot;&gt;What works?&lt;/h1&gt;
 
-(1) Policies weights can be inherited between different agents in the population.
+&lt;p&gt;(1) Policies weights can be inherited between different agents in the population.&lt;/p&gt;
 
-(2) Learning rate &amp; gamma are the only 2 hyperparameters involved for now. Both can be inherited/mutated. Learning rate can be resampled/perturbed while gamma can only be resampled.
+&lt;p&gt;(2) Learning rate &amp;amp; gamma are the only 2 hyperparameters involved for now.
+Both can be inherited/mutated. Learning rate can be resampled/perturbed while
+gamma can only be resampled. Both hyperparameters changes are verifiable in
+tensorboard.&lt;/p&gt;
 
-# Simple walkthru:
+&lt;h1 id=&quot;simple-walkthru&quot;&gt;Simple walkthru:&lt;/h1&gt;
 
-Before each training iteration, the driver (in this context, the main process, this is also where the RLlib trainer resides) randomly selects a pair of agents (agt_i, agt_j, where i != j) from a population of agents. This i, j pair will take up the role of player_A &amp; player_B respectively.
+&lt;p&gt;Before each training iteration, the driver (in this context, the main process, this is also where the RLlib trainer resides) randomly selects a pair of agents (agt_i, agt_j, where i != j) from a population of agents. This i, j pair will take up the role of player_A &amp;amp; player_B respectively.&lt;/p&gt;
 
-The IDs of i,j will be transmitted down to the worker processes. Each worker has 1 or more environments ([vectorized](https://rllib.readthedocs.io/en/latest/rllib-env.html#vectorized)) &amp; does it's own rollout. When an episode is sampled (that's when a match ends), the `on_episode_end` callback will be called. That's when the ratings of a match are computed &amp; updated to a global storage.
+&lt;p&gt;The IDs of i,j will be transmitted down to the worker processes. Each worker has 1 or more environments (&lt;a href=&quot;https://rllib.readthedocs.io/en/latest/rllib-env.html#vectorized&quot;&gt;vectorized&lt;/a&gt;) &amp;amp; does it’s own rollout. When an episode is sampled (that’s when a match ends), the &lt;code class=&quot;highlighter-rouge&quot;&gt;on_episode_end&lt;/code&gt; callback will be called. That’s when the ratings of a match are computed &amp;amp; updated to a global storage.&lt;/p&gt;
 
-When enough samples are collected, training starts. Training is done using [RLlib's DDPPO](https://docs.ray.io/en/master/rllib-algorithms.html#decentralized-distributed-proximal-policy-optimization-dd-ppo) (a variant of PPO). In DDPPO, learning does not happened in the trainer. Each worker does it's own learning. However, the trainer is still involved in the weight sync.
+&lt;p&gt;When enough samples are collected, training starts. Training is done using &lt;a href=&quot;https://docs.ray.io/en/master/rllib-algorithms.html#decentralized-distributed-proximal-policy-optimization-dd-ppo&quot;&gt;RLlib’s DDPPO&lt;/a&gt; (a variant of PPO). In DDPPO, learning does not happened in the trainer. Each worker does it’s own learning. However, the trainer is still involved in the weight sync.&lt;/p&gt;
 
-When a training iteration completes, `on_train_results` callback will be called. That's where inheritance &amp; mutation happens (if conditions are fulfilled).
+&lt;p&gt;When a training iteration completes, &lt;code class=&quot;highlighter-rouge&quot;&gt;on_train_results&lt;/code&gt; callback will be called. That’s where inheritance &amp;amp; mutation happens (if conditions are fulfilled).&lt;/p&gt;
 
-All of the above happens during 1 single main training loop of the driver. Rinse &amp; repeat.
+&lt;p&gt;All of the above happens during 1 single main training loop of the driver. Rinse &amp;amp; repeat.&lt;/p&gt;
 
-Note: Global coordination between different processes is done using [detached actors](https://docs.ray.io/en/master/advanced.html#detached-actors) from ray.
+&lt;p&gt;Note: Global coordination between different processes is done using &lt;a href=&quot;https://docs.ray.io/en/master/advanced.html#detached-actors&quot;&gt;detached actors&lt;/a&gt; from ray.&lt;/p&gt;
 
-# Example of what's stored in the global storage:
+&lt;h1 id=&quot;example-of-whats-stored-in-the-global-storage&quot;&gt;Example of what’s stored in the global storage:&lt;/h1&gt;
 
-```
-&quot;&quot;&quot;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&quot;&quot;&quot;
 {'agt_0':
     {'hyperparameters':
         {'lr': [0.0027558, 0.0022046, ...]},
@@ -356,31 +366,31 @@ Note: Global coordination between different processes is done using [detached ac
  'agt_n': ...    
 }
 &quot;&quot;&quot;
-```
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-# How to run the contents in this repo?
+&lt;h1 id=&quot;how-to-run-the-contents-in-this-repo&quot;&gt;How to run the contents in this repo?&lt;/h1&gt;
 
-The easiest way is to run the `PBT_MARL_watered_down.ipynb` Jupyter notebook in Colab.
+&lt;p&gt;The easiest way is to run the &lt;code class=&quot;highlighter-rouge&quot;&gt;PBT_MARL_watered_down.ipynb&lt;/code&gt; Jupyter notebook in Colab.&lt;/p&gt;
 
-# Dependencies:
+&lt;h1 id=&quot;dependencies&quot;&gt;Dependencies:&lt;/h1&gt;
 
-This is developed &amp; tested on Colab &amp; the following are the only packages that I explicitly `pip install`:
+&lt;p&gt;This is developed &amp;amp; tested in Colab.&lt;/p&gt;
 
-ray[rllib]==0.8.5
+&lt;p&gt;ray[rllib] &amp;gt; 0.8.6 or lastest wheels for ray, won’t work with ray &amp;lt;= 0.8.6&lt;/p&gt;
 
-tensorflow==2.2.0
+&lt;p&gt;tensorflow==2.3.0&lt;/p&gt;
 
-# Disclaimer:
+&lt;h1 id=&quot;disclaimer&quot;&gt;Disclaimer:&lt;/h1&gt;
 
-(1) I'm not affiliated with any of the authors of the [paper](https://arxiv.org/pdf/1902.07151.pdf)[1].
+&lt;p&gt;(1) I’m not affiliated with any of the authors of the &lt;a href=&quot;https://arxiv.org/pdf/1902.07151.pdf&quot;&gt;paper&lt;/a&gt;[1].&lt;/p&gt;
 
-# References:
+&lt;h1 id=&quot;references&quot;&gt;References:&lt;/h1&gt;
 
-[1] [EMERGENT COORDINATION THROUGH COMPETITION (Liu et al., 2019)](https://arxiv.org/pdf/1902.07151.pdf)
+&lt;p&gt;[1] &lt;a href=&quot;https://arxiv.org/pdf/1902.07151.pdf&quot;&gt;EMERGENT COORDINATION THROUGH COMPETITION (Liu et al., 2019)&lt;/a&gt;&lt;/p&gt;
 
----
+&lt;hr /&gt;
 
-&lt;br&gt;</content><author><name>Huan</name></author><summary type="html">My attempt to implement a water down version of PBT (Population based training) for MARL (Multi-agent reinforcement learning).</summary></entry><entry><title type="html">RLlib trainer common config</title><link href="https://chuacheowhuan.github.io/RLlib_trainer_config/" rel="alternate" type="text/html" title="RLlib trainer common config" /><published>2020-03-23T00:00:00+08:00</published><updated>2020-03-23T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/RLlib_trainer_config</id><content type="html" xml:base="https://chuacheowhuan.github.io/RLlib_trainer_config/">Ray (0.8.2) RLlib trainer common config from:
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;</content><author><name>Huan</name></author><summary type="html">My attempt to implement a water down version of PBT (Population based training) for MARL (Multi-agent reinforcement learning).</summary></entry><entry><title type="html">RLlib trainer common config</title><link href="https://chuacheowhuan.github.io/RLlib_trainer_config/" rel="alternate" type="text/html" title="RLlib trainer common config" /><published>2020-03-23T00:00:00+08:00</published><updated>2020-03-23T00:00:00+08:00</updated><id>https://chuacheowhuan.github.io/RLlib_trainer_config</id><content type="html" xml:base="https://chuacheowhuan.github.io/RLlib_trainer_config/">Ray (0.8.2) RLlib trainer common config from:
 
 [source](https://github.com/ray-project/ray/blob/master/rllib/agents/trainer.py)
 

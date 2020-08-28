@@ -34,11 +34,8 @@ My attempt to implement a water down version of PBT (Population based training) 
 
 (2) Learning rate & gamma are the only 2 hyperparameters involved for now.
 Both can be inherited/mutated. Learning rate can be resampled/perturbed while
-gamma can only be resampled.
-
-**EDIT**: Point (2) doesn't work as the configuration dict is replicated in the
-ray cluster so it's not something I can just change in my code. I'll be working
-on a workaround.
+gamma can only be resampled. Both hyperparameters changes are verifiable in
+tensorboard.
 
 # Simple walkthru:
 
@@ -81,11 +78,11 @@ The easiest way is to run the `PBT_MARL_watered_down.ipynb` Jupyter notebook in 
 
 # Dependencies:
 
-This is developed & tested on Colab & the following are the only packages that I explicitly `pip install`:
+This is developed & tested in Colab.
 
-ray[rllib]==0.8.5
+ray[rllib] > 0.8.6 or lastest wheels for ray, won't work with ray <= 0.8.6
 
-tensorflow==2.2.0
+tensorflow==2.3.0
 
 # Disclaimer:
 

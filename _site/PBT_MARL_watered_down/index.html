@@ -290,7 +290,10 @@
 
 <p>(1) Policies weights can be inherited between different agents in the population.</p>
 
-<p>(2) Learning rate &amp; gamma are the only 2 hyperparameters involved for now. Both can be inherited/mutated. Learning rate can be resampled/perturbed while gamma can only be resampled.</p>
+<p>(2) Learning rate &amp; gamma are the only 2 hyperparameters involved for now.
+Both can be inherited/mutated. Learning rate can be resampled/perturbed while
+gamma can only be resampled. Both hyperparameters changes are verifiable in
+tensorboard.</p>
 
 <h1 id="simple-walkthru">Simple walkthru:</h1>
 
@@ -332,11 +335,11 @@
 
 <h1 id="dependencies">Dependencies:</h1>
 
-<p>This is developed &amp; tested on Colab &amp; the following are the only packages that I explicitly <code class="highlighter-rouge">pip install</code>:</p>
+<p>This is developed &amp; tested in Colab.</p>
 
-<p>ray[rllib]==0.8.5</p>
+<p>ray[rllib] &gt; 0.8.6 or lastest wheels for ray, won’t work with ray &lt;= 0.8.6</p>
 
-<p>tensorflow==2.2.0</p>
+<p>tensorflow==2.3.0</p>
 
 <h1 id="disclaimer">Disclaimer:</h1>
 
@@ -356,7 +359,7 @@
   
     <li>
       <a href="#2020">
-        <strong>2020</strong> <span class="taxonomy__count">8</span>
+        <strong>2020</strong> <span class="taxonomy__count">10</span>
       </a>
     </li>
   
@@ -383,7 +386,65 @@
     
     <h2 class="archive__item-title" itemprop="headline">
       
-        <a href="/ray_results_folder_in_colab/" rel="permalink">Finding the <code class="highlighter-rouge">ray_results</code> folder in colab
+        <a href="/quantum_sys_measurement_mixed_states/" rel="permalink">Measurement &amp; mixed states for quantum systems.
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
+
+
+
+
+  9 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">Notes on measurement for quantum systems.
+
+</p>
+  </article>
+</div>
+
+      
+        
+
+
+
+<div class="list__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="/quantum_states_as_classical_probs/" rel="permalink">Quantum States as a generalization of classical probabilities.
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
+
+
+
+
+  51 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">Notes on quantum states as a generalization of classical probabilities.
+
+</p>
+  </article>
+</div>
+
+      
+        
+
+
+
+<div class="list__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="/ray_results_folder_in_colab/" rel="permalink">Finding the ray_results folder in colab
 </a>
       
     </h2>
@@ -752,7 +813,7 @@ This example uses Proximal Policy Optimization with Ray (RLlib).
 
 
 
-  114 minute read
+  131 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">Basic workflow of testing a dockerized Django &amp; Postgres web app with Travis

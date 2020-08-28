@@ -509,11 +509,18 @@ instance of a Docker image.</p>
 <p>Notice the <code class="highlighter-rouge">sleep</code> delay introduced in the 2 <code class="highlighter-rouge">command:</code> sections.
 See <a href="https://chuacheowhuan.github.io/docker_travis/">here</a> for details.</p>
 
+<p>EDIT: The environment variables are added under db as newly required when
+testing on Travis.</p>
+
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>version: '3'
 
 services:
     db:
         image: postgres
+        environment:
+            - POSTGRES_DB=${POSTGRES_DB}
+            - POSTGRES_USER=${POSTGRES_USER}
+            - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}           
     migration:
         build: .
         command: bash -c 'while !&lt;/dev/tcp/db/5432; do sleep 1; done; python3 manage.py migrate'
@@ -696,7 +703,7 @@ and web security is really beyond the scope of this post.</p>
   
     <li>
       <a href="#2020">
-        <strong>2020</strong> <span class="taxonomy__count">6</span>
+        <strong>2020</strong> <span class="taxonomy__count">10</span>
       </a>
     </li>
   
@@ -713,6 +720,122 @@ and web security is really beyond the scope of this post.</p>
   <section id="2020" class="taxonomy__section">
     <h2 class="archive__subtitle">2020</h2>
     <div class="entries-list">
+      
+        
+
+
+
+<div class="list__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="/quantum_sys_measurement_mixed_states/" rel="permalink">Measurement &amp; mixed states for quantum systems.
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
+
+
+
+
+  9 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">Notes on measurement for quantum systems.
+
+</p>
+  </article>
+</div>
+
+      
+        
+
+
+
+<div class="list__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="/quantum_states_as_classical_probs/" rel="permalink">Quantum States as a generalization of classical probabilities.
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
+
+
+
+
+  51 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">Notes on quantum states as a generalization of classical probabilities.
+
+</p>
+  </article>
+</div>
+
+      
+        
+
+
+
+<div class="list__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="/ray_results_folder_in_colab/" rel="permalink">Finding the ray_results folder in colab
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
+
+
+
+
+  17 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">The location of ray_results folder in colab when using RLlib &amp;/or tune.
+
+</p>
+  </article>
+</div>
+
+      
+        
+
+
+
+<div class="list__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="/PBT_MARL_watered_down/" rel="permalink">PBT for MARL
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
+
+
+
+
+  46 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">My attempt to implement a water down version of PBT (Population based training) for MARL (Multi-agent reinforcement learning).
+
+</p>
+  </article>
+</div>
+
       
         
 
@@ -1034,7 +1157,7 @@ This example uses Proximal Policy Optimization with Ray (RLlib).
 
 
 
-  129 minute read
+  131 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">Basic workflow of testing a dockerized Django &amp; Postgres web app with Travis
@@ -1064,7 +1187,7 @@ This example uses Proximal Policy Optimization with Ray (RLlib).
 
 
 
-  44 minute read
+  17 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">Introducing a delay to allow proper connection between dockerized Postgres &amp;
@@ -1123,7 +1246,7 @@ Django web app in Travis CI.
 
 
 
-  211 minute read
+  220 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">A custom MARL (multi-agent reinforcement learning) environment where multiple
@@ -1182,7 +1305,7 @@ agents trade against one another in a CDA (continuous double auction).
 
 
 
-  13 minute read
+  15 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">This post demonstrates how to create customized functions to bundle commands in
@@ -1212,7 +1335,7 @@ a .bash_profile file on Mac.
 
 
 
-  83 minute read
+  89 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">This post documents my implementation of the Random Network Distillation (RND)
@@ -1243,7 +1366,7 @@ with Proximal Policy Optimization (PPO) algorithm.
 
 
 
-  61 minute read
+  72 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">This post documents my implementation of the Distributed Proximal Policy
@@ -1274,7 +1397,7 @@ Optimization (Distributed PPO or DPPO) algorithm.
 
 
 
-  26 minute read
+  27 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">This post documents my implementation of the A3C
@@ -1305,7 +1428,7 @@ Optimization (Distributed PPO or DPPO) algorithm.
 
 
 
-  33 minute read
+  35 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">This post documents my implementation of the A3C
@@ -1336,7 +1459,7 @@ Optimization (Distributed PPO or DPPO) algorithm.
 
 
 
-  66 minute read
+  75 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">This post documents my implementation of the A3C
@@ -1396,7 +1519,7 @@ Optimization (Distributed PPO or DPPO) algorithm.
 
 
 
-  76 minute read
+  78 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">This post demonstrates a simple usage example of distributed Tensorflow with
@@ -1426,7 +1549,7 @@ Python multiprocessing package.
 
 
 
-  72 minute read
+  79 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">This post documents my implementation of the N-step Q-values estimation
@@ -1456,7 +1579,7 @@ algorithm.
 
 
 
-  32 minute read
+  33 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">This post demonstrates how to use the Python’s multiprocessing package to
@@ -1486,7 +1609,7 @@ achieve parallel data generation.
 
 
 
-  32 minute read
+  33 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">This post provides a simple usage examples for common Numpy array manipulation.
@@ -1515,7 +1638,7 @@ achieve parallel data generation.
 
 
 
-  46 minute read
+  53 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">This post documents my implementation of the Dueling Double Deep Q Network with Priority Experience Replay (Duel DDQN with PER) algorithm.
@@ -1544,7 +1667,7 @@ achieve parallel data generation.
 
 
 
-  23 minute read
+  25 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">This post documents my implementation of the Dueling Double Deep Q Network
@@ -1574,7 +1697,7 @@ achieve parallel data generation.
 
 
 
-  27 minute read
+  31 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">This post documents my implementation of the Double Deep Q Network (DDQN)
@@ -1604,7 +1727,7 @@ algorithm.
 
 
 
-  22 minute read
+  26 minute read
 </p>
     
     <p class="archive__item-excerpt" itemprop="description">This post documents my implementation of the Deep Q Network (DQN) algorithm.
